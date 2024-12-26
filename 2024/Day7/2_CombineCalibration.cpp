@@ -18,11 +18,21 @@ ll eval( vector<ll> nums, vector<char> op ) {
             nums[++i] = res;
         }
         else if( op[i] == '|' ) {
-            stringstream num1,num2;
-            // There is seriout problem with stream implementation on linux machine.
-            num1 << nums[i];
-            num2 << nums[i + 1];
-            res = stoll( string( num1.str() + num2.str() ) );
+            //// There is seriout problem with stream implementation on linux machine.
+            // num1 << nums[i];
+            // num2 << nums[i + 1];
+            // res = stoll( string( num1.str() + num2.str() ) );
+            // nums[++i] = res;
+            stringstream numStr( "" );
+            string num1( "" ), num2( "" );
+            numStr << nums[i];
+            numStr >> num1;
+            if( numStr.eof() ) numStr.clear();
+            else
+                cout << "Error Usage" << endl;
+            numStr << nums[i + 1];
+            numStr >> num2;
+            res = stoll( string( num1 + num2 ) );
             nums[++i] = res;
         }
         else {
