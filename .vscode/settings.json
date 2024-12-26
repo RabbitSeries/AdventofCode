@@ -9,6 +9,10 @@
         "*.vim": "Vimscript",
         "_vimrc": "Vimscript",
         "iosfwd": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "iostream": "cpp",
+        "ostream": "cpp",
+        "chrono": "cpp",
+        "span": "cpp"
     }
 }
