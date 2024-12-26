@@ -37,6 +37,18 @@
             
         },
         {
+            "type": "shell",
+            "label": "[ArchLinux] Clean workspace",
+            "command": "${workspaceFolder}/.vscode/clean_noConfirm.sh",
+            "args": [
+                "${workspaceFolder}"
+            ],
+            "problemMatcher": [
+                // "$gcc"
+            ],
+            
+        },
+        {
             "type": "cppbuild",
             "label": "[ArchLinux] C/C++: g++.exe build active file",
             "command": "/usr/bin/g++",
@@ -46,7 +58,7 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/exe_${fileBasenameNoExtension}"
             ],
             "options": {
                 "cwd": "${fileDirname}"
