@@ -15,12 +15,6 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 [![Day 5](https://img.shields.io/badge/Day%205-Print%20Queue-blue?logo=Archlinux)](https://adventofcode.com/2024/day/5) | ⭐ | ⭐ | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day5/1_OrderingUpdates.cpp) |[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day5/2_OrderingUpdates.cpp)
 [![Day 6](https://img.shields.io/badge/Day%206-Guard%20Gallivant-blue?logo=Archlinux)](https://adventofcode.com/2024/day/6) | | |
 
-## ⭐ Progress Tracking
-
-- ⭐ = First part completed
-- ⭐⭐ = Both parts completed
-- Blank = Not started/In progress
-
 ## 🔗 Links
 
 - [Advent of Code](https://adventofcode.com/)
