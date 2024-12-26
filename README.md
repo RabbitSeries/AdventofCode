@@ -14,7 +14,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 [![Day 4](https://img.shields.io/badge/Day%204-Ceres%20Search-blue?logo=Archlinux)](https://adventofcode.com/2024/day/4) | ⭐ | ⭐ | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day4/1_CeresSearch.cpp) |[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day4/2_XMAS.cpp)
 [![Day 5](https://img.shields.io/badge/Day%205-Print%20Queue-blue?logo=Archlinux)](https://adventofcode.com/2024/day/5) | ⭐ | ⭐ | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day5/1_OrderingUpdates.cpp) |[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day5/2_OrderingUpdates.cpp)
 [![Day 6](https://img.shields.io/badge/Day%206-Guard%20Gallivant-blue?logo=Archlinux)](https://adventofcode.com/2024/day/6) | ⭐ |⭐| [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day6/1_PatrolRoute.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day6/2_CircleObstacle.cpp)
-[![Day 7](https://img.shields.io/badge/Day%207-Bridge%20Repair-blue?logo=Archlinux)](https://adventofcode.com/2024/day/7) |⭐||[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day7/1_Caliration.cpp)
+[![Day 7](https://img.shields.io/badge/Day%207-Bridge%20Repair-blue?logo=Archlinux)](https://adventofcode.com/2024/day/7) |⭐|-|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day7/1_Caliration.cpp)|-
 
 ## 💻 Tools
 
