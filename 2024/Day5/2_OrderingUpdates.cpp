@@ -6,7 +6,7 @@
 
 using namespace std;
 #define buffer 1024
-bool isCorrectOrder( const vector<int>& update, const vector<vector<int>>& rules ) {
+bool isCorrectOrder( const vector<int> update, const vector<vector<int>>& rules ) {
     for( int i = 0; i < update.size(); i++ ) {
         for( int j = 0; j < i; j++ ) {
             for( int after : rules[update[i]] ) {
@@ -17,6 +17,25 @@ bool isCorrectOrder( const vector<int>& update, const vector<vector<int>>& rules
         }
     }
     return true;
+}
+
+void reOrder( vector<int>& update, const vector<vector<int>>& rules ) {
+    for( int i = 0; i < update.size(); i++ ) {
+        for( int j = i; j < update.size(); j++ ) {
+            bool ahead = true;
+            for( int k = i; k < update.size(); k++ ) {
+                if( k == j ) { continue; }
+                for( auto after : rules[update[k]] ) {
+                    if( after == update[j] ) { ahead = false; break; }
+                }
+                if( !ahead ) break;
+            }
+            if( ahead ) {
+                swap( update[i], update[j] );
+                break;
+            }
+        }
+    }
 }
 
 int main() {
@@ -50,18 +69,17 @@ int main() {
         if( update.size() > 0 )
             updates.push_back( update );
     }
-    for( const auto& update : updates ) {
+    int sum = 0;
+    for( vector<int> update : updates ) {
         if( isCorrectOrder( update, rules ) ) {
             int middle = update.size() / 2;
         }
         else {
-            correctUpdates.push_back( update );
+            reOrder( update, rules );
+            int middle = update.size() / 2;
+            sum += update[middle];
         }
     }
-    int sum = 0;
-
-
     cout << "The sum of the middle page numbers of the correctly reordered updates is: " << sum << endl;
-
     return 0;
 }

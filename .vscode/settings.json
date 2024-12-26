@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "*.cpp": "cpp",
+        "*.c": "c",
+        ".py": "python",
+        "*.stact": "st",
+        "*.stdut": "st",
+        "*.stfb": "st",
+        "*.vim": "Vimscript",
+        "_vimrc": "Vimscript",
+        "iosfwd": "cpp",
+        "valarray": "cpp"
+    }
+}
