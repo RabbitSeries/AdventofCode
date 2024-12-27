@@ -1,4 +1,6 @@
 #include "bits/stdc++.h"
+#include "stdio.h"
+#include "stdlib.h"
 #define BUFFER_SIZE 1024
 typedef long long ll;
 using namespace std;
@@ -15,18 +17,32 @@ void appendEmptyBlock( int size, vector<int>& disk ) {
     }
 }
 
-void printDisk( const vector<int>disk ) {
+void printDisk( const vector<int>disk, const string path ) {
+    // This won't work
+    // FILE* output = fopen( path.c_str(), "rw" );
+    int cnt = 0;
+    FILE* output = fopen( path.c_str(), "w" );
     for( int diskId = 0; diskId < disk.size(); diskId++ ) {
         // operands to ‘?:’ have different types ‘const char*’ and ‘__gnu_cxx::__alloc_traits<std::allocator<int>, int>::value_type’ {aka ‘int’}gcc
         // cout << ( disk[diskId] == -1 ? "." : disk[diskId] );
         if( disk[diskId] == -1 ) {
-            cout << ".";
+            // cout << ".";
+            fprintf( output, "_" );
         }
         else {
-            cout << disk[diskId];
+            // stringstream ss;
+            // ss << disk[diskId];
+            // string outs = ss.str();
+            fprintf( output, "%s", "X" );
+            // fprintf(output,"%c",disk[diskId]);
+            // cout << disk[diskId];
         }
+        // cnt = (cnt+1)%BUFFER_SIZE;
+        // if( !cnt )
+        //     fprintf( output, "\n");
     }
-    cout << endl;
+    fclose( output );
+    // cout << endl;
 }
 
 void scanFreeSpace( vector<int> disk, vector<pair<int, int>>& freeSpaceTable ) {
@@ -34,7 +50,7 @@ void scanFreeSpace( vector<int> disk, vector<pair<int, int>>& freeSpaceTable ) {
 }
 
 ll fileCompack( vector<int>disk, const vector<int> fileSizeTable, vector<pair<int, int>>& freeSpaceTable ) {
-    // printDisk( disk );
+    printDisk( disk, "original.txt" );
     int denseHead = 0;
     ll checkSum = 0;
     int j = disk.size() - 1;
@@ -115,7 +131,7 @@ ll fileCompack( vector<int>disk, const vector<int> fileSizeTable, vector<pair<in
         if( disk[diskId] != -1 )
             checkSum += diskId * disk[diskId];
     }
-    printDisk( disk );
+    printDisk( disk, "output.txt" );
     return checkSum;
 }
 
