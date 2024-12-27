@@ -51,7 +51,7 @@ void scanFreeSpace( vector<int> disk, vector<pair<int, int>>& freeSpaceTable ) {
 
 ll fileCompack( vector<int>disk, const vector<int> fileSizeTable, vector<pair<int, int>>& freeSpaceTable ) {
     printDisk( disk, "original.txt" );
-    int denseHead = 0;
+    int denseHead = freeSpaceTable[0].second;
     ll checkSum = 0;
     int j = disk.size() - 1;
     while( j > denseHead ) {
@@ -80,7 +80,6 @@ ll fileCompack( vector<int>disk, const vector<int> fileSizeTable, vector<pair<in
                 // printDisk( disk );
                 if( fileSize == blockInfo.first ) {
                     freeSpaceTable[s].first = 0;
-                    // TODO delete elem at s;
                     freeSpaceTable.erase( freeSpaceTable.begin() + s );
                 }
                 else {
