@@ -42,50 +42,33 @@ int main() {
                     isLock = false;
                     rowTimes++;
                 }
-                else {
-                    continue;
-                }
             }
             else {
-                if( isLock ) {
-                    if( rowTimes != 6 ) {
-                        rowTimes++;
-                        // schematics& lock = lockList.back();
-                        for( int pin = 0; pin < 5; pin++ ) {
-                            if( line[pin] == '#' ) {
-                                // lock[pin]++;
-                                row[pin]++;
-                            }
+                if( rowTimes != 6 ) {
+                    for( int pin = 0; pin < 5; pin++ ) {
+                        if( line[pin] == '#' ) {
+                            row[pin]++;
                         }
                     }
-                    else {
-                        if( isUnique( row, lockList ) ) {
-                            lockList.push_back( row );
-                        }
-                        fill( row.begin(), row.end(), 0 );
-                        rowTimes = 0;
-                    }
+                    rowTimes++;
                 }
                 else {
-                    if( rowTimes != 6 ) {
-                        rowTimes++;
-                        for( int pin = 0; pin < 5; pin++ ) {
-                            if( line[pin] == '#' ) {
-                                row[pin]++;
-                            }
+                    if( isLock ) {
+                        if( isUnique( row, lockList ) ) {
+                            lockList.push_back( row );
                         }
                     }
                     else {
                         if( isUnique( row, keyList ) ) {
                             keyList.push_back( row );
                         }
-                        fill( row.begin(), row.end(), 0 );
-                        rowTimes = 0;
                     }
+                    fill( row.begin(), row.end(), 0 );
+                    rowTimes = 0;
                 }
             }
-
         }
+
     }
     int res = 0;
     for( schematics lock : lockList ) {
