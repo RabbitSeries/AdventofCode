@@ -33,12 +33,10 @@ int main() {
         else {
             if( rowTimes == 0 ) {
                 if( line.substr( 0, 5 ) == "#####" ) {
-                    // lockList.push_back( schematics( 5, 0 ) );
                     isLock = true;
                     rowTimes++;
                 }
                 else if( line.substr( 0, 5 ) == "....." ) {
-                    // keyList.push_back( schematics( 5, 0 ) );
                     isLock = false;
                     rowTimes++;
                 }
