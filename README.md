@@ -27,7 +27,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ## 📜 Worth future utility
 
-### Day 9 Disk Fragment
+### Day 9 Disk Fragmenter
 
 ![Original](Images/Day9DiskFragmentOriginal.png)
 ![Output](Images/Day9DiskFragmentOutput.png)
