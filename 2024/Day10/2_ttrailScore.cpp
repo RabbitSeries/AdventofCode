@@ -1,53 +1,15 @@
 #include "bits/stdc++.h"
 #define BUFFER_SIZE 1024
 
-#define SOLUTION_1
+#define SOLUTION_2
 
 using namespace std;
 typedef pair<int, int> pos;
 typedef pair<pos, int> posInfo;
-// Version 1
-// int trail( int x, int y, const vector<vector<int>> topomap, vector<vector<bool>>& visited ) {
-//     int score = 0;
-//     if( topomap[x][y] == 9 ) {
-//         // Stay visited
-//         return 1;
-//     }
-//     // Up
-//     if( x - 1 >= 0 && !visited[x - 1][y] && topomap[x - 1][y] == topomap[x][y] + 1 ) {
-//         visited[x - 1][y] = true;
-//         score += trail( x - 1, y, topomap, visited );
-//         if( topomap[x - 1][y] != 9 )
-//             visited[x - 1][y] = false;
-//     }
-//     // Down
-//     if( x + 1 < topomap.size() && !visited[x + 1][y] && topomap[x + 1][y] == topomap[x][y] + 1 ) {
-//         visited[x + 1][y] = true;
-//         score += trail( x + 1, y, topomap, visited );
-//         if( topomap[x + 1][y] != 9 )
-//             visited[x + 1][y] = false;
-//     }
-//     // Left
-//     if( y - 1 >= 0 && !visited[x][y - 1] && topomap[x][y - 1] == topomap[x][y] + 1 ) {
-//         visited[x][y - 1] = true;
-//         score += trail( x, y - 1, topomap, visited );
-//         if( topomap[x][y - 1] != 9 )
-//             visited[x][y - 1] = false;
-//     }
-//     // Right
-//     if( y + 1 < topomap[x].size() && !visited[x][y + 1] && topomap[x][y + 1] == topomap[x][y] + 1 ) {
-//         visited[x][y + 1] = true;
-//         score += trail( x, y + 1, topomap, visited );
-//         if( topomap[x][y + 1] != 9 )
-//             visited[x][y + 1] = false;
-//     }
-//     return score;
-// }
 int trail( int x, int y, const vector<vector<int>> topomap, vector<vector<bool>>& visited ) {
     visited[x][y] = true;
     int score = 0;
     if( topomap[x][y] == 9 ) {
-        // Stay visited
 #ifdef SOLUTION_2
         visited[x][y] = false;
 #endif
