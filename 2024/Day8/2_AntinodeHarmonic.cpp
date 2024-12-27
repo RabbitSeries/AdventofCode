@@ -13,15 +13,23 @@ bool isValid( pos p, const vector<vector<char>> map ) {
 
 void HarmonicAntenna( const pos s, const pos t, vector<vector<char>>& antinodeMap ) {
     pos st, ts;
-    st.x = s.x + ( t.x - s.x ) * 2;
-    st.y = s.y + ( t.y - s.y ) * 2;
-    ts.x = t.x + ( s.x - t.x ) * 2;
-    ts.y = t.y + ( s.y - t.y ) * 2;
-    if( isValid( st, antinodeMap ) ) {
-        antinodeMap[st.x][st.y] = '#';
-    }
-    if( isValid( ts, antinodeMap ) ) {
-        antinodeMap[ts.x][ts.y] = '#';
+    for( int harmonicTimes = 1; ; harmonicTimes++ ) {
+        bool withinLocale = false;
+        st.x = s.x + ( t.x - s.x ) * harmonicTimes;
+        st.y = s.y + ( t.y - s.y ) * harmonicTimes;
+        ts.x = t.x + ( s.x - t.x ) * harmonicTimes;
+        ts.y = t.y + ( s.y - t.y ) * harmonicTimes;
+        if( isValid( st, antinodeMap ) ) {
+            antinodeMap[st.x][st.y] = '#';
+            withinLocale = true;
+        }
+        if( isValid( ts, antinodeMap ) ) {
+            antinodeMap[ts.x][ts.y] = '#';
+            withinLocale = true;
+        }
+        if( !withinLocale ) {
+            break;
+        }
     }
     return;
 }
