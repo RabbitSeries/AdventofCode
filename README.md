@@ -25,7 +25,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 - C++ standard: ![C++14](https://img.shields.io/badge/C%2B%2B14-purple?logo=C%2B%2B)
 - OS: [![Arch Linux](https://img.shields.io/badge/Arch%20Linux-grey?logo=Archlinux)](https://www.archlinux.org)
 
-## Worth future utility
+## 📜 Worth future utility
 
 ### Day 9 Disk Fragment
 
