@@ -15,7 +15,7 @@ void appendEmptyBlock( int size, vector<int>& disk ) {
     }
 }
 
-ll diskCompact( vector<int>disk ) {
+ll fileCompack( vector<int>disk ) {
     ll checkSum = 0;
     int i = 0, j = disk.size() - 1;
     while( i < disk.size() && j>i ) {
@@ -64,5 +64,5 @@ int main() {
             }
         }
     }
-    cout << diskCompact( disk ) << endl;
+    cout << fileCompack( disk ) << endl;
 }
