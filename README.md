@@ -28,4 +28,4 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 - [Advent of Code](https://adventofcode.com/)
 - [About Advent of Code](https://adventofcode.com/about)
-- [This Readme's template](https://github.com/TrueBurn/advent-of-code)
+- [This README's template](https://github.com/TrueBurn/advent-of-code)
