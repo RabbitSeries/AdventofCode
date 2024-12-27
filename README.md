@@ -29,8 +29,8 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ### Day 9 Disk Fragmenter
 
-![Original](Images/Day9DiskFragmentOriginal.png)
-![Output](Images/Day9DiskFragmentOutput.png)
+[![Original](Images/Day9DiskFragmentOriginal.png)](2024/Day9/2_compactingFiles.cpp)
+[![Output](Images/Day9DiskFragmentOutput.png)](2024/Day9/2_compactingFiles.cpp)
 
 ## 🔗 Links
 
