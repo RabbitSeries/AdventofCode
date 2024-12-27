@@ -17,6 +17,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 [![Day 7](https://img.shields.io/badge/Day%207-Bridge%20Repair-blue?logo=Archlinux)](https://adventofcode.com/2024/day/7) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day7/1_Caliration.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day7/2_CombineCalibration.cpp)
 [![Day 8](https://img.shields.io/badge/Day%208-Resonant%20Collinearity-blue?logo=Archlinux)](https://adventofcode.com/2024/day/8) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day8/1_AntinodesCnt.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day8/2_AntinodeHarmonic.cpp)
 [![Day 9](https://img.shields.io/badge/Day%209-Disk%20Fragmenter-blue?logo=Archlinux)](https://adventofcode.com/2024/day/9) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day9/1_compactingBlocks.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day9/2_compactingFiles.cpp)
+[![Day 10](https://img.shields.io/badge/Day%2010-Hoof%20It-blue?logo=Archlinux)](https://adventofcode.com/2024/day/10) |⭐|-|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day10/1_trailScore.cpp)|-
 
 ## 💻 Tools
 
