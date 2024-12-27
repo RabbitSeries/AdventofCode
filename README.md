@@ -19,6 +19,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 [![Day 9](https://img.shields.io/badge/Day%209-Disk%20Fragmenter-blue?logo=Archlinux)](https://adventofcode.com/2024/day/9) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day9/1_compactingBlocks.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day9/2_compactingFiles.cpp)
 [![Day 10](https://img.shields.io/badge/Day%2010-Hoof%20It-blue?logo=Archlinux)](https://adventofcode.com/2024/day/10) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day10/1_trailScore.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day10/2_ttrailScore.cpp)
 [![Day 11](https://img.shields.io/badge/Day%2011-Plutonian%20Pebbles-blue?logo=Archlinux)](https://adventofcode.com/2024/day/11) |-|-|-|-
+[![Day 25](https://img.shields.io/badge/Day%2025-Code%20Chroncile-blue?logo=Archlinux)](https://adventofcode.com/2024/day/25) |⭐|28⭐ lack|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day25/1_clockKeyPair.cpp)|-
 
 ## 💻 Tools
 
