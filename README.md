@@ -50,3 +50,8 @@ This problem guides a way of image edge detection algorithm.
 - [Advent of Code](https://adventofcode.com/)
 - [About Advent of Code](https://adventofcode.com/about)
 - [This README's template](https://github.com/TrueBurn/advent-of-code)
+- [Markdown emoji](<https://gist.github.com/rxaviers/7360908>)
+
+## 📆 TODOs
+
+- Chnge Day3 algorithm to regular expression implementation([C++11 feature](https://en.cppreference.com/w/cpp/regex)).
