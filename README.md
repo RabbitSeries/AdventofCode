@@ -38,7 +38,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ### Day 11 Plutonian Pebbles
 
-The multithreading aproach has crashed my OS for many times, the dynamic programming method is fruitful. However, what if the position of spawned stones matters in the result calculation?
+The multithreading aproach has crashed my OS many times, the dynamic programming method is fruitful. However, what if the position of spawned stones matters in the result calculation?
 
 ### Day 12 Garden Groups
 
