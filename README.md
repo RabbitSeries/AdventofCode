@@ -4,7 +4,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ## 🚀 Solutions
 
-### 2024 Progress: 11/25 ⭐⭐
+### 2024 Progress: 12/25 ⭐⭐
 
  Day | Part 1 | Part 2 | Solution to P1 | Solution to P2
 -----|:------:|:------:|:----------:|:----------:
@@ -19,8 +19,8 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 [![Day 9](https://img.shields.io/badge/Day%209-Disk%20Fragmenter-blue?logo=Archlinux)](https://adventofcode.com/2024/day/9) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day9/1_compactingBlocks.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day9/2_compactingFiles.cpp)
 [![Day 10](https://img.shields.io/badge/Day%2010-Hoof%20It-blue?logo=Archlinux)](https://adventofcode.com/2024/day/10) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day10/1_trailScore.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day10/2_ttrailScore.cpp)
 [![Day 11](https://img.shields.io/badge/Day%2011-Plutonian%20Pebbles-blue?logo=Archlinux)](https://adventofcode.com/2024/day/11) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day11/1_TwinkleStones.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day11/2_DPTwinkle.cpp)
-[![Day 12](https://img.shields.io/badge/Day%2012-Garden%20Groups-blue?logo=Archlinux)](https://adventofcode.com/2024/day/12) |⭐|-|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day12/1_perimeter.cpp)|-
-[![Day 25](https://img.shields.io/badge/Day%2025-Code%20Chroncile-blue?logo=Archlinux)](https://adventofcode.com/2024/day/25) |⭐|26⭐ lack|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day25/1_clockKeyPair.cpp)|-
+[![Day 12](https://img.shields.io/badge/Day%2012-Garden%20Groups-blue?logo=Archlinux)](https://adventofcode.com/2024/day/12) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day12/1_perimeter.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day12/2_edge.cpp)
+[![Day 25](https://img.shields.io/badge/Day%2025-Code%20Chroncile-blue?logo=Archlinux)](https://adventofcode.com/2024/day/25) |⭐|24⭐ lack|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day25/1_clockKeyPair.cpp)|-
 
 ## 💻 Tools
 
@@ -39,6 +39,11 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 ### Day 11 Plutonian Pebbles
 
 The multithreading aproach has crashed my OS for many times, the dynamic programming method is fruitful. However, what if the position of spawned stones matters in the result calculation?
+
+### Day 12 Garden Groups
+
+This problem guides a way of iamge edge detection algorithm.
+![Edge detection](Images/EdgeDetection.png)
 
 ## 🔗 Links
 
