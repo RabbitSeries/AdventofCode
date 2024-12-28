@@ -4,7 +4,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ## 🚀 Solutions
 
-### 2024 Progress: 10/25 ⭐⭐
+### 2024 Progress: 11/25 ⭐⭐
 
  Day | Part 1 | Part 2 | Solution to P1 | Solution to P2
 -----|:------:|:------:|:----------:|:----------:
@@ -18,8 +18,9 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 [![Day 8](https://img.shields.io/badge/Day%208-Resonant%20Collinearity-blue?logo=Archlinux)](https://adventofcode.com/2024/day/8) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day8/1_AntinodesCnt.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day8/2_AntinodeHarmonic.cpp)
 [![Day 9](https://img.shields.io/badge/Day%209-Disk%20Fragmenter-blue?logo=Archlinux)](https://adventofcode.com/2024/day/9) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day9/1_compactingBlocks.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day9/2_compactingFiles.cpp)
 [![Day 10](https://img.shields.io/badge/Day%2010-Hoof%20It-blue?logo=Archlinux)](https://adventofcode.com/2024/day/10) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day10/1_trailScore.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day10/2_ttrailScore.cpp)
-[![Day 11](https://img.shields.io/badge/Day%2011-Plutonian%20Pebbles-blue?logo=Archlinux)](https://adventofcode.com/2024/day/11) |-|-|-|-
-[![Day 25](https://img.shields.io/badge/Day%2025-Code%20Chroncile-blue?logo=Archlinux)](https://adventofcode.com/2024/day/25) |⭐|28⭐ lack|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day25/1_clockKeyPair.cpp)|-
+[![Day 11](https://img.shields.io/badge/Day%2011-Plutonian%20Pebbles-blue?logo=Archlinux)](https://adventofcode.com/2024/day/11) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day11/1_TwinkleStones.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day11/2_DPTwinkle.cpp)
+[![Day 12](https://img.shields.io/badge/Day%2012-Garden%20Groups-blue?logo=Archlinux)](https://adventofcode.com/2024/day/12) |-|-|-|-
+[![Day 25](https://img.shields.io/badge/Day%2025-Code%20Chroncile-blue?logo=Archlinux)](https://adventofcode.com/2024/day/25) |⭐|26⭐ lack|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day25/1_clockKeyPair.cpp)|-
 
 ## 💻 Tools
 
@@ -34,6 +35,10 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 [![Original](Images/Day9DiskFragmentOriginal.png)](2024/Day9/2_compactingFiles.cpp)
 [![Output](Images/Day9DiskFragmentOutput.png)](2024/Day9/2_compactingFiles.cpp)
+
+### Day 11 Plutonian Pebbles
+
+MultiThread aproach has crash my os for many times, the dynamic programming method is fruitful.
 
 ## 🔗 Links
 
