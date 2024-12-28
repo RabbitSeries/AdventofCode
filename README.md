@@ -38,7 +38,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ### Day 11 Plutonian Pebbles
 
-Multithreading aproach has crashes my OS for many times, the dynamic programming method is fruitful.
+The multithreading aproach has crashes my OS for many times, the dynamic programming method is fruitful.
 
 ## 🔗 Links
 
