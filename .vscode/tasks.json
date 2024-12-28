@@ -6,7 +6,7 @@
             "command": "D:\\Build_Tool_Lib\\x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
             "args": [
                 "-fdiagnostics-color=always",
-                "-std=c++14",
+                "-std=c++17",
                 "-g",
                 "${file}",
                 "-o",
@@ -54,7 +54,7 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-fdiagnostics-color=always",
-                "-std=c++14",
+                "-std=c++17",
                 "-g",
                 "${file}",
                 "-o",

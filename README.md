@@ -19,14 +19,14 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 [![Day 9](https://img.shields.io/badge/Day%209-Disk%20Fragmenter-blue?logo=Archlinux)](https://adventofcode.com/2024/day/9) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day9/1_compactingBlocks.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day9/2_compactingFiles.cpp)
 [![Day 10](https://img.shields.io/badge/Day%2010-Hoof%20It-blue?logo=Archlinux)](https://adventofcode.com/2024/day/10) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day10/1_trailScore.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day10/2_ttrailScore.cpp)
 [![Day 11](https://img.shields.io/badge/Day%2011-Plutonian%20Pebbles-blue?logo=Archlinux)](https://adventofcode.com/2024/day/11) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day11/1_TwinkleStones.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day11/2_DPTwinkle.cpp)
-[![Day 12](https://img.shields.io/badge/Day%2012-Garden%20Groups-blue?logo=Archlinux)](https://adventofcode.com/2024/day/12) |-|-|-|-
+[![Day 12](https://img.shields.io/badge/Day%2012-Garden%20Groups-blue?logo=Archlinux)](https://adventofcode.com/2024/day/12) |⭐|-|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day12/1_perimeter.cpp)|-
 [![Day 25](https://img.shields.io/badge/Day%2025-Code%20Chroncile-blue?logo=Archlinux)](https://adventofcode.com/2024/day/25) |⭐|26⭐ lack|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day25/1_clockKeyPair.cpp)|-
 
 ## 💻 Tools
 
 - IDE : [![VSCode](<Images/code-stable.png>)](https://code.visualstudio.com) [![VsCode](https://img.shields.io/badge/VsCode-blue)](https://code.visualstudio.com)
 - Compiler: ![MinGW](https://img.shields.io/badge/MinGW%20g++%20(GCC)%2014.2.1%2020240910-grey?logo=GNU)
-- C++ standard: ![C++14](https://img.shields.io/badge/C%2B%2B14-purple?logo=C%2B%2B)
+- C++ standard: ![C++17](https://img.shields.io/badge/C%2B%2B14-purple?logo=C%2B%2B)
 - OS: [![Arch Linux](https://img.shields.io/badge/Arch%20Linux-grey?logo=Archlinux)](https://www.archlinux.org)
 
 ## 📜 Worth future utility
@@ -45,4 +45,3 @@ The multithreading aproach has crashed my OS for many times, the dynamic program
 - [Advent of Code](https://adventofcode.com/)
 - [About Advent of Code](https://adventofcode.com/about)
 - [This README's template](https://github.com/TrueBurn/advent-of-code)
-
