@@ -171,7 +171,6 @@ int getBoundaryEdges( vector<pos> const boundary, vector<vector<char>> const gar
     }
     printGarden( gardenCanvas );
     return upedge + downEdge + leftEdge + rightEdge;
-
 }
 int main() {
     vector<vector<char>> garden;
