@@ -104,18 +104,13 @@
         "variant": "cpp"
     },
     "[cpp]": {
-        "editor.suggest.insertMode": "insert"
     },
     "[c]": {
-        "editor.suggest.insertMode": "insert"
     },
     "[json]": {
-        "editor.suggest.insertMode": "insert"
     },
     "[jsonc]": {
-        "editor.suggest.insertMode": "insert"
     },
     "[html]": {
-        "editor.suggest.insertMode": "insert"
     }
 }
