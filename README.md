@@ -42,7 +42,7 @@ The multithreading aproach has crashed my OS many times. The dynamic programming
 
 ### Day 12 Garden Groups
 
-This problem guides a way of iamge edge detection algorithm.
+This problem guides a way of image edge detection algorithm.
 ![Edge detection](Images/EdgeDetection.png)
 
 ## 🔗 Links
