@@ -25,7 +25,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 ## 💻 Tools
 
 - IDE : [![VSCode](<Images/code-stable.png>)](https://code.visualstudio.com) [![VsCode](https://img.shields.io/badge/VsCode-blue)](https://code.visualstudio.com)
-- Compiler: ![MinGW](https://img.shields.io/badge/MinGW%20g++%20(GCC)%2014.2.1%2020240910-grey?logo=GNU)
+- Compiler: ![G++](https://img.shields.io/badge/(GCC)%2014.2.1%2020240910-grey)
 - C++ standard: ![C++17](https://img.shields.io/badge/C%2B%2B14-purple?logo=C%2B%2B)
 - OS: [![Arch Linux](https://img.shields.io/badge/Arch%20Linux-grey?logo=Archlinux)](https://www.archlinux.org)
 
