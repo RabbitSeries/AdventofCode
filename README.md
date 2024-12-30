@@ -66,6 +66,8 @@ A regular expression pattern is a sequence of one or more Alternatives, separate
 
 >*Disjunction*
 
+- Also, if Disjunction can match at the current position in several ways, *only the first* one is tried. This is the same logic as || operator in C++.
+
 ### Disjunction
 
 >*Alternative*
@@ -76,6 +78,8 @@ A regular expression pattern is a sequence of one or more Alternatives, separate
 
 *Alternative* ::
 
+Empty Alternative always matches and does not consume any input
+
 >[empty]
 
 >Alternative Term
@@ -84,7 +88,7 @@ A regular expression pattern is a sequence of one or more Alternatives, separate
 
 *Term* ::
 
->*Assertion*
+>*Assertation*
 
 >*Atom*
 
@@ -105,8 +109,14 @@ QuantifierPrefix|Minimum|Maximum
 `{ DecimalDigits , }`|value of DecimalDigits |infinity
 `{ DecimalDigits , DecimalDigits }`|value of DecimalDigits before the comma |value of DecimalDigits after the comma
 
-### Assertion
+gcc|g++
+-|-
+smatch: m[0]=[zaacbbbcac] m[1]=[z] m[2]=[ac] m[3]=[a] `m[4]=[bbb]` m[5]=[c] |smatch: m[0]=[zaacbbbcac] m[1]=[z] m[2]=[ac] m[3]=[a] `m[4]=[]` m[5]=[c]
 
+
+### Assertation
+
+Assertations (also called lookahead assertation) match conditions, rather than substrings of the input string. They never consume any characters from the input.
 >`^`
 
 - The position that immediately follows a *LineTerminator* character (Enable: `std::regex_constants::multiline`)
@@ -117,7 +127,7 @@ QuantifierPrefix|Minimum|Maximum
 - The position of a LineTerminator character (Enable: `std::regex_constants::multiline`)
 - The end of the input (Disable: `std::regex_constants::match_not_eol`)
 
-In the two assertions above and in the Atom `.`(match any character) below, LineTerminator is one of the following four characters: `U+000A` (`\n`or line feed), `U+000D` (`\r` or carriage return), `U+2028` (`line separator`), or `U+2029` (`paragraph separator`), see [Unicode Character U+2028](https://www.compart.com/en/unicode/U+2028)
+In the two Assertations above and in the Atom `.`(match any character) below, LineTerminator is one of the following four characters: `U+000A` (`\n`or line feed), `U+000D` (`\r` or carriage return), `U+2028` (`line separator`), or `U+2029` (`paragraph separator`), see [Unicode Character U+2028](https://www.compart.com/en/unicode/U+2028)
 
 ```shell
 sudo pacman -S wget
@@ -126,19 +136,25 @@ wget ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt
 
 >`\b` : word boundary
 <!-- TODO test if enable match_not_bow/match_not_eow, word begins/ends with a-z will not be matched  -->
-- The **beginning/end** of a word (current character is not a letter, digit, or underscore, and the previous character isn't/is one of those)
-- The **beginning/end** of input if the first character is a letter, digit, or underscore (Disable: `std::regex_constants::match_not_bow`, `std::regex_constants::match_not_eow`)
+- The **beginning/end** of *a word* (current character is/isn't a letter, digit, or underscore, and the previous character isn't/is one of those)
+- The **beginning/end** of *the input* (the first character is not a letter, digit, or underscore )(Disable: `std::regex_constants::match_not_bow`, `std::regex_constants::match_not_eow`)
 
->`\B` : negative word boundary
+>`\B` : negative word boundary, match *except* :
+
+- The **beginning/end** of *a word/the input*
 
 >`( ? = Disjunction )`
 
+- The Assertation ( ? = Disjunction ) (zero-width positive lookahead) matches if Disjunction would match the input at the current position.
+- Positive lookahead Assertation does **not** consume letters, positive assertation succeeds if the pattern inside the lookahead **succeeds**. or it will try the remainder of the disjunction.
+
+ECMAScript **forbids** backtracking into the lookahead Disjunctions, which affects the behavior of backreferences into a **positive lookahead** from the remainder of the regular expression (see example below). Backreferences into the **negative lookahead** from the rest of the regular expression are always **undefined** (since the lookahead Disjunction must fail to proceed, and if it is failed there is no reason backreferencing to it).
+
 >`( ? ! Disjunction )`
 
-Remark: the backreferenced term inside parenthesis is the final regex matched result, but gcc got it wrong. It does not correctly clear the matches[4] capture group as required by ECMA-262 21.2.2.5.1, and thus incorrectly captures "bbb" for that group (see [1][Quantifiers]).
+- The Assertation ( ? ! Disjunction ) (zero-width negative lookahead) matches if Disjunction would NOT match the input at the current position.
+- Negative lookahead assertation does **not** cosume letters, negative assertation succeeds if the pattern inside the look =ahead **fails**, which requies all alternative terms in the disjunction unmatched.
 
-gcc|g++
--|-
-smatch: m[0]=[zaacbbbcac] m[1]=[z] m[2]=[ac] m[3]=[a] `m[4]=[bbb]` m[5]=[c] |smatch: m[0]=[zaacbbbcac] m[1]=[z] m[2]=[ac] m[3]=[a] `m[4]=[]` m[5]=[c]
+Remark: the backreferenced term inside parenthesis is the final regex matched result, but gcc got it wrong. It does not correctly clear the matches[4] capture group as required by ECMA-262 21.2.2.5.1, and thus incorrectly captures "bbb" for that group (see [cpp reference #Quantifiers][Quantifiers]).
 
 [Quantifiers]: https://en.cppreference.com/w/cpp/regex/ecmascript#Quantifiers

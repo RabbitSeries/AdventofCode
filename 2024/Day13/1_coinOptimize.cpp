@@ -15,7 +15,7 @@ int main() {
     while( !feof( input ) && fgets( buf, BUFFER_SIZE + 1, input ) ) {
         stringstream line( buf );
         if( line.str().substr( 0, string( "Button " ).size() ) == "Button " ) {
-            
+            // Regex "^.*\+([0-9]+),.*\+([0-9]+)$"
         }
     }
     return 0;
