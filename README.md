@@ -118,7 +118,7 @@ Each Alternative is either empty or is a **sequence** of Terms (with **no separa
 >*QuantifierPrefix* **?**
 
 QuantifierPrefix|Minimum|Maximum
-----------------|-------|-------
+----------------|-------|-------`
 `*`|zero|infinity
 `+`|one|infinity
 `?`|zero|one
@@ -179,5 +179,14 @@ Within a *Alternative*'s choice point, the *alternative* term (*Atom*) is matche
 
 All choices in the last (nth) repetition of Atom are tried before moving on to the next choice in the next-to-last (n–1)st repetition of Atom (**backtracking**); at which point it may turn out that more or fewer repetitions of Atom are now possible; these are exhausted (again, starting with either as few or as many as possible) before moving on to the next choice in the (n-1)st repetition of Atom and so on.
 
+### Priority
+
+P|OP
+-|-
+1|\
+2|(), (?:), (?=), []
+3|*, +, ?, {n}, {n,}, {n,m}
+4|^, $, \AnyClassChar,AnyChar
+5|\|
 <!-- References -->
 [Quantifiers]: https://en.cppreference.com/w/cpp/regex/ecmascript#Quantifiers

@@ -68,6 +68,9 @@ int main() {
 
     // because backtracking into lookaheads is prohibited, 
     // this matches aba rather than aaaba
+    // For the first match the Disjunction fails, making the entire regex moves to "b".
+    // Then, a+ matched aaa, and a* matched aaa, b matched b, but \1 aaa fails. And the backtracking to fewer times of repetition in (?=a+) is forhibited, so backtracking to a* won't match 
+    // So the entire regex moves to "ba" instead of cusumed by lookahead assertion, backtracking to fewer time of repetition. 
     show_matches( "baaabac", "(?=(a+))a*b\\1" );
 
     // logical AND via lookahead: this password matches IF it contains
