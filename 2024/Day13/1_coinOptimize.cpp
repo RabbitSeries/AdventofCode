@@ -16,6 +16,7 @@ int main() {
         stringstream line( buf );
         if( line.str().substr( 0, string( "Button " ).size() ) == "Button " ) {
             // Regex "^.*\+([0-9]+),.*\+([0-9]+)$"
+            // Regex "\+([0-9]+).*\+([0-9]+)"
         }
     }
     return 0;

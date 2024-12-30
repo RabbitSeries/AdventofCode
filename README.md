@@ -60,6 +60,20 @@ This problem guides a way of image edge detection algorithm.
 
 A regular expression pattern is a sequence of one or more Alternatives, separated by the disjunction operator | (in other words, the disjunction operator has the lowest precedence).
 
+Pattern = Disjunction = Alternative | Alternative | ...
+
+Alternative(Can be empty) = [Sequence of Alternative Terms]
+
+Alternative Term(not empty) = [Assertion] [Atom] [Atom Quantifier]
+
+Quantifier = QuantifierPrefix [?]
+
+Assertion = ^,$,\b,\B,( ? = Disjunction ),( ? ! Disjunction )
+
+QuantifierPrefix = *,+,?,{ DecimalDigits },{ DecimalDigits , },{ DecimalDigits , DecimalDigits }
+
+Atom = PatternCharacter,.,\ AtomEscape,CharacterClass,( Disjunction ),( ? : Disjunction )
+
 ### Alternatives
 
 *Pattern* ::
@@ -68,7 +82,7 @@ A regular expression pattern is a sequence of one or more Alternatives, separate
 
 - Also, if Disjunction can match at the current position in several ways, *only the first* one is tried. This is the same logic as || operator in C++.
 
-### Disjunction
+*Disjunction* ::
 
 >*Alternative*
 
@@ -76,22 +90,22 @@ A regular expression pattern is a sequence of one or more Alternatives, separate
 
 ### Terms
 
-*Alternative* ::
+Each Alternative is either empty or is a **sequence** of Terms (with **no separators** between the Terms)
 
-- Empty Alternative always matches and does not consume any input.
-- Between alternatives (Disjunctions), the remainder of the regular expression is not tried.
+*Alternative* ::
 
 >[empty]
 
 >Alternative Term
 
+- Empty Alternative always matches and does not consume any input.
+- Between alternatives (Disjunctions), if the former Term matched the remainder of the regular expression is not tried.
+
 ### Quantifiers
 
 *Term* ::
 
-- Within a alternative's choice points, the alternative term (*Atom*) is matched **as many** (or as few, if non-greedy) times as possible **in the first repetition**. All choice points in the remainder of the regular expression are tried **before** moving on to the next repetition in the last Atom.
-
->*Assertation*
+>*Assertion*
 
 >*Atom*
 
@@ -112,13 +126,15 @@ QuantifierPrefix|Minimum|Maximum
 `{ DecimalDigits , }`|value of DecimalDigits |infinity
 `{ DecimalDigits , DecimalDigits }`|value of DecimalDigits before the comma |value of DecimalDigits after the comma
 
+Remark: the backreferenced term inside parenthesis is the final regex matched result, but gcc got it wrong. It does not correctly clear the matches[4] capture group as required by ECMA-262 21.2.2.5.1, and thus incorrectly captures "bbb" for that group (see [cpp reference #Quantifiers][Quantifiers]).
+
 gcc|g++
 -|-
 smatch: m[0]=[zaacbbbcac] m[1]=[z] m[2]=[ac] m[3]=[a] `m[4]=[bbb]` m[5]=[c] |smatch: m[0]=[zaacbbbcac] m[1]=[z] m[2]=[ac] m[3]=[a] `m[4]=[]` m[5]=[c]
 
-### Assertation
+### Assertion
 
-Assertations (also called lookahead assertation) match conditions, rather than substrings of the input string. They never consume any characters from the input.
+Assertions (also called lookahead Assertion) match conditions, rather than substrings of the input string. They never consume any characters from the input.
 >`^`
 
 - The position that immediately follows a *LineTerminator* character (Enable: `std::regex_constants::multiline`)
@@ -129,7 +145,7 @@ Assertations (also called lookahead assertation) match conditions, rather than s
 - The position of a LineTerminator character (Enable: `std::regex_constants::multiline`)
 - The end of the input (Disable: `std::regex_constants::match_not_eol`)
 
-In the two Assertations above and in the Atom `.`(match any character) below, LineTerminator is one of the following four characters: `U+000A` (`\n`or line feed), `U+000D` (`\r` or carriage return), `U+2028` (`line separator`), or `U+2029` (`paragraph separator`), see [Unicode Character U+2028](https://www.compart.com/en/unicode/U+2028)
+In the two Assertions above and in the Atom `.`(match any character) below, LineTerminator is one of the following four characters: `U+000A` (`\n`or line feed), `U+000D` (`\r` or carriage return), `U+2028` (`line separator`), or `U+2029` (`paragraph separator`), see [Unicode Character U+2028](https://www.compart.com/en/unicode/U+2028)
 
 ```shell
 sudo pacman -S wget
@@ -147,16 +163,19 @@ wget ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt
 
 >`( ? = Disjunction )`
 
-- The Assertation ( ? = Disjunction ) (zero-width positive lookahead) matches if Disjunction would match the input at the current position.
-- Positive lookahead Assertation does **not** consume letters, positive assertation succeeds if the pattern inside the lookahead **succeeds**. or it will try the remainder of the disjunction.
-
-ECMAScript **forbids** backtracking into the lookahead Disjunctions, which affects the behavior of backreferences into a **positive lookahead** from the remainder of the regular expression (see example below). Backreferences into the **negative lookahead** from the rest of the regular expression are always **undefined** (since the lookahead Disjunction must fail to proceed, and if it is failed there is no reason backreferencing to it).
+- The Assertion ( ? = Disjunction ) (zero-width positive lookahead) matches if Disjunction would match the input at the current position.
+- Positive lookahead Assertion does **not** consume letters, positive Assertion succeeds if the pattern inside the lookahead **succeeds**. or it will try the remainder of the disjunction.
 
 >`( ? ! Disjunction )`
 
-- The Assertation ( ? ! Disjunction ) (zero-width negative lookahead) matches if Disjunction would NOT match the input at the current position.
-- Negative lookahead assertation does **not** cosume letters, negative assertation succeeds if the pattern inside the look =ahead **fails**, which requies all alternative terms in the disjunction unmatched.
+- The Assertion ( ? ! Disjunction ) (zero-width negative lookahead) matches if Disjunction would NOT match the input at the current position.
+- Negative lookahead Assertion does **not** cosume letters, negative Assertion succeeds if the pattern inside the look =ahead **fails**, which requies all alternative terms in the disjunction unmatched.
 
-Remark: the backreferenced term inside parenthesis is the final regex matched result, but gcc got it wrong. It does not correctly clear the matches[4] capture group as required by ECMA-262 21.2.2.5.1, and thus incorrectly captures "bbb" for that group (see [cpp reference #Quantifiers][Quantifiers]).
+ECMAScript **forbids** backtracking into the lookahead Disjunctions, which affects the behavior of backreferences into a **positive lookahead** from the remainder of the regular expression (see example below). Backreferences into the **negative lookahead** from the rest of the regular expression are always **undefined** (since the lookahead Disjunction must fail to proceed, and if it is failed there is no reason backreferencing to it).
 
+### Match Order
+
+Within a *Alternative*'s choice point, the *alternative* term (*Atom*) is matched **as many** (or as few, if non-greedy) times as possible **in the first repetition**, during which the *Atom* will begin to match with **Minimum** *Quantifier* times and repeat to match more of the input(if greedy *Quantifier*, or stops if not greedy) or move to the next *Disjunction* within the *Term* if fails to match. All choice points in the remainder of the regular expression are tried **before** moving on to the next choice in the last repetition of Atom.
+
+<!-- References -->
 [Quantifiers]: https://en.cppreference.com/w/cpp/regex/ecmascript#Quantifiers
