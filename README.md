@@ -78,7 +78,8 @@ A regular expression pattern is a sequence of one or more Alternatives, separate
 
 *Alternative* ::
 
-Empty Alternative always matches and does not consume any input
+- Empty Alternative always matches and does not consume any input.
+- Between alternatives (Disjunctions), the remainder of the regular expression is not tried.
 
 >[empty]
 
@@ -87,6 +88,8 @@ Empty Alternative always matches and does not consume any input
 ### Quantifiers
 
 *Term* ::
+
+- Within a alternative's choice points, the alternative term (*Atom*) is matched **as many** (or as few, if non-greedy) times as possible **in the first repetition**. All choice points in the remainder of the regular expression are tried **before** moving on to the next repetition in the last Atom.
 
 >*Assertation*
 
@@ -112,7 +115,6 @@ QuantifierPrefix|Minimum|Maximum
 gcc|g++
 -|-
 smatch: m[0]=[zaacbbbcac] m[1]=[z] m[2]=[ac] m[3]=[a] `m[4]=[bbb]` m[5]=[c] |smatch: m[0]=[zaacbbbcac] m[1]=[z] m[2]=[ac] m[3]=[a] `m[4]=[]` m[5]=[c]
-
 
 ### Assertation
 
