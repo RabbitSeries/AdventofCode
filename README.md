@@ -54,4 +54,91 @@ This problem guides a way of image edge detection algorithm.
 
 ## 📆 TODOs
 
-- Chnge Day3 algorithm to regular expression implementation([C++11 feature](https://en.cppreference.com/w/cpp/regex)).
+- Change Day3 algorithm to [regular expression](https://en.cppreference.com/w/cpp/regex/ecmascript) implementation([C++11 feature](https://en.cppreference.com/w/cpp/regex)).
+
+## Regex grammar
+
+A regular expression pattern is a sequence of one or more Alternatives, separated by the disjunction operator | (in other words, the disjunction operator has the lowest precedence).
+
+### Alternatives
+
+*Pattern* ::
+
+>*Disjunction*
+
+### Disjunction
+
+>*Alternative*
+
+>*Alternative* | *Disjunction*
+
+### Terms
+
+*Alternative* ::
+
+>[empty]
+
+>Alternative Term
+
+### Quantifiers
+
+*Term* ::
+
+>*Assertion*
+
+>*Atom*
+
+>*Atom* *Quantifier*
+
+*Quantifier* ::
+
+>*QuantifierPrefix*
+
+>*QuantifierPrefix* **?**
+
+QuantifierPrefix|Minimum|Maximum
+----------------|-------|-------
+`*`|zero|infinity
+`+`|one|infinity
+`?`|zero|one
+`{ DecimalDigits }`|value of DecimalDigits |value of DecimalDigits
+`{ DecimalDigits , }`|value of DecimalDigits |infinity
+`{ DecimalDigits , DecimalDigits }`|value of DecimalDigits before the comma |value of DecimalDigits after the comma
+
+### Assertion
+
+>`^`
+
+- The position that immediately follows a *LineTerminator* character (Enable: `std::regex_constants::multiline`)
+- The beginning of the input (Disable: `std::regex_constants::match_not_bol`)
+
+>`$`
+
+- The position of a LineTerminator character (Enable: `std::regex_constants::multiline`)
+- The end of the input (Disable: `std::regex_constants::match_not_eol`)
+
+In the two assertions above and in the Atom `.`(match any character) below, LineTerminator is one of the following four characters: `U+000A` (`\n`or line feed), `U+000D` (`\r` or carriage return), `U+2028` (`line separator`), or `U+2029` (`paragraph separator`), see [Unicode Character U+2028](https://www.compart.com/en/unicode/U+2028)
+
+```shell
+sudo pacman -S wget
+wget ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt
+```
+
+>`\b` : word boundary
+<!-- TODO test if enable match_not_bow/match_not_eow, word begins/ends with a-z will not be matched  -->
+- The **beginning/end** of a word (current character is not a letter, digit, or underscore, and the previous character isn't/is one of those)
+- The **beginning/end** of input if the first character is a letter, digit, or underscore (Disable: `std::regex_constants::match_not_bow`, `std::regex_constants::match_not_eow`)
+
+>`\B` : negative word boundary
+
+>`( ? = Disjunction )`
+
+>`( ? ! Disjunction )`
+
+Remark: the backreferenced term inside parenthesis is the final regex matched result, but gcc got it wrong. It does not correctly clear the matches[4] capture group as required by ECMA-262 21.2.2.5.1, and thus incorrectly captures "bbb" for that group (see [1][Quantifiers]).
+
+gcc|g++
+-|-
+smatch: m[0]=[zaacbbbcac] m[1]=[z] m[2]=[ac] m[3]=[a] `m[4]=[bbb]` m[5]=[c] |smatch: m[0]=[zaacbbbcac] m[1]=[z] m[2]=[ac] m[3]=[a] `m[4]=[]` m[5]=[c]
+
+[Quantifiers]: https://en.cppreference.com/w/cpp/regex/ecmascript#Quantifiers
