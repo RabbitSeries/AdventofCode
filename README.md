@@ -177,5 +177,7 @@ ECMAScript **forbids** backtracking into the lookahead Disjunctions, which affec
 
 Within a *Alternative*'s choice point, the *alternative* term (*Atom*) is matched **as many** (or as few, if non-greedy) times as possible **in the first repetition**, during which the *Atom* will begin to match with **Minimum** *Quantifier* times and repeat to match more of the input(if greedy *Quantifier*, or stops if not greedy) or move to the next *Disjunction* within the *Term* if fails to match. All choice points in the remainder of the regular expression are tried **before** moving on to the next choice in the last repetition of Atom.
 
+All choices in the last (nth) repetition of Atom are tried before moving on to the next choice in the next-to-last (n–1)st repetition of Atom (**backtracking**); at which point it may turn out that more or fewer repetitions of Atom are now possible; these are exhausted (again, starting with either as few or as many as possible) before moving on to the next choice in the (n-1)st repetition of Atom and so on.
+
 <!-- References -->
 [Quantifiers]: https://en.cppreference.com/w/cpp/regex/ecmascript#Quantifiers

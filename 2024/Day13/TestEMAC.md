@@ -17,8 +17,12 @@ abcdefghi a[a-z]{2,4}?
 abc a(b?)
 abc a(b??)
 
+input|pattern|replace pattern|result
+-|-|-|-
+baaabac (?=(a+)) 
 
-baaabac (?=(a+))
-baaabac (?=(a+))a*b\\1
-baaabac a+a*b\1   1:$1 2:$2 4:$4   1:a 2:aa 4:a
-baaabac (?=(a+))(a+)b(\1)   -1:$1 2:$2 4:$4-   -1:a 2:a 3:a-
+baaabac (?=(a+))a*b\1
+
+baaabac (a+)a*b\1   1:$1,2:$2,4:$4   1:a
+
+baaabac (?=(a+))(a+)b(\1)   -1:$1,2:$2,3:$3-   -1:a,2:a,3:a-
