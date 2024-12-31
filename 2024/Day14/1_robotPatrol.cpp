@@ -105,4 +105,5 @@ int main() {
         elapseTime++;
     }
     cout << quadrantCount( specs ) << endl;
+    return 0;
 }
