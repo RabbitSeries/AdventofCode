@@ -46,6 +46,8 @@ ll quadrantCount( specs s ) {
 }
 
 void printMap( specs s ) {
+    // system( "cls" );
+
     vector<vector<int>> room( HEIGHT, vector<int>( WIDTH, -1 ) );
     int id = 0;
     for( robot r : s ) {
@@ -53,9 +55,12 @@ void printMap( specs s ) {
     }
     for( auto line : room ) {
         for( auto id : line ) {
-            if( id >= 0 ) cout << id % 10;
+            if( id >= 0 ) {
+                // cout << id % 10;
+                cout << "*";
+            }
             else {
-                cout << ".";
+                cout << " ";
             }
         }
         cout << endl;
@@ -86,9 +91,18 @@ int main() {
         }
     }
     int elapseTime = 0;
-    while( elapseTime++ < 100 ) {
-        // printMap( specs );
+    int close = 0;
+    // while( elapseTime++ < 100 ) {
+    // This pattern is funny.
+    while( 1 ) {
+        if( elapseTime > close * 100 && elapseTime % 100 == 23 + close ) {
+            close++;
+            system( "clear" );
+            printMap( specs );
+            cout << elapseTime << endl;
+        }
         step( specs );
+        elapseTime++;
     }
     cout << quadrantCount( specs ) << endl;
 }
