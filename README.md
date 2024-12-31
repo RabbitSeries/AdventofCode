@@ -57,6 +57,10 @@ The multithreading aproach has crashed my OS many times. The dynamic programming
 This problem guides a way of image edge detection algorithm.
 ![Edge detection](Images/EdgeDetection.png)
 
+### Day 14 Restroom Redoubt
+
+![Merry Christmas!](Images/ChristmasTree.png)
+
 ## 🔗 Links
 
 - [Advent of Code](https://adventofcode.com/)

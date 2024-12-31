@@ -93,10 +93,13 @@ int main() {
     int elapseTime = 0;
     int close = 0;
     // while( elapseTime++ < 100 ) {
-    // This pattern is funny.
+    // This pattern is funny. U can see the line align aside.
     while( 1 ) {
-        if( elapseTime > close * 100 && elapseTime % 100 == 23 + close ) {
-            close++;
+        if(elapseTime == 7700){
+            int a = 0;
+        } 
+        if( elapseTime > 0 && elapseTime >= close * 100 && elapseTime % 100 == ( 23 + close ) %100 ) {
+            close = close + 1;
             system( "clear" );
             printMap( specs );
             cout << elapseTime << endl;
