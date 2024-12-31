@@ -96,7 +96,7 @@ bool isPatrolCircle( int i, int j, vector<vector<char>> routeMap, int x, int y, 
             }
         }
         else {
-            cout << "Erro situation" << endl;
+            cout << "Error situation" << endl;
         }
         // if( x == 4 && y == 8 ) {
         //     disPlayMap( routeMap );
