@@ -1,4 +1,5 @@
 #include "bits/stdc++.h"
+#include <termios.h>
 using namespace std;
 #define WALL -1
 #define EMPTY -2
@@ -10,8 +11,46 @@ typedef struct pos {
     int x, y;
 }pos;
 
+void enableRawMode() {
+    termios term;
+    tcgetattr( STDIN_FILENO, &term );          // 获取当前终端设置
+    term.c_lflag &= ~( ICANON | ECHO );        // 关闭规范模式和回显
+    tcsetattr( STDIN_FILENO, TCSANOW, &term ); // 立即生效
+}
+
+void disableRawMode() {
+    termios term;
+    tcgetattr( STDIN_FILENO, &term );
+    term.c_lflag |= ( ICANON | ECHO );         // 恢复规范模式和回显
+    tcsetattr( STDIN_FILENO, TCSANOW, &term );
+}
+
+char getMoveMent() {
+    char c;
+    while( 1 ) {
+        c = getchar();
+        if( c == '\033' ) { // 检测转义序列（ESC 键）
+            getchar();     // 跳过 '['
+            switch( getchar() ) { // 读取方向键的第三个字符
+            case 'A': return '^';
+            case 'B': return 'v';
+            case 'C': return '>';
+            case 'D': return '<';
+            default: std::cout << "Unknown key" << std::endl; break;
+            }
+        }
+        else if( c == 27 ) { // ESC 键单独按下
+            return 0;
+        }
+        else {
+            // std::cout << "Normal key: " << c << std::endl;
+            continue;
+        }
+    }
+}
+
 void printGUI( vector<vector<int>> const pos2Id, pos const curPos ) {
-    system("clear");
+    system( "clear" );
     vector<vector<int>> GUI = pos2Id;
     GUI[curPos.x][curPos.y] = BOT;
     for( auto line : GUI ) {
@@ -68,18 +107,18 @@ void pushBox( vector<pos>& id2Pos, vector<vector<int>>& pos2Id, pos& curPos, cha
     }
     if( pos2Id[nextPos.x][nextPos.y] == EMPTY ) {
         while( !boxPath.empty() ) {
-            printGUI( pos2Id, curPos );
+            // printGUI( pos2Id, curPos );
             pos preBox = boxPath.top();
             boxPath.pop();
             int preBoxId = pos2Id[preBox.x][preBox.y];
             id2Pos[preBoxId] = nextPos;
             pos2Id[nextPos.x][nextPos.y] = preBoxId;
             nextPos = preBox;
-            printGUI( pos2Id, curPos );
+            // printGUI( pos2Id, curPos );
         }
         pos2Id[nextPos.x][nextPos.y] = EMPTY;
         curPos = nextPos;
-        printGUI( pos2Id, curPos );
+        // printGUI( pos2Id, curPos );
     }
 }
 
@@ -101,6 +140,32 @@ void play( vector<pos>& id2Pos, vector<vector<int>>& pos2Id, pos& curPos, queue<
             break;
         }
     }
+}
+
+void playMyself( vector<pos>& id2Pos, vector<vector<int>>& pos2Id, pos& curPos ) {
+    printGUI( pos2Id, curPos );
+    enableRawMode(); // 开启字符缓冲模式
+    while( 1 ) {
+        char c = getMoveMent();
+        if( c == 0 ) {  // 按 'q' 退出
+            break;
+        }
+        // printGUI( pos2Id, curPos );
+        pos nextPos = getNextPos( c, curPos );
+        switch( pos2Id[nextPos.x][nextPos.y] ) {
+        case WALL:
+            break;
+        case EMPTY:
+            curPos = nextPos;
+            break;
+        default:
+            // Push boxes
+            pushBox( id2Pos, pos2Id, curPos, c );
+            break;
+        }
+        printGUI( pos2Id, curPos );
+    }
+    disableRawMode();
 }
 
 typedef long long ll;
@@ -154,6 +219,8 @@ int main() {
             if( c != '\n' && c != '\0' ) { control.push( c ); }
         }
     }
-    play( id2Pos, pos2Id, start, control );
+    // playMyself( id2Pos, pos2Id, start,control );
+    playMyself( id2Pos, pos2Id, start );
     cout << sumCoordinates( id2Pos, pos2Id ) << endl;
+    return 0;
 }
