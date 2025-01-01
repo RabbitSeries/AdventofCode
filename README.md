@@ -4,7 +4,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ## 🚀 Solutions
 
-### 2024 Progress: 14/25 ⭐⭐
+### 2024 Progress: 25/25 ⭐⭐
 
  Day | Part 1 | Part 2 | Solution to P1 | Solution to P2
 -----|:------:|:------:|:----------:|:----------:
@@ -22,7 +22,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 [![Day 12](https://img.shields.io/badge/Day%2012-Garden%20Groups-blue?logo=Archlinux)](https://adventofcode.com/2024/day/12) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day12/1_perimeter.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day12/2_edge.cpp)
 [![Day 13](https://img.shields.io/badge/Day%2013-Claw%20Contraption-blue?logo=Archlinux)](https://adventofcode.com/2024/day/13) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day13/1_coinOptimize.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day13/1_coinOptimize.cpp)
 [![Day 14](https://img.shields.io/badge/Day%2014-Restroom%20Redoubt-blue?logo=Archlinux)](https://adventofcode.com/2024/day/14) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day14/1_robotPatrol.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day14/1_robotPatrol.cpp)
-[![Day 15](https://img.shields.io/badge/Day%2015-Warehouse%20Woes-blue?logo=Archlinux)](https://adventofcode.com/2024/day/15) |⭐|-|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day15/1_pushBoxes.cpp)|-
+[![Day 15](https://img.shields.io/badge/Day%2015-Warehouse%20Woes-blue?logo=Archlinux)](https://adventofcode.com/2024/day/15) |⭐|⭐|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day15/1_pushBoxes.cpp)|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day15/2_pushWIderBoxes.cpp)
 [![Day 16](https://img.shields.io/badge/Day%2016-Reindeer%20Maze-blue?logo=Archlinux)](https://adventofcode.com/2024/day/16) |-|-|-|-
 [![Day 17](https://img.shields.io/badge/Day%2017-Chronospatial%20Computer-blue?logo=Archlinux)](https://adventofcode.com/2024/day/17) |-|-|-|-
 [![Day 18](https://img.shields.io/badge/Day%2018-RAM%20Run-blue?logo=Archlinux)](https://adventofcode.com/2024/day/18) |-|-|-|-
