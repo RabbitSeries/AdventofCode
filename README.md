@@ -45,21 +45,27 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ### Day 9 Disk Fragmenter
 
-[![Original](Images/Day9DiskFragmentOriginal.png)](2024/Day9/2_compactingFiles.cpp)
-[![Output](Images/Day9DiskFragmentOutput.png)](2024/Day9/2_compactingFiles.cpp)
+[![Original](Images/Day9DiskFragmentOriginal500X.png)](2024/Day9/2_compactingFiles.cpp)
+[![Output](Images/Day9DiskFragmentOutput500X.png)](2024/Day9/2_compactingFiles.cpp)
 
 ### Day 11 Plutonian Pebbles
 
-The multithreading aproach has crashed my OS many times. The dynamic programming method is fruitful. However, what if the position of spawned stones matters in the result calculation?
+The multithreading approach has crashed my OS many times. The dynamic programming method is fruitful. However, what if the position of spawned stones matters in the result calculation?
 
 ### Day 12 Garden Groups
 
 This problem guides a way of image edge detection algorithm.
-![Edge detection](Images/EdgeDetection.png)
+![Edge detection](Images/EdgeDetectionX500.png)
 
 ### Day 14 Restroom Redoubt
 
-![Merry Christmas!](Images/ChristmasTree.png)
+![Merry Christmas!](Images/ChristmasTreeX500.png)
+
+### Day 15 Warehouse Woes
+
+A simple box pushing game.
+
+<!-- ![Merry Christmas!](Images/ChristmasTree.png) -->
 
 ## 🔗 Links
 
@@ -72,3 +78,11 @@ This problem guides a way of image edge detection algorithm.
 
 - Change Day3 algorithm to [regular expression](https://en.cppreference.com/w/cpp/regex/ecmascript) implementation([C++11 feature](https://en.cppreference.com/w/cpp/regex)).
 - What does day 13 algorithm wants to testify?
+
+## Statistics
+
+Language|files|blank|comment|code
+--------|-----|-----|-------|----
+C++|33|133|247|2672
+C/C++ Header|3|14|17|293
+SUM:|36|147|264|2965

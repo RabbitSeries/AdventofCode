@@ -240,7 +240,7 @@ int main() {
             if( c != '\n' && c != '\0' ) { control.push( c ); }
         }
     }
-    // 1472388
+    // Error: 1472388
     // cout << sumCoordinates( id2BoxPos, acrade ) << endl;
     // printGUI( acrade, start );
     // play( id2BoxPos, acrade, start, control );
