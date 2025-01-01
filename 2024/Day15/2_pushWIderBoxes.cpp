@@ -14,6 +14,7 @@ vector<boxPos> getNextBoxVertical( vector<boxPos> const id2BoxPos, vector<vector
                 // Unable to move.
                 return nextLevel;
             }
+            // Avoid dulplicated eppend.
             if( nextIDL != EMPTY )
                 nextLevelID[nextIDL]++;
             if( nextIDR != EMPTY )

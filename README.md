@@ -31,8 +31,8 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 [![Day 21](https://img.shields.io/badge/Day%2021-Keypad%20Conundrum-blue?logo=Archlinux)](https://adventofcode.com/2024/day/21) |-|-|-|-
 [![Day 22](https://img.shields.io/badge/Day%2022-Monkey%20Market-blue?logo=Archlinux)](https://adventofcode.com/2024/day/22) |-|-|-|-
 [![Day 23](https://img.shields.io/badge/Day%2023-LAN%20Party-blue?logo=Archlinux)](https://adventofcode.com/2024/day/23) |-|-|-|-
-[![Day 24](https://img.shields.io/badge/Day%2023-Crossed%20Wires-blue?logo=Archlinux)](https://adventofcode.com/2024/day/24) |-|-|-|-
-[![Day 25](https://img.shields.io/badge/Day%2025-Code%20Chroncile-blue?logo=Archlinux)](https://adventofcode.com/2024/day/25) |⭐|20⭐ lack|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day25/1_clockKeyPair.cpp)|-
+[![Day 24](https://img.shields.io/badge/Day%2024-Crossed%20Wires-blue?logo=Archlinux)](https://adventofcode.com/2024/day/24) |-|-|-|-
+[![Day 25](https://img.shields.io/badge/Day%2025-Code%20Chroncile-blue?logo=Archlinux)](https://adventofcode.com/2024/day/25) |⭐|18⭐ lack|[![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day25/1_clockKeyPair.cpp)|-
 
 ## 💻 Tools
 
