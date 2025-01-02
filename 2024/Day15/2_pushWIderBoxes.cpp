@@ -8,16 +8,16 @@ vector<boxPos> getNextBoxVertical( vector<boxPos> const id2BoxPos, vector<vector
         {
             pos l = getNextPos( control, curBox.l ), r = getNextPos( control, curBox.r );
             int nextIDL = acrade[l.x][l.y], nextIDR = acrade[r.x][r.y];
-            if( nextIDL == WALL || nextIDR == WALL ) {
+            if( nextIDL == CELLWALL || nextIDR == CELLWALL ) {
                 isBlocked = true;
                 nextLevel.clear();
                 // Unable to move.
                 return nextLevel;
             }
             // Avoid dulplicated eppend.
-            if( nextIDL != EMPTY )
+            if( nextIDL != CELLEMPTY )
                 nextLevelID[nextIDL]++;
-            if( nextIDR != EMPTY )
+            if( nextIDR != CELLEMPTY )
                 nextLevelID[nextIDR]++;
         }
     }
@@ -60,8 +60,8 @@ void pushBoxVertical( vector<boxPos> const boxList, vector<boxPos>& id2BoxPos, v
         boxPos& curBox = id2BoxPos[boxId];
         curBox.l = getNextPos( control, l );
         curBox.r = getNextPos( control, r );
-        acrade[l.x][l.y] = EMPTY;
-        acrade[r.x][r.y] = EMPTY;
+        acrade[l.x][l.y] = CELLEMPTY;
+        acrade[r.x][r.y] = CELLEMPTY;
         acrade[curBox.l.x][curBox.l.y] = boxId;
         acrade[curBox.r.x][curBox.r.y] = boxId;
     }
@@ -76,9 +76,9 @@ void pushBoxHorizontal( vector<boxPos>& boxList, vector<boxPos>& id2BoxPos, vect
         curBox.l = getNextPos( control, l );
         curBox.r = getNextPos( control, r );
         if( control == '>' )
-            acrade[l.x][l.y] = EMPTY;
+            acrade[l.x][l.y] = CELLEMPTY;
         else
-            acrade[r.x][r.y] = EMPTY;
+            acrade[r.x][r.y] = CELLEMPTY;
         acrade[curBox.l.x][curBox.l.y] = boxId;
         acrade[curBox.r.x][curBox.r.y] = boxId;
     }
@@ -146,9 +146,9 @@ bool freshGUI( vector<boxPos>& id2BoxPos, vector<vector<int>>& acrade, pos& curP
     // printGUI( acrade, curPos );
     pos nextPos = getNextPos( c, curPos );
     switch( acrade[nextPos.x][nextPos.y] ) {
-    case WALL:
+    case CELLWALL:
         break;
-    case EMPTY:
+    case CELLEMPTY:
         curPos = nextPos;
         break;
     default:
@@ -167,9 +167,9 @@ void play( vector<boxPos>& id2BoxPos, vector<vector<int>>& acrade, pos& curPos, 
         // printGUI( acrade, curPos );
         pos nextPos = getNextPos( c, curPos );
         switch( acrade[nextPos.x][nextPos.y] ) {
-        case WALL:
+        case CELLWALL:
             break;
-        case EMPTY:
+        case CELLEMPTY:
             curPos = nextPos;
             break;
         default:
@@ -209,12 +209,12 @@ int main() {
             if( c != '\n' && c != '\0' ) {
                 switch( c ) {
                 case '#':
-                    row.push_back( WALL );
-                    row.push_back( WALL );
+                    row.push_back( CELLWALL );
+                    row.push_back( CELLWALL );
                     break;
                 case '.':
-                    row.push_back( EMPTY );
-                    row.push_back( EMPTY );
+                    row.push_back( CELLEMPTY );
+                    row.push_back( CELLEMPTY );
                     break;
                 case 'O':
                     row.push_back( id2BoxPos.size() );
@@ -223,8 +223,8 @@ int main() {
                     break;
                 case '@':
                     start = pos( acrade.size(), row.size() );
-                    row.push_back( EMPTY );
-                    row.push_back( EMPTY );
+                    row.push_back( CELLEMPTY );
+                    row.push_back( CELLEMPTY );
                     break;
                 default:
                     break;

@@ -1,4 +1,7 @@
 {
+    "markdownlint.config": {
+        "no-inline-html": false
+    },
     "files.associations": {
         "*.cpp": "cpp",
         "*.c": "c",

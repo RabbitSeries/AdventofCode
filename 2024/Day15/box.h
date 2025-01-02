@@ -72,10 +72,10 @@ void printGUI( vector<vector<int>> const acrade, pos const curPos ) {
                     cout << "]";
                 }
             }
-            else if( id == WALL ) {
+            else if( id == CELLWALL ) {
                 cout << '#';
             }
-            else if( id == EMPTY ) {
+            else if( id == CELLEMPTY ) {
                 cout << ' ';
             }
             else {
@@ -117,10 +117,10 @@ bool isBox( vector<vector<int>> const pos2Id, pos point ) {
     return pos2Id[point.x][point.y] >= 0;
 }
 bool isWALL( vector<vector<int>> const pos2Id, pos point ) {
-    return pos2Id[point.x][point.y] == WALL;
+    return pos2Id[point.x][point.y] == CELLWALL;
 }
 bool isEmpty( vector<vector<int>> const pos2Id, pos point ) {
-    return pos2Id[point.x][point.y] == EMPTY;
+    return pos2Id[point.x][point.y] == CELLEMPTY;
 }
 
 ll sumCoordinates( vector<boxPos> const id2BoxPos, vector<vector<int>> const acrade ) {
@@ -135,7 +135,7 @@ int countWall( vector<vector<int>> const acrade ) {
     int wallCnt = 0;
     for( int i = 0; i < acrade.size(); i++ ) {
         for( int j = 0; j < acrade[i].size(); j++ ) {
-            if( acrade[i][j] == WALL ) {
+            if( acrade[i][j] == CELLWALL ) {
                 // cout << "Pos" << i << "," << j << endl;
                 wallCnt++;
             }

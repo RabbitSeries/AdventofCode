@@ -57,10 +57,10 @@ void printGUI( vector<vector<int>> const pos2Id, pos const curPos ) {
         for( auto id : line ) {
             if( id >= 0 )
                 cout << 'O';
-            else if( id == WALL ) {
+            else if( id == CELLWALL ) {
                 cout << '#';
             }
-            else if( id == EMPTY ) {
+            else if( id == CELLEMPTY ) {
                 cout << ' ';
             }
             else
@@ -105,7 +105,7 @@ void pushBox( vector<pos>& id2Pos, vector<vector<int>>& pos2Id, pos& curPos, cha
         boxPath.push( nextPos );
         nextPos = getNextPos( control, nextPos );
     }
-    if( pos2Id[nextPos.x][nextPos.y] == EMPTY ) {
+    if( pos2Id[nextPos.x][nextPos.y] == CELLEMPTY ) {
         while( !boxPath.empty() ) {
             // printGUI( pos2Id, curPos );
             pos preBox = boxPath.top();
@@ -116,7 +116,7 @@ void pushBox( vector<pos>& id2Pos, vector<vector<int>>& pos2Id, pos& curPos, cha
             nextPos = preBox;
             // printGUI( pos2Id, curPos );
         }
-        pos2Id[nextPos.x][nextPos.y] = EMPTY;
+        pos2Id[nextPos.x][nextPos.y] = CELLEMPTY;
         curPos = nextPos;
         // printGUI( pos2Id, curPos );
     }
@@ -129,9 +129,9 @@ void play( vector<pos>& id2Pos, vector<vector<int>>& pos2Id, pos& curPos, queue<
         // printGUI( pos2Id, curPos );
         pos nextPos = getNextPos( c, curPos );
         switch( pos2Id[nextPos.x][nextPos.y] ) {
-        case WALL:
+        case CELLWALL:
             break;
-        case EMPTY:
+        case CELLEMPTY:
             curPos = nextPos;
             break;
         default:
@@ -153,9 +153,9 @@ void playMyself( vector<pos>& id2Pos, vector<vector<int>>& pos2Id, pos& curPos )
         // printGUI( pos2Id, curPos );
         pos nextPos = getNextPos( c, curPos );
         switch( pos2Id[nextPos.x][nextPos.y] ) {
-        case WALL:
+        case CELLWALL:
             break;
-        case EMPTY:
+        case CELLEMPTY:
             curPos = nextPos;
             break;
         default:
@@ -192,17 +192,17 @@ int main() {
             if( c != '\n' && c != '\0' ) {
                 switch( c ) {
                 case '#':
-                    row.push_back( WALL );
+                    row.push_back( CELLWALL );
                     break;
                 case '.':
-                    row.push_back( EMPTY );
+                    row.push_back( CELLEMPTY );
                     break;
                 case 'O':
                     row.push_back( id2Pos.size() );
                     id2Pos.push_back( pos( pos2Id.size(), row.size() - 1 ) );
                     break;
                 case '@':
-                    row.push_back( EMPTY );
+                    row.push_back( CELLEMPTY );
                     start = pos( pos2Id.size(), row.size() - 1 );
                     break;
                 default:

@@ -45,8 +45,12 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ### Day 9 Disk Fragmenter
 
-[![Original](Images/Day9DiskFragmentOriginal500X.png)](2024/Day9/2_compactingFiles.cpp)
-[![Output](Images/Day9DiskFragmentOutput500X.png)](2024/Day9/2_compactingFiles.cpp)
+<div style="text-align: center;">
+  <img src="Images/Day9DiskFragmentOriginal.png" alt="Original" width="500" />
+</div>
+<div style="text-align: center;">
+  <img src="Images/Day9DiskFragmentOutput.png" alt="Original" width="500" />
+</div>
 
 ### Day 11 Plutonian Pebbles
 
@@ -78,6 +82,7 @@ A simple box pushing game.
 
 - Change Day3 algorithm to [regular expression](https://en.cppreference.com/w/cpp/regex/ecmascript) implementation([C++11 feature](https://en.cppreference.com/w/cpp/regex)).
 - What does day 13 algorithm wants to testify?
+- Chnagge Day 16 algorithm to shortest path algorithm.
 
 ## Statistics
 
