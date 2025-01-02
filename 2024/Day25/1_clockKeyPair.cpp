@@ -2,7 +2,7 @@
 #define BUFFER_SIZE 10
 using namespace std;
 typedef vector<int> schematics;
-
+// TODO Change this algorithm to schema hash code and mapping.
 bool isUnique( schematics schema, vector<schematics> schemaList ) {
     for( auto s : schemaList ) {
         bool isEuqal = true;
