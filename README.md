@@ -90,6 +90,7 @@ A simple box pushing game.
 - What does day 13 algorithm wants to testify?
 - Chnagge Day 16 algorithm to shortest path algorithm.
 - Get a lisence.
+- Construct project to a CMake test project.
 
 ## Statistics
 
