@@ -86,7 +86,7 @@ A simple box pushing game.
 
 ## 📆 TODOs
 
-- Change Day3 algorithm to [regular expression](https://en.cppreference.com/w/cpp/regex/ecmascript) implementation([C++11 feature](https://en.cppreference.com/w/cpp/regex)).
+- Change day 3 algorithm to [regular expression](https://en.cppreference.com/w/cpp/regex/ecmascript) implementation([C++11 feature](https://en.cppreference.com/w/cpp/regex)).
 - What does day 13 algorithm wants to testify?
 - Chnagge Day 16 algorithm to shortest path algorithm.
 - Get a lisence.
@@ -94,8 +94,8 @@ A simple box pushing game.
 
 ## Statistics
 
-Language|files|blank|comment|code
---------|-----|-----|-------|----
-C++|33|133|247|2672
-C/C++ Header|3|14|17|293
-SUM:|36|147|264|2965
+Language    |files|blank|comment|code
+--------    |-----|-----|-------|----
+C++         |33   |134  |277    |2828
+C/C++ Header|3    |14   |17     |293
+SUM:        |36   |148  |294    |3121
