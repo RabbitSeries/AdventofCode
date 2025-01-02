@@ -1,8 +1,8 @@
 #include "bits/stdc++.h"
 #include <termios.h>
 using namespace std;
-#define WALL -1
-#define EMPTY -2
+#define CELLWALL -1
+#define CELLEMPTY -2
 #define BOT -3
 #define BUF 4096
 typedef struct pos {

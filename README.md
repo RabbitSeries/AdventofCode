@@ -46,10 +46,10 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 ### Day 9 Disk Fragmenter
 
 <div style="text-align: center;">
-  <img src="Images/Day9DiskFragmentOriginal.png" alt="Original" width="500" />
+  <img src="Images/DiskFragmentOriginal.png" alt="DiskFragmentOriginal" width="500" />
 </div>
 <div style="text-align: center;">
-  <img src="Images/Day9DiskFragmentOutput.png" alt="Original" width="500" />
+  <img src="Images/DiskFragmentOutput.png" alt="DiskFragmentOutput" width="500" />
 </div>
 
 ### Day 11 Plutonian Pebbles
@@ -59,17 +59,22 @@ The multithreading approach has crashed my OS many times. The dynamic programmin
 ### Day 12 Garden Groups
 
 This problem guides a way of image edge detection algorithm.
-![Edge detection](Images/EdgeDetectionX500.png)
-
+<div style="text-align: center;">
+  <img src="Images/EdgeDetection.png" alt="EdgeDetection" width="500" />
+</div>
 ### Day 14 Restroom Redoubt
 
-![Merry Christmas!](Images/ChristmasTreeX500.png)
+<div style="text-align: center;">
+  <img src="Images/ChristmasTree.png" alt="Merry Christmas!" width="200" />
+</div>
 
 ### Day 15 Warehouse Woes
 
 A simple box pushing game.
 
-<!-- ![Merry Christmas!](Images/ChristmasTree.png) -->
+<div style="text-align: center;">
+  <img src="Images/PushBox.png" alt="Push Box!" width="250" />
+</div>
 
 ## 🔗 Links
 

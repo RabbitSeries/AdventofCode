@@ -95,10 +95,10 @@ int main() {
     // while( elapseTime++ < 100 ) {
     // This pattern is funny. U can see the line align aside.
     while( 1 ) {
-        if(elapseTime == 7700){
-            int a = 0;
-        } 
-        if( elapseTime > 0 && elapseTime >= close * 100 && elapseTime % 100 == ( 23 + close ) %100 ) {
+        if( elapseTime == 6000 ) {
+            int foo = 0;
+        }
+        if( elapseTime > 0 && elapseTime >= close * 100 && elapseTime % 100 == ( 23 + close ) % 100 ) {
             close = close + 1;
             system( "clear" );
             printMap( specs );
