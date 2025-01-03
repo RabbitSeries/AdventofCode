@@ -1,7 +1,5 @@
 #include "bits/stdc++.h"
-#include "stdio.h"
-#include "stdlib.h"
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 5
 typedef long long ll;
 using namespace std;
 
@@ -136,7 +134,8 @@ ll fileCompack( vector<int>disk, const vector<int> fileSizeTable, vector<pair<in
 
 int main() {
     FILE* input = fopen( "input.txt", "r" );
-    char linebuf[BUFFER_SIZE + 1] = { '\0' };
+    // 6467290479134
+    char linebuf[BUFFER_SIZE] = { '\0' };
     int fileId = 0;
     vector<int> disk;
     vector<int> fileSizeTable;

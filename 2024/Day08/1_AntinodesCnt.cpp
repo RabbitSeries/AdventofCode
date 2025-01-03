@@ -51,7 +51,7 @@ int main() {
     vector<vector<char>> antinodeMap;
     FILE* input = fopen( "input.txt", "r" );
     // char (*linebuf)[BUFFER_SIZE+1] = {'\0'}; //argument of type "char (*)[1025]" is incompatible with parameter of type "char *"C/C++(167)
-    char linebuf[BUFFER_SIZE + 1] = { '\0' };
+    char linebuf[BUFFER_SIZE] = { '\0' };
     int posx = 0;
     while( !feof( input ) && fgets( linebuf, BUFFER_SIZE, input ) ) {
         string line( linebuf );

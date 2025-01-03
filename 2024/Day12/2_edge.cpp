@@ -100,15 +100,15 @@ int getBoundaryEdges( vector<pos> const boundary, vector<vector<char>> const gar
         }
 
     }
-    printGarden( gardenCanvas );
+    // printGarden( gardenCanvas );
     return upedge + downEdge + leftEdge + rightEdge;
 }
 int main() {
     vector<vector<char>> garden;
     FILE* input = fopen( "input.txt", "r" );
-    char buf[BUFFER_SIZE + 1] = "\0";
+    char buf[BUFFER_SIZE] = "\0";
     int lineCnt = 0;
-    while( !feof( input ) && fgets( buf, BUFFER_SIZE + 1, input ) ) {
+    while( !feof( input ) && fgets( buf, BUFFER_SIZE, input ) ) {
         vector<char> row;
         for( char c : buf ) {
             row.push_back( c );

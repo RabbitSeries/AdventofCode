@@ -1,5 +1,5 @@
 #include "bits/stdc++.h"
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 512
 using namespace std;
 typedef pair<int, int> pos;
 typedef long long ll;

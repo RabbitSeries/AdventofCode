@@ -3,6 +3,7 @@
 int main() {
     regex re( "[0-9]+" );
     vector<int> instruction;
+    // FILE* input( fopen( "inputExample.txt", "r" ) );
     FILE* input( fopen( "input.txt", "r" ) );
     char buf[1024] = "\0";
     ull tra = 0, trb = 0, trc = 0;
@@ -59,8 +60,10 @@ int main() {
                 flag = true;
                 // cout << outBuf << endl;
                 if( outBuf == program ) {
-                    cout << "Found register A :" << curRA << endl;
-                    // return 0;
+                    cout << "Found register A: " << curRA << endl;
+                    cout << (ull)(0xFFFFFFFFFFFFFFFFull) << endl;
+                    // Break here instead.
+                    return 0;
                 }
                 // Don't break me!
                 // break;

@@ -1,41 +1,63 @@
-#include "string"
-#include "iostream"
-#include "map"
+#include <bits/stdc++.h>
 using namespace std;
 // Todo: this algorithm's output has something to do with the difined BUFFER_SZIE, to solve the problem, change the algorithm to line process unit or figure out a way to concile BUFFER_SZIE and the string sent to next process.
-#define BUFFER_SIZE 5000
-int getNum( string& str ) {
-    int i = 0, num = 0;
+#define BUFFER_SIZE 4000
+typedef long long ll;
+int getNum( string str, int pos ) {
+    int i = pos, num = 0;
     while( i < str.length() && isdigit( str[i] ) ) {
-        num = num * 10 + str[i] - '0';
+        num = num * 10 + stoi( string( 1, str[i] ) );
         i++;
     }
-    if( i < str.length() )
-        str = str.substr( i );
-    else str = "";
     return num;
 }
 
-int getZoneResult( string& str ) {
+// Will trip all available matched multiply result.
+ll getZoneResult( string& str ) {
     if( str.find( "don't()" ) != string::npos )  cout << "error algorithm at " << str.find( "don't()" ) << "\n";
     size_t mulPos = str.find( "mul(" );
-    long long res = 0;
+    ll res = 0;
+    int nextPos = 0;
     while( mulPos != string::npos && mulPos + 4 < str.length() ) {
-        str = str.substr( mulPos + 4 );
+        // Not trimed yet.
         int a = 0, b = 0;
-        bool flaga = false, flagb = false;
-        if( !str.empty() && isdigit( str[0] ) ) {
-            a = getNum( str );
-            flaga = true;
+        nextPos = mulPos + 4;
+        if( nextPos < str.length() ) {
+            if( isdigit( str[nextPos] ) ) {
+                a = getNum( str, nextPos );
+                nextPos += to_string( a ).size();
+            }
+            else {
+                return res;
+            }
         }
-        if( str.length() >= 2 && str[0] == ',' && isdigit( str[1] ) ) {
-            str = str.substr( 1 );
-            b = getNum( str );
-            flagb = true;
+        if( nextPos < str.length() ) {
+            if( str[nextPos] == ',' )
+                nextPos++;
+            else
+                return res;
         }
-        if( flaga && flagb && !str.empty() && str[0] == ')' ) {
-            res += a * b;
-            str = str.substr( 1 );
+        if( nextPos < str.length() ) {
+            if( isdigit( str[nextPos] ) ) {
+                b = getNum( str, nextPos );
+                nextPos += to_string( b ).size();
+            }
+            else {
+                return res;
+            }
+        }
+        if( nextPos < str.length() ) {
+            if( str[nextPos] == ')' ) {
+                res += a * b;
+                nextPos++;
+                if( nextPos < str.length() )
+                    str = str.substr( nextPos );
+                else
+                    str = "";
+            }
+            else {
+                return res;
+            }
         }
         if( !str.empty() )
             mulPos = str.find( "mul(" );
@@ -50,9 +72,9 @@ int getLineResult( string& str, bool& enabled ) {
     if( enabled ) {
         size_t dontPos = str.find( "don't()" );
         if( dontPos != string::npos ) {
-            enabled = false;
             string process = str.substr( 0, dontPos );
             zoneAdd += getZoneResult( process );
+            enabled = false;
             if( dontPos + string( "don't()" ).size() < str.length() ) {
                 str = str.substr( dontPos + string( "don't()" ).size() );
                 zoneAdd += getLineResult( str, enabled );
@@ -75,14 +97,15 @@ int getLineResult( string& str, bool& enabled ) {
             if( doPos + string( "do()" ).size() < str.length() ) {
                 str = str.substr( doPos + string( "do()" ).size() );
                 zoneAdd += getLineResult( str, enabled );
+                return zoneAdd;
             }
             else {
                 str = "";
-                return 0;
+                return zoneAdd;
             }
         }
         else {
-            return 0;
+            return zoneAdd;
         }
     }
     return zoneAdd;
@@ -90,21 +113,25 @@ int getLineResult( string& str, bool& enabled ) {
 
 
 int main() {
+    // FILE* input = fopen( "example.txt", "r" );
     FILE* input = fopen( "input.txt", "r" );
-    char linebuffer[BUFFER_SIZE + 1] = { "\0" };
-    long long addUp = 0;
+    char linebuffer[BUFFER_SIZE] = { '\0' };
+    ll addUp = 0;
     bool enabled = true;
-    string leftOver = "";
-    while( !feof( input ) && fgets( linebuffer, BUFFER_SIZE, input ) ) {
+    string LinkBuf = "";
+    while( fgets( linebuffer, BUFFER_SIZE, input ) ) {
         string currentLine( linebuffer );
-        currentLine = currentLine + leftOver;
-        addUp += getLineResult( currentLine, enabled );
-        if( *currentLine.end() != '\n' )
-            leftOver = currentLine;
-        else
-            leftOver = "";
+        if( !currentLine.empty() ) {
+            if( currentLine.back() != '\n' )
+                LinkBuf = currentLine;
+            else
+                LinkBuf = currentLine.substr( 0, currentLine.size() - 1 );
+            addUp = +getLineResult( LinkBuf, enabled );
+            enabled = true;
+        }
         // linebuffer[0] = '\0';
     }
-    cout << addUp;
+
+    cout << addUp << endl;
     return 0;
 }
