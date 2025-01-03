@@ -1,6 +1,6 @@
 #include "bits/stdc++.h"
 using namespace std;
-// ! Penalty is 0, then this is a simple undirected map problem.
+// ! If the Penalty is 0, then this is a simple undirected graph problem.
 #define PENALTY 1000
 // #define PENALTY 1
 // #define PENALTY 0
@@ -59,14 +59,13 @@ void printPathInMaze( vector<pair<int, int>> curPath, vector<vector<int>> m ) {
     }
 }
 
-// Dijikstra + state machine transfer, four dimensionnal dijikstra.
+// Dijikstra + state machine transfer, four dimensional dijikstra.
 int countSeats( vector<vector<int>> maze, point2D start, point2D end ) {
     int foo = 0;
-
-    vector<vector<int>> cost;
+    
     set<pair<int, int>> pathSeats;
     vector<vector<pair<int, int>>> pathRecord;
-    unordered_map<string, int> pathState;
+    unordered_map<string, int> pathCost;
     priority_queue<pair<int, point2D>, vector<pair<int, point2D>>, greater<>> process;
 
     int rows = maze.size();
@@ -77,7 +76,7 @@ int countSeats( vector<vector<int>> maze, point2D start, point2D end ) {
     };
     start.cost = 0;
     process.push( { 0,start } );
-    pathState.emplace( start.hashCode(), 0 );
+    pathCost.emplace( start.hashCode(), 0 );
     int endCost = INT_MAX;
     size_t max_process = 0;
     while( !process.empty() ) {
@@ -90,7 +89,7 @@ int countSeats( vector<vector<int>> maze, point2D start, point2D end ) {
         // printPathInMaze( curPoint.LinkRoad, maze );
         // this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
         // ! This happens when turning cost 1 penalty, and the input is inputCutOptimize.txt.
-        if( pathState.count( curPoint.hashCode() ) != 0 && curCost > pathState[curPoint.hashCode()] ) {
+        if( pathCost.count( curPoint.hashCode() ) != 0 && curCost > pathCost[curPoint.hashCode()] ) {
             foo++;
             continue;
         }
@@ -128,27 +127,27 @@ int countSeats( vector<vector<int>> maze, point2D start, point2D end ) {
             }
             if( isValid( nextPoint ) ) {
                 // Reachable in Dijkstra.
-                if( pathState.count( nextState ) == 0 ) {
+                if( pathCost.count( nextState ) == 0 ) {
                     // Unvisited before.
-                    pathState.emplace( nextState, nextCost );
+                    pathCost.emplace( nextState, nextCost );
                     nextPoint.LinkRoad = curPoint.LinkRoad;
                     process.push( { nextCost,nextPoint } );
                 }
                 else {
-                    if( nextCost <= pathState[nextState] ) {
+                    if( nextCost <= pathCost[nextState] ) {
                         // Visited and can be relaxed or same path.
-                        pathState[nextState] = nextCost; // This line doesn't affect the result.
+                        pathCost[nextState] = nextCost; // This line doesn't affect the result.
                         nextPoint.LinkRoad = curPoint.LinkRoad;
                         process.push( { nextCost,nextPoint } );
                     }
                     // else {
                     //     // TODO this lien seems no use, as the cost does not need to get larger if it is already too large to relax.
-                    //     pathState.emplace( point2D( curPoint.first, curPoint.second, nextDirection ).pointState(), nextCost - 1 );
+                    //     pathCost.emplace( point2D( curPoint.first, curPoint.second, nextDirection ).pointState(), nextCost - 1 );
                     // }
                 }
             }
             else {
-                pathState.emplace( point2D( curPoint.first, curPoint.second, nextDirection ).hashCode(), nextCost - 1 );
+                pathCost.emplace( point2D( curPoint.first, curPoint.second, nextDirection ).hashCode(), nextCost - 1 );
             }
         }
     }
