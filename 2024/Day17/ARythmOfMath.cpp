@@ -31,37 +31,44 @@ int main() {
     }
     ull  p = 1;
     // Yeah, I nailed it.
-    queue<ull> processQue;
+    priority_queue<ull, vector<ull>, greater<>> processQue;
     processQue.push( p );
+    int filterdTimes = 0;
     while( !processQue.empty() ) {
-        ull a = processQue.front();
+        ull searchBase = processQue.top();
         processQue.pop();
         int i = 0;
+        bool flag = false;
         // This boundary is determined by the constant literal value after opcode 0: 0,3, 1<<3 = 8.
         for( ; i < 8; i++ ) {
-            ull inittmp = a + i;
-            InitProgram( inittmp, 0, 0 );
-            // out = out + "," + to_string( ( ( ( ( ra%8 ) ^ 7 ) ^ ( tmp / ( unsigned long long )( powf128( 2, ( ra%8 ) ^ 7 ) ) ) ) ^ 7 ) % 8 );
-            while( pc < instruction.size() ) {
-                int opcode = instruction[pc];
-                int operand = instruction[pc + 1];
-                operation( opcode, operand );
-            }
+            ull curRA = searchBase + i;
+            InitProgram( curRA, 0, 0 );
+            // while( pc < instruction.size() ) {
+            //     int opcode = instruction[pc];
+            //     int operand = instruction[pc + 1];
+            //     operation( opcode, operand );
+            // }
+            ull copy = curRA;
+            do {
+                outBuf = outBuf + "," + to_string( ( ( ( ( copy % 8 ) ^ 7 ) ^ ( copy / ( unsigned long long )( powf128( 2, ( copy % 8 ) ^ 7 ) ) ) ) ^ 7 ) % 8 );
+                copy /= 8;
+            } while( copy != 0 );
+
             if( outBuf.size() <= program.size() && outBuf == program.substr( program.size() - outBuf.size(), outBuf.size() ) ) {
-                processQue.push( inittmp << 3 );
+                processQue.push( curRA << 3 );
+                flag = true;
                 cout << outBuf << endl;
                 if( outBuf == program ) {
-                    cout << inittmp << endl;
-                    return 0;
+                    cout << "Found register A :" << curRA << endl;
+                    // return 0;
                 }
                 // Don't break me!
                 // break;
                 // There are multiple choice in 0-7 that can reach the current result, but some of them is invalid.
             }
         }
-        if( i == 8 && processQue.empty()) {
-            // processQue.push( a - 1 );
-            cout << "I am dead." << endl;
+        if( i == 8 && !flag ) {
+            cout << "Filtered times " << ++filterdTimes << ": " << searchBase << endl;
         }
     }
     return 0;
