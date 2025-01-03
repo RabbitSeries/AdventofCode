@@ -37,9 +37,11 @@ int main() {
         ull a = processQue.front();
         processQue.pop();
         int i = 0;
+        // This boundary is determined by the constant literal value after opcode 0: 0,3, 1<<3 = 8.
         for( ; i < 8; i++ ) {
             ull inittmp = a + i;
             InitProgram( inittmp, 0, 0 );
+            // out = out + "," + to_string( ( ( ( ( ra%8 ) ^ 7 ) ^ ( tmp / ( unsigned long long )( powf128( 2, ( ra%8 ) ^ 7 ) ) ) ) ^ 7 ) % 8 );
             while( pc < instruction.size() ) {
                 int opcode = instruction[pc];
                 int operand = instruction[pc + 1];
