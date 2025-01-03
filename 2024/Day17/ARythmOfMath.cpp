@@ -50,25 +50,26 @@ int main() {
             // }
             ull copy = curRA;
             do {
-                outBuf = outBuf + "," + to_string( ( ( ( ( copy % 8 ) ^ 7 ) ^ ( copy / ( unsigned long long )( powf128( 2, ( copy % 8 ) ^ 7 ) ) ) ) ^ 7 ) % 8 );
+                outBuf = outBuf + "," + to_string( ( ( ( ( copy % 8 ) ^ 7 ) ^ ( copy / ( ull )( pow( 2, ( copy % 8 ) ^ 7 ) ) ) ) ^ 7 ) % 8 );
                 copy /= 8;
             } while( copy != 0 );
 
             if( outBuf.size() <= program.size() && outBuf == program.substr( program.size() - outBuf.size(), outBuf.size() ) ) {
                 processQue.push( curRA << 3 );
                 flag = true;
-                cout << outBuf << endl;
+                // cout << outBuf << endl;
                 if( outBuf == program ) {
                     cout << "Found register A :" << curRA << endl;
                     // return 0;
                 }
                 // Don't break me!
                 // break;
+                // Filtered, times 71, value 2140870108847336
                 // There are multiple choice in 0-7 that can reach the current result, but some of them is invalid.
             }
         }
         if( i == 8 && !flag ) {
-            cout << "Filtered times " << ++filterdTimes << ": " << searchBase << endl;
+            cout << "Filtered, times " << ++filterdTimes << ", value " << searchBase << endl;
         }
     }
     return 0;
