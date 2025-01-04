@@ -105,13 +105,13 @@ void Solution2( vector<vector<cellStatus>> stamp, FILE* input ) {
         cout << "Search corrupted: " << countCorrupted( curStamp ) << endl;
         if( dijkstra( curStamp ) ) {
             // Search right half;
-            // If not satisfied position mid should be excluded.
+            // If not satisfied, position mid should be excluded.
             // Next search in (mid,right].
             left = mid + 1;
         }
         else {
             // Search left half;
-            // If satisfied position mid should not be excluded.
+            // If satisfied, position mid should not be excluded.
             // Next search in [left,mid].
             right = mid;
         }
