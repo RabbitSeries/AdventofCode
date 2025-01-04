@@ -4,7 +4,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ## 🚀 Solutions
 
-### 2024 Progress: 18/25 ⭐⭐
+### 2024 Progress: 19/25 ⭐⭐
 
  Day                                                                                                                                  | Part 1 | Part 2 | Solution to P1                                                                                              | Solution to P2
 --------------------------------------------------------------------------------------------------------------------------------------|:------:|:------:|:-----------------------------------------------------------------------------------------------------------:|:----------:
@@ -27,12 +27,12 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 [![Day 17](https://img.shields.io/badge/Day%2017-Chronospatial%20Computer-blue?logo=Archlinux)](https://adventofcode.com/2024/day/17) |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day17/3bitMachine.cpp)         | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day17/ARythmOfMath.cpp)
 [![Day 18](https://img.shields.io/badge/Day%2018-RAM%20Run-blue?logo=Archlinux)](https://adventofcode.com/2024/day/18)                |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day18/RAMRun.cpp)              | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day18/RAMRun.cpp)
 [![Day 19](https://img.shields.io/badge/Day%2019-Linen%20Layout-blue?logo=Archlinux)](https://adventofcode.com/2024/day/19)           |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day19/LinenLayout.cpp)         | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day19/LinenLayout.cpp)
-[![Day 20](https://img.shields.io/badge/Day%2020-Race%20Condition-blue?logo=Archlinux)](https://adventofcode.com/2024/day/20)         |-|-|-|-
+[![Day 20](https://img.shields.io/badge/Day%2020-Race%20Condition-blue?logo=Archlinux)](https://adventofcode.com/2024/day/20)         |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day20/RaceCondition.cpp)       | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day20/RaceCondition.cpp)
 [![Day 21](https://img.shields.io/badge/Day%2021-Keypad%20Conundrum-blue?logo=Archlinux)](https://adventofcode.com/2024/day/21)       |-|-|-|-
 [![Day 22](https://img.shields.io/badge/Day%2022-Monkey%20Market-blue?logo=Archlinux)](https://adventofcode.com/2024/day/22)          |-|-|-|-
 [![Day 23](https://img.shields.io/badge/Day%2023-LAN%20Party-blue?logo=Archlinux)](https://adventofcode.com/2024/day/23)              |-|-|-|-
 [![Day 24](https://img.shields.io/badge/Day%2024-Crossed%20Wires-blue?logo=Archlinux)](https://adventofcode.com/2024/day/24)          |-|-|-|-
-[![Day 25](https://img.shields.io/badge/Day%2025-Code%20Chroncile-blue?logo=Archlinux)](https://adventofcode.com/2024/day/25)         |⭐      |12⭐ lack| [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day25/1_clockKeyPair.cpp)|-
+[![Day 25](https://img.shields.io/badge/Day%2025-Code%20Chroncile-blue?logo=Archlinux)](https://adventofcode.com/2024/day/25)         |⭐      |10⭐ lack| [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day25/1_clockKeyPair.cpp)|-
 
 ## 💻 Tools
 
@@ -96,6 +96,6 @@ A simple box pushing game.
 
 Language    |files|blank|comment|code
 --------    |-----|-----|-------|----
-C++         |35   |138  |310    |2926
+C++         |38   |174  |387    |3296
 C/C++ Header|4    |27   |19     |368
-SUM:        |39   |168  |329    |3294
+SUM:        |42   |201  |406    |3664
