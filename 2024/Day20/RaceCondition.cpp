@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include "ProgressBar.h"
 using namespace std;
 #define BUF_SIZE 1024
 
@@ -93,7 +94,7 @@ void readMap( pos& start, pos& end, vector<vector<cellStatus>>& roadMap, map<pos
 }
 
 void cheat( pos end, vector<vector<cellStatus>> const roadMap, map<pos, int> const path ) {
-    // Bench march satisfied.
+    // Benchmark satisfied.
     // vector<int> targets{ 2,4,6,8,10,12,20,36,38,40,64 };
     // vector<pair<pair<pos, pos>, int>> cheatPos;
     // for( int target : targets ) {
@@ -172,8 +173,7 @@ void Solution2() {
     int pathCnt = path.size();
     int processCnt = 0;
     for( auto [startPos, curCost] : path ) {
-        system("clear");
-        cout << "Processing " << ++processCnt/pathCnt << " / " << pathCnt << endl;
+        showProgressBar( ++processCnt, pathCnt );
         for( auto [nextPos, cheatCost] : getCheatZone( startPos, roadMap ) ) {
             int proceedCost = cheatCost + path.at( end ) - path.at( nextPos );
             int savedTime = path.at( end ) - path.at( startPos ) - proceedCost;
