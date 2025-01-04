@@ -15,7 +15,7 @@ int getNum( string str, int pos ) {
 
 // Will trip all available matched multiply result.
 ll getZoneResult( string& str ) {
-    if( str.find( "don't()" ) != string::npos )  cout << "error algorithm at " << str.find( "don't()" ) << "\n";
+    assert( str.find( "don't()" ) == string::npos );
     size_t nextPos = 0;
     ll res = 0;
     while( nextPos != string::npos && nextPos < str.length() ) {
@@ -124,7 +124,7 @@ ll getLineResult( string& str, bool& enabled ) {
 int main() {
     // FILE* input = fopen( "example.txt", "r" );
     FILE* input = fopen( "input.txt", "r" );
-    char linebuffer[BUFFER_SIZE] = { '\0' };
+    char linebuffer[BUFFER_SIZE] = "\0";
     ll addUp = 0;
     bool enabled = true;
     string leftOver = "";
