@@ -18,6 +18,6 @@ void showProgressBar(int processCnt, int pathCnt) {
         else
             std::cout << " "; // 未完成部分
     }
-    std::cout << "] " << std::fixed << std::setprecision(2) << (progress * 100.0) << "%";
-    std::cout.flush(); // 刷新输出
+    std::cout << "] " << std::fixed << std::setprecision(2) << (progress * 100.0) << "%" << std::endl;
+    // std::cout.flush(); // 刷新输出
 }

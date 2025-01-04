@@ -122,7 +122,7 @@ void cheat( pos end, vector<vector<cellStatus>> const roadMap, map<pos, int> con
 
     }
     // cout << "There are " << res << " cheats that save " << target << " picoseconds." << endl;
-    cout << "There are " << res << " cheats that save " << 100 << " picoseconds." << endl;
+    cout << "Solution 1: there are " << res << " cheats that save " << 100 << " picoseconds." << endl;
     // }
     // return cheatPos;
     return;
@@ -163,6 +163,7 @@ vector<pair<pos, int>> getCheatZone( pos curPos, vector<vector<cellStatus>>  con
 }
 
 void Solution2() {
+    // Benchmark satisfied.
     // vector<int> targets{ 50,52,54,56,58,60,62,64,66,68,70,72,74,76 };
     // for( auto target : targets ) {
     int res = 0;
@@ -184,24 +185,10 @@ void Solution2() {
         }
     }
     // cout << "There are " << res << " cheats that save " << target << " picoseconds." << endl;
-    cout << "There are " << res << " cheats that save " << 100 << " picoseconds." << endl;
+    cout << "Solution 2: there are " << res << " cheats that save " << 100 << " picoseconds." << endl;
     // }
 }
 
-// There are 32 cheats that save 50 picoseconds.    34
-// There are 31 cheats that save 52 picoseconds.    33
-// There are 29 cheats that save 54 picoseconds.    31
-// There are 39 cheats that save 56 picoseconds.    29  
-// There are 25 cheats that save 58 picoseconds.    27
-// There are 23 cheats that save 60 picoseconds.    25
-// There are 20 cheats that save 62 picoseconds.    23
-// There are 19 cheats that save 64 picoseconds.    21
-// There are 12 cheats that save 66 picoseconds.    19
-// There are 14 cheats that save 68 picoseconds.    17
-// There are 12 cheats that save 70 picoseconds.    15
-// There are 22 cheats that save 72 picoseconds.    13
-// There are 4 cheats that save 74 picoseconds.     11
-// There are 3 cheats that save 76 picoseconds.     9 
 int main() {
     Solution2();
     Solution1();
