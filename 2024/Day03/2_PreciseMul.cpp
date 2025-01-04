@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
-// Todo: this algorithm's output has something to do with the difined BUFFER_SZIE, to solve the problem, change the algorithm to line process unit or figure out a way to concile BUFFER_SZIE and the string sent to next process.
-#define BUFFER_SIZE 4000
+// // Todo: this algorithm's output has something to do with the difined BUFFER_SZIE, to solve the problem, change the algorithm to line process unit or figure out a way to concile BUFFER_SZIE and the string sent to next process.
+// Now the buffer_size does not affect the result.
+#define BUFFER_SIZE 100
 typedef long long ll;
 int getNum( string str, int pos ) {
     int i = pos, num = 0;
@@ -15,60 +16,66 @@ int getNum( string str, int pos ) {
 // Will trip all available matched multiply result.
 ll getZoneResult( string& str ) {
     if( str.find( "don't()" ) != string::npos )  cout << "error algorithm at " << str.find( "don't()" ) << "\n";
-    size_t mulPos = str.find( "mul(" );
+    size_t nextPos = 0;
     ll res = 0;
-    int nextPos = 0;
-    while( mulPos != string::npos && mulPos + 4 < str.length() ) {
-        // Not trimed yet.
-        int a = 0, b = 0;
-        nextPos = mulPos + 4;
-        if( nextPos < str.length() ) {
-            if( isdigit( str[nextPos] ) ) {
-                a = getNum( str, nextPos );
-                nextPos += to_string( a ).size();
+    while( nextPos != string::npos && nextPos < str.length() ) {
+        // Remember to find "mul(" from next position.
+        nextPos = str.find( "mul(", nextPos );
+        if( nextPos != string::npos ) {
+            // Not trimed yet.
+            int a = 0, b = 0;
+            nextPos = nextPos + 4;
+            if( nextPos < str.length() ) {
+                if( isdigit( str[nextPos] ) ) {
+                    a = getNum( str, nextPos );
+                    nextPos += to_string( a ).size();
+                }
+                else {
+                    continue;
+                }
             }
-            else {
-                return res;
+            if( nextPos < str.length() ) {
+                if( str[nextPos] == ',' )
+                    nextPos++;
+                else {
+                    continue;
+                }
+            }
+            if( nextPos < str.length() ) {
+                if( isdigit( str[nextPos] ) ) {
+                    b = getNum( str, nextPos );
+                    nextPos += to_string( b ).size();
+                }
+                else {
+                    continue;
+                }
+            }
+            if( nextPos < str.length() ) {
+                if( str[nextPos] == ')' ) {
+                    res += a * b;
+                    nextPos++;
+                    cout << "mul(" << a << "," << b << ")" << endl;
+                    if( nextPos < str.length() ) {
+                        str = str.substr( nextPos );
+                        // Once trimed the string, remember to reset next search position.
+                        nextPos = 0;
+                    }
+                    else {
+                        nextPos = 0;
+                        str = "";
+                    }
+                }
+                else {
+                    continue;
+                }
             }
         }
-        if( nextPos < str.length() ) {
-            if( str[nextPos] == ',' )
-                nextPos++;
-            else
-                return res;
-        }
-        if( nextPos < str.length() ) {
-            if( isdigit( str[nextPos] ) ) {
-                b = getNum( str, nextPos );
-                nextPos += to_string( b ).size();
-            }
-            else {
-                return res;
-            }
-        }
-        if( nextPos < str.length() ) {
-            if( str[nextPos] == ')' ) {
-                res += a * b;
-                nextPos++;
-                if( nextPos < str.length() )
-                    str = str.substr( nextPos );
-                else
-                    str = "";
-            }
-            else {
-                return res;
-            }
-        }
-        if( !str.empty() )
-            mulPos = str.find( "mul(" );
-        else
-            mulPos = string::npos;
     }
     return res;
 }
 
-int getLineResult( string& str, bool& enabled ) {
-    int zoneAdd = 0;
+ll getLineResult( string& str, bool& enabled ) {
+    ll zoneAdd = 0;
     if( enabled ) {
         size_t dontPos = str.find( "don't()" );
         if( dontPos != string::npos ) {
@@ -95,6 +102,8 @@ int getLineResult( string& str, bool& enabled ) {
         if( doPos != string::npos ) {
             enabled = true;
             if( doPos + string( "do()" ).size() < str.length() ) {
+                // cout << str.substr( 0, doPos + string( "do()" ).size() );
+                // cout.flush();
                 str = str.substr( doPos + string( "do()" ).size() );
                 zoneAdd += getLineResult( str, enabled );
                 return zoneAdd;
@@ -118,20 +127,15 @@ int main() {
     char linebuffer[BUFFER_SIZE] = { '\0' };
     ll addUp = 0;
     bool enabled = true;
-    string LinkBuf = "";
+    string leftOver = "";
     while( fgets( linebuffer, BUFFER_SIZE, input ) ) {
         string currentLine( linebuffer );
         if( !currentLine.empty() ) {
-            if( currentLine.back() != '\n' )
-                LinkBuf = currentLine;
-            else
-                LinkBuf = currentLine.substr( 0, currentLine.size() - 1 );
-            addUp = +getLineResult( LinkBuf, enabled );
-            enabled = true;
+            currentLine = leftOver + currentLine;
+            addUp += getLineResult( currentLine, enabled );
+            leftOver = currentLine;
         }
-        // linebuffer[0] = '\0';
     }
-
     cout << addUp << endl;
     return 0;
 }
