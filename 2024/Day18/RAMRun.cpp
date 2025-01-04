@@ -102,7 +102,7 @@ void Solution2( vector<vector<cellStatus>> stamp, FILE* input ) {
         for_each( bytePos.begin(), bytePos.begin() + mid + 1, [ & ]( pos cur ) {
             curStamp[cur.second][cur.first] = bad;
         } );
-        cout << "Search corrupted: " << countCorrupted( curStamp ) << endl;
+        // cout << "Search corrupted: " << countCorrupted( curStamp ) << endl;
         if( dijkstra( curStamp ) ) {
             // Search right half;
             // If not satisfied, position mid should be excluded.
@@ -117,7 +117,7 @@ void Solution2( vector<vector<cellStatus>> stamp, FILE* input ) {
         }
     }
     assert( left == right );
-    cout << "Found last byte at index:" << left << endl;
+    cout << "Found last byte at index: " << left << endl;
     vector<vector<cellStatus>> curStamp = stamp;
     for_each( bytePos.begin(), bytePos.begin() + left, [ & ]( pos cur ) {
         curStamp[cur.second][cur.first] = bad;
