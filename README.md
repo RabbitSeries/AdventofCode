@@ -26,7 +26,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 [![Day 16](https://img.shields.io/badge/Day%2016-Reindeer%20Maze-blue?logo=Archlinux)](https://adventofcode.com/2024/day/16)          |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day16/1_MazeDijkstra.cpp)      | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day16/1_MazeDijkstra.cpp)
 [![Day 17](https://img.shields.io/badge/Day%2017-Chronospatial%20Computer-blue?logo=Archlinux)](https://adventofcode.com/2024/day/17) |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day17/3bitMachine.cpp)         | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day17/ARythmOfMath.cpp)
 [![Day 18](https://img.shields.io/badge/Day%2018-RAM%20Run-blue?logo=Archlinux)](https://adventofcode.com/2024/day/18)                |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day18/RAMRun.cpp)              | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day18/RAMRun.cpp)
-[![Day 19](https://img.shields.io/badge/Day%2019-Linen%20Layout-blue?logo=Archlinux)](https://adventofcode.com/2024/day/19)           |-|-|-|-
+[![Day 19](https://img.shields.io/badge/Day%2019-Linen%20Layout-blue?logo=Archlinux)](https://adventofcode.com/2024/day/19)           |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day19/LinenLayout.cpp)         | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day19/LinenLayout.cpp)
 [![Day 20](https://img.shields.io/badge/Day%2020-Race%20Condition-blue?logo=Archlinux)](https://adventofcode.com/2024/day/20)         |-|-|-|-
 [![Day 21](https://img.shields.io/badge/Day%2021-Keypad%20Conundrum-blue?logo=Archlinux)](https://adventofcode.com/2024/day/21)       |-|-|-|-
 [![Day 22](https://img.shields.io/badge/Day%2022-Monkey%20Market-blue?logo=Archlinux)](https://adventofcode.com/2024/day/22)          |-|-|-|-
@@ -99,4 +99,3 @@ Language    |files|blank|comment|code
 C++         |35   |138  |310    |2926
 C/C++ Header|4    |27   |19     |368
 SUM:        |39   |168  |329    |3294
-

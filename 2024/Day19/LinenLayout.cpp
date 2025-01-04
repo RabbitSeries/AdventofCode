@@ -74,7 +74,7 @@ void Solution2() {
     ull res = 0;
     for_each( designs.begin(), designs.end(), [ & ]( string design ) {
         res += ALLMatch( keys, design );
-        cout << "Curruntly thre are: " << res << " ways" << endl;
+        // cout << "Curruntly thre are: " << res << " ways" << endl;
     } );
     cout << "Total matched ways: " << res << endl;
     fclose( keyInput ), fclose( designInput );
