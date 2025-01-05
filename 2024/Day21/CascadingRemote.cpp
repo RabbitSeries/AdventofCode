@@ -82,7 +82,7 @@ int getOnePath( char const s, char const t, map<char, vector<pair<char, char>>> 
 
 // <A^A>^^AvvvA
 // <->A:>>^ A
-vector<vector<char>>  getKeyPadAllPath( char const s, char const t, map<char, vector<pair<char, char>>> const keyPad ) {
+vector<vector<char>>  getKeyPadAllPath( char const s, char const t, map<char, vector<pair<char, char>>> const& keyPad ) {
     // map<char, int> cost{ {'0',INT_MAX}, {'1',INT_MAX},{'2',INT_MAX},{'3',INT_MAX},{'4',INT_MAX},{'5',INT_MAX},{'6',INT_MAX},{'7',INT_MAX},{'8',INT_MAX},{'9',INT_MAX},{'A',INT_MAX} };
     map<char, int> cost;
     for( auto [key, nextKeyList] : keyPad ) {
@@ -103,6 +103,9 @@ vector<vector<char>>  getKeyPadAllPath( char const s, char const t, map<char, ve
     priority_queue<pair<int, point>, vector<pair<int, point>>, greater<>> pq;
     pq.push( { 0,point( s,0 ) } );
     cost[s] = 0;
+
+    point endPoint( t, 0 );
+
     while( !pq.empty() ) {
         auto [curCost, curPoint] = pq.top();
         char curKey = curPoint.curKey;
@@ -123,13 +126,12 @@ vector<vector<char>>  getKeyPadAllPath( char const s, char const t, map<char, ve
         }
         // Output process
         if( curKey == t ) {
-            for( auto& path : curPoint.linkRoad ) {
-                path.push_back( 'A' );
+            for( auto road : curPoint.linkRoad ) {
+                endPoint.linkRoad.push_back( road );
             }
-            return curPoint.linkRoad;
         }
         // Proceed process
-        for( auto [nextKey, nextDirection] : numericPad.at( curKey ) ) {
+        for( auto [nextKey, nextDirection] : keyPad.at( curKey ) ) {
             point nextPoint( nextKey, nextDirection );
             if( curCost + 1 < cost.at( nextKey ) ) {
                 nextPoint.linkRoad = curPoint.linkRoad;
@@ -143,13 +145,22 @@ vector<vector<char>>  getKeyPadAllPath( char const s, char const t, map<char, ve
             }
         }
     }
-    return vector<vector<char>>();
+    if( endPoint.linkRoad.empty() ) {
+        endPoint.linkRoad.push_back( { { 'A' , }, } );
+    }
+    else {
+        for( auto& road : endPoint.linkRoad ) {
+            road.push_back( 'A' );
+        }
+    }
+    return endPoint.linkRoad;
 }
 
 vector<vector<char>> readPassword() {
     vector<vector<char>> commandList;
-    // FILE* input( fopen( "input.txt", "r" ) );
-    FILE* input( fopen( "example.txt", "r" ) );
+    FILE* input( fopen( "input.txt", "r" ) );
+    // 126384
+    // FILE* input( fopen( "example.txt", "r" ) );
     char buf[BUF_SIZE];
     while( fgets( buf, BUF_SIZE, input ) ) {
         string strbuf( buf );
@@ -167,7 +178,7 @@ vector<vector<char>> readPassword() {
 // once used default param then the following param must all have default
 // This is error.
 // void findShortestCommand( vector<vector<vector<char>>> const  robot2CommList, vector<char>& curCommand, int depth = 0, int& res ) {
-void findShortestCommand( vector<vector<vector<char>>> const  robot2CommList, vector<char>& curCommand, int depth, int& res ) {
+void findShortestCommand( vector<vector<vector<char>>> const& robot2CommList, vector<char>& curCommand, int depth, int& res ) {
     if( depth == robot2CommList.size() ) {
         int curLen = 0, i = 0;
         for( auto comm : curCommand ) {
@@ -175,6 +186,7 @@ void findShortestCommand( vector<vector<vector<char>>> const  robot2CommList, ve
             i++;
         }
         res = min( curLen, res );
+        return;
     }
     for( int i = 0; i < robot2CommList[depth].size(); i++ ) {
         for( auto c : robot2CommList[depth][i] ) {
@@ -197,7 +209,7 @@ int generateCommand( vector<char> const password ) {
 
             vector<vector<vector<char>>> robot2CommList;
             for( int j = 0; j < robot1Comm.size(); j++ ) {
-                robot2CommList.push_back( getKeyPadAllPath( j == 0 ? 'A' : password[j - 1], password[j], directionalPad ) );
+                robot2CommList.push_back( getKeyPadAllPath( j == 0 ? 'A' : robot1Comm[j - 1], robot1Comm[j], directionalPad ) );
             }
 
             vector<char> curComm;
