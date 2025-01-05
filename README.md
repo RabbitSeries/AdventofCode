@@ -4,7 +4,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ## 🚀 Solutions
 
-### 2024 Progress: 21/25 ⭐⭐
+### 2024 Progress: 21.5/25 ⭐⭐
 
  Day                                                                                                                                  | Part 1 | Part 2 | Solution to P1                                                                                              | Solution to P2
 --------------------------------------------------------------------------------------------------------------------------------------|:------:|:------:|:-----------------------------------------------------------------------------------------------------------:|:----------:
@@ -28,11 +28,11 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 [![Day 18](https://img.shields.io/badge/Day%2018-RAM%20Run-blue?logo=Archlinux)](https://adventofcode.com/2024/day/18)                |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day18/RAMRun.cpp)              | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day18/RAMRun.cpp)
 [![Day 19](https://img.shields.io/badge/Day%2019-Linen%20Layout-blue?logo=Archlinux)](https://adventofcode.com/2024/day/19)           |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day19/LinenLayout.cpp)         | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day19/LinenLayout.cpp)
 [![Day 20](https://img.shields.io/badge/Day%2020-Race%20Condition-blue?logo=Archlinux)](https://adventofcode.com/2024/day/20)         |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day20/RaceCondition.cpp)       | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day20/RaceCondition.cpp)
-[![Day 21](https://img.shields.io/badge/Day%2021-Keypad%20Conundrum-blue?logo=Archlinux)](https://adventofcode.com/2024/day/21)       |-|-|-|-
+[![Day 21](https://img.shields.io/badge/Day%2021-Keypad%20Conundrum-blue?logo=Archlinux)](https://adventofcode.com/2024/day/21)       |   ⭐   |-       | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day21/CascadingRemote.cpp      |-
 [![Day 22](https://img.shields.io/badge/Day%2022-Monkey%20Market-blue?logo=Archlinux)](https://adventofcode.com/2024/day/22)          |-|-|-|-
 [![Day 23](https://img.shields.io/badge/Day%2023-LAN%20Party-blue?logo=Archlinux)](https://adventofcode.com/2024/day/23)              |-|-|-|-
 [![Day 24](https://img.shields.io/badge/Day%2024-Crossed%20Wires-blue?logo=Archlinux)](https://adventofcode.com/2024/day/24)          |-|-|-|-
-[![Day 25](https://img.shields.io/badge/Day%2025-Code%20Chroncile-blue?logo=Archlinux)](https://adventofcode.com/2024/day/25)         |⭐      |8⭐ lack| [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day25/1_clockKeyPair.cpp)|-
+[![Day 25](https://img.shields.io/badge/Day%2025-Code%20Chroncile-blue?logo=Archlinux)](https://adventofcode.com/2024/day/25)         |⭐      |7⭐ lack| [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day25/1_clockKeyPair.cpp)|-
 
 ## 💻 Tools
 
@@ -78,11 +78,12 @@ A simple box pushing game.
 </div>
 
 ### Day 16 Dijkstra + State transfer machine
+
 Prove:
+
 1. Each vertex in the shortest path is enqued in the order of the shotest path itself.
 2. Any equivalent cost path is enqued once.
-3. 
-
+3. Once a vertex is relaxed, the path is already in **current** optimal status, this status will be settled when poped from the priority queue.
 
 ## 🔗 Links
 
@@ -103,6 +104,6 @@ Prove:
 
 Language    |files|blank|comment|code
 --------    |-----|-----|-------|----
-C++         |38   |174  |387    |3296
-C/C++ Header|4    |27   |19     |368
-SUM:        |42   |201  |406    |3664
+C++         |39   |193  |428    |3480
+C/C++ Header|6    |34   |61     |511
+SUM:        |45   |227  |489    |3991
