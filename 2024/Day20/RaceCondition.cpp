@@ -4,25 +4,27 @@ using namespace std;
 #define BUF_SIZE 1024
 
 typedef pair<int, int> pos;
+
 enum cellStatus {
     WALL,
     EMPTY
 };
 
+
 int dx[4]{ 0,0,1,-1 };
 int dy[4]{ 1,-1,0,0 };
 
-bool isValid( int rows, int cols, pos curPos, vector<vector<cellStatus>> const roadMap ) {
+bool isValid( int const& rows, int const& cols, pos const& curPos, vector<vector<cellStatus>> const& roadMap ) {
     return curPos.first < rows && curPos.second < cols && curPos.first >= 0 && curPos.second >= 0 && roadMap[curPos.first][curPos.second] == EMPTY;
 }
-bool isWall( int rows, int cols, pos curPos, vector<vector<cellStatus>>const roadMap ) {
+inline bool isWall( int const& rows, int const& cols, pos const& curPos, vector<vector<cellStatus>>const& roadMap ) {
     return curPos.first < rows && curPos.second < cols && curPos.first >= 0 && curPos.second >= 0 && roadMap[curPos.first][curPos.second] == WALL;
 }
-pos getNextPos( pos curPos, int id ) {
+inline pos getNextPos( pos curPos, int id ) {
     return pos{ curPos.first + dx[id],curPos.second + dy[id] };
 }
 
-int Dijkstra( pos const start, pos const end, vector<vector<cellStatus>> const roadMap, map<pos, int>& path ) {
+int Dijkstra( pos const start, pos const end, vector<vector<cellStatus>> const& roadMap, map<pos, int>& path ) {
     int rows = roadMap.size(), cols = roadMap[0].size();
     vector<vector<int>> cost( rows, vector<int>( cols, INT_MAX ) );
     vector<vector<int>> optimized( rows, vector<int>( cols, false ) );
@@ -93,7 +95,7 @@ void readMap( pos& start, pos& end, vector<vector<cellStatus>>& roadMap, map<pos
     return;
 }
 
-void cheat( pos end, vector<vector<cellStatus>> const roadMap, map<pos, int> const path ) {
+void cheat( pos end, vector<vector<cellStatus>> const& roadMap, map<pos, int> const& path ) {
     // Benchmark satisfied.
     // vector<int> targets{ 2,4,6,8,10,12,20,36,38,40,64 };
     // vector<pair<pair<pos, pos>, int>> cheatPos;
@@ -147,19 +149,24 @@ void Solution1() {
     * *
      *
 */
-vector<pair<pos, int>> getCheatZone( pos curPos, vector<vector<cellStatus>>  const roadMap ) {
-    vector<pair<pos, int>> cheatPos;
+inline int getCheatZone( pos const& curPos, vector<vector<cellStatus>>  const& roadMap, pos end, map<pos, int> const& path ) {
+    // vector<pair<pos, int>> cheatPos;
+    int cnt = 0;
     int rows = roadMap.size(), cols = roadMap[0].size();
-    for( int i = -20; i <= 20; i++ ) {
-        for( int j = -( 20 - abs( i ) ); j <= ( 20 - abs( i ) ); j++ ) {
+    for( int i = -min( curPos.first, 20 ); i <= min( rows - 1 - curPos.first, 20 ); i++ ) {
+        for( int j = -min( curPos.second, ( 20 - abs( i ) ) ); j <= min( cols - 1 - curPos.second, ( 20 - abs( i ) ) ); j++ ) {
             pos checkPos{ curPos.first + i,curPos.second + j };
             int cheatCost = abs( i ) + abs( j );
-            if( cheatCost > 0 && abs( i ) + abs( j ) != 0 && isValid( rows, cols, checkPos, roadMap ) ) {
-                cheatPos.push_back( { checkPos,abs( i ) + abs( j ) } );
+            if( isValid( rows, cols, checkPos, roadMap ) ) {
+                int proceedCost = cheatCost + path.at( end ) - path.at( checkPos );
+                int savedTime = path.at( end ) - path.at( curPos ) - proceedCost;
+                if( savedTime >= 100 )
+                    cnt++;
+                // cheatPos.push_back( { checkPos,abs( i ) + abs( j ) } );
             }
         }
     }
-    return cheatPos;
+    return cnt;
 }
 
 void Solution2() {
@@ -175,14 +182,15 @@ void Solution2() {
     int processCnt = 0;
     for( auto [startPos, curCost] : path ) {
         showProgressBar( ++processCnt, pathCnt );
-        for( auto [nextPos, cheatCost] : getCheatZone( startPos, roadMap ) ) {
-            int proceedCost = cheatCost + path.at( end ) - path.at( nextPos );
-            int savedTime = path.at( end ) - path.at( startPos ) - proceedCost;
+        // vector<pair<pos, int>> const& cheatPos = getCheatZone( startPos, roadMap, end, path );
+        res += getCheatZone( startPos, roadMap, end, path );
+        // for( auto& [nextPos, cheatCost] : cheatPos ) {
+
             // if( savedTime == target ) {
-            if( savedTime >= 100 ) {
-                res++;
-            }
-        }
+            // if( savedTime >= 100 ) {
+        // res++;
+        // }
+    // }
     }
     // cout << "There are " << res << " cheats that save " << target << " picoseconds." << endl;
     cout << "Solution 2: there are " << res << " cheats that save " << 100 << " picoseconds." << endl;

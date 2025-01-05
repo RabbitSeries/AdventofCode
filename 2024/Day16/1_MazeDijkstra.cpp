@@ -91,6 +91,7 @@ int countSeats( vector<vector<int>> maze, point2D start, point2D end ) {
         // ! This happens when turning cost 1 penalty, and the input is inputCutOptimize.txt.
         if( pathCost.count( curPoint.hashCode() ) != 0 && curCost > pathCost[curPoint.hashCode()] ) {
             foo++;
+            // Once the point is visited in this visit, it should be optimized therefore the following visit should be excluded except that this vertex is shared by different shortest path.
             continue;
         }
         // There are 1 different ways that can reach destination at same cost.
@@ -170,10 +171,10 @@ int main() {
     vector<vector<int>> m;
     pair<int, int> s, e;
     // ! To change test example, choose the following code to uncomment:
-    FILE* input = fopen( "input_example1.txt", "r" );
+    // FILE* input = fopen( "input_example1.txt", "r" );
     // FILE* input = fopen( "input_example2.txt", "r" );
     // FILE* input = fopen( "inputCutOptimize.txt", "r" );
-    // FILE* input = fopen( "input.txt", "r" );
+    FILE* input = fopen( "input.txt", "r" );
     // Always init it, or you will have wrong result.
     char buf[1024] = "\0";
     while( !feof( input ) && fgets( buf, 1024, input ) ) {

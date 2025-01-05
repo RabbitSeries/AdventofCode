@@ -77,6 +77,13 @@ A simple box pushing game.
   <img src="Images/PushBox.png" alt="Push Box!" width="250" />
 </div>
 
+### Day 16 Dijkstra + State transfer machine
+Prove:
+1. Each vertex in the shortest path is enqued in the order of the shotest path itself.
+2. Any equivalent cost path is enqued once.
+3. 
+
+
 ## 🔗 Links
 
 - [Advent of Code](https://adventofcode.com/)
@@ -87,7 +94,7 @@ A simple box pushing game.
 ## 📆 TODOs
 
 - [x] Change day 3 algorithm to [regular expression](https://en.cppreference.com/w/cpp/regex/ecmascript) implementation([C++11 feature](https://en.cppreference.com/w/cpp/regex)).
-- What does day 13 algorithm wants to testify?
+- What is day 13 algorithm trying to testify?
 - Chnagge Day 16 algorithm to shortest path algorithm.
 - Get a lisence.
 - Construct project to a CMake test project.
