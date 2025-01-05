@@ -182,15 +182,7 @@ void Solution2() {
     int processCnt = 0;
     for( auto [startPos, curCost] : path ) {
         showProgressBar( ++processCnt, pathCnt );
-        // vector<pair<pos, int>> const& cheatPos = getCheatZone( startPos, roadMap, end, path );
         res += getCheatZone( startPos, roadMap, end, path );
-        // for( auto& [nextPos, cheatCost] : cheatPos ) {
-
-            // if( savedTime == target ) {
-            // if( savedTime >= 100 ) {
-        // res++;
-        // }
-    // }
     }
     // cout << "There are " << res << " cheats that save " << target << " picoseconds." << endl;
     cout << "Solution 2: there are " << res << " cheats that save " << 100 << " picoseconds." << endl;
