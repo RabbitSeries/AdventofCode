@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-map<char, vector<pair<char, char>>> numericPad{
+map<char, vector<pair<char, char>>> NUMERIC_KEYPAD{
     //     +---+
     //     | 3 |
     // +---+---+
@@ -110,7 +110,7 @@ map<char, vector<pair<char, char>>> numericPad{
 };
 
 
-map<char, vector<pair<char, char>>> directionalPad{
+map<char, vector<pair<char, char>>> DIRECTIONAL_KEYPAD{
     {'A',
         {
             {'^','<'},

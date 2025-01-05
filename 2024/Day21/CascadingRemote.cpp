@@ -11,7 +11,7 @@
 //     +---+---+
 
 // 780A 7->8->0->A
-int getOnePath( char const s, char const t, map<char, vector<pair<char, char>>> const keyPad ) {
+int getOnePath( char const s, char const t, map<char, vector<pair<char, char>>> const & keyPad ) {
     map<char, int> cost;
     // map<char, bool> visited;
     for( auto [key, nextKeyList] : keyPad ) {
@@ -182,7 +182,7 @@ void findShortestCommand( vector<vector<vector<char>>> const& robot2CommList, ve
     if( depth == robot2CommList.size() ) {
         int curLen = 0, i = 0;
         for( auto comm : curCommand ) {
-            curLen += getOnePath( i == 0 ? 'A' : curCommand[i - 1], curCommand[i], directionalPad );
+            curLen += getOnePath( i == 0 ? 'A' : curCommand[i - 1], curCommand[i], DIRECTIONAL_KEYPAD );
             i++;
         }
         res = min( curLen, res );
@@ -203,13 +203,13 @@ int generateCommand( vector<char> const password ) {
     int humanCommLen = 0;
     for( int i = 0; i < password.size(); i++ ) {
 
-        vector<vector<char>> robot1CommList = getKeyPadAllPath( i == 0 ? 'A' : password[i - 1], password[i], numericPad );
+        vector<vector<char>> robot1CommList = getKeyPadAllPath( i == 0 ? 'A' : password[i - 1], password[i], NUMERIC_KEYPAD );
         int res = INT_MAX;
         for( auto robot1Comm : robot1CommList ) {
 
             vector<vector<vector<char>>> robot2CommList;
             for( int j = 0; j < robot1Comm.size(); j++ ) {
-                robot2CommList.push_back( getKeyPadAllPath( j == 0 ? 'A' : robot1Comm[j - 1], robot1Comm[j], directionalPad ) );
+                robot2CommList.push_back( getKeyPadAllPath( j == 0 ? 'A' : robot1Comm[j - 1], robot1Comm[j], DIRECTIONAL_KEYPAD ) );
             }
 
             vector<char> curComm;
@@ -244,7 +244,7 @@ int main() {
 
 // Construct a map of this numeric keypad
 // map<int,vector<int>>
-// For each vertex in an numericPad, perform dijkstra.
+// For each vertex in an NUMERIC_KEYPAD, perform dijkstra.
 // Get a path:
 // 6546543216546A
 
