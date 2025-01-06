@@ -43,9 +43,9 @@ int getLineResult( string str ) {
 
 int main() {
     FILE* input = fopen( "input.txt", "r" );
-    char linebuffer[( 1 << 10 ) + 1] = { "\0" };
+    char linebuffer[( 1 << 15 ) + 1] = { "\0" };
     long long addUp = 0;
-    while( !feof( input ) && fgets( linebuffer, 1 << 15, input ) ) {
+    while( !feof( input ) && fgets( linebuffer, ( 1 << 15 ) + 1, input ) ) {
         addUp += getLineResult( string( linebuffer ) );
     }
     cout << addUp;
