@@ -1,4 +1,4 @@
-# 🎄 Advent of Code Solutions
+# Advent of Code Solutions
 
 Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of Code is an annual coding event with daily programming puzzles released from December 1st to December 25th.
 

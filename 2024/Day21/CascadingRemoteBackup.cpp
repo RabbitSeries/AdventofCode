@@ -71,11 +71,11 @@ void Solution1() {
 }
 void Solution2() {
 
-    ull res = 0;
+    int res = 0;
     vector<vector<char>> passwordList = readPassword();
     for( auto password : passwordList ) {
 
-        ull manCommand = generateCommand( password, 25 );
+        int manCommand = generateCommand( password, 5 );
         cout << "Password: " << string( password.begin(), password.end() )
             << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
         res += stoi( string( password.begin(), password.end() - 1 ) ) * manCommand;
@@ -84,7 +84,7 @@ void Solution2() {
 }
 
 int main() {
-    Solution1();
-    // Solution2();
+    // Solution1();
+    Solution2();
     return 0;
 }
