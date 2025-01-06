@@ -1,10 +1,10 @@
 #include "KeyPadStructure.h"
 #define BUF_SIZE 50
 
-inline ull generatePermutations( vector<char> const& curComm, int robotCnt ) {
+static map<pair<vector<char>, int>, ull > cacheMap;
+inline ull directionalCascadingCommand( vector<char> const& curComm, int robotCnt ) {
     // WTF?
     // Learned from <https://github.com/TrueBurn/advent-of-code/blob/main/2024/day-21/solution.py> this cache method is insane.
-    static map<pair<vector<char>, int>, ull > cacheMap;
     if( cacheMap.find( { curComm,robotCnt } ) != cacheMap.end() ) {
         return cacheMap[{ curComm, robotCnt }];
     }
@@ -24,7 +24,7 @@ inline ull generatePermutations( vector<char> const& curComm, int robotCnt ) {
         vector<vector<char>> nextRobotCommList = getKeyPadAllPath( i == 0 ? 'A' : curComm[i - 1], curComm[i], DIRECTIONAL_KEYPAD );
         ull curLen = ULONG_LONG_MAX;
         for( auto nextRobotComm : nextRobotCommList ) {
-            curLen = min( generatePermutations( nextRobotComm, robotCnt - 1 ), curLen );
+            curLen = min( directionalCascadingCommand( nextRobotComm, robotCnt - 1 ), curLen );
         }
         res += curLen;
     }
@@ -32,13 +32,13 @@ inline ull generatePermutations( vector<char> const& curComm, int robotCnt ) {
     return res;
 }
 
-ull generateCommand( vector<char> const password, int robotCnt ) {
+ull numericCommand( vector<char> const password, int robotCnt ) {
     ull res = 0;
     for( int i = 0; i < password.size(); i++ ) {
         vector<vector<char>> nextRobotCommList = getKeyPadAllPath( i == 0 ? 'A' : password[i - 1], password[i], NUMERIC_KEYPAD );
         ull curLen = ULONG_LONG_MAX;
         for( auto nextRobotComm : nextRobotCommList ) {
-            curLen = min( generatePermutations( nextRobotComm, robotCnt - 1 ), curLen );
+            curLen = min( directionalCascadingCommand( nextRobotComm, robotCnt - 1 ), curLen );
         }
         res += curLen;
     }
@@ -51,24 +51,26 @@ void Solution1() {
     int res = 0;
     vector<vector<char>> passwordList = readPassword();
     for( auto password : passwordList ) {
-        int manCommand = generateCommand( password, 3 );
+        int manCommand = numericCommand( password, 3 );
         cout << "Password: " << string( password.begin(), password.end() )
             << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
         res += stoi( string( password.begin(), password.end() - 1 ) ) * manCommand;
     }
     cout << "Sum of the complexities: " << res << endl;
+    cout << "Cache size: " << cacheMap.size() << endl;
 }
 void Solution2() {
     ull res = 0;
     vector<vector<char>> passwordList = readPassword();
 
     for( auto password : passwordList ) {
-        ull manCommand = generateCommand( password, 26 );
+        ull manCommand = numericCommand( password, 26 );
         cout << "Password: " << string( password.begin(), password.end() )
             << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
         res += stoll( string( password.begin(), password.end() - 1 ) ) * manCommand;
     }
     cout << "Sum of the complexities: " << res << endl;
+    cout << "Cache size: " << cacheMap.size() << endl;
 }
 
 int main() {

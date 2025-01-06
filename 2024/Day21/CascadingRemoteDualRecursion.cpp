@@ -4,7 +4,12 @@
 // once used default param then the following param must all have default
 // This is error.
 // void findShortestCommand( vector<vector<vector<char>>> const  curRobotCommList, vector<char>& curCommand, int depth = 0, int& res ) {
-void generatePermutations( vector<vector<vector<char>>> const& curRobotCommList, vector<char> curCommand, int depth, int robotCnt, ull& res ) {
+void directionalCascadingCommand( vector<vector<vector<char>>> const& curRobotCommList, vector<char> curCommand, int depth, int robotCnt, ull& res ) {
+    static map<tuple<vector<vector<vector<char>>>, vector<char>, int, int>, ull> cacheMap;
+    if( cacheMap.find( tuple( curRobotCommList, curCommand, depth, robotCnt ) ) != cacheMap.end() ) {
+        res = cacheMap[tuple( curRobotCommList, curCommand, depth, robotCnt )];
+        return;
+    }
     if( depth == curRobotCommList.size() ) {
         // cout << "Generated level " << robotCnt << " command list, size: " << depth << " CurCommand size: " << curCommand.size() << endl;
         // When recursively enters this level, one permutation is obtained.
@@ -14,7 +19,8 @@ void generatePermutations( vector<vector<vector<char>>> const& curRobotCommList,
                 nextRobotCommList.push_back( getKeyPadAllPath( j == 0 ? 'A' : curCommand[j - 1], curCommand[j], DIRECTIONAL_KEYPAD ) );
             }
             vector<char> nextComm;
-            generatePermutations( nextRobotCommList, nextComm, 0, robotCnt - 1, res );
+            directionalCascadingCommand( nextRobotCommList, nextComm, 0, robotCnt - 1, res );
+            cacheMap[tuple( nextRobotCommList, nextComm, 0, robotCnt - 1 )] = res;
             return;
         }
         // The final human.
@@ -24,6 +30,7 @@ void generatePermutations( vector<vector<vector<char>>> const& curRobotCommList,
             i++;
         }
         res = min( curLen, res );
+        cacheMap[tuple( curRobotCommList, curCommand, 0, robotCnt)] = res;
         return;
     }
     // Generate the permutation between each edge.
@@ -31,14 +38,16 @@ void generatePermutations( vector<vector<vector<char>>> const& curRobotCommList,
         for( auto c : curRobotCommList[depth][i] ) {
             curCommand.push_back( c );
         }
-        generatePermutations( curRobotCommList, curCommand, depth + 1, robotCnt, res );
+        // ! There is not need to perform global password optimization. Just perform optimization point to point.
+        directionalCascadingCommand( curRobotCommList, curCommand, depth + 1, robotCnt, res );
+        cacheMap[tuple( curRobotCommList, curCommand, depth + 1, robotCnt)] = res;
         for( auto c : curRobotCommList[depth][i] ) {
             curCommand.pop_back();
         }
     }
 }
 
-ull generateCommand( vector<char> const password, int robotCnt ) {
+ull numericCommand( vector<char> const password, int robotCnt ) {
     ull res = 0;
     vector<vector<vector<char>>> robot1CommList;
     for( int i = 0; i < password.size(); i++ ) {
@@ -49,7 +58,7 @@ ull generateCommand( vector<char> const password, int robotCnt ) {
     for( auto robot1Comm : robot1CommList ) {
         vector<vector<vector<char>>> nextComm{ robot1Comm };
         ull curLen = ULONG_LONG_MAX;
-        generatePermutations( nextComm, vector<char>(), 0, robotCnt, curLen );
+        directionalCascadingCommand( nextComm, vector<char>(), 0, robotCnt, curLen );
         res += curLen;
     }
 
@@ -62,7 +71,7 @@ void Solution1() {
     vector<vector<char>> passwordList = readPassword();
     for( auto password : passwordList ) {
 
-        int manCommand = generateCommand( password, 3 );
+        int manCommand = numericCommand( password, 3 );
         cout << "Password: " << string( password.begin(), password.end() )
             << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
         res += stoi( string( password.begin(), password.end() - 1 ) ) * manCommand;
@@ -75,7 +84,7 @@ void Solution2() {
     vector<vector<char>> passwordList = readPassword();
     for( auto password : passwordList ) {
 
-        ull manCommand = generateCommand( password, 25 );
+        ull manCommand = numericCommand( password, 26 );
         cout << "Password: " << string( password.begin(), password.end() )
             << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
         res += stoi( string( password.begin(), password.end() - 1 ) ) * manCommand;
@@ -85,6 +94,6 @@ void Solution2() {
 
 int main() {
     Solution1();
-    // Solution2();
+    Solution2();
     return 0;
 }
