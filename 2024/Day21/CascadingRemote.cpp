@@ -2,7 +2,8 @@
 #define BUF_SIZE 50
 
 inline ull generatePermutations( vector<char> const& curComm, int robotCnt ) {
-    // Learn from <https://github.com/TrueBurn/advent-of-code/blob/main/2024/day-21/solution.py> this cache is insane.
+    // WTF?
+    // Learned from <https://github.com/TrueBurn/advent-of-code/blob/main/2024/day-21/solution.py> this cache method is insane.
     static map<pair<vector<char>, int>, ull > cacheMap;
     if( cacheMap.find( { curComm,robotCnt } ) != cacheMap.end() ) {
         return cacheMap[{ curComm, robotCnt }];
