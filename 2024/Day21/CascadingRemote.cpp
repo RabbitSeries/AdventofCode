@@ -18,7 +18,6 @@ inline ull generatePermutations( vector<char> const& curComm, int robotCnt ) {
         }
         cacheMap[{curComm, robotCnt}] = curLen;
         return curLen;
-
     }
     ull res = 0;
     for( int i = 0; i < curComm.size(); i++ ) {
