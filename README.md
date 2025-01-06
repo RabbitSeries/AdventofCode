@@ -99,6 +99,7 @@ Prove:
 - Chnagge Day 16 algorithm to shortest path algorithm.
 - Get a lisence.
 - Construct project to a CMake test project.
+- Add cachce to Dijkstra in Day 21 solution.
 
 ## Statistics
 
