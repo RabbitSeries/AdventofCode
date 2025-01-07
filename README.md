@@ -101,6 +101,7 @@ Prove:
 - Construct project to a CMake test project.
 - Add cachce to Dijkstra in Day 21 solution.
 - Github issue at: [13110](<https://github.com/microsoft/vscode-cpptools/issues/13110>)
+- Mutex > future async > normal algorithm (vscode debugger will try tracing the calling stack, thus recursive algorithm will be slowed down serverely)
 
 ## Statistics
 

@@ -173,21 +173,21 @@ void Solution2() {
     }
     int lastChecked = 0, total = routeMap.size() * routeMap[0].size();
     while( lastChecked < total ) {
-        int checked = count.load();  // 获取当前已处理的数量
+        int checked = count.load();
         if( checked != lastChecked ) {
             lastChecked = checked;
             std::cout << "\033[2J\033[1;1H";
             cout << "Progress - Part 2" << endl;
             cout << "Positions checked: " << checked << "/" << total << " (" << ( checked * 100.0 / total ) << "%)" << endl;
             cout << "Loop positions found: " << count.load() << endl;
-            this_thread::sleep_for( chrono::milliseconds( 100 ) );  // 每隔 100ms 更新一次进度
+            this_thread::sleep_for( chrono::milliseconds( 100 ) );
         }
     }
 
     int totalDistinctPlacement = 0;
     // Accumulate all res.
     for( auto& fut : futures ) {
-        totalDistinctPlacement += fut.get();  // Wait can get.
+        totalDistinctPlacement += fut.get();  // Wait and get.
     }
 
     cout << "Solution 2: " << totalDistinctPlacement << endl;
