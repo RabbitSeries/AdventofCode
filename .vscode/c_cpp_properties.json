@@ -2,9 +2,6 @@
     "configurations": [
         {
             "name": "ArchLinux",
-            "includePath": [
-                "${workspaceFolder}/**"
-            ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
@@ -13,13 +10,19 @@
             "compilerPath": "/usr/bin/g++",
             "cStandard": "c17",
             "cppStandard": "gnu++17",
-            "intelliSenseMode": "windows-gcc-x64"
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPathInCppPropertiesJson": "/usr/bin/g++",
+            "mergeConfigurations": false,
+            "browse": {
+                "path": [
+                    "d:/back_up/ProgrammingEvents/AdventOfCode/**",
+                    "d:/back_up/ProgrammingEvents/AdventOfCode"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
         },
         {
             "name": "MinGW",
-            "includePath": [
-                "${workspaceFolder}/**"
-            ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
@@ -28,7 +31,16 @@
             "compilerPath": "D:/Build_Tool_Lib/x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0/mingw64/bin/g++.exe",
             "cStandard": "c17",
             "cppStandard": "gnu++17",
-            "intelliSenseMode": "windows-gcc-x64"
+            "intelliSenseMode": "windows-gcc-x64",
+            "compilerPathInCppPropertiesJson": "D:/Build_Tool_Lib/x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0/mingw64/bin/g++.exe",
+            "mergeConfigurations": false,
+            "browse": {
+                "path": [
+                    "d:/back_up/ProgrammingEvents/AdventOfCode/**",
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
         }
     ],
     "version": 4

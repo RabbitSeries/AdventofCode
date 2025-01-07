@@ -24,7 +24,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "logging": { "engineLogging": true, "trace": true, "traceResponse": true },
+            // "logging": { "engineLogging": true, "trace": true, "traceResponse": true },
             "preLaunchTask": "C/C++: g++.exe build active file"
         },
         {

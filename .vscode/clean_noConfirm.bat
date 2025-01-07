@@ -19,6 +19,7 @@ for /r "%workingPath%" %%p in (*.o)   do del /q "%%p"
 for /r "%workingPath%" %%p in (*.obj) do del /q "%%p"
 for /r "%workingPath%" %%p in (*.pdb) do del /q "%%p"
 for /r "%workingPath%" %%p in (*.ilk) do del /q "%%p"
+for /r "%workingPath%" %%p in (*.out) do del /q "%%p"
 for /r "%workingPath%" %%p in (*.ilk) do del /q "%%p"
 echo Deleted *.exe, *.dll, *.o, *.obj, *.pdb, *.ilk in %workingPath% recursively.
 @REM directories /s removes all subdirectories.
