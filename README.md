@@ -100,11 +100,12 @@ Prove:
 - Get a lisence.
 - Construct project to a CMake test project.
 - Add cachce to Dijkstra in Day 21 solution.
+- Github issue at: [13110](<https://github.com/microsoft/vscode-cpptools/issues/13110>)
 
 ## Statistics
 
 Language    |files|blank|comment|code
 --------    |-----|-----|-------|----
-C++         |39   |193  |428    |3480
-C/C++ Header|6    |34   |61     |511
-SUM:        |45   |227  |489    |3991
+C++         |39   |210  |389    |3327
+C/C++ Header|6    |39   |80     |637
+SUM:        |45   |249  |469    |3964

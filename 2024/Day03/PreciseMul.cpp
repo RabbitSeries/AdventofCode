@@ -2,7 +2,6 @@
 using namespace std;
 // // Todo: this algorithm's output has something to do with the difined BUFFER_SZIE, to solve the problem, change the algorithm to line process unit or figure out a way to concile BUFFER_SZIE and the string sent to next process.
 // Now the buffer_size does not affect the result.
-#define BUFFER_SIZE 100
 typedef long long ll;
 int getNum( string str, int pos ) {
     int i = pos, num = 0;
@@ -124,11 +123,11 @@ ll getLineResult( string& str, bool& enabled ) {
 int main() {
     // FILE* input = fopen( "example.txt", "r" );
     FILE* input = fopen( "input.txt", "r" );
-    char linebuffer[BUFFER_SIZE] = "\0";
+    char linebuffer[BUFSIZ];
     ll addUp = 0;
     bool enabled = true;
     string leftOver = "";
-    while( fgets( linebuffer, BUFFER_SIZE, input ) ) {
+    while( fgets( linebuffer, BUFSIZ, input ) ) {
         string currentLine( linebuffer );
         if( !currentLine.empty() ) {
             currentLine = leftOver + currentLine;
@@ -136,6 +135,6 @@ int main() {
             leftOver = currentLine;
         }
     }
-    cout << addUp << endl;
+    cout << "Solution 2: " << addUp << endl;
     return 0;
 }
