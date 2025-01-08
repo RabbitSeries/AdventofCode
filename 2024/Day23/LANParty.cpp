@@ -130,6 +130,7 @@ void Solution2() {
             for( auto& [Host, connection] : connections ) {
                 if( isConnected( atom, connection, LANNetwork ) ) {
                     connection += atom;
+                    // Don't break here.
                     added = true;
                 }
             }
