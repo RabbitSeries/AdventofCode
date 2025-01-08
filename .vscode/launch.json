@@ -22,7 +22,7 @@
                     "description": "Set Disassembly Flavor to Intel",
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
-                }
+                },
             ],
             // "logging": { "engineLogging": true, "trace": true, "traceResponse": true },
             "preLaunchTask": "C/C++: g++.exe build active file"

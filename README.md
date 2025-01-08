@@ -29,10 +29,10 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 [![Day 19](https://img.shields.io/badge/Day%2019-Linen%20Layout-blue?logo=Archlinux)](https://adventofcode.com/2024/day/19)           |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day19/LinenLayout.cpp)         | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day19/LinenLayout.cpp)
 [![Day 20](https://img.shields.io/badge/Day%2020-Race%20Condition-blue?logo=Archlinux)](https://adventofcode.com/2024/day/20)         |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day20/RaceCondition.cpp)       | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day20/RaceCondition.cpp)
 [![Day 21](https://img.shields.io/badge/Day%2021-Keypad%20Conundrum-blue?logo=Archlinux)](https://adventofcode.com/2024/day/21)       |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day21/CascadingRemote.cpp)     | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day21/CascadingRemote.cpp)
-[![Day 22](https://img.shields.io/badge/Day%2022-Monkey%20Market-blue?logo=Archlinux)](https://adventofcode.com/2024/day/22)          |-|-|-|-
+[![Day 22](https://img.shields.io/badge/Day%2022-Monkey%20Market-blue?logo=Archlinux)](https://adventofcode.com/2024/day/22)          |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day22/MonkeyMarket.cpp)        | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day22/MonkeyMarket.cpp)
 [![Day 23](https://img.shields.io/badge/Day%2023-LAN%20Party-blue?logo=Archlinux)](https://adventofcode.com/2024/day/23)              |-|-|-|-
 [![Day 24](https://img.shields.io/badge/Day%2024-Crossed%20Wires-blue?logo=Archlinux)](https://adventofcode.com/2024/day/24)          |-|-|-|-
-[![Day 25](https://img.shields.io/badge/Day%2025-Code%20Chroncile-blue?logo=Archlinux)](https://adventofcode.com/2024/day/25)         |⭐      |6⭐ lack| [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day25/1_clockKeyPair.cpp)|-
+[![Day 25](https://img.shields.io/badge/Day%2025-Code%20Chroncile-blue?logo=Archlinux)](https://adventofcode.com/2024/day/25)         |⭐      |4⭐ lack| [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day25/1_clockKeyPair.cpp)|-
 
 ## 💻 Tools
 
@@ -96,12 +96,11 @@ Prove:
 
 - [x] Change day 3 algorithm to [regular expression](https://en.cppreference.com/w/cpp/regex/ecmascript) implementation([C++11 feature](https://en.cppreference.com/w/cpp/regex)).
 - What is day 13 algorithm trying to testify?
-- Chnagge Day 16 algorithm to shortest path algorithm.
 - Get a lisence.
-- Construct project to a CMake test project.
+- Construct the project to a CMake test project.
 - Add cachce to Dijkstra in Day 21 solution.
 - Github issue at: [13110](<https://github.com/microsoft/vscode-cpptools/issues/13110>)
-- Mutex > future async > normal algorithm (vscode debugger will try tracing the calling stack, thus recursive algorithm will be slowed down serverely)
+- Mutex > future async > normal algorithm (vscode debugger will try tracking the calling stack, thus recursive algorithm will be slowed down serverely)
 
 ## Statistics
 
