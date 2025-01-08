@@ -18,40 +18,39 @@ typedef struct wire wire;
 typedef struct gate gate;
 
 struct wire {
-    wire( string _Name, bool _isValid, bool _data ) : wireName( _Name ), isValid( _isValid ), data( _data ) {};
-    string wireName;
+    wire( bool _isValid, bool _data ) : isValid( _isValid ), data( _data ) {};
     bool isValid;
     bool data;
     vector<pair<pair<string, string>, string>> outWireList;
 };
 
-vector<wire> wireId2Wire;
-
-map<string, int> wireName2Id;
-map<string, int> allOutWireName2Id;
-map<string, int> zResWire2Id;
+map<string, wire> inputWireList;
+map<string, wire> allOutWireList;
 
 void resetGates() {
-    for( auto& w : wireId2Wire ) {
-        if( w.wireName[0] != 'x' && w.wireName[0] != 'y' ) {
-            w.isValid = false;
-            w.data = false;
-        }
+    for( auto& w : allOutWireList ) {
+        w.second.isValid = false;
+        w.second.data = false;
     }
 }
 
 long long xOperandVal, yOperandVal, zOperandVal;
 
 void createWire( string wireName, bool isValid = false, bool data = false ) {
-    if( wireName2Id.count( wireName ) == 0 ) {
-        wireName2Id[wireName] = wireId2Wire.size();
-        wireId2Wire.push_back( wire( wireName, isValid, data ) );
+    if( inputWireList.count( wireName ) == 0 ) {
+        inputWireList[wireName] = wire( isValid, data );
         // TODO Add forward list to support emplace
+        // wireId2Wire.push_back( wire( wireName, isValid, data ) );
     }
 }
 
 wire& getWire( string wireName ) {
-    return wireId2Wire[wireName2Id[wireName]];
+    if( inputWireList.count( wireName ) != 0 ) {
+        return inputWireList[wireName];
+    }
+    else {
+        return allOutWireList[wireName];
+    }
 }
 
 void swapWire( string wireName1, string wireName2 ) {
@@ -81,10 +80,7 @@ queue<string> readFile() {
             createWire( wire1Name );
             createWire( wire2Name );
             createWire( outWireName );
-            allOutWireName2Id[outWireName] = wireName2Id[outWireName];
-            if( outWireName[0] == 'z' ) {
-                zResWire2Id[outWireName] = wireName2Id[outWireName];
-            }
+            allOutWireList[outWireName] = inputWireList[outWireName];
             getWire( wire1Name ).outWireList.push_back( { { m[2], wire2Name}, outWireName } );
             getWire( wire2Name ).outWireList.push_back( { { m[2], wire1Name}, outWireName } );
 
@@ -125,10 +121,10 @@ long long runGates( queue<string> processWireNameQueue ) {
         }
     }
     string res = "";
-    for( auto& wireInfo : allOutWireName2Id ) {
+    for( auto& wireInfo : allOutWireList ) {
         // wireInfo.second = getWire( wireInfo.first ).data;
         if( wireInfo.first[0] == 'z' )
-            res = to_string( getWire( getWire( wireInfo.first ).wireName ).data ) + res;
+            res = to_string( getWire( getWire( wireInfo.first ) ).data ) + res;
     }
     // sort( zResWire2Id.begin(), zResWire2Id.end(), less<pair<string, bool>>() );
     return stoll( res, nullptr, 2 );

@@ -8,11 +8,11 @@ void Solution1() {
 int res = 0;
 int rows = 0;
 vector<string> swapNames;
-void swapGates( queue<string>& processWireNameQueue, map<string, bool>& swapped, bool& found, int depth = 4 ) {
+void swapGates( queue<string>& processWireNameQueue, map < string, pair<bool, string>>& swapped, bool& found, int depth = 4 ) {
     if( depth == 0 ) {
         if( runGates( processWireNameQueue ) == zOperandVal ) {
             for( auto wireInfo : swapped ) {
-                if( wireInfo.second ) {
+                if( wireInfo.second.first ) {
                     swapNames.push_back( wireInfo.first );
                 }
             }
@@ -20,35 +20,35 @@ void swapGates( queue<string>& processWireNameQueue, map<string, bool>& swapped,
         }
         return;
     }
-    for( auto wireInfo : allOutWireName2Id ) {
+    for( auto wireInfo : allOutWireList ) {
         string wireName = wireInfo.first;
-        int wireId = wireInfo.second;
-        if( !swapped[wireName] ) {
-            swapped[wireName] = true;
-            for( auto nextWire : allOutWireName2Id ) {
+        if( !swapped[wireName].first ) {
+            swapped[wireName].first = true;
+            for( auto nextWire : allOutWireList ) {
                 string nextWireName = nextWire.first;
-                int nextWireId = nextWire.second;
-                if( nextWireName != wireName && !swapped[nextWireName] ) {
-                    swapped[nextWireName] = true;
+                if( nextWireName != wireName && !swapped[nextWireName].first ) {
+                    swapped[nextWireName].first = true;
                     swapWire( wireName, nextWireName );
                     swapGates( processWireNameQueue, swapped, found, depth - 1 );
                     if( found ) {
                         return;
                     }
                     swapWire( wireName, nextWireName );
-                    swapped[nextWireName] = false;
+                    swapped[nextWireName].first = false;
+                    swapped[wireName].second = wireName;
+                    swapped[nextWireName].second = nextWireName;
                 }
             }
-            swapped[wireName] = false;
+            swapped[wireName].first = false;
         }
-        cout << ++res << "/" << 1ull*rows*rows*rows*rows << endl;
+        cout << ++res << "/" << 1ull * rows * rows * rows * rows << endl;
     }
 }
 
 void Solution2() {
     queue<string> processWireNameQueue = readFile();
     string xOperand = "", yOperand = "";
-    for( auto wire : wireName2Id ) {
+    for( auto wire : inputWireList ) {
         if( wire.first[0] == 'x' ) {
             xOperand = to_string( getWire( wire.first ).data ) + xOperand;
         }
@@ -58,10 +58,10 @@ void Solution2() {
     }
     xOperandVal = stoll( xOperand, nullptr, 2 ), yOperandVal = stoll( yOperand, nullptr, 2 );
     zOperandVal = xOperandVal & yOperandVal;
-    map<string, bool> swapped;
-    for( auto ourWireInfo : allOutWireName2Id ) {
+    map <string, pair<bool, string>> swapped;
+    for( auto outWireInfo : allOutWireList ) {
         rows++;
-        swapped[ourWireInfo.first] = false;
+        swapped[outWireInfo.first] = { false,outWireInfo.first };
     }
     bool found = false;
     swapGates( processWireNameQueue, swapped, found );
