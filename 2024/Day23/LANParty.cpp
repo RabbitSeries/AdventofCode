@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-map<string, map<string, bool>> readFile() {
-    map<string, map<string, bool>> LANNetwork;
+void readFile( map<string, map<string, bool>>& LANNetwork ) {
     ifstream input( "input.txt" );
     string buf;
     while( getline( input, buf ) ) {
@@ -14,11 +13,8 @@ map<string, map<string, bool>> readFile() {
             LANNetwork[pc2][pc1] = true;
         }
     }
-    return move( LANNetwork );
+    return;
 }
-
-map<string, string> connections;
-mutex connectionsMutex;
 
 inline bool isConnected( string const& Host, string const& ConnectionNextwork, map<string, map<string, bool>> const& LANNetWork ) {
     bool connected = true;
@@ -45,7 +41,7 @@ inline bool checkUnique( string const& ConnectionNextwork, map<string, string> c
 }
 
 
-int findConnection( map<string, map<string, bool>> const& LANNetWork, string Host, string curConnection = "", int depth = 3 ) {
+int findConnection( map<string, string>& connections, mutex& connectionsMutex, map<string, map<string, bool>> const& LANNetWork, string Host, string curConnection = "", int depth = 3 ) {
     // void findConnection( map<string, map<string, bool>> const& LANNetWork, string Host, string & curConnection = "", int depth = 3 ) {
     curConnection += Host;
     if( depth == 1 ) {
@@ -62,7 +58,7 @@ int findConnection( map<string, map<string, bool>> const& LANNetWork, string Hos
         if( curConnection.find( nextPC.first ) == string::npos ) {
             // curConnection += nextPC.first;
             if( isConnected( nextPC.first, curConnection, LANNetWork ) )
-                findConnection( LANNetWork, nextPC.first, curConnection, depth - 1 );
+                findConnection( connections, connectionsMutex, LANNetWork, nextPC.first, curConnection, depth - 1 );
             // curConnection.pop_back();
             // curConnection.pop_back();
         }
@@ -71,7 +67,7 @@ int findConnection( map<string, map<string, bool>> const& LANNetWork, string Hos
 }
 
 
-void threadTask( int startRow, int endRow, map<string, map<string, bool>> const& LANNetWork ) {
+void threadTask( int startRow, int endRow, map<string, string>& connections, mutex& connectionsMutex, map<string, map<string, bool>> const& LANNetWork ) {
     std::map<std::string, std::map<std::string, bool>>::const_iterator it = LANNetWork.begin(), end = LANNetWork.end();
     // auto it = LANNetWork.begin();
     while( distance( it, LANNetWork.end() ) != endRow - startRow ) {
@@ -81,13 +77,16 @@ void threadTask( int startRow, int endRow, map<string, map<string, bool>> const&
 
     while( it != end ) {
         // findConnection( LANNetWork, ( *it ).first, ( *it ).first );
-        findConnection( LANNetWork, ( *it ).first );
+        findConnection( connections, connectionsMutex, LANNetWork, ( *it ).first );
         it++;
     }
 }
 
 void Solution1() {
-    map<string, map<string, bool>> LANNetwork = readFile();
+    map<string, string> connections;
+    mutex connectionsMutex;
+    map<string, map<string, bool>> LANNetwork;
+    readFile( LANNetwork );
     bool enableMultiThreading = false;
     int maxThread = thread::hardware_concurrency();
     int processPerThread = LANNetwork.size() / maxThread;
@@ -96,11 +95,11 @@ void Solution1() {
         for( int i = 0; i < maxThread; i++ ) {
             int startRow = i * processPerThread;
             int endRow = ( i == maxThread - 1 ) ? LANNetwork.size() : ( i + 1 ) * processPerThread;
-            threadList.push_back( thread( threadTask, startRow, endRow, ref( LANNetwork ) ) );
+            threadList.push_back( thread( threadTask, startRow, endRow, ref( connections ), ref( connectionsMutex ), ref( LANNetwork ) ) );
         }
     }
     else {
-        threadList.push_back( thread( threadTask, 0, LANNetwork.size(), ref( LANNetwork ) ) );
+        threadList.push_back( thread( threadTask, 0, LANNetwork.size(), ref( connections ), ref( connectionsMutex ), ref( LANNetwork ) ) );
     }
     for( auto& t : threadList ) {
         t.join();
@@ -115,8 +114,10 @@ void Solution1() {
 }
 
 void Solution2() {
-    connections.clear();
-    map<string, map<string, bool>> LANNetwork = readFile();
+    map<string, string> connections;
+    mutex connectionsMutex;
+    map<string, map<string, bool>> LANNetwork;
+    readFile( LANNetwork );
     std::map<std::string, std::map<std::string, bool>>::const_iterator it = LANNetwork.begin(), end = LANNetwork.end();
     size_t res = 0;
     while( it != end ) {

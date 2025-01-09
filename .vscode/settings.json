@@ -1,5 +1,5 @@
 {
-    "markdownlint.config": {
+    "markdownlint.config": {    
         "no-inline-html": false
     },
     "files.associations": {
