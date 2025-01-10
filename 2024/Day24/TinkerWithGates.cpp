@@ -110,6 +110,7 @@ void Solution2() {
     vector<string> xOutList;
     vector<string> yOutList;
     vector<string> otherOutList;
+    vector<string> zList;
     for( auto wire : outWireList ) {
         auto [gateType, inWire1, inWire2] = wire.second;
         if( inWire1[0] == 'x' )
@@ -122,8 +123,12 @@ void Solution2() {
             xOutList.push_back( inWire2 + "-->" + wire.first + "\n" );
         else if( inWire2[0] == 'y' )
             yOutList.push_back( inWire2 + "-->" + wire.first + "\n" );
-        else
+        else {
             otherOutList.push_back( inWire2 + "-->" + wire.first + "\n" );
+            if( wire.first[0] == 'z' ) {
+                zList.push_back( wire.first );
+            }
+        }
         // output << inWire1 << "-->" << wire.first << endl;
         // output << inWire2 << "-->" << wire.first << endl;
         // output << gateType + wire.first << "-->" << wire.first << endl;
@@ -139,6 +144,9 @@ void Solution2() {
     }
     for( auto line : otherOutList ) {
         output << line;
+    }
+    for(auto zWire:zList){
+        
     }
 }
 
