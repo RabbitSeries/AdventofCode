@@ -100,54 +100,51 @@ void Solution1() {
 }
 
 void Solution2() {
-    map<string, wire> wireList; map<string, tuple<string, string, string>> outWireList;
+    map<string, wire> wireList;
+    map<string, tuple<string, string, string>> outWireList;
     readFile( wireList, outWireList );
     map<string, bool> swappedGateOutWire;
     // Start from x00,y00 search for its AND (carrier), XOR (Add) gate
     ofstream output( "mermaid.md", ios::out );
-    output <<
-        "---\ntitle: Node\n---\nflowchart TD\n";
-    vector<string> xOutList;
-    vector<string> yOutList;
-    vector<string> otherOutList;
+    // output << "```mermaid" << endl;
+    // output << "---\ntitle: Node\n---\nflowchart TD\n";
+    output << "---\ntitle: Node\n---\nflowchart-elk TD\n";
+
+    vector<string> xList;
+    vector<string> yList;
     vector<string> zList;
-    for( auto wire : outWireList ) {
-        auto [gateType, inWire1, inWire2] = wire.second;
-        if( inWire1[0] == 'x' )
-            xOutList.push_back( inWire1 + "-->" + wire.first + "\n" );
-        else if( inWire1[0] == 'y' )
-            yOutList.push_back( inWire1 + "-->" + wire.first + "\n" );
-        else
-            otherOutList.push_back( inWire1 + "-->" + wire.first + "\n" );
-        if( inWire2[0] == 'x' )
-            xOutList.push_back( inWire2 + "-->" + wire.first + "\n" );
-        else if( inWire2[0] == 'y' )
-            yOutList.push_back( inWire2 + "-->" + wire.first + "\n" );
-        else {
-            otherOutList.push_back( inWire2 + "-->" + wire.first + "\n" );
-            if( wire.first[0] == 'z' ) {
-                zList.push_back( wire.first );
-            }
+    for( auto wire : wireList ) {
+        switch( wire.first[0] ) {
+        case 'x':
+            xList.push_back( wire.first );
+            break;
+        case 'y':
+            yList.push_back( wire.first );
+            break;
+        default:
+            break;
         }
-        // output << inWire1 << "-->" << wire.first << endl;
-        // output << inWire2 << "-->" << wire.first << endl;
-        // output << gateType + wire.first << "-->" << wire.first << endl;
     }
-    sort( xOutList.begin(), xOutList.end(), less<string>() );
-    sort( yOutList.begin(), yOutList.end(), less<string>() );
-    sort( otherOutList.begin(), otherOutList.end(), less<string>() );
-    for( auto line : xOutList ) {
+    vector<string> outList;
+    for( auto wire : outWireList ) {
+        if( wire.first[0] == 'z' ) {
+            zList.push_back( wire.first );
+        }
+        auto [gateType, inWire1, inWire2] = wire.second;
+        outList.push_back( inWire1 + " & " + inWire2 + "-->" + wire.first + "\n" );
+    }
+    sort( outList.begin(), outList.end(), less<string>() );
+    for( auto line : outList ) {
         output << line;
     }
-    for( auto line : yOutList ) {
-        output << line;
+    int i = 0;
+    for( i = 1; i < xList.size() - 1; i++ ) {
+        // output << xList[i] << "-->" << xList[i + 1] << endl;
+        // output << yList[i] << "-->" << yList[i + 1] << endl;
+        output << zList[i] << "-->" << zList[i + 1] << endl;
     }
-    for( auto line : otherOutList ) {
-        output << line;
-    }
-    for(auto zWire:zList){
-        
-    }
+    output << zList[i] << "-->" << zList[i + 1] << endl;
+    // output << "```" << endl;
 }
 
 int main() {
