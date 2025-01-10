@@ -6,22 +6,15 @@
 
 ## Solution
 
-To begin with, suppose the carrier wire in the cascading adder has been found. So to check one specific cascading level in the system, five gates input and output must match the specific rules:
+To begin with, suppose the carrier wire in the cascading adder has been found. As **there is no loops**(this condition is important), so the gates can't be swapped from latter gates to former gates. That makes the situation a lot simplifed. Thus, there can only exist five prossible swap (I haven't sort them out in a more practical way):
+![Possible swap](../../Images/PossibleSwaps.png)
+ So to check one specific cascading level in the system, five gates input and output must match the specific rules:
 
 ### Add XOR gate
 
-input: $x_{Level}$ $y_{Level}$\
-gate type: XOR\
-output: XOR->$z_{Level}
-
 ### Carrier Add XOR gate
 
-input: $x_{Level}$ $y_{Level}$\
-gate type: XOR\
-output: XOR->$z_{Level}
-
 ### Carrier Add's Carrier AND gate
-
 
 ### Carrier AND Gate
 
