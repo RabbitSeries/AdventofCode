@@ -4,7 +4,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ## 🚀 Solutions
 
-### 2024 Progress: 23.5/25 ⭐⭐
+### 2024 Progress: 24.5/25 ⭐⭐
 
  Day                                                                                                                                  | Part 1 | Part 2 | Solution to P1                                                                                              | Solution to P2
 --------------------------------------------------------------------------------------------------------------------------------------|:------:|:------:|:-----------------------------------------------------------------------------------------------------------:|:----------:
@@ -102,7 +102,7 @@ Prove:
 - What is day 13 algorithm trying to testify?
 - Get a lisence.
 - Construct the project to a CMake test project.
-- Add cachce to Dijkstra in Day 21 solution.
+- Add cache to Dijkstra in Day 21 solution.
 - Github issue at: [13110](<https://github.com/microsoft/vscode-cpptools/issues/13110>)
 - Mutex > future async > normal algorithm (vscode debugger will try tracking the calling stack, thus recursive algorithm will be slowed down serverely)
 

@@ -6,9 +6,11 @@
 
 ## Solution
 
-To begin with, suppose the carrier wire in the cascading adder has been found. As **there is no loops**(this condition is important), so the gates can't be swapped from latter gates to former gates. That makes the situation a lot simplifed. Thus, there can only exist five prossible swap (I haven't sort them out in a more practical way):
+To begin with, suppose the carrier wire in the cascading adder has been found. As **there are no loops**(this condition is important), so the gates can't be swapped from latter gates to former gates. That makes the situation a lot simplifed. Thus, there can only exist five prossible swap (I haven't sort them out in a more practical way):
+
 ![Possible swap](../../Images/PossibleSwaps.png)
- So to check one specific cascading level in the system, five gates input and output must match the specific rules:
+
+So to check one specific cascading level in the system, five gates input and output must match the specific rules:
 
 ### Add XOR gate
 
@@ -20,7 +22,7 @@ To begin with, suppose the carrier wire in the cascading adder has been found. A
 
 ### Next carrier OR gate
 
-For detailed visualization See [Mermaid diagram](#mermaid-diagram)
+For detailed visualization see [Mermaid diagram](#mermaid-diagram)
 
 ## Mermaid diagram
 
@@ -33,8 +35,7 @@ $1 & $2-->$3
 
 ```mermaid
 flowchart-elk TD
-
-    y40 & x40-->wdr[RED]
+    y40 & x40-->wdr
     kpc & jsd-->chv
     jwm & nbr-->pbb
     mrn & mck-->z31
