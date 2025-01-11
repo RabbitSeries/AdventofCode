@@ -181,7 +181,7 @@ void Solution2() {
             // Next Carrier 
             nextCarrier = findGate( carrier2, carrier1, "OR" );
             if( nextCarrier == "z" + input1.substr( 1 ) ) {
-                // Possible swap situation 4.
+                // Possible swap situation 5.
                 swap( add2, nextCarrier );
                 swapList.push_back( add2 );
                 swapList.push_back( nextCarrier );
