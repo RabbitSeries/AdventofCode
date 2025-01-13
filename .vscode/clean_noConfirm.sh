@@ -20,7 +20,7 @@ if [ -n "$files" ]; then
     echo "Deleting files:"
     echo "$files"
     rm -f $files
-    echo "Deleted *.exe, *.dll, *.o, *.obj, *.pdb, *.ilk in $workingPath recursively."
+    echo "Deleted *.exe, *.dll, *.o, *.obj, *.pdb, *.ilk, *.out in $workingPath recursively."
 else
     echo "No matching files to delete in $workingPath."
 fi

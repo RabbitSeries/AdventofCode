@@ -21,7 +21,7 @@ for /r "%workingPath%" %%p in (*.pdb) do del /q "%%p"
 for /r "%workingPath%" %%p in (*.ilk) do del /q "%%p"
 for /r "%workingPath%" %%p in (*.out) do del /q "%%p"
 for /r "%workingPath%" %%p in (*.ilk) do del /q "%%p"
-echo Deleted *.exe, *.dll, *.o, *.obj, *.pdb, *.ilk in %workingPath% recursively.
+echo Deleted *.exe, *.dll, *.o, *.out, *.obj, *.pdb, *.ilk in %workingPath% recursively.
 @REM directories /s removes all subdirectories.
 if exist "%workingPath%\.vs" rd /s /q "%workingPath%\.vs" && echo Remoed directory %workingPath%\.vs.
 if exist "%workingPath%\.vscode\debug" rd /s /q "%workingPath%\.vscode\debug" && echo Remoed directory %workingPath%\.vscode\debug.
