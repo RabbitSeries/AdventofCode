@@ -98,13 +98,15 @@ Prove:
 
 ## 📆 TODOs
 
-- [x] Change day 3 algorithm to [regular expression](https://en.cppreference.com/w/cpp/regex/ecmascript) implementation([C++11 feature](https://en.cppreference.com/w/cpp/regex)).
-- What is day 13 algorithm trying to testify?
-- Get a lisence.
-- Construct the project to a CMake test project.
-- Add cache to Dijkstra in Day 21 solution.
-- Github issue at: [13110](<https://github.com/microsoft/vscode-cpptools/issues/13110>)
-- Mutex > future async > normal algorithm (vscode debugger will try tracking the calling stack, thus recursive algorithm will be slowed down serverely)
+<div id="TODOList" style="transform: translateX(30px);padding-bottom: 20px">
+    <input type="checkbox" checked="true" disabled="true" >Change day 3 algorithm to <a href="https://en.cppreference.com/w/cpp/regex/ecmascript">regular expression</a> implementation <a href="https://en.cppreference.com/w/cpp/regex">(C++ 11 feature)</a>.<br>
+    <input type="checkbox" disabled="true" >What is day 13 algorithm trying to testify?<br>
+    <input type="checkbox" disabled="true" >Get a lisence.<br>
+    <input type="checkbox" disabled="true" >Construct the project to a CMake test project.<br>
+    <input type="checkbox" disabled="true" >Add cache to Dijkstra in Day 21 solution.<br>
+    <input type="checkbox" disabled="true" >Github issue at: <a href="https://github.com/microsoft/vscode-cpptools/issues/13110">13110</a><br>
+    <input type="checkbox" disabled="true" >Mutex > future async > normal algorithm (vscode debugger will try tracking the calling stack, thus recursive algorithm will be slowed down serverely)<br>
+</div>
 
 ## Statistics
 
