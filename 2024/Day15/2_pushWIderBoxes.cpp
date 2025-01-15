@@ -1,13 +1,13 @@
 #include "box.h"
 int opId = 0;
-vector<boxPos> getNextBoxVertical( vector<boxPos> const id2BoxPos, vector<vector<int>> const acrade, vector<boxPos> const curLevel, char const control, bool& isBlocked ) {
+vector<boxPos> getNextBoxVertical( vector<boxPos> const id2BoxPos, vector<vector<int>> const arcade, vector<boxPos> const curLevel, char const control, bool& isBlocked ) {
     map<int, int> nextLevelID;
     vector<boxPos> nextLevel;
     for( int i = 0; i < curLevel.size() && !isBlocked; i++ ) {
         boxPos curBox = curLevel[i];
         {
             pos l = getNextPos( control, curBox.l ), r = getNextPos( control, curBox.r );
-            int nextIDL = acrade[l.x][l.y], nextIDR = acrade[r.x][r.y];
+            int nextIDL = arcade[l.x][l.y], nextIDR = arcade[r.x][r.y];
             if( nextIDL == CELLWALL || nextIDR == CELLWALL ) {
                 isBlocked = true;
                 nextLevel.clear();
@@ -27,7 +27,7 @@ vector<boxPos> getNextBoxVertical( vector<boxPos> const id2BoxPos, vector<vector
     return nextLevel;
 }
 
-vector<boxPos> getNextBoxHorizental( vector<boxPos> const id2BoxPos, vector<vector<int>> const  acrade, vector<boxPos> const curLevel, char const control, bool& isBlocked ) {
+vector<boxPos> getNextBoxHorizental( vector<boxPos> const id2BoxPos, vector<vector<int>> const  arcade, vector<boxPos> const curLevel, char const control, bool& isBlocked ) {
     assert( curLevel.size() == 1 );
     vector<boxPos> nextLevel;
     boxPos curBox = curLevel[0];
@@ -38,11 +38,11 @@ vector<boxPos> getNextBoxHorizental( vector<boxPos> const id2BoxPos, vector<vect
     else {
         nextBoxPos = getNextPos( control, curBox.r );
     }
-    if( isBox( acrade, nextBoxPos ) ) {
-        nextLevel.push_back( getBoxPosAtPos( id2BoxPos, acrade, nextBoxPos ) );
+    if( isBox( arcade, nextBoxPos ) ) {
+        nextLevel.push_back( getBoxPosAtPos( id2BoxPos, arcade, nextBoxPos ) );
 
     }
-    else if( isWALL( acrade, nextBoxPos ) ) {
+    else if( isWALL( arcade, nextBoxPos ) ) {
         isBlocked = true;
 
     }
@@ -53,54 +53,54 @@ vector<boxPos> getNextBoxHorizental( vector<boxPos> const id2BoxPos, vector<vect
 
 }
 
-void pushBoxVertical( vector<boxPos> const boxList, vector<boxPos>& id2BoxPos, vector<vector<int>>& acrade, char const control ) {
+void pushBoxVertical( vector<boxPos> const boxList, vector<boxPos>& id2BoxPos, vector<vector<int>>& arcade, char const control ) {
     for( boxPos b : boxList ) {
         pos l = b.l, r = b.r;
-        int boxId = acrade[l.x][l.y];
+        int boxId = arcade[l.x][l.y];
         boxPos& curBox = id2BoxPos[boxId];
         curBox.l = getNextPos( control, l );
         curBox.r = getNextPos( control, r );
-        acrade[l.x][l.y] = CELLEMPTY;
-        acrade[r.x][r.y] = CELLEMPTY;
-        acrade[curBox.l.x][curBox.l.y] = boxId;
-        acrade[curBox.r.x][curBox.r.y] = boxId;
+        arcade[l.x][l.y] = CELLEMPTY;
+        arcade[r.x][r.y] = CELLEMPTY;
+        arcade[curBox.l.x][curBox.l.y] = boxId;
+        arcade[curBox.r.x][curBox.r.y] = boxId;
     }
 }
 
-void pushBoxHorizontal( vector<boxPos>& boxList, vector<boxPos>& id2BoxPos, vector<vector<int>>& acrade, char const control ) {
+void pushBoxHorizontal( vector<boxPos>& boxList, vector<boxPos>& id2BoxPos, vector<vector<int>>& arcade, char const control ) {
     assert( boxList.size() == 1 );
     for( boxPos b : boxList ) {
         pos l = b.l, r = b.r;
-        int boxId = acrade[l.x][l.y];
+        int boxId = arcade[l.x][l.y];
         boxPos& curBox = id2BoxPos[boxId];
         curBox.l = getNextPos( control, l );
         curBox.r = getNextPos( control, r );
         if( control == '>' )
-            acrade[l.x][l.y] = CELLEMPTY;
+            arcade[l.x][l.y] = CELLEMPTY;
         else
-            acrade[r.x][r.y] = CELLEMPTY;
-        acrade[curBox.l.x][curBox.l.y] = boxId;
-        acrade[curBox.r.x][curBox.r.y] = boxId;
+            arcade[r.x][r.y] = CELLEMPTY;
+        arcade[curBox.l.x][curBox.l.y] = boxId;
+        arcade[curBox.r.x][curBox.r.y] = boxId;
     }
 }
 
-void pushBox( vector<boxPos>& id2BoxPos, vector<vector<int>>& acrade, pos& curPos, char control ) {
+void pushBox( vector<boxPos>& id2BoxPos, vector<vector<int>>& arcade, pos& curPos, char control ) {
     // if( opId == 2579 )
-        // printGUI( acrade, curPos );
+        // printGUI( arcade, curPos );
     bool isBlocked = false;
     stack<vector<boxPos>> boxPath;
     vector<boxPos> curLevel;
     // NextPos of start
     pos nextPos = getNextPos( control, curPos );
-    curLevel.push_back( getBoxPosAtPos( id2BoxPos, acrade, nextPos ) );
+    curLevel.push_back( getBoxPosAtPos( id2BoxPos, arcade, nextPos ) );
     boxPath.push( curLevel );
     while( !isBlocked && !curLevel.empty() ) {
         vector<boxPos> nextLevel;
         if( control == 'v' || control == '^' ) {
-            nextLevel = getNextBoxVertical( id2BoxPos, acrade, curLevel, control, isBlocked );
+            nextLevel = getNextBoxVertical( id2BoxPos, arcade, curLevel, control, isBlocked );
         }
         else {
-            nextLevel = getNextBoxHorizental( id2BoxPos, acrade, curLevel, control, isBlocked );
+            nextLevel = getNextBoxHorizental( id2BoxPos, arcade, curLevel, control, isBlocked );
 
         }
         if( !isBlocked ) {
@@ -116,36 +116,36 @@ void pushBox( vector<boxPos>& id2BoxPos, vector<vector<int>>& acrade, pos& curPo
     if( !isBlocked ) {
         while( !boxPath.empty() ) {
             // if( opId == 2578 )
-                // printGUI( acrade, curPos );
+                // printGUI( arcade, curPos );
             vector<boxPos> preBoxList = boxPath.top();
             boxPath.pop();
-            if( countWall( acrade ) != 758 ) {
-                printGUI( acrade, curPos );
+            if( countWall( arcade ) != 758 ) {
+                printGUI( arcade, curPos );
 
             }
             if( control == '^' || control == 'v' ) {
-                pushBoxVertical( preBoxList, id2BoxPos, acrade, control );
+                pushBoxVertical( preBoxList, id2BoxPos, arcade, control );
             }
             else {
-                pushBoxHorizontal( preBoxList, id2BoxPos, acrade, control );
+                pushBoxHorizontal( preBoxList, id2BoxPos, arcade, control );
             }
             // if( opId == 2578 )
-                // printGUI( acrade, curPos );
+                // printGUI( arcade, curPos );
         }
         curPos = nextPos;
         // if( opId == 2578 )
-            // printGUI( acrade, curPos );
+            // printGUI( arcade, curPos );
     }
 }
 
-bool freshGUI( vector<boxPos>& id2BoxPos, vector<vector<int>>& acrade, pos& curPos ) {
+bool freshGUI( vector<boxPos>& id2BoxPos, vector<vector<int>>& arcade, pos& curPos ) {
     char c = getMoveMent();
     if( c == 'q' ) {  // 按 'q' 退出
         return false;
     }
-    // printGUI( acrade, curPos );
+    // printGUI( arcade, curPos );
     pos nextPos = getNextPos( c, curPos );
-    switch( acrade[nextPos.x][nextPos.y] ) {
+    switch( arcade[nextPos.x][nextPos.y] ) {
     case CELLWALL:
         break;
     case CELLEMPTY:
@@ -153,20 +153,20 @@ bool freshGUI( vector<boxPos>& id2BoxPos, vector<vector<int>>& acrade, pos& curP
         break;
     default:
         // Push boxes
-        pushBox( id2BoxPos, acrade, curPos, c );
+        pushBox( id2BoxPos, arcade, curPos, c );
         break;
     }
     return true;
 }
 
-void play( vector<boxPos>& id2BoxPos, vector<vector<int>>& acrade, pos& curPos, queue<char> control ) {
-    // printGUI( acrade, curPos );
+void play( vector<boxPos>& id2BoxPos, vector<vector<int>>& arcade, pos& curPos, queue<char> control ) {
+    // printGUI( arcade, curPos );
     while( !control.empty() ) {
         char c = control.front();
         control.pop();
-        // printGUI( acrade, curPos );
+        // printGUI( arcade, curPos );
         pos nextPos = getNextPos( c, curPos );
-        switch( acrade[nextPos.x][nextPos.y] ) {
+        switch( arcade[nextPos.x][nextPos.y] ) {
         case CELLWALL:
             break;
         case CELLEMPTY:
@@ -174,21 +174,21 @@ void play( vector<boxPos>& id2BoxPos, vector<vector<int>>& acrade, pos& curPos, 
             break;
         default:
             // Push boxes
-            pushBox( id2BoxPos, acrade, curPos, c );
+            pushBox( id2BoxPos, arcade, curPos, c );
             break;
         }
         opId++;
-        // printGUI( acrade, curPos );
+        // printGUI( arcade, curPos );
     }
-    // printGUI( acrade, curPos );
+    // printGUI( arcade, curPos );
 }
 
-void playMyself( vector<boxPos>& id2BoxPos, vector<vector<int>>& acrade, pos& curPos ) {
-    printGUI( acrade, curPos );
+void playMyself( vector<boxPos>& id2BoxPos, vector<vector<int>>& arcade, pos& curPos ) {
+    printGUI( arcade, curPos );
     enableRawMode(); // 开启字符缓冲模式
     while( 1 ) {
-        if( freshGUI( id2BoxPos, acrade, curPos ) )
-            printGUI( acrade, curPos );
+        if( freshGUI( id2BoxPos, arcade, curPos ) )
+            printGUI( arcade, curPos );
         else return;
     }
     disableRawMode();
@@ -199,53 +199,23 @@ void playMyself( vector<boxPos>& id2BoxPos, vector<vector<int>>& acrade, pos& cu
 
 int main() {
     vector<boxPos> id2BoxPos;
-    vector<vector<int>> acrade;
-    char buf[BUF] = "\0";
+    vector<vector<int>> arcade;
     pos start;
-    FILE* input = fopen( "input.txt", "r" );
-    while( !feof( input ) && fgets( buf, BUF, input ) ) {
-        vector<int> row;
-        for( char c : buf ) {
-            if( c != '\n' && c != '\0' ) {
-                switch( c ) {
-                case '#':
-                    row.push_back( CELLWALL );
-                    row.push_back( CELLWALL );
-                    break;
-                case '.':
-                    row.push_back( CELLEMPTY );
-                    row.push_back( CELLEMPTY );
-                    break;
-                case 'O':
-                    row.push_back( id2BoxPos.size() );
-                    row.push_back( id2BoxPos.size() );
-                    id2BoxPos.push_back( boxPos( pos( acrade.size(), row.size() - 2 ), pos( acrade.size(), row.size() - 1 ) ) );
-                    break;
-                case '@':
-                    start = pos( acrade.size(), row.size() );
-                    row.push_back( CELLEMPTY );
-                    row.push_back( CELLEMPTY );
-                    break;
-                default:
-                    break;
-                }
-            }
-        }
-        acrade.push_back( row );
-    }
-    FILE* move = fopen( "move.txt", "r" );
+    readMap( arcade, id2BoxPos, start );
+    ifstream move( "move.txt" );
     queue<char> control;
-    while( !feof( move ) && fgets( buf, BUF, move ) ) {
+    string buf = "\0";
+    while( getline( move, buf ) ) {
         for( char c : buf ) {
             if( c != '\n' && c != '\0' ) { control.push( c ); }
         }
     }
     // Error: 1472388
-    // cout << sumCoordinates( id2BoxPos, acrade ) << endl;
-    // printGUI( acrade, start );
-    // play( id2BoxPos, acrade, start, control );
-    playMyself( id2BoxPos, acrade, start );
-    printGUI( acrade, start );
-    cout << sumCoordinates( id2BoxPos, acrade ) << endl;
+    // cout << sumCoordinates( id2BoxPos, arcade ) << endl;
+    // printGUI( arcade, start );
+    play( id2BoxPos, arcade, start, control );
+    // playMyself( id2BoxPos, arcade, start );
+    printGUI( arcade, start );
+    cout << sumCoordinates( id2BoxPos, arcade ) << endl;
     return 0;
 }

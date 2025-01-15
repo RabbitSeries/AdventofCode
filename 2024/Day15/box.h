@@ -18,15 +18,15 @@ typedef struct boxPos {
 typedef long long ll;
 void enableRawMode() {
     termios term;
-    tcgetattr( STDIN_FILENO, &term );          // 获取当前终端设置
-    term.c_lflag &= ~( ICANON | ECHO );        // 关闭规范模式和回显
-    tcsetattr( STDIN_FILENO, TCSANOW, &term ); // 立即生效
+    tcgetattr( STDIN_FILENO, &term );          // Obtain terminal setting
+    term.c_lflag &= ~( ICANON | ECHO );        // Shut down standard IO and echo
+    tcsetattr( STDIN_FILENO, TCSANOW, &term ); // immediate effect
 }
 
 void disableRawMode() {
     termios term;
     tcgetattr( STDIN_FILENO, &term );
-    term.c_lflag |= ( ICANON | ECHO );         // 恢复规范模式和回显
+    term.c_lflag |= ( ICANON | ECHO );         // restore standard IO and echo
     tcsetattr( STDIN_FILENO, TCSANOW, &term );
 }
 
@@ -34,9 +34,9 @@ char getMoveMent() {
     char c;
     while( 1 ) {
         c = getchar();
-        if( c == '\033' ) { // 检测转义序列（ESC 键）
-            getchar();     // 跳过 '['
-            switch( getchar() ) { // 读取方向键的第三个字符
+        if( c == '\033' ) { // Detext escape character
+            getchar();     // jump '['
+            switch( getchar() ) { // read the third character of direction key
             case 'A': return '^';
             case 'B': return 'v';
             case 'C': return '>';
@@ -44,13 +44,48 @@ char getMoveMent() {
             default: std::cout << "Unknown key" << std::endl; break;
             }
         }
-        else if( c == 27 ) { // ESC 键单独按下
+        else if( c == 27 ) { // ESC pressed
             return 0;
         }
         else {
             // std::cout << "Normal key: " << c << std::endl;
             continue;
         }
+    }
+}
+
+void readMap( vector<vector<int>>& arcade, vector<boxPos>& id2BoxPos, pos& start ) {
+    ifstream input( "input.txt" );
+    string buf = "\0";
+    while( getline( input, buf ) ) {
+        vector<int> row;
+        for( char c : buf ) {
+            if( c != '\n' && c != '\0' ) {
+                switch( c ) {
+                case '#':
+                    row.push_back( CELLWALL );
+                    row.push_back( CELLWALL );
+                    break;
+                case '.':
+                    row.push_back( CELLEMPTY );
+                    row.push_back( CELLEMPTY );
+                    break;
+                case 'O':
+                    row.push_back( id2BoxPos.size() );
+                    row.push_back( id2BoxPos.size() );
+                    id2BoxPos.push_back( boxPos( pos( arcade.size(), row.size() - 2 ), pos( arcade.size(), row.size() - 1 ) ) );
+                    break;
+                case '@':
+                    start = pos( arcade.size(), row.size() );
+                    row.push_back( CELLEMPTY );
+                    row.push_back( CELLEMPTY );
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+        arcade.push_back( row );
     }
 }
 

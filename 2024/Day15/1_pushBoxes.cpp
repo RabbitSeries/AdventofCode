@@ -1,10 +1,10 @@
 #include "bits/stdc++.h"
 #include <termios.h>
 using namespace std;
-#define WALL -1
-#define EMPTY -2
+#define CELLWALL -1
+#define CELLEMPTY -2
 #define BOT -3
-#define BUF 1024
+#define BUF 4096
 typedef struct pos {
     pos() {};
     pos( int a, int b ) : x( a ), y( b ) {}
@@ -219,8 +219,9 @@ int main() {
             if( c != '\n' && c != '\0' ) { control.push( c ); }
         }
     }
+    play( id2Pos, pos2Id, start, control );
     // playMyself( id2Pos, pos2Id, start,control );
-    playMyself( id2Pos, pos2Id, start );
+    // playMyself( id2Pos, pos2Id, start );
     cout << sumCoordinates( id2Pos, pos2Id ) << endl;
     return 0;
 }

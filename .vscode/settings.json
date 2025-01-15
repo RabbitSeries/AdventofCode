@@ -1,8 +1,14 @@
 {
-    "markdownlint.config": {    
+    "markdownlint.config": {
         "no-inline-html": false
     },
-    
+    "java.project.sourcePaths": [
+        "2024Java/src"
+    ],
+    "java.project.outputPath": "2024Java/bin",
+    "java.project.referencedLibraries": [
+        "2024Java/lib/**/*.jar"
+    ],
     "files.associations": {
         "*.cpp": "cpp",
         "*.c": "c",

@@ -2,3 +2,5 @@
 exe_*
 *.exe
 test.py
+2024Java/bin
+*.class

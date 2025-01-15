@@ -1,6 +1,14 @@
 {
     "configurations": [
         {
+            "type": "java",
+            "name": "GameCore",
+            "request": "launch",
+            "cwd": "${fileDirname}",
+            "mainClass": "Day15.GameCore",
+            "projectName": "AdventOfCode_92206a96"
+        },
+        {
             "name": "Python Debugger: Current File",
             "type": "debugpy",
             "request": "launch",
@@ -30,9 +38,8 @@
                     "description": "Set Disassembly Flavor to Intel",
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
-                },
+                }
             ],
-            // "logging": { "engineLogging": true, "trace": true, "traceResponse": true },
             "preLaunchTask": "C/C++: g++.exe build active file"
         },
         {
@@ -89,5 +96,4 @@
         }
     ],
     "version": "2.0.0"
-    
 }
