@@ -103,6 +103,7 @@ Prove:
 - [ ] Get a license.
 - [ ] Construct the project to a CMake test project.
 - [ ] Add cache to Dijkstra in Day 21 solution.
+- [ ] Add A* algorithm to Day 16 solution.
 - [ ] Github issue at: [13110](https://github.com/microsoft/vscode-cpptools/issues/13110)
 - [ ] Mutex > future async > normal algorithm (VSCode debugger will try tracking the calling stack, thus recursive algorithm will be slowed down severely).
 
