@@ -10,6 +10,19 @@
     // Clean plugin cache on each modification.
     "java.project.outputPath": "2024Java/bin",
     "java.project.referencedLibraries": [],
+    "files.associations": {
+        "*.cpp": "cpp",
+        "*.c": "c",
+        ".py": "python",
+        "*.stact": "st",
+        "*.stdut": "st",
+        "*.stfb": "st",
+        "*.vim": "Vimscript",
+        "_vimrc": "Vimscript",
+        "string": "cpp",
+        "ostream": "cpp",
+        "vector": "cpp"
+    },
     // "java.project.referencedLibraries": [
     //     "2024Java/lib/**/*.jar"
     // ],

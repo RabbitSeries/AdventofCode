@@ -37,10 +37,9 @@ ll solve( const problem p ) {
     return -1;
 }
 
-int main() {
+void createProblem( vector<problem>& problemSet, ll top_up = 0 ) {
     FILE* input = fopen( "input.txt", "r" );
     char buf[BUFFER_SIZE + 1];
-    vector<problem> problemSet;
     // Regex "^.*\+([0-9]+),.*\+([0-9]+)$"
     // Regex "\+([0-9]+).*\+([0-9]+)"
     // Regex "(?=(\+.*?)[0-9]+,)\1([0-9]+)(?=(.*\+)[0-9])\3([0-9]+)"
@@ -62,20 +61,23 @@ int main() {
                 problemSet.push_back( problem() );
                 problemSet.back().a = pair<ll, ll>( stoi( m[1] ), stoi( m[2] ) );
                 inProblem++;
-            }
-            else {
+            } else {
                 if( inProblem == 1 ) {
                     problemSet.back().b = pair<ll, ll>( stoi( m[1] ), stoi( m[2] ) );
                     inProblem++;
-                }
-                else {
+                } else {
                     // InProblem == 2
-                    problemSet.back().prize = pair<ll, ll>( stoi( m[1] ) + TOP_UP, stoi( m[2] ) + TOP_UP );
+                    problemSet.back().prize = pair<ll, ll>( stoi( m[1] ) + top_up, stoi( m[2] ) + top_up );
                     inProblem = 0;
                 }
             }
         }
     }
+}
+
+void Solution1() {
+    vector<problem> problemSet;
+    createProblem( problemSet );
     ll tokenCnt = 0;
     for_each( problemSet.begin(), problemSet.end(), [ & ]( const  problem p ) {
         ll res = solve( p );
@@ -83,7 +85,23 @@ int main() {
             tokenCnt += res;
         }
     } );
-    cout << tokenCnt << endl;
-    return 0;
+    cout << "Solution 1: " << tokenCnt << endl;
+}
 
+void Solution2() {
+    vector<problem> problemSet;
+    createProblem( problemSet, TOP_UP );
+    ll tokenCnt = 0;
+    for_each( problemSet.begin(), problemSet.end(), [ & ]( const  problem p ) {
+        ll res = solve( p );
+        if( res >= 0 ) {
+            tokenCnt += res;
+        }
+    } );
+    cout << "Solution 2: " << tokenCnt << endl;
+}
+
+int main() {
+    Solution1();
+    Solution2();
 }

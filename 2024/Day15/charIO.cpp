@@ -4,30 +4,30 @@
 
 void enableRawMode() {
     termios term;
-    tcgetattr(STDIN_FILENO, &term);          // 获取当前终端设置
-    term.c_lflag &= ~(ICANON | ECHO);        // 关闭规范模式和回显
-    tcsetattr(STDIN_FILENO, TCSANOW, &term); // 立即生效
+    tcgetattr(STDIN_FILENO, &term);          // Obtain current terminal input mode.
+    term.c_lflag &= ~(ICANON | ECHO);        // Disable standard mode and echo.
+    tcsetattr(STDIN_FILENO, TCSANOW, &term); // Effective immediately.
 }
 
 void disableRawMode() {
     termios term;
     tcgetattr(STDIN_FILENO, &term);
-    term.c_lflag |= (ICANON | ECHO);         // 恢复规范模式和回显
+    term.c_lflag |= (ICANON | ECHO);         // Restore standard mode and echo.
     tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
 int main() {
-    enableRawMode(); // 开启字符缓冲模式
+    enableRawMode(); // Eable raw mode.
 
     char c;
     while (true) {
         c = getchar();
-        if (c == 'q') {  // 按 'q' 退出
+        if (c == 'q') {  // Press 'q' to exit.
             break;
         }
         std::cout << "You entered: " << c << std::endl;
     }
 
-    disableRawMode(); // 恢复行缓冲模式
+    disableRawMode(); // Restore buffer moed.
     return 0;
 }

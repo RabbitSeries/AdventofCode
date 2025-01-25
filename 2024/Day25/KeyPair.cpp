@@ -29,19 +29,16 @@ int main() {
         string line( linebuf );
         if( line.size() < 5 ) {
             continue;
-        }
-        else {
+        } else {
             if( rowTimes == 0 ) {
                 if( line.substr( 0, 5 ) == "#####" ) {
                     isLock = true;
                     rowTimes++;
-                }
-                else if( line.substr( 0, 5 ) == "....." ) {
+                } else if( line.substr( 0, 5 ) == "....." ) {
                     isLock = false;
                     rowTimes++;
                 }
-            }
-            else {
+            } else {
                 if( rowTimes != 6 ) {
                     for( int pin = 0; pin < 5; pin++ ) {
                         if( line[pin] == '#' ) {
@@ -49,14 +46,12 @@ int main() {
                         }
                     }
                     rowTimes++;
-                }
-                else {
+                } else {
                     if( isLock ) {
                         if( isUnique( row, lockList ) ) {
                             lockList.push_back( row );
                         }
-                    }
-                    else {
+                    } else {
                         if( isUnique( row, keyList ) ) {
                             keyList.push_back( row );
                         }
@@ -82,5 +77,5 @@ int main() {
             }
         }
     }
-    cout << res << endl;
+    cout << "Solution 1: " << res << endl;
 }
