@@ -14,7 +14,7 @@
             "request": "launch",
             "cwd": "${fileDirname}",
             "mainClass": "${file}",
-            "projectName": "AdventOfCodeJava2024"
+            "projectName": "aocjava",
         },
         {
             "name": "Python Debugger: Current File",
