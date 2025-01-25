@@ -8,9 +8,9 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
  Day                                                                                                                                  | Part 1 | Part 2 | Cpp Solution                                                                                                | Java Solution
 --------------------------------------------------------------------------------------------------------------------------------------|:------:|:------:|:-----------------------------------------------------------------------------------------------------------:|:----------:
-[![Day 1](https://img.shields.io/badge/Day%201-Historian%20Hysteria-blue?logo=Archlinux)](https://adventofcode.com/2024/day/1)        |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day01/PairAndAdd.cpp)          | [![Solution](https://img.shields.io/badge/java-purple?logo=C%2B%2B)](2024/Day01/PairAndAdd.cpp)
-[![Day 2](https://img.shields.io/badge/Day%202-Red--Nosed%20Reports-blue?logo=Archlinux)](https://adventofcode.com/2024/day/2)        |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day02/CheckLevelInOrder.cpp)   | [![Solution](https://img.shields.io/badge/java-purple?logo=C%2B%2B)](2024/Day02/CheckLevelInOrder.cpp)
-[![Day 3](https://img.shields.io/badge/Day%203-Mull%20It%20Over-blue?logo=Archlinux)](https://adventofcode.com/2024/day/3)            |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day03/PreciseMul.cpp)          | [![Solution](https://img.shields.io/badge/java-purple?logo=C%2B%2B)](2024/Day03/PreciseMul.cpp)
+[![Day 1](https://img.shields.io/badge/Day%201-Historian%20Hysteria-blue?logo=Archlinux)](https://adventofcode.com/2024/day/1)        |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day01/PairAndAdd.cpp)          | [![Solution](https://img.shields.io/badge/JAVA-white?logo=OpenJDK&logoColor=yellow)](2024/Day01/PairAndAdd.cpp)
+[![Day 2](https://img.shields.io/badge/Day%202-Red--Nosed%20Reports-blue?logo=Archlinux)](https://adventofcode.com/2024/day/2)        |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day02/CheckLevelInOrder.cpp)   | [![Solution](https://img.shields.io/badge/JAVA-white?logo=OpenJDK&logoColor=yellow)](2024/Day02/CheckLevelInOrder.cpp)
+[![Day 3](https://img.shields.io/badge/Day%203-Mull%20It%20Over-blue?logo=Archlinux)](https://adventofcode.com/2024/day/3)            |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day03/PreciseMul.cpp)          | [![Solution](https://img.shields.io/badge/JAVA-white?logo=OpenJDK&logoColor=yellow)](2024/Day03/PreciseMul.cpp)
 [![Day 4](https://img.shields.io/badge/Day%204-Ceres%20Search-blue?logo=Archlinux)](https://adventofcode.com/2024/day/4)              |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day04/CeresSearch.cpp)         | -
 [![Day 5](https://img.shields.io/badge/Day%205-Print%20Queue-blue?logo=Archlinux)](https://adventofcode.com/2024/day/5)               |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day05/OrderingUpdates.cpp)     | -
 [![Day 6](https://img.shields.io/badge/Day%206-Guard%20Gallivant-blue?logo=Archlinux)](https://adventofcode.com/2024/day/6)           |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day06/PatrolRoute.cpp)         | -
@@ -37,8 +37,9 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 ## 💻 Tools
 
 - IDE : [![VSCode](<Images/code-stable.png>)](https://code.visualstudio.com) [![VsCode](https://img.shields.io/badge/VsCode-blue)](https://code.visualstudio.com)
-- Compiler: ![G++](https://img.shields.io/badge/(GCC)%2014.2.1%2020240910-grey)
-- C++ standard: ![C++17](https://img.shields.io/badge/C%2B%2B17-purple?logo=C%2B%2B)
+- Cpp Compiler: ![G++](https://img.shields.io/badge/(GCC)%2014.2.1%2020240910-grey)
+- C++ standard: ![C++17](https://img.shields.io/badge/C%2B%2B-17-purple?logo=C%2B%2B) 
+- JVM Version: ![Solution](https://img.shields.io/badge/OpenJDK-21-white?logo=OpenJDK)
 - OS: [![Arch Linux](https://img.shields.io/badge/Arch%20Linux-grey?logo=Archlinux)](https://www.archlinux.org)
 
 ## 📜 Worth future utility
@@ -100,7 +101,7 @@ Prove:
 
 - [x] Change day 3 algorithm to [regular expression](https://en.cppreference.com/w/cpp/regex/ecmascript) implementation ([C++ 11 feature](https://en.cppreference.com/w/cpp/regex)).
 - [ ] What is day 13 algorithm trying to testify?
-- [ ] Get a license.
+- [ ] Building java repo.
 - [ ] Construct the project to a CMake test project.
 - [ ] Add cache to Dijkstra in Day 21 solution.
 - [ ] ~~Add A*algorithm to Day 16 solution.~~ Nah, A* algo is not suitable for penalty shortest path problem.
