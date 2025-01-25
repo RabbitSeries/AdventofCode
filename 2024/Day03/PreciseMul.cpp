@@ -108,11 +108,11 @@ ll getLineResult( string& str, bool& enabled ) {
 }
 
 void Solution1() {
-    FILE* input = fopen( "input.txt", "r" );
-    char linebuffer[BUFSIZ];
+    ifstream input( "input.txt" );
+    string linebuffer;
     ll addUp = 0;
     string leftOver = "";
-    while( fgets( linebuffer, BUFSIZ, input ) ) {
+    while( getline( input, linebuffer ) ) {
         string currentLine( linebuffer );
         if( !currentLine.empty() ) {
             currentLine = leftOver + currentLine;
@@ -124,12 +124,12 @@ void Solution1() {
 }
 
 void Solution2() {
-    FILE* input = fopen( "input.txt", "r" );
-    char linebuffer[BUFSIZ];
+    ifstream input( "input.txt" );
+    string linebuffer;
     ll addUp = 0;
     bool enabled = true;
     string leftOver = "";
-    while( fgets( linebuffer, BUFSIZ, input ) ) {
+    while( getline( input, linebuffer ) ) {
         string currentLine( linebuffer );
         if( !currentLine.empty() ) {
             currentLine = leftOver + currentLine;

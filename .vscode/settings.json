@@ -21,7 +21,9 @@
         "_vimrc": "Vimscript",
         "string": "cpp",
         "ostream": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "*.tcc": "cpp",
+        "iosfwd": "cpp"
     },
     // "java.project.referencedLibraries": [
     //     "2024Java/lib/**/*.jar"
