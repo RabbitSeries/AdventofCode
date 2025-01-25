@@ -9,8 +9,8 @@
         //     "projectName": "AdventOfCode_92206a96"
         // },
         {
+            "name": "Java: java build and debug active file",
             "type": "java",
-            "name": "Debug java",
             "request": "launch",
             "cwd": "${fileDirname}",
             "mainClass": "${file}",
