@@ -34,6 +34,12 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 [![Day 24](https://img.shields.io/badge/Day%2024-Crossed%20Wires-blue?logo=Archlinux)](https://adventofcode.com/2024/day/24)          |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day24/TinkerWithGates.cpp)     | -
 [![Day 25](https://img.shields.io/badge/Day%2025-Code%20Chroncile-blue?logo=Archlinux)](https://adventofcode.com/2024/day/25)         |   ⭐   |   💫   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day25/KeyPair.cpp)             | -
 
+### Other years
+
+ Year | Progress
+:----:|:----------:
+2023  | 3/25 ⭐⭐
+
 ## 💻 Tools
 
 - IDE : [![VSCode](<Images/code-stable.png>)](https://code.visualstudio.com) [![VsCode](https://img.shields.io/badge/VsCode-blue)](https://code.visualstudio.com)
