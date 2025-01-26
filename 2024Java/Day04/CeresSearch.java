@@ -6,44 +6,39 @@ import java.util.*;
 
 class CeresSearch {
 
-    int[][] dx;
-    int[][] dy;
-    int[][] xdx;
-    int[][] xdy;
+    static int[][] dx = new int[][] {
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 1, 2, 3 },
+            { 0, 1, 2, 3 },
+            { 0, 1, 2, 3 },
+            { 0, -1, -2, -3 },
+            { 0, -1, -2, -3 },
+            { 0, -1, -2, -3 },
+    };
+    static int[][] dy = new int[][] {
+            { 0, 1, 2, 3 },
+            { 0, -1, -2, -3 },
+            { 0, 1, 2, 3 },
+            { 0, 0, 0, 0 },
+            { 0, -1, -2, -3 },
+            { 0, 1, 2, 3 },
+            { 0, 0, 0, 0 },
+            { 0, -1, -2, -3 }
 
-    void InitDataModel() {
-
-        dx = new int[8][4];
-        dy = new int[8][4];
-        xdx = new int[4][3];
-        xdy = new int[4][3];
-
-        dx[2] = new int[] { 0, 1, 2, 3 };
-        dx[3] = new int[] { 0, 1, 2, 3 };
-        dx[4] = new int[] { 0, 1, 2, 3 };
-        dx[5] = new int[] { 0, -1, -2, -3 };
-        dx[6] = new int[] { 0, -1, -2, -3 };
-        dx[7] = new int[] { 0, -1, -2, -3 };
-
-        dy[0] = new int[] { 0, 1, 2, 3 };
-        dy[1] = new int[] { 0, -1, -2, -3 };
-        dy[2] = new int[] { 0, 1, 2, 3 };
-        dy[3] = new int[] { 0, 0, 0, 0 };
-        dy[4] = new int[] { 0, -1, -2, -3 };
-        dy[5] = new int[] { 0, 1, 2, 3 };
-        dy[6] = new int[] { 0, 0, 0, 0 };
-        dy[7] = new int[] { 0, -1, -2, -3 };
-
-        xdx[0] = new int[] { -1, 0, 1 };
-        xdx[1] = new int[] { -1, 0, 1 };
-        xdx[2] = new int[] { 1, 0, -1 };
-        xdx[3] = new int[] { 1, 0, -1 };
-
-        xdy[0] = new int[] { -1, 0, 1 };
-        xdy[1] = new int[] { 1, 0, -1 };
-        xdy[2] = new int[] { -1, 0, 1 };
-        xdy[3] = new int[] { 1, 0, -1 };
-    }
+    };
+    static int[][] xdx = new int[][] {
+            { -1, 0, 1 },
+            { -1, 0, 1 },
+            { 1, 0, -1 },
+            { 1, 0, -1 }
+    };
+    static int[][] xdy = new int[][] {
+            { -1, 0, 1 },
+            { 1, 0, -1 },
+            { -1, 0, 1 },
+            { 1, 0, -1 },
+    };
 
     boolean isXMAS(int i, int j, int k, ArrayList<ArrayList<Character>> m) {
         int rows = m.size(), rols = m.get(0).size();
@@ -82,7 +77,6 @@ class CeresSearch {
     }
 
     CeresSearch Solution1() throws IOException {
-        InitDataModel();
         ArrayList<ArrayList<Character>> m = readFile();
         int res = 0;
         for (int i = 0; i < m.size(); i++) {
@@ -99,7 +93,6 @@ class CeresSearch {
     }
 
     void Solution2() throws IOException {
-        InitDataModel();
         ArrayList<ArrayList<Character>> m = readFile();
         Integer res = 0;
         for (int i = 0; i < m.size(); i++) {

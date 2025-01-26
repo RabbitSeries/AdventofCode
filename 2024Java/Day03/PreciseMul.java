@@ -68,7 +68,7 @@ public class PreciseMul {
         return res;
     }
 
-    Integer getLineResult(StringBuilder str, booleanRef enabled) {
+    Integer getLineResult(StringBuilder str, BooleanRef enabled) {
         Integer zoneAdd = 0;
         if (enabled.isEnabled()) {
             Integer dontPos = str.indexOf("don't()");
@@ -124,7 +124,7 @@ public class PreciseMul {
         String buf;
         StringBuilder currentLine, leftOver = new StringBuilder("");
         Integer addUp = 0;
-        booleanRef enabled = new booleanRef();
+        BooleanRef enabled = new BooleanRef();
         while ((buf = input.readLine()) != null) {
             if (!buf.isEmpty()) {
                 currentLine = new StringBuilder(buf + leftOver.substring(0));
@@ -143,7 +143,7 @@ public class PreciseMul {
 
     }
 
-    static class booleanRef {
+    static class BooleanRef {
         private boolean enabled = true;
 
         public boolean isEnabled() {
