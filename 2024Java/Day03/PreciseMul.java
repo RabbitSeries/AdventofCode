@@ -114,6 +114,7 @@ public class PreciseMul {
             addUp += getLineResult(new StringBuilder(buf));
         }
         System.out.println("Solution 1: " + addUp);
+        input.close();
         return this;
         // input.close();
     }
@@ -132,6 +133,7 @@ public class PreciseMul {
             }
         }
         System.out.println("Solution 2: " + addUp);
+        input.close();
         return this;
     }
 
