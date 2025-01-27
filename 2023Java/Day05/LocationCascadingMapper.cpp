@@ -39,7 +39,11 @@ void readFile( vector<ull>& seedId, vector<vector<pair<pair<ull, ull>, ull>>>& m
 
 typedef pair<ull, ull> Interval;
 
-vector<Interval> SearchInterval( vector<pair<pair<ull, ull>, ull>> IntervalMapList, Interval itv ) {
+vector<Interval> SearchInterval( vector<pair<pair<ull, ull>, ull>>& IntervalMapList, Interval itv ) {
+    sort( IntervalMapList.begin(), IntervalMapList.end(), []( pair<pair<ull, ull>, ull> p1, pair<pair<ull, ull>, ull> p2 ) {
+        return p1.first.second < p2.first.second;
+    } );
+
     vector<Interval> resList;
     ull itvStart = itv.first, itvEnd = itv.second;
 
@@ -103,7 +107,7 @@ void Solution2() {
                 for( auto nextItv : SearchInterval( searchList, itv ) )
                     nextLevelList.push_back( nextItv );
             }
-            curLevelList = nextLevelList;
+            curLevelList = move( nextLevelList );
         }
 
         for_each( curLevelList.begin(), curLevelList.end(), [ & ]( Interval itv ) {
