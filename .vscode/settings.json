@@ -25,7 +25,18 @@
         "vector": "cpp",
         "*.tcc": "cpp",
         "iosfwd": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "print": "cpp",
+        "format": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "ranges": "cpp",
+        "span": "cpp",
+        "stacktrace": "cpp",
+        "regex": "cpp",
+        "valarray": "cpp"
     },
     // "java.project.referencedLibraries": [
     //     "2024Java/lib/**/*.jar"

@@ -28,16 +28,16 @@ ll parseLL( string str ) {
     return val;
 }
 
-int main() {
-    // for( string s : split( "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green", ":" ) ) {
-    //     cout << s << endl;
-    // }
-    vector<string> gameInfo = split( "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green", ":" );
-    int gameId = parseLL( split( gameInfo[0], " " )[1] );
-    cout << gameId << endl;
-    vector<string> res;
-    boost::split( res, "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green", boost::is_any_of( ":" ) );
-    for_each( res.begin(), res.end(), []( string str ) {
-        cout << str << endl;
-    } );
-}
+// int main() {
+//     // for( string s : split( "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green", ":" ) ) {
+//     //     cout << s << endl;
+//     // }
+//     vector<string> gameInfo = split( "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green", ":" );
+//     int gameId = parseLL( split( gameInfo[0], " " )[1] );
+//     cout << gameId << endl;
+//     vector<string> res;
+//     boost::split( res, "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green", boost::is_any_of( ":" ) );
+//     for_each( res.begin(), res.end(), []( string str ) {
+//         cout << str << endl;
+//     } );
+// }
