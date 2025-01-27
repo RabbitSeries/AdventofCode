@@ -33,16 +33,17 @@ void readFile( vector<ull>& seedId, vector<vector<pair<pair<ull, ull>, ull>>>& m
 
                 mapperList.back().push_back( mapInfo );
             }
+            // Lets sort here, once for all.
+            sort( mapperList.back().begin(), mapperList.back().end(), []( pair<pair<ull, ull>, ull> p1, pair<pair<ull, ull>, ull> p2 ) {
+                return p1.first.second < p2.first.second;
+            } );
         }
     }
 }
 
 typedef pair<ull, ull> Interval;
 
-vector<Interval> SearchInterval( vector<pair<pair<ull, ull>, ull>>& IntervalMapList, Interval itv ) {
-    sort( IntervalMapList.begin(), IntervalMapList.end(), []( pair<pair<ull, ull>, ull> p1, pair<pair<ull, ull>, ull> p2 ) {
-        return p1.first.second < p2.first.second;
-    } );
+vector<Interval> SearchInterval( vector<pair<pair<ull, ull>, ull>> const& IntervalMapList, Interval const& itv ) {
 
     vector<Interval> resList;
     ull itvStart = itv.first, itvEnd = itv.second;
@@ -60,7 +61,6 @@ vector<Interval> SearchInterval( vector<pair<pair<ull, ull>, ull>>& IntervalMapL
             if( itvStart >= mapStart && itvStart <= mapEnd ) {
                 splited = true;
                 if( itvEnd <= mapEnd ) {
-
                     resList.push_back( Interval( itvStart - mapStart + mapToStart,
                         itvEnd - mapStart + mapToStart ) );
 
@@ -101,9 +101,9 @@ void Solution2() {
 
         curLevelList.push_back( Interval( seedId[i], seedId[i] + seedId[i + 1] - 1 ) );
 
-        for( auto searchList : mapperList ) {
+        for( auto const& searchList : mapperList ) {
             vector<Interval> nextLevelList;
-            for( Interval itv : curLevelList ) {
+            for( Interval const& itv : curLevelList ) {
                 for( auto nextItv : SearchInterval( searchList, itv ) )
                     nextLevelList.push_back( nextItv );
             }
