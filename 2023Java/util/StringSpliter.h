@@ -4,6 +4,7 @@
 #include <iostream>
 #include <boost/algorithm/string.hpp>
 typedef long long ll;
+typedef unsigned long long ull;
 using namespace std;
 
 vector<string> split( string const str, string regexString ) {
@@ -19,13 +20,36 @@ vector<string> split( string const str, string regexString ) {
         }
         res.push_back( suffix );
     }
-    return res;
+    return move( res );
 }
 
 ll parseLL( string str ) {
     ll val = 0;
     stringstream( str ) >> val;
     return val;
+}
+
+ull parseULL( string str ) {
+    ull val = 0;
+    stringstream( str ) >> val;
+    return val;
+}
+
+string trim( string s ) {
+    regex re( "^\\s+" );
+    sregex_iterator it( s.begin(), s.end(), re ), end_it;
+    if( distance( it, end_it ) != 0 ) {
+        re = regex( "\\b" );
+        it = sregex_iterator( s.begin(), s.end(), re );
+        s = s.substr( ( ( *it ).prefix().str().length() ) );
+    }
+    re = regex( "\\s+$" );
+    if( distance( it, end_it ) != 0 ) {
+        re = regex( "\\b\\s+$" );
+        it = sregex_iterator( s.begin(), s.end(), re );
+        s = s.substr( 0, ( *it ).prefix().str().length() );
+    }
+    return s;
 }
 
 // int main() {

@@ -8,10 +8,9 @@ void readFile( vector<ull>& seedId, vector<vector<pair<pair<ull, ull>, ull>>>& m
     string buf;
     while( getline( input, buf ) ) {
         if( buf.find( "seeds" ) != string::npos ) {
-            stringstream ss( split( buf, ":" )[1] );
-            ull id;
-            while( ss >> id ) {
-                seedId.push_back( id );
+            for( string s : split( split( buf, ":" )[1], "\\s" ) ) {
+                if( !s.empty() && s != "\n" )
+                    seedId.push_back( parseULL( s ) );
             }
         }
 
@@ -24,9 +23,7 @@ void readFile( vector<ull>& seedId, vector<vector<pair<pair<ull, ull>, ull>>>& m
                 vector<string> infoStr = split( buf, "\\s" );
                 vector<ull> info( infoStr.size() );
                 transform( infoStr.begin(), infoStr.end(), info.begin(), []( string s ) {
-                    ull tmp;
-                    stringstream( s ) >> tmp;
-                    return tmp;
+                    return parseULL( s );
                 } );
 
                 pair<pair<ull, ull>, ull> mapInfo( { {info[0],info[1]},info[2] } );
@@ -132,4 +129,6 @@ void Solution2() {
 
 int main() {
     Solution2();
+
+    cout << trim( " \n  \t\t\t \n \r\r\r  asdasd   \t\t\t\t \n\n" );
 }
