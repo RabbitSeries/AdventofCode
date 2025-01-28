@@ -116,7 +116,6 @@ void Solution2() {
                     nextLevelList.push_back( nextItv );
             }
             curLevelList = move( nextLevelList );
-            curLevelList = move( nextLevelList );
         }
 
         for_each( curLevelList.begin(), curLevelList.end(), [ & ]( Interval itv ) {
