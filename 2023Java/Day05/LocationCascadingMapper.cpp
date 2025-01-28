@@ -8,9 +8,9 @@ void readFile( vector<ull>& seedId, vector<vector<pair<pair<ull, ull>, ull>>>& m
     string buf;
     while( getline( input, buf ) ) {
         if( buf.find( "seeds" ) != string::npos ) {
-            for( string s : split( split( buf, ":" )[1], "\\s" ) ) {
-                if( !s.empty() && s != "\n" )
-                    seedId.push_back( parseULL( s ) );
+            for( string s : split( trim( split( buf, ":" )[1] ), "\\s" ) ) {
+                // if( !s.empty() && s != "\n" )
+                seedId.push_back( parseULL( s ) );
             }
         }
 
@@ -129,6 +129,5 @@ void Solution2() {
 
 int main() {
     Solution2();
-
-    cout << trim( " \n  \t\t\t \n \r\r\r  asdasd   \t\t\t\t \n\n" );
+    cout << trim( "\n  \r \r \t\t\t asdasd  \r \r   \t\t\t\t \n\n" );
 }

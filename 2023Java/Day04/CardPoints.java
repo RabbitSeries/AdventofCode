@@ -75,8 +75,9 @@ public class CardPoints {
             }
             currentLine++;
         }
-        System.out.println("Solution 2: " + res);
         input.close();
+        System.out.println("Solution 2: " + res);
+        return;
     }
 
     public static void main(String[] args) throws IOException {

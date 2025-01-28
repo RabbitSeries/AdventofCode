@@ -9,6 +9,9 @@ using namespace std;
 
 vector<string> split( string const str, string regexString ) {
     vector<string> res;
+    if( str.empty() ) {
+        return res;
+    }
     regex re( regexString );
     sregex_iterator it( str.begin(), str.end(), re ), end_it;
     string suffix = "";
@@ -40,10 +43,14 @@ string trim( string s ) {
     sregex_iterator it( s.begin(), s.end(), re ), end_it;
     if( distance( it, end_it ) != 0 ) {
         re = regex( "\\b" );
-        it = sregex_iterator( s.begin(), s.end(), re );
-        s = s.substr( ( ( *it ).prefix().str().length() ) );
+        if( distance( it, end_it ) != 0 ) {
+            it = sregex_iterator( s.begin(), s.end(), re );
+            s = s.substr( ( ( *it ).prefix().str().length() ) );
+        } else
+            return "";
     }
     re = regex( "\\s+$" );
+    it = sregex_iterator( s.begin(), s.end(), re );
     if( distance( it, end_it ) != 0 ) {
         re = regex( "\\b\\s+$" );
         it = sregex_iterator( s.begin(), s.end(), re );

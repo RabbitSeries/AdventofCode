@@ -12,6 +12,7 @@ public class ValueCalibration {
             if (buf.length() > 1)
                 maplist.add(buf);
         }
+        input.close();
         return maplist;
     }
 
