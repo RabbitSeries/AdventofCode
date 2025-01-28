@@ -34,9 +34,9 @@ void readFile( vector<ull>& seedId, vector<vector<pair<pair<ull, ull>, ull>>>& m
                 mapperList.back().push_back( mapInfo );
             }
             // Lets sort here, once for all.
-            sort( mapperList.back().begin(), mapperList.back().end(), []( pair<pair<ull, ull>, ull> p1, pair<pair<ull, ull>, ull> p2 ) {
-                return p1.first.second < p2.first.second;
-            } );
+            // sort( mapperList.back().begin(), mapperList.back().end(), []( pair<pair<ull, ull>, ull> p1, pair<pair<ull, ull>, ull> p2 ) {
+            //     return p1.first.second < p2.first.second;
+            // } );
         }
     }
 }
@@ -46,9 +46,14 @@ typedef pair<ull, ull> Interval;
 vector<Interval> SearchInterval( vector<pair<pair<ull, ull>, ull>> const& IntervalMapList, Interval const& itv ) {
 
     vector<Interval> resList;
-    ull itvStart = itv.first, itvEnd = itv.second;
 
-    while( itvStart <= itvEnd ) {
+    queue<Interval> processList;
+    processList.push( itv );
+    while( !processList.empty() ) {
+
+        ull itvStart = processList.front().first, itvEnd = processList.front().second;
+        processList.pop();
+
         bool splited = false;
         for( auto mapRange : IntervalMapList ) {
 
@@ -57,25 +62,31 @@ vector<Interval> SearchInterval( vector<pair<pair<ull, ull>, ull>> const& Interv
             ull mapToStart = mapRange.first.first;
             ull mapToEnd = mapToStart + mapRange.second - 1;
 
-            assert( mapToEnd - mapToStart == mapEnd - mapStart );
             if( itvStart >= mapStart && itvStart <= mapEnd ) {
                 splited = true;
                 if( itvEnd <= mapEnd ) {
                     resList.push_back( Interval( itvStart - mapStart + mapToStart,
                         itvEnd - mapStart + mapToStart ) );
-
                     return resList;
                 } else {
 
                     resList.push_back( Interval( itvStart - mapStart + mapToStart, mapToEnd ) );
-                    itvStart = mapEnd + 1;
+                    processList.push( { mapEnd + 1, itvEnd } );
                     break;
                 }
-            } else if( itvEnd >= mapStart && itvEnd <= mapEnd ) {
-                splited = true;
-                resList.push_back( Interval( mapToStart, itvEnd - itvStart + mapToStart ) );
-                itvEnd = mapStart - 1;
-                break;
+            } else if( itvStart < mapStart ) {
+                if( itvEnd >= mapStart && itvEnd <= mapEnd ) {
+                    splited = true;
+                    resList.push_back( Interval( mapToStart, itvEnd - itvStart + mapToStart ) );
+                    processList.push( { itvStart,mapStart - 1 } );
+                    break;
+                } else if( itvEnd > mapEnd ) {
+                    splited = true;
+                    resList.push_back( Interval( mapToStart, mapToEnd ) );
+                    processList.push( { itvStart,mapStart - 1 } );
+                    processList.push( { mapEnd,itvEnd } );
+                    break;
+                }
             }
 
         }

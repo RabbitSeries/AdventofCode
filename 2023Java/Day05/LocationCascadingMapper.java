@@ -5,7 +5,7 @@ import java.lang.Math;
 import java.util.AbstractMap.*;
 import java.util.*;
 import java.util.Map.*;
-
+// ToDo If each mapperlist is large,  
 public class LocationCascadingMapper {
     ArrayList<Long> seedID;
     ArrayList<ArrayList<Entry<Entry<Long, Long>, Long>>> mapperList;
@@ -52,6 +52,8 @@ public class LocationCascadingMapper {
                                     new SimpleEntry<>(Long.parseLong(mapInfo[0]), Long.parseLong(mapInfo[1])),
                                     Long.parseLong(mapInfo[2])));
                 }
+                // mapperList.getLast().sort(Comparator.comparing(entry ->
+                // entry.getKey().getValue()));
                 continue;
             }
         }
@@ -82,7 +84,8 @@ public class LocationCascadingMapper {
 
     ArrayList<Interval> SearchInterval(ArrayList<Entry<Entry<Long, Long>, Long>> IntervalMapList, Interval itv) {
         // If not sort get error, don't know why yet.
-        IntervalMapList.sort(Comparator.comparing(entry -> entry.getKey().getValue()));
+        // IntervalMapList.sort(Comparator.comparing(entry ->
+        // entry.getKey().getValue()));
         // IntervalMapList
         // .forEach(entry -> {
         // System.out.print(entry);
@@ -91,10 +94,13 @@ public class LocationCascadingMapper {
         // });
 
         ArrayList<Interval> resList = new ArrayList<>();
-        long itvStart = itv.s, itvEnd = itv.t;
-
-        while (itvStart <= itvEnd) {
+        Queue<Interval> q = new LinkedList<>();
+        q.add(itv);
+        while (!q.isEmpty()) {
+            Interval curItv = q.poll();
+            long itvStart = curItv.s, itvEnd = curItv.t;
             boolean splited = false;
+
             for (Entry<Entry<Long, Long>, Long> mapRange : IntervalMapList) {
 
                 long mapStart = mapRange.getKey().getValue();
@@ -102,34 +108,41 @@ public class LocationCascadingMapper {
                 long mapToStart = mapRange.getKey().getKey();
                 long mapToEnd = mapToStart + mapRange.getValue() - 1;
 
-                assert (mapToEnd - mapToStart == mapEnd - mapStart);
                 if (itvStart >= mapStart && itvStart <= mapEnd) {
                     splited = true;
                     if (itvEnd <= mapEnd) {
-
+                        // |-----*-----*---|
                         resList.add(new Interval(itvStart - mapStart + mapToStart,
                                 itvEnd - mapStart + mapToStart));
-
                         return resList;
                     } else {
-
+                        // |-----*--------|---*
+                        splited = true;
                         resList.add(new Interval(itvStart - mapStart + mapToStart, mapToEnd));
-                        itvStart = mapEnd + 1;
+                        q.add(new Interval(mapEnd + 1, itvEnd));
                         break;
                     }
-                } else if (itvEnd >= mapStart && itvEnd <= mapEnd) {
-                    splited = true;
-                    resList.add(new Interval(mapToStart, itvEnd - itvStart + mapToStart));
-                    itvEnd = mapStart - 1;
-                    break;
+                } else if (itvStart < mapStart) {
+                    if (itvEnd >= mapStart && itvEnd <= mapEnd) {
+                        // *----|-----*------|
+                        splited = true;
+                        resList.add(new Interval(mapToStart, itvEnd - itvStart + mapToStart));
+                        q.add(new Interval(itvStart, mapStart - 1));
+                        break;
+                    } else if (itvEnd > mapEnd) {
+                        // *----|------------|----*
+                        splited = true;
+                        resList.add(new Interval(mapToStart, mapToEnd));
+                        q.add(new Interval(itvStart, mapStart - 1));
+                        q.add(new Interval(mapEnd + 1, itvEnd));
+                        break;
+                    }
                 }
-
             }
             if (!splited) {
                 resList.add(new Interval(itvStart, itvEnd));
                 return resList;
             }
-
         }
         return resList;
     }
@@ -163,7 +176,7 @@ public class LocationCascadingMapper {
 
     public static void main(String[] args) throws IOException {
         LocationCascadingMapper Solution = new LocationCascadingMapper();
-        // Solution.Solution1();
+        Solution.Solution1();
         Solution.Solution2();
     }
 }

@@ -41,7 +41,7 @@ public class CardPoints {
         String buf;
         while ((buf = input.readLine()) != null) {
             if (currentLine == bonusRecord.size()) {
-                //The original one.
+                // The original one.
                 bonusRecord.add(1);
             }
             currentBonus = bonusRecord.get(currentLine);
@@ -67,7 +67,9 @@ public class CardPoints {
                 if (currentLine + i < bonusRecord.size()) {
                     bonusRecord.set(currentLine + i, bonusRecord.get(currentLine + i) + currentBonus);
                 } else {
-                    assert (currentLine + i == bonusRecord.size());
+                    if (!(currentLine + i == bonusRecord.size())) {
+                        throw new ExceptionInInitializerError("Not expected.");
+                    }
                     bonusRecord.add(currentBonus + 1);
                 }
             }
