@@ -38,7 +38,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
  Year | Progress
 :----:|:----------:
-2023  | 3/25 ⭐⭐
+2023  | 5/25 ⭐⭐
 
 ## 💻 Tools
 
@@ -129,7 +129,7 @@ Prove:
 
 Language    |files|blank|comment|code
 --------    |-----|-----|-------|----
-C++         |41   |309  |433    |4031
-C/C++ Header|5    |39   |74     |541
-SUM:        |46   |348  |507    |4572
-Markdown    | 3   |42   |0      |597
+C++         |41   |364  |433    |4141
+Java        |11   |151  |34     |1263
+C/C++ Header|7    |48   |100    |651
+SUM:        |59   |563  |567    |6055
