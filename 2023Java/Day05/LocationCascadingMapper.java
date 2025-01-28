@@ -6,7 +6,7 @@ import java.util.AbstractMap.*;
 import java.util.*;
 import java.util.Map.*;
 
-// TODO If each mapperlist is too large.
+// TODO If each mapperlist is too large， a BST tree were used.
 public class LocationCascadingMapper {
     ArrayList<Long> seedID;
     ArrayList<ArrayList<Entry<Entry<Long, Long>, Long>>> mapperList;

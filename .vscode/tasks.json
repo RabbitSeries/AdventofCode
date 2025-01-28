@@ -84,7 +84,7 @@
         },
         {
             "type": "cppbuild",
-            "label": "[ArchLinux] [Release] C/C++: g++ build active file",
+            "label": "[ArchLinux] [Release Build] [C/C++]: g++ build active file",
             "command": "/usr/bin/g++",
             "args": [
                 "-fdiagnostics-color=always",
@@ -108,7 +108,7 @@
         },
         {
             "type": "cppbuild",
-            "label": "[ArchLinux] C/C++: gcc build active file",
+            "label": "[ArchLinux] [Debug Build] [C/C++]: g++ build active file with debug info",
             "command": "/usr/bin/g++",
             "args": [
                 "-fdiagnostics-color=always",

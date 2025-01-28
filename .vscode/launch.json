@@ -51,7 +51,7 @@
             "preLaunchTask": "C/C++: g++.exe build active file"
         },
         {
-            "name": "[ArchLinux] C/C++: g++ build and debug active file",
+            "name": "[ArchLinux] [Debug Launch] [C/C++]: g++ build and debug active file",
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/exe_${fileBasenameNoExtension}",
@@ -74,10 +74,10 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "[ArchLinux] C/C++: g++ build active file"
+            "preLaunchTask": "[ArchLinux] [Debug Build] [C/C++]: g++ build active file with debug info"
         },
         {
-            "name": "[ArchLinux] C/C++: g++ launch release active file",
+            "name": "[ArchLinux] [Release Launch] [C/C++]: g++ launch release active file",
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/exe_${fileBasenameNoExtension}",
@@ -88,7 +88,7 @@
             "externalConsole": false,
             "MIMode": "gdb",
             "miDebuggerPath": "/usr/bin/gdb",
-            "preLaunchTask": "[ArchLinux] [Release] C/C++: g++ build active file"
+            "preLaunchTask": "[ArchLinux] [Release Build] [C/C++]: g++ build active file"
         },
         {
             "name": "[ArchLinux] C/C++: gcc build and debug active file",
