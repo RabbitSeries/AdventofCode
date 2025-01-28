@@ -5,7 +5,8 @@ import java.lang.Math;
 import java.util.AbstractMap.*;
 import java.util.*;
 import java.util.Map.*;
-// ToDo If each mapperlist is large,  
+
+// TODO If each mapperlist is too large.
 public class LocationCascadingMapper {
     ArrayList<Long> seedID;
     ArrayList<ArrayList<Entry<Entry<Long, Long>, Long>>> mapperList;

@@ -35,6 +35,7 @@ ll parseLL( string str ) {
 ull parseULL( string str ) {
     ull val = 0;
     stringstream( str ) >> val;
+    sscanf( str.c_str(), "%llu", &val );
     return val;
 }
 

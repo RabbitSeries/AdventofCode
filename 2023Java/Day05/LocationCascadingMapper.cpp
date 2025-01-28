@@ -116,6 +116,7 @@ void Solution2() {
                     nextLevelList.push_back( nextItv );
             }
             curLevelList = move( nextLevelList );
+            curLevelList = move( nextLevelList );
         }
 
         for_each( curLevelList.begin(), curLevelList.end(), [ & ]( Interval itv ) {
@@ -130,4 +131,8 @@ void Solution2() {
 int main() {
     Solution2();
     cout << trim( "\n  \r \r \t\t\t asdasd  \r \r   \t\t\t\t \n\n" );
+    ull num;
+    // sscanf( "1233", "%ld", &num );
+    sscanf( "1233", "%llu", &num );
+    cout << num << endl;
 }
