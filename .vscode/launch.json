@@ -1,13 +1,5 @@
 {
     "configurations": [
-        // {
-        //     "type": "java",
-        //     "name": "GameCore",
-        //     "request": "launch",
-        //     "cwd": "${fileDirname}",
-        //     "mainClass": "Day15.GameCore",
-        //     "projectName": "AdventOfCode_92206a96"
-        // },
         {
             "name": "Java: java build and debug active file",
             "type": "java",
