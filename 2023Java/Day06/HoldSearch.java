@@ -27,7 +27,7 @@ public class HoldSearch {
                             return Integer.parseInt(token);
                         })
                         .collect(ArrayList<Integer>::new, ArrayList<Integer>::add, ArrayList<Integer>::addAll)) {
-                    recordList.set(id, new SimpleEntry<>(recordList.get(id).getKey(), integer));
+                    recordList.get(id).setValue(integer);
                     id++;
                 }
             }
