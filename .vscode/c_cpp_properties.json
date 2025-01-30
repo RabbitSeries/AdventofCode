@@ -14,7 +14,7 @@
             "mergeConfigurations": false,
             "browse": {
                 "path": [
-                    "${workspaceFolder}/**"
+                    "${workspaceFolder}"
                 ],
                 "limitSymbolsToIncludedHeaders": true
             }
@@ -33,7 +33,7 @@
             "mergeConfigurations": false,
             "browse": {
                 "path": [
-                    "${workspaceFolder}/**"
+                    "${workspaceFolder}"
                 ],
                 "limitSymbolsToIncludedHeaders": true
             }

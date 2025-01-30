@@ -47,7 +47,8 @@ string trim( string s ) {
         if( distance( it, end_it ) != 0 ) {
             it = sregex_iterator( s.begin(), s.end(), re );
             s = s.substr( ( ( *it ).prefix().str().length() ) );
-        } else
+        }
+        else
             return "";
     }
     re = regex( "\\s+$" );

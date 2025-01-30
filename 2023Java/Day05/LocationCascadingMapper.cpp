@@ -65,19 +65,22 @@ vector<Interval> SearchInterval( vector<pair<pair<ull, ull>, ull>> const& Interv
                     resList.push_back( Interval( itvStart - mapStart + mapToStart,
                         itvEnd - mapStart + mapToStart ) );
                     return resList;
-                } else {
+                }
+                else {
 
                     resList.push_back( Interval( itvStart - mapStart + mapToStart, mapToEnd ) );
                     processList.push( { mapEnd + 1, itvEnd } );
                     break;
                 }
-            } else if( itvStart < mapStart ) {
+            }
+            else if( itvStart < mapStart ) {
                 if( itvEnd >= mapStart && itvEnd <= mapEnd ) {
                     splited = true;
                     resList.push_back( Interval( mapToStart, itvEnd - itvStart + mapToStart ) );
                     processList.push( { itvStart,mapStart - 1 } );
                     break;
-                } else if( itvEnd > mapEnd ) {
+                }
+                else if( itvEnd > mapEnd ) {
                     splited = true;
                     resList.push_back( Interval( mapToStart, mapToEnd ) );
                     processList.push( { itvStart,mapStart - 1 } );
