@@ -35,27 +35,31 @@ public class HoldSearch {
         input.close();
     }
 
+    long binarySearch(long timeout, long target) {
+        long s = 1, t = timeout / 2;
+        while (s != t) {
+            long mid = (s + t) / 2;
+            long val = (timeout - mid) * mid;
+            if (val > target) {
+                t = mid;
+            } else {
+                s = mid + 1;
+            }
+        }
+        if (timeout % 2 == 1)
+            return (timeout / 2 - s + 1) * 2;
+        else {
+            return (timeout / 2 - s + 1) * 2 - 1;
+        }
+    }
+
     void Solution1() throws IOException {
         readFile();
-        int targetCnt = 1;
+        long targetCnt = 1;
         // targetCnt = (timeout - t) * t for target > distance: (const - t)*t - distance
         // > 0 for t <= timeout
         for (Entry<Integer, Integer> timeout : recordList) {
-            int s = 1, t = timeout.getKey() / 2;
-            while (s != t) {
-                int mid = (s + t) / 2;
-                int val = (timeout.getKey() - mid) * mid;
-                if (val > timeout.getValue()) {
-                    t = mid;
-                } else {
-                    s = mid + 1;
-                }
-            }
-            if (timeout.getKey() % 2 == 1)
-                targetCnt *= (timeout.getKey() / 2 - s + 1) * 2;
-            else {
-                targetCnt *= (timeout.getKey() / 2 - s + 1) * 2 - 1;
-            }
+            targetCnt *= binarySearch(timeout.getKey(), timeout.getValue());
         }
         System.out.println("Solution 1: " + targetCnt);
     }
@@ -68,21 +72,7 @@ public class HoldSearch {
                 .parseLong(recordList.stream().map(token -> token.getValue().toString()).collect(Collectors.joining()));
         long targetCnt = 1;
 
-        long s = 1, t = realTimeout / 2;
-        while (s != t) {
-            long mid = (s + t) / 2;
-            long val = (realTimeout - mid) * mid;
-            if (val > realDistance) {
-                t = mid;
-            } else {
-                s = mid + 1;
-            }
-        }
-        if (realTimeout % 2 == 1)
-            targetCnt *= (realTimeout / 2 - s + 1) * 2;
-        else {
-            targetCnt *= (realTimeout / 2 - s + 1) * 2 - 1;
-        }
+        targetCnt *= binarySearch(realTimeout, realDistance);
 
         System.out.println("Solution 2: " + targetCnt);
     }
