@@ -38,7 +38,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
  Year | Progress
 :----:|:----------:
-2023  | 5/25 ⭐⭐
+2023  | 7/25 ⭐⭐
 
 ## 💻 Tools
 
