@@ -74,7 +74,11 @@ void Solution2() {
 }
 
 int main() {
+    auto now = chrono::high_resolution_clock::now();
     Solution1();
     Solution2();
+    auto end = chrono::high_resolution_clock::now();
+    // 56.983 ms
+    cout << chrono::duration_cast<chrono::microseconds>( end - now ).count() / 1000.0 << endl;
     return 0;
 }

@@ -11,16 +11,8 @@ public class CubeClassify {
     HashMap<String, Integer> cubeTarget;
 
     void InitDataModel() {
-        cubeCnt = new HashMap<>();
-        cubeTarget = new HashMap<>();
-
-        cubeCnt.put("red", 0);
-        cubeCnt.put("green", 0);
-        cubeCnt.put("blue", 0);
-
-        cubeTarget.put("red", 12);
-        cubeTarget.put("green", 13);
-        cubeTarget.put("blue", 14);
+        cubeCnt = new HashMap<>(Map.of("red", 0, "green", 0, "blue", 0));
+        cubeTarget = new HashMap<>(Map.of("red", 12, "green", 13, "blue", 14));
     }
 
     void readFile(boolean stopOnFail) throws IOException {

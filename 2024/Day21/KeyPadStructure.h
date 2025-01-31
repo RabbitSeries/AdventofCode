@@ -3,17 +3,18 @@ using namespace std;
 #define BUF_SIZE 50
 typedef unsigned long long ull;
 
-map<char, vector<pair<char, char>>> NUMERIC_KEYPAD{
-    //     +---+
-    //     | 3 |
-    // +---+---+
-    // | 0 | A |
-    // +---+---+
-    {'A',{
-                    {'3','^'},
-            {'0','<'}
-        }
-    },
+unordered_map<char, vector<pair<char, char>>> NUMERIC_KEYPAD{
+    // map<char, vector<pair<char, char>>> NUMERIC_KEYPAD{
+        //     +---+
+        //     | 3 |
+        // +---+---+
+        // | 0 | A |
+        // +---+---+
+        {'A',{
+                        {'3','^'},
+                {'0','<'}
+            }
+        },
     // +---+
     // | 2 |
     // +---+---+
@@ -92,50 +93,41 @@ map<char, vector<pair<char, char>>> NUMERIC_KEYPAD{
                     {'6','v'},
         }
     },
-
-    // +---+---+---+
-    // | 7 | 8 | 9 |
-    // +---+---+---+
-    // | 4 | 5 | 6 |
-    // +---+---+---+
-    // | 1 | 2 | 3 |
-    // +---+---+---+
-    //     | 0 | A |
-    //     +---+---+
 };
 
 
-map<char, vector<pair<char, char>>> DIRECTIONAL_KEYPAD{
-    {'A',
-        {
-            {'^','<'},
-                    {'>','v'},
+unordered_map<char, vector<pair<char, char>>> DIRECTIONAL_KEYPAD{
+    // map<char, vector<pair<char, char>>> DIRECTIONAL_KEYPAD{
+        {'A',
+            {
+                {'^','<'},
+                        {'>','v'},
+            }
+        },
+        {'^',
+            {
+                        {'A','>'},
+                {'v','v'},
+            }
+        },
+        {'v',
+            {
+                        {'^','^'},
+                {'<','<'},
+                                {'>','>'},
+            }
+        },
+        {'<',
+            {
+                                {'v','>'},
+            }
+        },
+        {'>',
+            {
+                        {'A','^'},
+                {'v','<'},
+            }
         }
-    },
-    {'^',
-        {
-                    {'A','>'},
-            {'v','v'},
-        }
-    },
-    {'v',
-        {
-                    {'^','^'},
-            {'<','<'},
-                            {'>','>'},
-        }
-    },
-    {'<',
-        {
-                            {'v','>'},
-        }
-    },
-    {'>',
-        {
-                    {'A','^'},
-            {'v','<'},
-        }
-    }
     //     +---+---+
     //     | ^ | A |
     // +---+---+---+
@@ -156,7 +148,8 @@ map<char, vector<pair<char, char>>> DIRECTIONAL_KEYPAD{
 // | < | v | > |
 // +---+---+---+
 
-inline int getOnePath( char const s, char const t, map<char, vector<pair<char, char>>> const& keyPad ) {
+inline int getOnePath( char const s, char const t, unordered_map<char, vector<pair<char, char>>> const& keyPad ) {
+    // inline int getOnePath( char const s, char const t, map<char, vector<pair<char, char>>> const& keyPad ) {
     map<char, int> cost;
     // map<char, bool> visited;
     for( auto [key, nextKeyList] : keyPad ) {
@@ -217,7 +210,8 @@ inline int getOnePath( char const s, char const t, map<char, vector<pair<char, c
     return  0;
 }
 
-inline vector<vector<char>>  getKeyPadAllPath( char const s, char const t, map<char, vector<pair<char, char>>> const& keyPad ) {
+// inline vector<vector<char>>  getKeyPadAllPath( char const s, char const t, map<char, vector<pair<char, char>>> const& keyPad ) {
+inline vector<vector<char>>  getKeyPadAllPath( char const s, char const t, unordered_map<char, vector<pair<char, char>>> const& keyPad ) {
     // map<char, int> cost{ {'0',INT_MAX}, {'1',INT_MAX},{'2',INT_MAX},{'3',INT_MAX},{'4',INT_MAX},{'5',INT_MAX},{'6',INT_MAX},{'7',INT_MAX},{'8',INT_MAX},{'9',INT_MAX},{'A',INT_MAX} };
     map<char, int> cost;
     for( auto [key, nextKeyList] : keyPad ) {
