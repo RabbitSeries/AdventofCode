@@ -32,9 +32,11 @@ public class CardSort {
         return 0;
     }
 
-    static Priority rule1Priority(String str) {
+    Priority rule1Priority(String str) {
+        // Be familiar with stream programming, but also learn yourself the way of
+        // manual implementation.
         long maxSameChCnt = str.chars().boxed().collect(Collectors.groupingBy(l -> l, Collectors.counting())).values()
-                .stream().mapToLong(l -> l).max().orElse(0);
+                .stream().max(Long::compareTo).orElse(0l);
 
         Priority[] priorityValues = Priority.values();
 
@@ -71,9 +73,9 @@ public class CardSort {
             return rule1Priority(str);
         }
 
-        int maxSameChCnt = str.chars().filter(ascii -> (char) ascii != 'J').boxed()
-                .collect(Collectors.groupingBy(l -> l, Collectors.toList()))
-                .values().stream().mapToInt(l -> l.size()).max().orElse(0);
+        long maxSameChCnt = str.chars().filter(ascii -> (char) ascii != 'J').boxed()
+                .collect(Collectors.groupingBy(l -> l, Collectors.counting()))
+                .values().stream().max((l1, l2) -> Long.compare(l1, l2)).orElse(0l);
 
         long totalSameChCnt = wildCardCnt + maxSameChCnt;
 
@@ -149,8 +151,11 @@ public class CardSort {
     }
 
     public static void main(String[] args) throws IOException {
+        long now = System.nanoTime();
         CardSort Day07 = new CardSort();
         Day07.Solution1();
         Day07.Solution2();
+        long end = System.nanoTime();
+        System.out.printf("%.3f", (end - now) / 1000000.0);
     }
 }
