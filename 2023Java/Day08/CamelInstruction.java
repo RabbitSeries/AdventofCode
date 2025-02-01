@@ -56,7 +56,6 @@ public class CamelInstruction {
                 System.out.println("Map incomplete");
                 return;
             }
-
             if (Instructions.get(curInsId).equals('L')) {
                 start = nextDes.getKey();
             } else {
@@ -68,8 +67,11 @@ public class CamelInstruction {
 
         }
         System.out.println("Solution 1: " + nCnt);
+
     }
 
+    // This problem have an implicit condition: every start node end with 'A' only
+    // reaches one specific node end with 'Z'.
     void findAllPath(String start) {
         int curInsId = 0;
         int curPathLength = 0;
@@ -122,7 +124,6 @@ public class CamelInstruction {
         }
         long res = 1;
         for (int i = 0; i < PathList.size(); i++) {
-
             System.out.println("" + PathList.keySet().toArray()[i] + " " +
                     PathList.get(PathList.keySet().toArray()[i]).getKey()
                     + " " + PathList.get(PathList.keySet().toArray()[i]).getValue());
