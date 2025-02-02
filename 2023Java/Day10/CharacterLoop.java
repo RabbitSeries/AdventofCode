@@ -1,7 +1,6 @@
 package Day10;
 
 import java.io.*;
-import java.time.Clock;
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
@@ -29,8 +28,8 @@ public class CharacterLoop {
         input.close();
     }
 
-    void PrintMap() {
-        PipeMap.forEach(line -> {
+    void PrintMap(List<List<Character>> CharacterMap) {
+        CharacterMap.forEach(line -> {
             line.forEach(c -> {
                 System.out.printf("%c", !c.equals('*') ? ' ' : c);
             });
@@ -38,9 +37,12 @@ public class CharacterLoop {
         });
     }
 
-    void PrintPath(List<Point2D> pathList) {
+    void PrintPath(List<Point2D> pathList, List<List<Character>> CharacterMap) {
+        // new ArrayList<>(CharacterMap) means copy CharacterMap's value (second level
+        // reference) but the underlying value is not copied to a new memory space;
+        // List<List<Character>> printMap = new ArrayList<>(CharacterMap);
         List<List<Character>> printMap = new ArrayList<>();
-        for (List<Character> row : PipeMap) {
+        for (List<Character> row : CharacterMap) {
             // Deep copy instead of shallow copy.
             printMap.add(new ArrayList<>(row));
         }
@@ -64,11 +66,9 @@ public class CharacterLoop {
         return Point2D.isValid(rows, cols, curPos) && PipeMap.get(curPos.getKey()).get(curPos.getValue()) != '.';
     }
 
-    static ClockOrder PathClockOrder = null;
-
     List<Point2D> Solution1() throws IOException, InterruptedException {
         readFile();
-        Queue<Entry<Entry<Point2D, Integer>, ClockOrder>> q = new LinkedList<>();
+        Queue<Entry<Point2D, Integer>> q = new LinkedList<>();
         HashMap<Entry<Point2D, Integer>, Boolean> visited = new HashMap<>();
 
         for (int i = 0; i < 4; i++) {
@@ -76,8 +76,8 @@ public class CharacterLoop {
 
             if (isValid(nextPos) && PipeModel.NextPipeDirection.get(getPipe(nextPos)).getOrDefault(i, -1) != -1) {
                 // Start of path, ClockOrder is null;
-                q.add(new SimpleEntry<>(new SimpleEntry<>(nextPos, i), null));
-                visited.put(new AbstractMap.SimpleEntry<>(nextPos, i), true);
+                q.add(new SimpleEntry<>(nextPos, i));
+                visited.put(new SimpleEntry<>(nextPos, i), true);
             }
         }
 
@@ -88,9 +88,8 @@ public class CharacterLoop {
             q.clear();
             for (var front : curLevelList) {
                 // Level info
-                Point2D curPos = front.getKey().getKey();
-                int curFace = front.getKey().getValue();
-                ClockOrder curOrder = front.getValue();
+                Point2D curPos = front.getKey();
+                int curFace = front.getValue();
 
                 // Path process
                 if (curPos.pathList == null) {
@@ -101,7 +100,6 @@ public class CharacterLoop {
                 // Destination process
                 if (curPos.equals(StartPos)) {
                     System.out.println("Solution 1: " + loopLen / 2);
-                    PathClockOrder = curOrder;
                     return new ArrayList<>(
                             curPos.pathList.stream().map(entry -> new Point2D(entry.getKey(), entry.getValue()))
                                     .collect(Collectors.toList()));
@@ -114,20 +112,8 @@ public class CharacterLoop {
 
                     // Enqueue
                     if (isValid(nextPos) && !visited.getOrDefault(new SimpleEntry<>(nextPos, nextFace), false)) {
-                        ClockOrder nextOrder = curOrder;
-
-                        // Once confirmed path clock order, keep it thereafter
-                        if (nextOrder == null) {
-                            Map<Integer, ClockOrder> PreFaceQuery = PipeModel.ClockOrderQuery.getOrDefault(
-                                    getPipe(nextPos),
-                                    null);
-                            if (PreFaceQuery != null) {
-                                nextOrder = PreFaceQuery.getOrDefault(curFace, null);
-                            }
-                        }
-
                         nextPos.pathList = new ArrayList<>(curPos.pathList);
-                        q.add(new SimpleEntry<>(new SimpleEntry<>(nextPos, nextFace), nextOrder));
+                        q.add(new SimpleEntry<>(nextPos, nextFace));
                         visited.put(new SimpleEntry<>(nextPos, nextFace), true);
                     }
                 }
@@ -137,10 +123,12 @@ public class CharacterLoop {
         return null;
     }
 
+    static ClockOrder PathClockOrder = null;
+    static boolean innerBlock = true;
+
     int innerFlood(Point2D s, HashMap<Point2D, Boolean> visited) {
         Queue<Point2D> q = new LinkedList<>();
         q.add(s);
-        boolean innerBlock = true;
         int cellCnt = 0;
         while (!q.isEmpty()) {
             Point2D curPos = q.poll();
@@ -157,48 +145,42 @@ public class CharacterLoop {
                 }
             }
         }
-        // if (innerBlock) {
-        //     return cellCnt;
-        // }
-        return cellCnt;
-        // throw new ExceptionInInitializerError(
-        // "Unexpeted, the algo should seek path's adjacent point on path's inner
-        // direction");
+        if (innerBlock) {
+            return cellCnt;
+        }
+        return 0;
     }
 
     void Solution2(List<Point2D> pathList) {
-        PrintPath(pathList);
-        // HashMap<Character, Map<Integer, List<Integer>>> QueryModel = PathClockOrder
-        // .equals(PipeModel.ClockOrder.ClockWise) ? PipeModel.ClockwiseQuery :
-        // PipeModel.CounterclockwiseQuery;
-        // Get the smaller one
-        HashMap<Character, Map<Integer, List<Integer>>> QueryModel = PipeModel.ClockwiseQuery;
-        QueryModel = PipeModel.CounterclockwiseQuery;
-        HashMap<Point2D, Boolean> visited = new HashMap<>();
-        for (Point2D curPos : pathList) {
-            visited.putIfAbsent(curPos, true);
-        }
-        int res = 0;
-        Point2D prePos = null;
-        for (Point2D curPos : pathList) {
-            if (curPos.equals(StartPos)) {
-                System.out.println("Solution 2: " + res);
-                return;
+        for (int i = 0; i < 2; i++) {
+            var QueryModel = i == 0 ? PipeModel.ClockwiseQuery : PipeModel.CounterclockwiseQuery;
+            HashMap<Point2D, Boolean> visited = new HashMap<>();
+            for (Point2D curPos : pathList) {
+                visited.putIfAbsent(curPos, true);
             }
-            if (prePos != null) {
-                for (var adjPos : getInnerAdjacents(curPos, prePos, QueryModel, visited)) {
-
-                    // int t = innerFlood(adjPos, visited);
-                    // System.out.println("Flood this valid point, got " + t);
-                    res += innerFlood(adjPos, visited);
+            int res = 0;
+            Point2D prePos = null;
+            for (Point2D curPos : pathList) {
+                if (curPos.equals(StartPos)) {
+                    System.out.println("Solution 2: " + res);
+                    return;
                 }
+                if (prePos != null) {
+                    for (var adjPos : getInnerAdjacents(curPos, prePos, QueryModel, visited)) {
+                        res += innerFlood(adjPos, visited);
+                        if (!innerBlock) {
+                            break;
+                        }
+                    }
+                }
+                prePos = curPos;
             }
-            prePos = curPos;
+            innerBlock = true;
         }
     }
 
     List<Point2D> getInnerAdjacents(Point2D curPos, Point2D prePos,
-            HashMap<Character, Map<Integer, List<Integer>>> QueryModel, HashMap<Point2D, Boolean> visited) {
+            HashMap<Character, HashMap<Integer, List<Integer>>> QueryModel, HashMap<Point2D, Boolean> visited) {
         int inDirection = -1;
         int dx = curPos.getKey() - prePos.getKey(), dy = curPos.getValue() - prePos.getValue();
         if (dx == 0) {
@@ -206,9 +188,6 @@ public class CharacterLoop {
         } else {
             inDirection = (dx == 1 ? 0 : 1);
         }
-        // System.out.println("Attempt " + "enters " + getPipe(curPos) + " from " +
-        // getPipe(prePos) + " at direction " + inDirection + " on clockorder: " +
-        // PathClockOrder);
         List<Point2D> PointList = new ArrayList<>();
         for (int v : QueryModel.get(getPipe(curPos)).get(inDirection)) {
             Point2D nextPos = Point2D.getNextPosition(curPos, v);
@@ -217,8 +196,6 @@ public class CharacterLoop {
                 PointList.add(nextPos);
             }
         }
-        // System.out.println("Have " + PointList.size() + " valid adjacent inner
-        // points");
         return PointList;
     }
 

@@ -2,6 +2,7 @@ package Day03;
 
 import java.io.*;
 import java.util.*;
+import java.util.Map.Entry;
 import DataModel.Point2D;
 
 public class PartNumberSearch {
@@ -55,7 +56,7 @@ public class PartNumberSearch {
     void Solution1() throws IOException {
         readFile();
         Integer rows = schematic.size(), cols = schematic.get(0).size();
-        for (Map.Entry<Point2D, Integer> posInfo : partNumberPos) {
+        for (Entry<Point2D, Integer> posInfo : partNumberPos) {
             Point2D pos = posInfo.getKey();
             Integer numLen = posInfo.getValue();
             catString = "";
