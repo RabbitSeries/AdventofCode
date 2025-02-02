@@ -12,7 +12,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 [![Day 2](https://img.shields.io/badge/Day%202-Red--Nosed%20Reports-blue?logo=Archlinux)](https://adventofcode.com/2024/day/2)        |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day02/CheckLevelInOrder.cpp)   | [![Solution](https://img.shields.io/badge/JAVA-white?logo=OpenJDK&logoColor=yellow)](2024Java/Day02/CheckLevelInOrder.java)
 [![Day 3](https://img.shields.io/badge/Day%203-Mull%20It%20Over-blue?logo=Archlinux)](https://adventofcode.com/2024/day/3)            |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day03/PreciseMul.cpp)          | [![Solution](https://img.shields.io/badge/JAVA-white?logo=OpenJDK&logoColor=yellow)](2024Java/Day03/PreciseMul.java)
 [![Day 4](https://img.shields.io/badge/Day%204-Ceres%20Search-blue?logo=Archlinux)](https://adventofcode.com/2024/day/4)              |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day04/CeresSearch.cpp)         | [![Solution](https://img.shields.io/badge/JAVA-white?logo=OpenJDK&logoColor=yellow)](2024Java/Day04/CeresSearch.java)
-[![Day 5](https://img.shields.io/badge/Day%205-Print%20Queue-blue?logo=Archlinux)](https://adventofcode.com/2024/day/5)               |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day05/OrderingUpdates.cpp)     | -
+[![Day 5](https://img.shields.io/badge/Day%205-Print%20Queue-blue?logo=Archlinux)](https://adventofcode.com/2024/day/5)               |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day05/OrderingUpdates.cpp)     | [![Solution](https://img.shields.io/badge/JAVA-white?logo=OpenJDK&logoColor=yellow)](2024Java/Day05/OrderingUpdates.java)
 [![Day 6](https://img.shields.io/badge/Day%206-Guard%20Gallivant-blue?logo=Archlinux)](https://adventofcode.com/2024/day/6)           |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day06/PatrolRoute.cpp)         | -
 [![Day 7](https://img.shields.io/badge/Day%207-Bridge%20Repair-blue?logo=Archlinux)](https://adventofcode.com/2024/day/7)             |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day07/Calibration.cpp)         | -
 [![Day 9](https://img.shields.io/badge/Day%209-Disk%20Fragmenter-blue?logo=Archlinux)](https://adventofcode.com/2024/day/9)           |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day09/DiskCompact.cpp)         | -
@@ -38,7 +38,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
  Year | Progress
 :----:|:----------:
-2023  | 7/25 ⭐⭐
+2023  | 10/25 ⭐⭐
 
 ## 💻 Tools
 

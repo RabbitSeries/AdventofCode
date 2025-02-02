@@ -1,21 +1,23 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-bool isCorrectOrder( const vector<int>& update, const map<int, vector<int>>& rules ) {
+bool isCorrectOrder( const vector<int>& update, const unordered_map<int, set<int>>& rules ) {
     for( int i = 0; i < update.size(); i++ ) {
         for( int j = 0; j < i; j++ ) {
-            for( int after : rules.at( update[i] ) ) {
-                if( after == update[j] ) {
+            if( rules.count( update[i] ) != 0 ) {
+                if( rules.at( update[i] ).count( update[j] ) != 0 )
                     return false;
-                }
+            }
+            else {
+                break;
             }
         }
     }
     return true;
 }
 
-map<int, vector<int>> readRules() {
-    map<int, vector<int>> rules;
+unordered_map<int, set<int>> readRules() {
+    unordered_map<int, set<int>> rules;
     FILE* RuleInput = fopen( "RuleInput.txt", "r" );
 
     char linebuf[BUFSIZ];
@@ -23,7 +25,7 @@ map<int, vector<int>> readRules() {
         stringstream ss( linebuf );
         int num1 = 0, num2 = 0; char sep = '\0';
         ss >> num1 >> sep >> num2;
-        rules[num1].push_back( num2 );
+        rules[num1].insert( num2 );
     }
     return move( rules );
 
@@ -52,7 +54,7 @@ vector<vector<int>> readUpdates() {
 
 
 void Solution1() {
-    map<int, vector<int>> rules = readRules();
+    unordered_map<int, set<int>> rules = readRules();
     vector<vector<int>> updates = readUpdates();
     int sum = 0;
     for( const auto& update : updates ) {
@@ -61,19 +63,16 @@ void Solution1() {
             sum += update[middle];
         }
     }
-    cout << "The sum of the middle page numbers of the correctly reordered updates is: " << sum << endl;
+    cout << "Solution 1: " << sum << endl;
 }
 
-void reOrder( vector<int>& update, const map<int, vector<int>>& rules ) {
+void reOrder( vector<int>& update, const unordered_map<int, set<int>>& rules ) {
     for( int i = 0; i < update.size(); i++ ) {
         for( int j = i; j < update.size(); j++ ) {
             bool ahead = true;
             for( int k = i; k < update.size(); k++ ) {
                 if( k == j ) { continue; }
-                for( auto after : rules.at( update[k] ) ) {
-                    if( after == update[j] ) { ahead = false; break; }
-                }
-                if( !ahead ) break;
+                if( rules.count( update[k] ) != 0 && rules.at( update[k] ).count( update[j] ) != 0 ) { ahead = false; break; }
             }
             if( ahead ) {
                 swap( update[i], update[j] );
@@ -84,20 +83,17 @@ void reOrder( vector<int>& update, const map<int, vector<int>>& rules ) {
 }
 
 int Solution2() {
-    map<int, vector<int>> rules = readRules();
+    unordered_map<int, set<int>> rules = readRules();
     vector<vector<int>> updates = readUpdates();
     int sum = 0;
     for( vector<int> update : updates ) {
-        if( isCorrectOrder( update, rules ) ) {
-            int middle = update.size() / 2;
-        }
-        else {
+        if( !isCorrectOrder( update, rules ) ) {
             reOrder( update, rules );
             int middle = update.size() / 2;
             sum += update[middle];
         }
     }
-    cout << "The sum of the middle page numbers of the correctly reordered updates is: " << sum << endl;
+    cout << "Solution 2: " << sum << endl;
     return 0;
 }
 

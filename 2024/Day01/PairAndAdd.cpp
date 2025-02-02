@@ -34,7 +34,7 @@ void Solution1() {
 
 void Solution2() {
     vector<pair<int, int>> numList = readFile( "input.txt" );
-    map <int, int> elemCount;
+    unordered_map <int, int> elemCount;
     for( auto [num1, num2] : numList ) {
         elemCount[num2]++;
     }
