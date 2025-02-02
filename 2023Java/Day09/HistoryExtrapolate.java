@@ -49,7 +49,6 @@ public class HistoryExtrapolate {
         long res = 0;
         for (List<Integer> historyList : HistoryList) {
             IntegerRef addUp = new IntegerRef(0);
-
             res += predict(historyList, addUp, false);
         }
         System.out.println("Solution 2: " + res);

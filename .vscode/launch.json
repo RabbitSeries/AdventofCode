@@ -4,6 +4,7 @@
             "name": "Java: java build and debug active file",
             "type": "java",
             "request": "launch",
+            "vmArgs": "-ea",
             "cwd": "${fileDirname}",
             "mainClass": "${file}",
             "projectName": "aocjava",

@@ -59,16 +59,16 @@ public class PartNumberSearch {
             Point2D pos = posInfo.getKey();
             Integer numLen = posInfo.getValue();
             catString = "";
-            schematic.get(pos.getX()).subList(pos.getY(), pos.getY() + numLen)
+            schematic.get(pos.getKey()).subList(pos.getValue(), pos.getValue() + numLen)
                     .forEach(num -> catString += num);
             Integer num = Integer.parseInt(catString);
             boolean added = false;
             for (int i = 0; i < numLen; i++) {
                 for (int direction = 0; direction < 8; direction++) {
-                    Point2D nextPos = new Point2D(pos.getX() + Point2D.dx[direction],
-                            pos.getY() + i + Point2D.dy[direction]);
+                    Point2D nextPos = new Point2D(pos.getKey() + Point2D.dx[direction],
+                            pos.getValue() + i + Point2D.dy[direction]);
                     if (Point2D.isValid(rows, cols, nextPos)) {
-                        char ch = schematic.get(nextPos.getX()).get(nextPos.getY());
+                        char ch = schematic.get(nextPos.getKey()).get(nextPos.getValue());
                         if (!Character.isDigit(ch) && ch != '.') {
                             res += num;
                             added = true;
@@ -88,7 +88,7 @@ public class PartNumberSearch {
     }
 
     Integer searchNumber(int rows, int cols, Point2D pos, HashMap<Point2D, Boolean> visit) {
-        int startIndex = pos.getY(), endIndex = pos.getY(), x = pos.getX();
+        int startIndex = pos.getValue(), endIndex = pos.getValue(), x = pos.getKey();
         visit.put(pos, true);
         Point2D nextPos = new Point2D(x, startIndex - 1);
         while (Point2D.isValid(rows, cols, nextPos)
@@ -124,15 +124,15 @@ public class PartNumberSearch {
             HashMap<Point2D, Boolean> visit = new HashMap<>();
 
             for (int i = 0; i < 8; i++) {
-                Point2D nextPos = new Point2D(pos.getX() + Point2D.dx[i], pos.getY() + Point2D.dy[i]);
+                Point2D nextPos = new Point2D(pos.getKey() + Point2D.dx[i], pos.getValue() + Point2D.dy[i]);
                 if (Point2D.isValid(rows, cols, nextPos))
                     visit.put(nextPos, false);
             }
 
             for (int i = 0; i < 8; i++) {
-                Point2D nextPos = new Point2D(pos.getX() + Point2D.dx[i], pos.getY() + Point2D.dy[i]);
+                Point2D nextPos = new Point2D(pos.getKey() + Point2D.dx[i], pos.getValue() + Point2D.dy[i]);
                 if (Point2D.isValid(rows, cols, nextPos)
-                        && Character.isDigit(schematic.get(nextPos.getX()).get(nextPos.getY()))) {
+                        && Character.isDigit(schematic.get(nextPos.getKey()).get(nextPos.getValue()))) {
                     try {
                         if (!visit.get(nextPos)) {
                             if (numberCnt < 2) {
