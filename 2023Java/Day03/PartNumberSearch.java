@@ -121,7 +121,7 @@ public class PartNumberSearch {
         Integer rows = schematic.size(), cols = schematic.get(0).size();
         for (Point2D pos : gearPos) {
             int numberCnt = 0;
-            Integer[] numPair = new Integer[2];
+            Integer[] numPoint2D = new Integer[2];
             HashMap<Point2D, Boolean> visit = new HashMap<>();
 
             for (int i = 0; i < 8; i++) {
@@ -137,7 +137,7 @@ public class PartNumberSearch {
                     try {
                         if (!visit.get(nextPos)) {
                             if (numberCnt < 2) {
-                                numPair[numberCnt++] = searchNumber(rows, cols, nextPos, visit);
+                                numPoint2D[numberCnt++] = searchNumber(rows, cols, nextPos, visit);
                             } else {
                                 numberCnt++;
                                 break;
@@ -150,7 +150,7 @@ public class PartNumberSearch {
                 }
             }
             if (numberCnt == 2) {
-                ratioSum += numPair[0] * numPair[1];
+                ratioSum += numPoint2D[0] * numPoint2D[1];
             }
         }
         System.out.println("Solution 2: " + ratioSum);

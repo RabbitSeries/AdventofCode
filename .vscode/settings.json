@@ -20,6 +20,7 @@
         "*.stfb": "st",
         "*.vim": "Vimscript",
         "_vimrc": "Vimscript",
+        "*.md": "markdown",
         "string": "cpp",
         "ostream": "cpp",
         "vector": "cpp",
@@ -113,7 +114,8 @@
         "thread": "cpp",
         "typeindex": "cpp",
         "typeinfo": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "strstream": "cpp"
     },
     // "java.project.referencedLibraries": [
     //     "2024Java/lib/**/*.jar"

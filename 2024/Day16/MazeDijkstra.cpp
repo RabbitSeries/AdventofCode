@@ -29,7 +29,6 @@ struct point2D : public pair<int, int> {
 
 };
 
-// TODO Add this to point2D.
 template <>
 struct std::hash<point2D> {
     // typedef size_t result_type;
@@ -51,9 +50,11 @@ void printPathInMaze( vector<pair<int, int>> curPath, vector<vector<int>> m ) {
         for( auto cell : line ) {
             if( cell == CELLWALL ) {
                 row += '#';
-            } else if( cell == CELLEMPTY ) {
+            }
+            else if( cell == CELLEMPTY ) {
                 row += ' ';
-            } else {
+            }
+            else {
                 row += '0';
             }
         }
@@ -69,9 +70,11 @@ void printPathInMaze( pair<int, int> const& curPos, vector<vector<int>> m ) {
         for( auto cell : line ) {
             if( cell == CELLWALL ) {
                 row += '#';
-            } else if( cell == CELLEMPTY ) {
+            }
+            else if( cell == CELLEMPTY ) {
                 row += ' ';
-            } else {
+            }
+            else {
                 row += '0';
             }
         }
@@ -124,7 +127,7 @@ void countSeats( vector<vector<int>> const& maze, point2D start, point2D const& 
             break;
         }
         pq.pop();
-        
+
         Direction curDir = curPoint.direction;
         curPoint.LinkRoad.emplace_back( curPoint );
         // ! To trace the pq, uncomment the code as follows:
@@ -146,7 +149,8 @@ void countSeats( vector<vector<int>> const& maze, point2D start, point2D const& 
                 pathRecord.clear();
                 pathRecord.emplace_back( curPoint.LinkRoad );
                 for_each( curPoint.LinkRoad.begin(), curPoint.LinkRoad.end(), [ & ]( pair<int, int> seat ) {pathSeats.insert( seat ); } );
-            } else if( curCost == endCost ) {
+            }
+            else if( curCost == endCost ) {
                 pathRecord.emplace_back( curPoint.LinkRoad );
                 for_each( curPoint.LinkRoad.begin(), curPoint.LinkRoad.end(), [ & ]( pair<int, int> seat ) {pathSeats.insert( seat ); } );
             }
@@ -160,7 +164,8 @@ void countSeats( vector<vector<int>> const& maze, point2D start, point2D const& 
             if( nDir != curDir ) {
                 if( nDir == ( curDir + 2 ) % 4 ) {
                     continue;
-                } else {
+                }
+                else {
                     nextCost += PENALTY;
                 }
             }
@@ -172,7 +177,8 @@ void countSeats( vector<vector<int>> const& maze, point2D start, point2D const& 
                     pathCost.emplace( nextPoint, nextCost );
                     nextPoint.LinkRoad = curPoint.LinkRoad;
                     pq.push( { nextCost,nextPoint } );
-                } else {
+                }
+                else {
                     if( nextCost <= pathCost[nextPoint] ) {
                         // Visited and can be relaxed or same path.
                         pathCost[nextPoint] = nextCost; // This line doesn't affect the result.
@@ -206,12 +212,15 @@ void readFile( vector<vector<int>>& m, pair<int, int>& s, pair<int, int>& e ) {
             if( c != '\n' && c != '\0' ) {
                 if( c == '#' ) {
                     row.push_back( CELLWALL );
-                } else if( c == '.' ) {
+                }
+                else if( c == '.' ) {
                     row.push_back( CELLEMPTY );
-                } else if( c == 'S' ) {
+                }
+                else if( c == 'S' ) {
                     s = { m.size(), row.size() };
                     row.push_back( CELLEMPTY );
-                } else if( c == 'E' ) {
+                }
+                else if( c == 'E' ) {
                     e = { m.size(), row.size() };
                     row.push_back( CELLEMPTY );
                 }

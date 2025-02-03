@@ -95,7 +95,7 @@ public class CharacterLoop {
                 if (curPos.pathList == null) {
                     curPos.pathList = new ArrayList<>();
                 }
-                curPos.pathList.add(curPos.extractPosPair());
+                curPos.pathList.add(curPos.extractPosPoint2D());
 
                 // Destination process
                 if (curPos.equals(StartPos)) {

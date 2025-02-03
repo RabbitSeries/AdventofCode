@@ -49,8 +49,9 @@
         },
         {
             "type": "shell",
-            "label": "Clean workspace",
+            "label": "[Windows] Clean workspace",
             "command": "${workspaceFolder}/.vscode/clean_noConfirm.bat",
+            "isBackground": true,
             "args": [
                 "${workspaceFolder}"
             ],
@@ -62,6 +63,7 @@
             "type": "shell",
             "label": "[ArchLinux] Clean workspace",
             "command": "${workspaceFolder}/.vscode/clean_noConfirm.sh",
+            "isBackground": true,
             "args": [
                 "${workspaceFolder}"
             ],

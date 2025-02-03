@@ -40,7 +40,7 @@ public class PipeModel {
                                         'F', new HashMap<>(Map.of(3, Arrays.asList(7), 1, Arrays.asList(0, 2)))));
 
         // Right hand
-        static public HashMap<Character, HashMap<Integer, List<Integer>>> ClockwiseQuery = new HashMap<>(
+        static public HashMap<Character, HashMap<Integer, List<Integer>>> ClockwiseQuery = new HashMap<>( 
                         Map.of(
                                         '|', new HashMap<>(Map.of(1, Arrays.asList(3), 0, Arrays.asList(2))),
                                         '-', new HashMap<>(Map.of(3, Arrays.asList(0), 2, Arrays.asList(1))),

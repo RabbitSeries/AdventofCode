@@ -113,7 +113,9 @@ Prove:
 - [ ] ~~Add A*algorithm to Day 16 solution.~~ Nah, A* algo is not suitable for penalty shortest path problem.
 - [ ] Change Day 20 distance calculation to Manhattan distance.
 - [ ] Github issue at: [13110](https://github.com/microsoft/vscode-cpptools/issues/13110)
-- [ ] Mutex > future async > normal algorithm (VSCode debugger will try tracking the calling stack, thus recursive algorithm will be slowed down severely).
+- [ ] Time efficency: Mutex > future async > single thread algorithm (VSCode debugger will try tracking the allocation variable data, thus recursive algorithm will be slowed down severely).
+- [ ] Time efficency: Fixed size array > linked list > bucket> ... > ; stack variable > heap variable
+- [ ] VSCode tracking memory of big HashMap/unordered_map cost extremely massive amount of time, execute the program manually.
 
 <!-- <div id="TODOList" style="transform: translateX(30px);padding-bottom: 20px">
     <input type="checkbox" checked="true" disabled="true" >Change day 3 algorithm to <a href="https://en.cppreference.com/w/cpp/regex/ecmascript">regular expression</a> implementation <a href="https://en.cppreference.com/w/cpp/regex">(C++ 11 feature)</a>.<br>

@@ -1,36 +1,34 @@
 #include "bits/stdc++.h"
 #define BUFFER_SIZE 1024
 using namespace std;
-typedef pair<int, int> pos;
-
-inline void turnFace( char& curFace ) {
-    switch( curFace ) {
-    case '^':
-        curFace = '>';
-        break;
-    case '>':
-        curFace = 'v';
-        break;
-    case 'v':
-        curFace = '<';
-        break;
-    case '<':
-        curFace = '^';
-        break;
-    default:
-        cerr << "Error facing." << endl;
+struct Point2D : public pair<int, int> {
+    Point2D() {};
+    Point2D( int f, int s ) {
+        first = f, second = s;
     }
-    return;
-}
-
-const map<char, pos> NEXTPOS{
-    {'^',{-1,0}},
-    {'>',{0, 1}},
-    {'v', {1,0}},
-    {'<',{0,-1}}
+    inline bool operator==( Point2D const& p ) const {
+        return first == p.first && second == p.second;
+    }
 };
 
-inline bool isValid( pos curPos, int rows, int cols ) {
+template<>
+struct std::hash<Point2D> {
+    inline size_t operator()( const Point2D& p ) const {
+        return hash<int>{}( p.first ) ^ ( hash<int>{}( p.first ) << 10 );
+    }
+};
+
+char face[]{ '^','>','v','<' };
+unordered_map<char, int> faceId{
+    {'^',0},
+    {'>',1},
+    {'v',2},
+    {'<',3}
+};
+int dx[]{ -1,0,1,0 };
+int dy[]{ 0,1,0,-1 };
+
+inline bool isValid( Point2D curPos, int rows, int cols ) {
     int x = curPos.first, y = curPos.second;
     return x >= 0 && x < rows && y >= 0 && y < cols;
 }
@@ -58,23 +56,23 @@ vector<vector<char>> readFile( pair<int, int>& guardPos ) {
     return move( routeMap );
 }
 
-void patrol( pos curPos, vector<vector<char>>& routeMap ) {
+void patrol( Point2D curPos, vector<vector<char>>& routeMap ) {
     int rows = routeMap.size(), cols = routeMap[0].size();
-    char curFace;
+    int curFace;
     while( isValid( curPos, rows, cols ) ) {
         // Determine the face
-        curFace = routeMap[curPos.first][curPos.second];
-        pos nextPos{ NEXTPOS.at( curFace ).first + curPos.first,NEXTPOS.at( curFace ).second + curPos.second };
+        curFace = faceId.at( routeMap[curPos.first][curPos.second] );
+        Point2D nextPos{ dx[curFace] + curPos.first,dy[curFace] + curPos.second };
         if( isValid( nextPos, rows, cols ) ) {
             char& nextBlock = routeMap[nextPos.first][nextPos.second];
             if( nextBlock == '#' ) {
-                turnFace( curFace );
-                routeMap[curPos.first][curPos.second] = curFace;
+                curFace = ( curFace + 1 ) % 4;
+                routeMap[curPos.first][curPos.second] = face[curFace];
             }
             else {
                 routeMap[curPos.first][curPos.second] = 'X';
                 curPos = nextPos;
-                nextBlock = curFace;
+                nextBlock = face[curFace];
             }
         }
         else {
@@ -85,7 +83,7 @@ void patrol( pos curPos, vector<vector<char>>& routeMap ) {
 }
 
 void Solution1() {
-    pair<int, int> guardPos( 0, 0 );
+    Point2D guardPos;
     vector<vector<char>> routeMap = readFile( guardPos );
     patrol( guardPos, routeMap );
     int distinctPosCnt = 0;
@@ -102,30 +100,52 @@ void Solution1() {
 
 }
 
-// Thus reduced the copy time consumption.
-bool isPatrolCircle( pos curPos, vector<vector<char>> const& routeMap, int rows, int cols ) {
-    bool isCircle = false;
-    vector<vector<pair<bool, char>>> passed( rows, vector<pair<bool, char>>( cols, pair<bool, char>( false, '.' ) ) );
-    int times = 0;
-    char curFace = routeMap[curPos.first][curPos.second];;
-    pair<bool, char> curStatus;
-    while( isValid( curPos, rows, cols ) ) {
-        times++;
-        curStatus = passed[curPos.first][curPos.second];
-        if( curStatus.first && curStatus.second == curFace ) {
-            isCircle = true;
-            return isCircle;
+void PrintMap( unordered_map<Point2D, unordered_map<char, bool >> passed, vector<vector<char>> const& routeMap ) {
+    auto canvas = routeMap;
+    for( auto [pos, directitons] : passed ) {
+        for( auto [d, _] : directitons ) {
+            switch( d ) {
+            case '^':
+            case 'v':
+                canvas[pos.first][pos.second] = '|';
+                break;
+            case '<':
+            case '>':
+                canvas[pos.first][pos.second] = '-';
+            default:
+                break;
+            }
         }
-        // Determine the face
-        pos nextPos{ NEXTPOS.at( curFace ).first + curPos.first,NEXTPOS.at( curFace ).second + curPos.second };
+    }
+    for( auto line : canvas ) {
+        for( auto cell : line ) {
+            cout << cell;
+        }
+        cout << endl;
+    }
+}
+
+// Thus reduced the copy time consumption.
+bool isPatrolCircle( Point2D curPos, vector<vector<char>> const& routeMap, int rows, int cols ) {
+    bool isCircle = false;
+    // vector<vector<pair<bool, char>>> passed( rows, vector<pair<bool, char>>( cols, pair<bool, char>( false, '.' ) ) );
+    unordered_map<Point2D, unordered_map<char, bool>> passed;
+    int curFace = faceId[routeMap[curPos.first][curPos.second]];
+    bool curStatus;
+    while( isValid( curPos, rows, cols ) ) {
+        // PrintMap( passed, routeMap );
+        curStatus = ( passed.count( curPos ) != 0 && passed[curPos].count( face[curFace] ) != 0 ) ? true : false;
+        if( curStatus ) {
+            return true;
+        }
+        Point2D nextPos{ dx[curFace] + curPos.first,dy[curFace] + curPos.second };
         if( isValid( nextPos, rows, cols ) ) {
             if( routeMap[nextPos.first][nextPos.second] == '#' ) {
-                turnFace( curFace );
+                passed[curPos][face[curFace]] = true;
+                curFace = ( curFace + 1 ) % 4;
             }
             else {
-                passed[curPos.first][curPos.second].first = true;
-                passed[curPos.first][curPos.second].second = curFace;
-                // routeMap[i--][j] = '|';
+                passed[curPos][face[curFace]] = true;
                 curPos = nextPos;
             }
         }
@@ -136,11 +156,11 @@ bool isPatrolCircle( pos curPos, vector<vector<char>> const& routeMap, int rows,
     return isCircle;
 }
 
-int threadTask( int startRow, int endRow, pair<int, int> guardPos, vector<vector<char>> routeMap, atomic<int>& count ) {
+int threadTask( int startRow, int endRow, Point2D guardPos, vector<vector<char>> routeMap, atomic<int>& count ) {
     int distinctPlacementLocal = 0;
     for( int i = startRow; i < endRow; i++ ) {
         for( int j = 0; j < routeMap[i].size(); j++ ) {
-            count++;
+            // count++;
             if( i == guardPos.first && j == guardPos.second || routeMap[i][j] == '#' ) {
                 continue;
             }
@@ -156,46 +176,51 @@ int threadTask( int startRow, int endRow, pair<int, int> guardPos, vector<vector
 }
 
 void Solution2() {
-    pair<int, int> guardPos( 0, 0 );
+    Point2D guardPos;
     vector<vector<char>> routeMap = readFile( guardPos );
 
     int numThreads = std::thread::hardware_concurrency();
     vector<future<int>> futures;
 
-    int rowsPerThread = routeMap.size() / numThreads;
     atomic<int> count = 0;
-
-    for( int t = 0; t < numThreads; t++ ) {
-        int startRow = t * rowsPerThread;
-        int endRow = ( t == numThreads - 1 ) ? routeMap.size() : ( t + 1 ) * rowsPerThread;
-        // User async to start mission.
-        futures.push_back( std::async( std::launch::async, threadTask, startRow, endRow, guardPos, ref( routeMap ), ref( count ) ) );
-    }
-    int lastChecked = 0, total = routeMap.size() * routeMap[0].size();
-    while( lastChecked < total ) {
-        int checked = count.load();
-        if( checked != lastChecked ) {
-            lastChecked = checked;
-            std::cout << "\033[2J\033[1;1H";
-            cout << "Progress - Part 2" << endl;
-            cout << "Positions checked: " << checked << "/" << total << " (" << ( checked * 100.0 / total ) << "%)" << endl;
-            cout << "Loop positions found: " << count.load() << endl;
-            this_thread::sleep_for( chrono::milliseconds( 100 ) );
-        }
-    }
-
+    bool enableMultiThread = true;
     int totalDistinctPlacement = 0;
-    // Accumulate all res.
-    for( auto& fut : futures ) {
-        totalDistinctPlacement += fut.get();  // Wait and get.
+    if( enableMultiThread ) {
+        int rowsPerThread = routeMap.size() / numThreads;
+
+        for( int t = 0; t < numThreads; t++ ) {
+            int startRow = t * rowsPerThread;
+            int endRow = ( t == numThreads - 1 ) ? routeMap.size() : ( t + 1 ) * rowsPerThread;
+            // User async to start mission.
+            futures.push_back( std::async( std::launch::async, threadTask, startRow, endRow, guardPos, routeMap, ref( count ) ) );
+        }
+        // int lastChecked = 0, total = routeMap.size() * routeMap[0].size();
+        // while( lastChecked < total ) {
+        //     lastChecked = count.load();
+
+        //     cout << "Progress - Part 2" << endl;
+        //     cout << "Positions checked: " << lastChecked << "/" << total << " (" << ( lastChecked * 100.0 / total ) << "%)" << endl;
+        //     cout << "Loop positions found: " << count.load() << endl;
+        //     this_thread::sleep_for( chrono::milliseconds( 50 ) );
+
+        // }
+        // Accumulate all res.
+        for( auto& fut : futures ) {
+            totalDistinctPlacement += fut.get();  // Wait and get.
+        }
+
+    }
+    else {
+        totalDistinctPlacement = threadTask( 0, routeMap.size(), guardPos, routeMap, ref( count ) );
     }
 
     cout << "Solution 2: " << totalDistinctPlacement << endl;
+
 }
 
 int main() {
     auto now = chrono::high_resolution_clock::now();
-    Solution1();
+    // Solution1();
     Solution2();
     auto end = chrono::high_resolution_clock::now();
     cout << chrono::duration_cast<chrono::milliseconds>( end - now ).count() / 1000.0 << " seconds" << endl;
