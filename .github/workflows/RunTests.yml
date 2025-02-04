@@ -22,44 +22,7 @@ jobs:
         msys_packages: 'mingw-w64-x86_64-toolchain'
 
     - name: Set up CMake
-      uses: cmname: CMake Build and Test
-
-on:
-  push:
-    branches:
-      - main  # Trigger workflow on pushes to the main branch
-  pull_request:
-    branches:
-      - main  # Trigger workflow on pull requests targeting the main branch
-
-jobs:
-  build:
-    runs-on: windows-latest  # Use Windows runner for MinGW builds
-
-    steps:
-    - name: Check out the code
-      uses: actions/checkout@v2
-
-    - name: Set up MinGW
-      uses: msys2/setup-msys2-action@v2
-      with:
-        msys_packages: 'mingw-w64-x86_64-toolchain'
-
-    - name: Set up CMake
       uses: cmake/setup-cmake@v3  # Correct action to set up CMake
-
-    - name: Configure CMake with MinGW
-      run: |
-        cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
-
-    - name: Build project
-      run: cmake --build build --config Release
-
-    - name: Run executable on Windows
-      run: |
-        # Run the executable on Windows (using MinGW, executable will have .exe extension)
-        .\build\solution.exe
-      shell: cmd
 
     - name: Configure CMake with MinGW
       run: |
