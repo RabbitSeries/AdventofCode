@@ -6,13 +6,13 @@
 inline void showProgressBar( int processCnt, int pathCnt ) {
     static int processCntDelta = 0;
     if( processCnt > processCntDelta + 2000 || processCnt == pathCnt ) {
-// #if defined(_WIN32) || defined(_WIN64)
-        std::system( "PAUSE" );  // For Windows
-        // std::cout << "\033[2J\033[1;1H";  // For Windows
+        // #if defined(_WIN32) || defined(_WIN64)
+                // std::system( "PAUSE" );  // For Windows
+        std::cout << "\033[2J\033[1;1H";  // For Windows
         // std::system( "cls" );  // For Windows
-// #else
-//         std::system( "clear" );  // For Linux or macOS
-// #endif
+        // #else
+        //         std::system( "clear" );  // For Linux or macOS
+        // #endif
         processCntDelta = processCnt;
     }
     else {

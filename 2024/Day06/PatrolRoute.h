@@ -11,7 +11,7 @@ class PatrolRoute {
     static atomic<int> progress;
     static mutex progressMtx;
     static void progressIncrement() {
-        lock_guard<mutex> resultLock( mtx );
+        lock_guard<mutex> resultLock{ mtx };
         progress++;
     }
     static const char face[];

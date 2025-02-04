@@ -133,7 +133,8 @@
         "rope": "cpp",
         "slist": "cpp",
         "bool_set": "cpp",
-        "dynamic_bitset": "cpp"
+        "dynamic_bitset": "cpp",
+        "*.java": "cpp"
     },
     // "java.project.referencedLibraries": [
     //     "2024Java/lib/**/*.jar"

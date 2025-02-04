@@ -13,7 +13,7 @@ ull getNextSecret( ull derival ) {
 
 vector<ull> readFile() {
     vector<ull> secrets;
-    ifstream input( "input.txt" );
+    ifstream input( "Day22/input.txt" );
     string buf;
     while( getline( input, buf ) ) {
         if( !buf.empty() ) {
@@ -41,9 +41,9 @@ ull getSecret( ull derival, int curDepth = 0, int targetDepth = 2000 ) {
         // }
         // else {
             // deriveHashTable.emplace( nextSecret, deriveList.size() );
-            deriveList.push_back( nextSecret );
-            derival = nextSecret;
-            curDepth++;
+        deriveList.push_back( nextSecret );
+        derival = nextSecret;
+        curDepth++;
         // }
     }
     return deriveList.back();
@@ -186,11 +186,11 @@ void Solution2() {
     return;
 }
 
-int main() {
-    auto now = chrono::high_resolution_clock::now();
-    Solution1();
-    Solution2();
-    auto end = chrono::high_resolution_clock::now();
-    cout << "Algorithm takes: " << setprecision( 2 ) << chrono::duration_cast<chrono::milliseconds>( end - now ).count() / 1000.0 << " seconds" << endl;
-    return 0;
-}
+// int main() {
+//     auto now = chrono::high_resolution_clock::now();
+//     Solution1();
+//     Solution2();
+//     auto end = chrono::high_resolution_clock::now();
+//     cout << "Algorithm takes: " << setprecision( 2 ) << chrono::duration_cast<chrono::milliseconds>( end - now ).count() / 1000.0 << " seconds" << endl;
+//     return 0;
+// }

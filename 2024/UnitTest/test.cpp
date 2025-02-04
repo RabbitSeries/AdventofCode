@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 
-int main() {
+void test3() {
     // Github issue at: <https://github.com/microsoft/vscode-cpptools/issues/13110>
     std::cout << "This line should be cleared." << std::endl;
     // std::cout.flush();
@@ -16,5 +16,4 @@ int main() {
     system( "PAUSE" );
     std::cout << "Count 3. Some random words. Some random words. Some random words. " << std::endl;
     system( "PAUSE" );
-    return 0;
 }

@@ -2,7 +2,7 @@
 #include <vector>
 #include <algorithm>
 
-int main() {
+void test() {
     std::vector<int> nums = { 3,2,1 };
 
     // Copy the original state
@@ -24,5 +24,4 @@ int main() {
     for( int num : nums ) {
         std::cout << num << " ";
     }
-    return 0;
 }

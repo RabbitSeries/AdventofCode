@@ -1,2 +1,35 @@
+name: CMake Build and Test
 
+on:
+  push:
+    branches:
+      - main  # Trigger workflow on pushes to the main branch
+  pull_request:
+    branches:
+      - main  # Trigger workflow on pull requests targeting the main branch
 
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Use Ubuntu for building the project (you can change this to `windows-latest` for MinGW if needed)
+
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v2
+
+    - name: Set up CMake
+      uses: actions/setup-cmake@v2
+      with:
+        cmake-version: '3.19'  # CMake version to use (matches your CMakePresets.json)
+
+    - name: Configure CMake
+      run: |
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release  # Configure using CMakePresets.json settings
+
+    - name: Build project
+      run: cmake --build build --config Release  # Build the project in the build directory
+
+    - name: Run tests (optional)
+      run: cmake --build build --target test  # Runs tests, if defined in CMakeLists.txt
+
+    - name: Package project (optional)
+      run: cmake --build build --target package  # If you want to package your project
