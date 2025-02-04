@@ -2,5 +2,6 @@
 exe_*
 *.exe
 test.py
-compileRuntime/bin
+compileRuntime
+build
 *.class

@@ -217,12 +217,3 @@ void Solution2() {
     cout << "Solution 2: " << totalDistinctPlacement << endl;
 
 }
-
-int main() {
-    auto now = chrono::high_resolution_clock::now();
-    // Solution1();
-    Solution2();
-    auto end = chrono::high_resolution_clock::now();
-    cout << chrono::duration_cast<chrono::milliseconds>( end - now ).count() / 1000.0 << " seconds" << endl;
-    return 0;
-}

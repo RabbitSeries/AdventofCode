@@ -1,5 +1,4 @@
 #include "bits/stdc++.h"
-#include <termios.h>
 using namespace std;
 #define CELLWALL -1
 #define CELLEMPTY -2
@@ -10,20 +9,6 @@ typedef struct pos {
     pos( int a, int b ) : x( a ), y( b ) {}
     int x, y;
 }pos;
-
-void enableRawMode() {
-    termios term;
-    tcgetattr( STDIN_FILENO, &term );          // 获取当前终端设置
-    term.c_lflag &= ~( ICANON | ECHO );        // 关闭规范模式和回显
-    tcsetattr( STDIN_FILENO, TCSANOW, &term ); // 立即生效
-}
-
-void disableRawMode() {
-    termios term;
-    tcgetattr( STDIN_FILENO, &term );
-    term.c_lflag |= ( ICANON | ECHO );         // 恢复规范模式和回显
-    tcsetattr( STDIN_FILENO, TCSANOW, &term );
-}
 
 char getMoveMent() {
     char c;
@@ -144,7 +129,7 @@ void play( vector<pos>& id2Pos, vector<vector<int>>& pos2Id, pos& curPos, queue<
 
 void playMyself( vector<pos>& id2Pos, vector<vector<int>>& pos2Id, pos& curPos ) {
     printGUI( pos2Id, curPos );
-    enableRawMode(); // 开启字符缓冲模式
+    // enableRawMode(); // 开启字符缓冲模式
     while( 1 ) {
         char c = getMoveMent();
         if( c == 0 ) {  // 按 'q' 退出
@@ -165,7 +150,7 @@ void playMyself( vector<pos>& id2Pos, vector<vector<int>>& pos2Id, pos& curPos )
         }
         printGUI( pos2Id, curPos );
     }
-    disableRawMode();
+    // disableRawMode();
 }
 
 typedef long long ll;

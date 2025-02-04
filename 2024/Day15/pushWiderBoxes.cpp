@@ -140,7 +140,7 @@ void pushBox( vector<boxPos>& id2BoxPos, vector<vector<int>>& arcade, pos& curPo
 
 bool freshGUI( vector<boxPos>& id2BoxPos, vector<vector<int>>& arcade, pos& curPos ) {
     char c = getMoveMent();
-    if( c == 'q' ) {  // 按 'q' 退出
+    if( c == 'q' ) {  // q exit
         return false;
     }
     // printGUI( arcade, curPos );
@@ -185,13 +185,13 @@ void play( vector<boxPos>& id2BoxPos, vector<vector<int>>& arcade, pos& curPos, 
 
 void playMyself( vector<boxPos>& id2BoxPos, vector<vector<int>>& arcade, pos& curPos ) {
     printGUI( arcade, curPos );
-    enableRawMode(); // 开启字符缓冲模式
+    // enableRawMode();
     while( 1 ) {
         if( freshGUI( id2BoxPos, arcade, curPos ) )
             printGUI( arcade, curPos );
         else return;
     }
-    disableRawMode();
+    // disableRawMode();
 }
 
 

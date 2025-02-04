@@ -21,10 +21,10 @@
             "name": "[Windows] [Debug] C/C++: g++.exe build and debug active file",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            "program": "${workspaceFolder}\\main.exe",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -40,17 +40,16 @@
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
                 }
-            ],
-            "preLaunchTask": "[Debug] C/C++: g++.exe build active file"
+            ]
         },
         {
             "name": "[Windows] [Release] C/C++: g++.exe build and launch active file",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            "program": "${workspaceFolder}\\build\\${relativeFileDirname}\\..\\solution.exe",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceFolder}\\${relativeFileDirname}\\..",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -66,8 +65,7 @@
                     "description": "Disables pretty printing of variables",
                     "ignoreFailures": true
                 }
-            ],
-            "preLaunchTask": "[Release] C/C++: g++.exe build active file"
+            ]
         },
         {
             "name": "[ArchLinux] [Debug Launch] [C/C++]: g++ build and debug active file",

@@ -1,0 +1,78 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 19,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "MinGW configure",
+            "displayName": "MinGW configure",
+            "hidden": false,
+            "generator": "MinGW Makefiles",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "MinGW build",
+            "displayName": "MinGW build",
+            "hidden": false,
+            "configurePreset": "MinGW configure"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "MinGW test",
+            "configurePreset": "MinGW configure",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": true
+            }
+        }
+    ],
+    "packagePresets": [
+        {
+            "name": "MinGW package",
+            "configurePreset": "MinGW configure",
+            "generators": [
+                "ZIP"
+            ]
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "MinGW workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "MinGW configure"
+                },
+                {
+                    "type": "build",
+                    "name": "MinGW build"
+                },
+                {
+                    "type": "test",
+                    "name": "MinGW test"
+                },
+                {
+                    "type": "package",
+                    "name": "MinGW package"
+                }
+            ]
+        }
+    ],
+    "vendor": {
+        "example.com/ExampleIDE/1.0": {
+            "autoFormat": false
+        }
+    }
+}

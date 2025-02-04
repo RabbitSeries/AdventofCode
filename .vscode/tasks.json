@@ -8,12 +8,13 @@
                 "-fdiagnostics-color=always",
                 "-std=c++20",
                 "-g",
-                "${file}",
+                "${fileDirname}/..main.cc",
+                "${fileDirname}/../**/*.cpp",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                "${fileDirname}/../main.exe"
             ],
             "options": {
-                "cwd": "${fileDirname}"
+                "cwd": "${fileDirname}/.."
             },
             "problemMatcher": [
                 "$gcc"
@@ -21,23 +22,22 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
-            },
+            }
         },
         {
             "type": "cppbuild",
             "label": "[Release] C/C++: g++.exe build active file",
             "command": "D:\\Build_Tool_Lib\\x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
             "args": [
-                // "-fdiagnostics-color=always",
                 "-std=c++20",
                 "-O1",
-                // "-g",
-                "${file}",
+                "${fileDirname}/../main.cc",
+                "${fileDirname}/../**/*.cpp",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                "${fileDirname}/../main.exe"
             ],
             "options": {
-                "cwd": "${fileDirname}"
+                "cwd": "${fileDirname}/.."
             },
             "problemMatcher": [
                 "$gcc"
@@ -45,7 +45,7 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
-            },
+            }
         },
         {
             "type": "shell",
@@ -55,9 +55,7 @@
             "args": [
                 "${workspaceFolder}"
             ],
-            "problemMatcher": [
-                // "$gcc"
-            ],
+            "problemMatcher": []
         },
         {
             "type": "shell",
@@ -67,9 +65,7 @@
             "args": [
                 "${workspaceFolder}"
             ],
-            "problemMatcher": [
-                // "$gcc"
-            ],
+            "problemMatcher": []
         },
         {
             "type": "shell",
@@ -79,9 +75,7 @@
                 "cwd": "${fileDirname}"
             },
             "args": [],
-            "problemMatcher": [
-                // "$gcc"
-            ],
+            "problemMatcher": []
         },
         {
             "type": "cppbuild",
@@ -91,7 +85,7 @@
                 "-fdiagnostics-color=always",
                 "-std=c++17",
                 "-g",
-                "${file}",
+                "${fileBasenameNoExtension}.cpp",
                 "-o",
                 "${fileDirname}/exe_${fileBasenameNoExtension}"
             ],
@@ -104,7 +98,7 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
-            },
+            }
         },
         {
             "type": "cppbuild",
@@ -113,9 +107,8 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-std=c++17",
-                // "-g",
                 "-O1",
-                "${file}",
+                "${fileBasenameNoExtension}.cpp",
                 "-o",
                 "${fileDirname}/exe_${fileBasenameNoExtension}"
             ],
@@ -128,7 +121,7 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
-            },
+            }
         },
         {
             "type": "cppbuild",
@@ -139,7 +132,7 @@
                 "-lstdc++",
                 "-std=c++17",
                 "-g",
-                "${file}",
+                "${fileBasenameNoExtension}.cpp",
                 "-o",
                 "${fileDirname}/exe_${fileBasenameNoExtension}"
             ],
@@ -152,8 +145,20 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
-            },
+            }
         },
+        {
+            "type": "cmake",
+            "label": "CMake: clean rebuild",
+            "command": "cleanRebuild",
+            "targets": [
+                "all"
+            ],
+            "preset": "${command:cmake.activeBuildPresetName}",
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "CMake template clean rebuild task"
+        }
     ],
     "version": "2.0.0"
 }

@@ -35,7 +35,11 @@ void InitProgram( ull a, ull b, ull c ) {
 // It turns out that only opcode 0 will change the value of ra, and the example of this problem always use literal num to change its value. Within one round ra is only changed once, and was all the way devided to zero.
 // out = out + "," + to_string( ( ( ( ( modulo ) ^ 7 ) ^ ( tmp / ( unsigned long long )( powf128( 2, ( modulo ) ^ 7 ) ) ) ) ^ 7 ) % 8 );
 void adv( int operand ) {
+#ifdef UNIX
     ull denominator = (ull)powf128( 2, combo( operand ) );
+#else
+    ull denominator = (ull)powl( 2, combo( operand ) );
+#endif
     ra = ra / denominator;
     return;
 }

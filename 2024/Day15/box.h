@@ -1,5 +1,4 @@
 #include "bits/stdc++.h"
-#include <termios.h>
 using namespace std;
 #define CELLWALL -1
 #define CELLEMPTY -2
@@ -16,19 +15,7 @@ typedef struct boxPos {
     pos l, r;
 }bos;
 typedef long long ll;
-void enableRawMode() {
-    termios term;
-    tcgetattr( STDIN_FILENO, &term );          // Obtain terminal setting
-    term.c_lflag &= ~( ICANON | ECHO );        // Shut down standard IO and echo
-    tcsetattr( STDIN_FILENO, TCSANOW, &term ); // immediate effect
-}
 
-void disableRawMode() {
-    termios term;
-    tcgetattr( STDIN_FILENO, &term );
-    term.c_lflag |= ( ICANON | ECHO );         // restore standard IO and echo
-    tcsetattr( STDIN_FILENO, TCSANOW, &term );
-}
 
 char getMoveMent() {
     char c;

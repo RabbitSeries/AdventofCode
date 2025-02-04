@@ -115,7 +115,25 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "strstream": "cpp"
+        "strstream": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp",
+        "decimal": "cpp",
+        "buffer": "cpp",
+        "contract": "cpp",
+        "executor": "cpp",
+        "internet": "cpp",
+        "io_context": "cpp",
+        "netfwd": "cpp",
+        "propagate_const": "cpp",
+        "scope": "cpp",
+        "socket": "cpp",
+        "synchronized_value": "cpp",
+        "timer": "cpp",
+        "rope": "cpp",
+        "slist": "cpp",
+        "bool_set": "cpp",
+        "dynamic_bitset": "cpp"
     },
     // "java.project.referencedLibraries": [
     //     "2024Java/lib/**/*.jar"
