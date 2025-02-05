@@ -101,7 +101,7 @@
             "type": "cmake",
             "label": "[CMake] CMake: configure",
             "command": "configure",
-            "preset": "MinGW configure",
+            "preset": "MinGW Release",
             "presentation": {
                 "reveal": "silent"
             }
