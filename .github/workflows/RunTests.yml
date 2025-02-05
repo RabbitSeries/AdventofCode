@@ -1,4 +1,4 @@
-name: CMake Windows Build
+name: CMake Build 2024 Solution
 
 on:
   push:
@@ -26,5 +26,5 @@ jobs:
     - name: Run executable on Windows
       run: |
         # Run the executable on Windows (using MinGW, executable will have .exe extension)
-        .2024\build\solution.exe
+        cd .\2024 && ..\build\2024\solution.exe
       shell: cmd
