@@ -90,7 +90,7 @@ class DiskCompact {
     }
 
     ll fileCompack( vector<int>disk, const vector<int> fileSizeTable, vector<pair<int, int>>& freeSpaceTable ) {
-        printDisk( disk, "original.txt" );
+        printDisk( disk, "Day09/original.txt" );
         int denseHead = freeSpaceTable[0].second;
         ll checkSum = 0;
         int j = disk.size() - 1;

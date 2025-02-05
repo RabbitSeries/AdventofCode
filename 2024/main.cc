@@ -24,7 +24,7 @@
 #include "Day24/TinkerWithGates.h"
 #include "Day25/KeyPair.h"
 
-int SolutionStart = 14;
+int SolutionStart = 1;
 int SolutionTarget = 25;
 
 auto nowTime = chrono::high_resolution_clock::now();
@@ -39,8 +39,13 @@ void printProcess() {
         << " seconds." << endl;
     if( SolutionStart != SolutionTarget ) {
         // cout << "Cotinuing to next problem" << endl;
-        cout << "Cotinuing to next problem in 1 seconds." << endl;
+        cout << "Cotinuing to next problem in 1 seconds." << endl << endl << endl;
         this_thread::sleep_for( chrono::seconds( 1 ) );
+    }
+    else {
+        cout << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
+        cout << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
+        cout << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
     }
     SolutionStart++;
     nowTime = chrono::high_resolution_clock::now();

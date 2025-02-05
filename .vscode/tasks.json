@@ -103,7 +103,7 @@
             "command": "configure",
             "preset": "MinGW configure",
             "presentation": {
-                "reveal": "silent",
+                "reveal": "silent"
             }
         },
         {
@@ -112,11 +112,11 @@
             "command": "build",
             "preset": "MinGW build",
             "presentation": {
-                "reveal": "silent",
+                "reveal": "silent"
             },
             "dependsOn": [
-                "[CMake] CMake: configure",
-            ],
+                "[CMake] CMake: configure"
+            ]
         },
         {
             "type": "cmake",
@@ -124,12 +124,32 @@
             "command": "cleanRebuild",
             "preset": "MinGW build",
             "dependsOn": [
-                "[CMake] CMake: configure",
+                "[CMake] CMake: configure"
             ],
             "presentation": {
-                "reveal": "silent",
-            },
+                "reveal": "silent"
+            }
         },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++.exe build active file",
+            "command": "D:/Build_Tool_Lib/x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0/mingw64/bin/g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                // "-g",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "D:/Build_Tool_Lib/x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0/mingw64/bin"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build",
+            "detail": "compiler: D:/Build_Tool_Lib/x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0/mingw64/bin/g++.exe"
+        }
     ],
     "version": "2.0.0"
 }

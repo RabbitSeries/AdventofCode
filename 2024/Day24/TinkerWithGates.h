@@ -19,8 +19,9 @@ class TinkerWithGates {
     struct wire {
         wire() {};
         wire( bool _isValid, bool _data ) : isValid( _isValid ), data( _data ) {};
-        bool isValid;
-        bool data;
+        //! Bool is not one bit, it is one entire byte, always init data member!!!!!!!
+        bool isValid = false;
+        bool data = false;
         vector<pair<pair<string, string>, string>> outWireList;
     };
 
@@ -98,6 +99,33 @@ class TinkerWithGates {
         return curProcessList;
     }
 
+    // TODO Someone tells me to permutate by level.
+    void Solution2_Permutate() {
+        map<string, wire> wireList;
+        map<string, tuple<string, string, string>> outWireList;
+        readFile( wireList, outWireList );
+        map<string, string> binaryDigits;
+        for( auto wireInfo : wireList ) {
+            if( wireInfo.first[0] == 'x' )
+                binaryDigits[wireInfo.first] = 'y' + wireInfo.first.substr( 1 );
+        }
+        // This queue
+        queue<string> wireQueue;
+        wireQueue.push( "x00" );
+        resetGates( wireList );
+        string input1 = "x00", input2 = "y00", carrier = "";
+        tuple < vector<string>, bool, bool> curProcessList;
+        vector<string> swapList;
+
+        // while( stoi( input1.substr( 1 ) ) < binaryDigits.size() ) {
+        //     curProcessList = runGates( wireQueue, wireList, true );
+        //     bool res = carrier.empty() ? ( wireList[input1].data ^ wireList[input2].data ) : ( wireList[input1].data ^ wireList[input2].data ^ wireList[carrier].data );
+
+        //     if( res != curWire.data )
+        //         permutateAndSort( curProcessList, swapList, wireList, carrier, stoi( input1.substr( 1 ) ) );
+        // }
+    }
+
 public:
     void Solution1() {
         map<string, wire> wireList; map<string, tuple<string, string, string>> outWireList;
@@ -111,10 +139,11 @@ public:
         }
         runGates( wireQueue, wireList );
         string res = "";
-        for( auto& wireInfo : wireList ) {
+        for( auto wireInfo : wireList ) {
             if( wireInfo.first[0] == 'z' )
                 res = to_string( wireInfo.second.data ) + res;
         }
+        cout << "-" << res << "-" << endl;
         cout << "Solution 1: " << stoll( res, nullptr, 2 ) << endl;
     }
 
@@ -201,32 +230,5 @@ public:
             cout << "," << res;
         } );
         cout << endl;
-    }
-
-    // TODO Someone tells me to permutate by level.
-    void Solution2_Permutate() {
-        map<string, wire> wireList;
-        map<string, tuple<string, string, string>> outWireList;
-        readFile( wireList, outWireList );
-        map<string, string> binaryDigits;
-        for( auto wireInfo : wireList ) {
-            if( wireInfo.first[0] == 'x' )
-                binaryDigits[wireInfo.first] = 'y' + wireInfo.first.substr( 1 );
-        }
-        // This queue
-        queue<string> wireQueue;
-        wireQueue.push( "x00" );
-        resetGates( wireList );
-        string input1 = "x00", input2 = "y00", carrier = "";
-        tuple < vector<string>, bool, bool> curProcessList;
-        vector<string> swapList;
-
-        // while( stoi( input1.substr( 1 ) ) < binaryDigits.size() ) {
-        //     curProcessList = runGates( wireQueue, wireList, true );
-        //     bool res = carrier.empty() ? ( wireList[input1].data ^ wireList[input2].data ) : ( wireList[input1].data ^ wireList[input2].data ^ wireList[carrier].data );
-
-        //     if( res != curWire.data )
-        //         permutateAndSort( curProcessList, swapList, wireList, carrier, stoi( input1.substr( 1 ) ) );
-        // }
     }
 };
