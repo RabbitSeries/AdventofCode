@@ -131,6 +131,21 @@
             }
         },
         {
+            "type": "shell",
+            "label": "[CMake] [Release] [MinGW] [Test]",
+            "command": "cmd",
+            "args": [
+                "/k",
+                "${workspaceFolder}\\build\\${relativeFileDirname}\\solution.exe"
+            ],
+            "isBackground": false,
+            "options": {
+                "cwd": "${workspaceFolder}\\${relativeFileDirname}"
+            },
+            "group": "test",
+            "dependsOn": "[CMake] CMake: build"
+        },
+        {
             "type": "cppbuild",
             "label": "C/C++: g++.exe build active file",
             "command": "D:/Build_Tool_Lib/x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0/mingw64/bin/g++.exe",

@@ -1,32 +1,6 @@
 {
     "configurations": [
         {
-            "name": "(gdb) Launch",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${fileDirname}\\..",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "D:/Build_Tool_Lib/x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0/mingw64/bin/gdb.exe",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                },
-                {
-                    "description": "Set Disassembly Flavor to Intel",
-                    "text": "-gdb-set disassembly-flavor intel",
-                    "ignoreFailures": true
-                }
-            ],
-            "preLaunchTask": "C/C++: g++.exe build active file"
-        },
-        {
             "name": "Java: java build and debug active file",
             "type": "java",
             "request": "launch",
@@ -45,7 +19,7 @@
             "cwd": "${fileDirname}"
         },
         {
-            "name": "[CMake] [Release] [MinGW]",
+            "name": "[CMake] [Debug] [MinGW]",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}\\build\\${relativeFileDirname}\\solution.exe",
@@ -53,22 +27,9 @@
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}\\${relativeFileDirname}",
             "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "D:\\Build_Tool_Lib\\x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0\\mingw64\\bin\\gdb.exe",
-            "setupCommands": [
-                {
-                    "text": "set pagination off",
-                    "description": "Disables pagination during GDB output",
-                    "ignoreFailures": true
-                },
-                {
-                    "text": "set print pretty off",
-                    "description": "Disables pretty printing of variables",
-                    "ignoreFailures": true
-                }
-            ],
-            "preLaunchTask": "[CMake] CMake: build"
+            "externalConsole": true,
+            // "MIMode": "gdb",
+            // "miDebuggerPath": "D:\\Build_Tool_Lib\\x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0\\mingw64\\bin\\gdb.exe",
         },
         {
             "name": "[ArchLinux] [Debug Launch] [C/C++]: g++ build and debug active file",
