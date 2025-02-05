@@ -39,8 +39,8 @@ void printProcess() {
         << " seconds." << endl;
     if( SolutionStart != SolutionTarget ) {
         // cout << "Cotinuing to next problem" << endl;
-        cout << "Cotinuing to next problem in 2 seconds." << endl;
-        this_thread::sleep_for( chrono::seconds( 2 ) );
+        cout << "Cotinuing to next problem in 1 seconds." << endl;
+        this_thread::sleep_for( chrono::seconds( 1 ) );
     }
     SolutionStart++;
     nowTime = chrono::high_resolution_clock::now();

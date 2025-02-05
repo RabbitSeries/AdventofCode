@@ -1,53 +1,6 @@
 {
     "tasks": [
         {
-            "type": "cppbuild",
-            "label": "[Debug] C/C++: g++.exe build active file",
-            "command": "D:\\Build_Tool_Lib\\x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
-            "args": [
-                "-fdiagnostics-color=always",
-                "-std=c++20",
-                "-g",
-                "${fileDirname}/..main.cc",
-                "${fileDirname}/../**/*.cpp",
-                "-o",
-                "${fileDirname}/../main.exe"
-            ],
-            "options": {
-                "cwd": "${fileDirname}/.."
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "type": "cppbuild",
-            "label": "[Release] C/C++: g++.exe build active file",
-            "command": "D:\\Build_Tool_Lib\\x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
-            "args": [
-                "-std=c++20",
-                "-O1",
-                "${fileDirname}/../main.cc",
-                "${fileDirname}/../**/*.cpp",
-                "-o",
-                "${fileDirname}/../main.exe"
-            ],
-            "options": {
-                "cwd": "${fileDirname}/.."
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
             "type": "shell",
             "label": "[Windows] Clean workspace",
             "command": "${workspaceFolder}/.vscode/clean_noConfirm.bat",
@@ -96,8 +49,7 @@
                 "$gcc"
             ],
             "group": {
-                "kind": "build",
-                "isDefault": true
+                "kind": "build"
             }
         },
         {
@@ -119,8 +71,7 @@
                 "$gcc"
             ],
             "group": {
-                "kind": "build",
-                "isDefault": true
+                "kind": "build"
             }
         },
         {
@@ -143,22 +94,42 @@
                 "$gcc"
             ],
             "group": {
-                "kind": "build",
-                "isDefault": true
+                "kind": "build"
             }
         },
         {
             "type": "cmake",
-            "label": "CMake: clean rebuild",
-            "command": "cleanRebuild",
-            "targets": [
-                "all"
+            "label": "[CMake] CMake: configure",
+            "command": "configure",
+            "preset": "MinGW configure",
+            "presentation": {
+                "reveal": "silent",
+            }
+        },
+        {
+            "type": "cmake",
+            "label": "[CMake] CMake: build",
+            "command": "build",
+            "preset": "MinGW build",
+            "presentation": {
+                "reveal": "silent",
+            },
+            "dependsOn": [
+                "[CMake] CMake: configure",
             ],
-            "preset": "${command:cmake.activeBuildPresetName}",
-            "group": "build",
-            "problemMatcher": [],
-            "detail": "CMake template clean rebuild task"
-        }
+        },
+        {
+            "type": "cmake",
+            "label": "[CMake] CMake: clean rebuild",
+            "command": "cleanRebuild",
+            "preset": "MinGW build",
+            "dependsOn": [
+                "[CMake] CMake: configure",
+            ],
+            "presentation": {
+                "reveal": "silent",
+            },
+        },
     ],
     "version": "2.0.0"
 }

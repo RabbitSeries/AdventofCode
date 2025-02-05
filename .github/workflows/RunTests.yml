@@ -1,4 +1,4 @@
-name: CMake Build and Test
+name: CMake Windows Build
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
 
     - name: Configure CMake with MinGW
       run: |
-        cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
+        cmake -S .\2024 -B .\2024\build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
 
     - name: Build project
       run: cmake --build build --config Release
@@ -26,5 +26,5 @@ jobs:
     - name: Run executable on Windows
       run: |
         # Run the executable on Windows (using MinGW, executable will have .exe extension)
-        .\build\solution.exe
+        .2024\build\solution.exe
       shell: cmd
