@@ -39,11 +39,6 @@ class CheckLevelInOrder {
     }
 
     bool AnalyseInOrder( ifstream& input, bool enableRemoval ) {
-        // // char cline[1 << 10 + 1] = { '\0' };
-        // // If fgets read a empty line, it won't set cline to "\0", thus remain ramdom value (if cline is two big, there is a chance that cline is allocated at a rather later position of the stack, and the space is not realocated to other usage, and because of which cline may also be reallocated to the same position because there might be such long free space ahead ) for cline.
-        // The above is not right, the problem exists at the buffer size is not matched.
-        // However, Always innitialize your datasets.
-        // if( !fgets( cline, 1 << 10, input ) )
         string buf;
         if( !getline( input, buf ) )
             return false;

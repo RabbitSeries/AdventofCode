@@ -16,14 +16,6 @@ jobs:
     - name: Check out the code
       uses: actions/checkout@v2
 
-    - name: Set up MinGW
-      uses: msys2/setup-msys2-action@v2
-      with:
-        msys_packages: 'mingw-w64-x86_64-toolchain'
-
-    - name: Set up CMake
-      uses: cmake/setup-cmake@v3  # Correct action to set up CMake
-
     - name: Configure CMake with MinGW
       run: |
         cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release

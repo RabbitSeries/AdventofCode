@@ -38,11 +38,13 @@ struct std::hash<point2D> {
 class MazeDijkstra {
 
     // ! If the Penalty is 0, then this is a simple undirected graph problem.
-    const int PENALTY = 1000;
     // static const int PENALTY = 1
     // static const int PENALTY = 0
-    const int  CELLWALL = -2;
-    const int CELLEMPTY = -1;
+    enum constants {
+        PENALTY = 1000,
+        CELLWALL = -2,
+        CELLEMPTY = -1
+    };
 
     const int dx[4]{ 0,1,0,-1 };
     const int dy[4]{ 1,0,-1,0 };
