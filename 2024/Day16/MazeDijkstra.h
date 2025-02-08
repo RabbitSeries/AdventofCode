@@ -112,7 +112,7 @@ class MazeDijkstra {
             // 39 ms
             auto [curCost, curPoint] = move( const_cast<pair<int, point2D>&>( pq.top() ) );
 
-            if( found && curPoint != end ) {
+            if( found && curCost > endCost ) {
                 break;
             }
             pq.pop();
