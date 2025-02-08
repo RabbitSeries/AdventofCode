@@ -1,4 +1,4 @@
-#include "3bitMachine.h"
+#include "TenaryMachine.h"
 
 using namespace data;
 

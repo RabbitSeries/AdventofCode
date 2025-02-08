@@ -14,7 +14,7 @@
 #include "Day14/RobotPatrol.h"
 #include "Day15/PushBox.h"
 #include "Day16/MazeDijkstra.h"
-#include "Day17/3bitMachine.h"
+#include "Day17/TenaryMachine.h"
 #include "Day18/RAMRun.h"
 #include "Day19/LinenLayout.h"
 #include "Day20/RaceCondition.h"

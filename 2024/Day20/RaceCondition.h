@@ -138,7 +138,7 @@ class RaceCondition {
         * *
          *
     */
-    inline int getCheatZone( pos const& curPos, vector<vector<cellStatus>>  const& roadMap, pos end, map<pos, int> const& path ) {
+    int getCheatZone( pos const& curPos, vector<vector<cellStatus>>  const& roadMap, pos end, map<pos, int> const& path ) {
         int cnt = 0;
         int rows = roadMap.size(), cols = roadMap[0].size();
         for( int i = -min( curPos.first, 20 ); i <= min( rows - 1 - curPos.first, 20 ); i++ ) {

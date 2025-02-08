@@ -6,7 +6,7 @@ class CascadingRemote {
 
     unordered_map<pair<vector<char>, int>, ull > cacheMap;
 
-    inline ull directionalCascadingCommand( vector<char> const& curComm, int robotCnt ) {
+    ull directionalCascadingCommand( vector<char> const& curComm, int robotCnt ) {
 
         if( cacheMap.find( { curComm,robotCnt } ) != cacheMap.end() ) {
             return cacheMap[{ curComm, robotCnt }];
@@ -49,7 +49,7 @@ class CascadingRemote {
         return res;
     }
 
-    inline int getOnePath( char const s, char const t, unordered_map<char, vector<pair<char, char>>> const& keyPad ) {
+    int getOnePath( char const s, char const t, unordered_map<char, vector<pair<char, char>>> const& keyPad ) {
         map<char, int> cost;
         // map<char, bool> visited;
         for( auto [key, nextKeyList] : keyPad ) {
@@ -110,7 +110,7 @@ class CascadingRemote {
         return  0;
     }
 
-    inline vector<vector<char>>  getKeyPadAllPath( char const s, char const t, unordered_map<char, vector<pair<char, char>>> const& keyPad ) {
+    vector<vector<char>>  getKeyPadAllPath( char const s, char const t, unordered_map<char, vector<pair<char, char>>> const& keyPad ) {
         map<char, int> cost;
         for( auto [key, nextKeyList] : keyPad ) {
             cost[key] = INT_MAX;

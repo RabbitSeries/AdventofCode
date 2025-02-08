@@ -36,8 +36,7 @@ class TenaryMachine {
         if( ra == 0 ) {
             pc += 2;
             return;
-        }
-        else {
+        } else {
             pc = operand;
         }
     }
@@ -112,15 +111,12 @@ public:
             if( distance( it, end_it ) == 1 ) {
                 if( pattern.find( "A" ) != string::npos ) {
                     tra = stoi( ( *it ).str() );
-                }
-                else if( pattern.find( "B" ) != string::npos ) {
+                } else if( pattern.find( "B" ) != string::npos ) {
                     rb = trb = stoi( ( *it ).str() );
-                }
-                else {
+                } else {
                     rc = trc = stoi( ( *it ).str() );
                 }
-            }
-            else {
+            } else {
                 while( it != end_it ) {
                     instruction.push_back( stoi( ( *it ).str() ) );
                     program += "," + ( *it ).str();
@@ -135,7 +131,7 @@ public:
             int operand = instruction[pc + 1];
             operation( opcode, operand );
         }
-        cout << outBuf.substr( 1 ) << endl;
+        cout << "Solution 1: " << outBuf.substr( 1 ) << endl;
     }
 
     void Solution2() {
@@ -152,15 +148,12 @@ public:
             if( distance( it, end_it ) == 1 ) {
                 if( pattern.find( "A" ) != string::npos ) {
                     tra = stoi( ( *it ).str() );
-                }
-                else if( pattern.find( "B" ) != string::npos ) {
+                } else if( pattern.find( "B" ) != string::npos ) {
                     rb = trb = stoi( ( *it ).str() );
-                }
-                else {
+                } else {
                     rc = trc = stoi( ( *it ).str() );
                 }
-            }
-            else {
+            } else {
                 while( it != end_it ) {
                     instruction.push_back( stoi( ( *it ).str() ) );
                     program += "," + ( *it ).str();
