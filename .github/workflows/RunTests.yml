@@ -24,7 +24,8 @@ jobs:
       run: cmake --build .\build --config Release
 
     - name: Run executable on Windows
+      working-directory: .\build\2024
       run: |
         # Run the executable on Windows (using MinGW, executable will have .exe extension)
-        cd .\2024 && ..\build\2024\solution.exe
+        echo %cd% && .\solution.exe
       shell: cmd

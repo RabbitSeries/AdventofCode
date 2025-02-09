@@ -99,59 +99,47 @@
         },
         {
             "type": "cmake",
-            "label": "[CMake] CMake: configure",
-            "command": "configure",
-            "preset": "MinGW Release",
-            "presentation": {
-                "reveal": "silent"
-            }
-        },
-        {
-            "type": "cmake",
-            "label": "[CMake] CMake: build",
+            "label": "[CMake] [Debug]: build",
             "command": "build",
-            "preset": "MinGW build",
+            "preset": "MinGW Build Debug",
             "presentation": {
                 "reveal": "silent"
             },
-            "dependsOn": [
-                "[CMake] CMake: configure"
-            ]
         },
         {
             "type": "cmake",
-            "label": "[CMake] CMake: clean rebuild",
+            "label": "[CMake] [Debug]: clean rebuild",
             "command": "cleanRebuild",
-            "preset": "MinGW build",
-            "dependsOn": [
-                "[CMake] CMake: configure"
-            ],
+            "preset": "MinGW Build Debug",
             "presentation": {
                 "reveal": "silent"
             }
         },
         {
-            "type": "shell",
-            "label": "[CMake] [Release] [MinGW] [Test]",
-            "command": "cmd",
-            "args": [
-                "/k",
-                "${workspaceFolder}\\build\\${relativeFileDirname}\\solution.exe"
-            ],
-            "isBackground": false,
-            "options": {
-                "cwd": "${workspaceFolder}\\${relativeFileDirname}"
+            "type": "cmake",
+            "label": "[CMake] [Release]: build",
+            "command": "build",
+            "preset": "MinGW Build Release",
+            "presentation": {
+                "reveal": "silent"
             },
-            "group": "test",
-            "dependsOn": "[CMake] CMake: build"
+        },
+        {
+            "type": "cmake",
+            "label": "[CMake] [Release]: clean rebuild",
+            "command": "cleanRebuild",
+            "preset": "MinGW Build Release",
+            "presentation": {
+                "reveal": "silent"
+            }
         },
         {
             "type": "cppbuild",
-            "label": "C/C++: g++.exe build active file",
+            "label": "[MinGW] [Debug] C/C++: g++.exe build active file",
             "command": "D:/Build_Tool_Lib/x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0/mingw64/bin/g++.exe",
             "args": [
                 "-fdiagnostics-color=always",
-                // "-g",
+                "-g",
                 "${file}",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
