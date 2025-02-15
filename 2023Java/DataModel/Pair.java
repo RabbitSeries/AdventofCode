@@ -4,8 +4,8 @@ import java.util.*;
 
 public class Pair<K, V> {
 
-    K first;
-    V second;
+    public K first;
+    public V second;
 
     public Pair(K _x, V _y) {
         first = _x;
