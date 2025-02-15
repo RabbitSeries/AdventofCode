@@ -17,7 +17,7 @@ public class HoldSearch {
             if (buf.indexOf("Time:") != -1) {
                 for (Integer timeout : Arrays.stream(buf.split(":")[1].trim().split("\\s+"))
                         .map(Integer::parseInt)
-                        .collect(Collectors.toCollection(ArrayList::new))) {
+                        .toList()) {
                     recordList.add(new SimpleEntry<>(timeout, 0));
                 }
             } else if (buf.indexOf("Distance") != -1) {
@@ -26,7 +26,7 @@ public class HoldSearch {
                         .map(token -> {
                             return Integer.parseInt(token);
                         })
-                        .collect(ArrayList<Integer>::new, ArrayList<Integer>::add, ArrayList<Integer>::addAll)) {
+                        .toList()) {
                     recordList.get(id).setValue(integer);
                     id++;
                 }

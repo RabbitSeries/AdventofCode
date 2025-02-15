@@ -12,8 +12,7 @@ public class HistoryExtrapolate {
         String buf;
         while ((buf = input.readLine()) != null) {
             HistoryList.add(
-                    Arrays.stream(buf.trim().split("\\s+")).mapToInt(l -> Integer.parseInt(l)).collect(ArrayList::new,
-                            ArrayList::add, ArrayList::addAll));
+                    Arrays.stream(buf.trim().split("\\s+")).map(l -> Integer.parseInt(l)).toList());
         }
         input.close();
     }

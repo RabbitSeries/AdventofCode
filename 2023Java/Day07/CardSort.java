@@ -7,7 +7,7 @@ import java.util.stream.*;
 import java.util.AbstractMap.*;
 
 public class CardSort {
-    ArrayList<Entry<String, Integer>> cardBits;
+    List<Entry<String, Integer>> cardBits;
 
     static String Rule1Cards = "AKQJT98765432";
     static String Rule2Cards = "AKQT98765432J";

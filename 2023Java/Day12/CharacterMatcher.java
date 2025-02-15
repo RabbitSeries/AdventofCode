@@ -13,7 +13,9 @@ public class CharacterMatcher {
         if (groupSize + startPos > m.length()) {
             return false;
         }
-        StringBuilder groupSequence = new StringBuilder(m.substring(startPos, startPos + groupSize));
+        // StringBuilder groupSequence = new StringBuilder(m.substring(startPos,
+        // startPos + groupSize));
+        String groupSequence = m.substring(startPos, startPos + groupSize);
         for (int i = 0; i < groupSize; i++) {
             if (groupSequence.charAt(i) == '.') {
                 return false;
@@ -36,8 +38,7 @@ public class CharacterMatcher {
         while ((buf = input.readLine()) != null) {
             String[] recordings = buf.split("\\s+");
             SpringLists.add(recordings[0]);
-            DamagedGroups.add(List.of(recordings[1].trim().split(",")).stream().mapToInt(s -> Integer.parseInt(s))
-                    .collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
+            DamagedGroups.add(List.of(recordings[1].trim().split(",")).stream().map(s -> Integer.parseInt(s)).toList());
         }
         input.close();
     }
@@ -107,6 +108,7 @@ public class CharacterMatcher {
     }
 
     public static void main(String[] args) throws IOException {
+
         CharacterMatcher Solution = new CharacterMatcher();
         // Solution.unitTest();
         Solution.unitTest();

@@ -5,17 +5,16 @@ import java.util.*;
 import java.util.Map.*;
 import java.util.AbstractMap.*;
 import java.util.regex.*;
-import java.util.stream.*;
 
 public class CamelInstruction {
     // Solution 1
-    ArrayList<Character> Instructions;
+    List<Character> Instructions;
     HashMap<String, Entry<String, String>> Network;
 
     // Solution 2
     HashMap<String, Entry<String, Integer>> PathList;
-    ArrayList<String> StartList;
-    ArrayList<Integer> StepCnt;
+    List<String> StartList;
+    List<Integer> StepCnt;
 
     void readFile() throws IOException {
         Network = new HashMap<>();
@@ -26,7 +25,9 @@ public class CamelInstruction {
         BufferedReader input = new BufferedReader(new FileReader("input.txt"));
         String buf;
         buf = input.readLine();
-        Instructions = buf.chars().mapToObj(l -> (char) l).collect(Collectors.toCollection(ArrayList::new));
+        Instructions = buf.chars().mapToObj(l -> (char) l).toList();
+        // Instructions = buf.chars().mapToObj(l -> (char)
+        // l).collect(Collectors.toCollection(ArrayList::new));
 
         while ((buf = input.readLine()) != null) {
             if (buf.isEmpty()) {

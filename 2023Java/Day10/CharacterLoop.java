@@ -21,7 +21,7 @@ public class CharacterLoop {
             if (buf.indexOf("S") != -1) {
                 StartPos = new Point2D(PipeMap.size(), buf.indexOf("S"));
             }
-            PipeMap.add(buf.chars().mapToObj(l -> (char) l).collect(Collectors.toList()));
+            PipeMap.add(buf.chars().mapToObj(l -> (char) l).toList());
         }
         rows = PipeMap.size();
         cols = PipeMap.get(0).size();
@@ -84,7 +84,7 @@ public class CharacterLoop {
         int loopLen = 1;
         // BFS
         while (!q.isEmpty()) {
-            var curLevelList = q.stream().collect(Collectors.toList());
+            var curLevelList = q.stream().toList();
             q.clear();
             for (var front : curLevelList) {
                 // Level info
@@ -102,7 +102,7 @@ public class CharacterLoop {
                     System.out.println("Solution 1: " + loopLen / 2);
                     return new ArrayList<>(
                             curPos.pathList.stream().map(entry -> new Point2D(entry.getKey(), entry.getValue()))
-                                    .collect(Collectors.toList()));
+                                    .toList());
                 }
 
                 // Construct nextPos info

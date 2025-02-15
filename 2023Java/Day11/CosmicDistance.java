@@ -2,7 +2,6 @@ package Day11;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 import DataModel.Pair;
 
 public class CosmicDistance {
@@ -18,7 +17,7 @@ public class CosmicDistance {
         // Line Scanning
         while ((buf = input.readLine()) != null) {
             List<Integer> row = new ArrayList<>();
-            for (char c : buf.chars().mapToObj(c -> (char) c).collect(Collectors.toList())) {
+            for (char c : buf.chars().mapToObj(c -> (char) c).toList()) {
                 if (c == '#') {
                     row.add(GalaxyList.size());
                     GalaxyList.add(new Pair<>((long) (CosmicMap.size()), (long) (row.size())));
@@ -84,7 +83,7 @@ public class CosmicDistance {
 
     void Solution2() throws IOException {
         readFile();
-        System.out.println("Solution 2: " + expandCosmic(1000000-1));
+        System.out.println("Solution 2: " + expandCosmic(1000000 - 1));
         return;
     }
 
