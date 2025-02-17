@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
-import java.util.stream.*;
 import Day10.PipeModel.*;
 import DataModel.Point2D;
 
