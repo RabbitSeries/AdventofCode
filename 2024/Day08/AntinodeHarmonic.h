@@ -70,8 +70,7 @@ class AntinodeHarmonic {
             for( int i = 0; i < line.size(); i++ ) {
                 if( line[i] == '\n' || line[i] == '\0' ) {
                     continue;
-                }
-                else {
+                } else {
                     row.push_back( line[i] );
                     if( line[i] != '.' ) {
                         if( antennaLists.find( line[i] ) == antennaLists.end() ) {
@@ -90,7 +89,7 @@ class AntinodeHarmonic {
         for( auto name : antennaNames ) {
             cout << "Processing antenna name: " << name << ". At " << ++debugLineCnt << "/" << antennaNames.size() << endl;
             antennaEffectZone( antennaLists[name], antinodeMap, isHarmony );
-            showAntinode( antinodeMap );
+            // showAntinode( antinodeMap );
         }
         int antinodeCnt = 0;
         for( auto row : antinodeMap ) {

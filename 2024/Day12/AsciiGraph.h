@@ -137,7 +137,7 @@ class AsciiGraph {
                     // Draw horizontal line
                     upedge++;
                     while( y - 1 >= 0 && garden[x][y - 1] == garden[x][y] && !visited[x][y - 1] && isUpBoundary( pos( x, y - 1 ), garden ) ) {
-                        cout << "Draw up edge From " << s.first << " " << s.second << " to " << x << " " << y - 1 << "." << endl;
+                        // cout << "Draw up edge From " << s.first << " " << s.second << " to " << x << " " << y - 1 << "." << endl;
                         y--;
                     }
                     visited[x][y] = true;
@@ -161,7 +161,7 @@ class AsciiGraph {
                     // Draw horizontal line
                     downEdge++;
                     while( y - 1 >= 0 && garden[x][y - 1] == garden[x][y] && !visited[x][y - 1] && isDownBoundary( pos( x, y - 1 ), garden ) ) {
-                        cout << "Draw down edge From " << s.first << " " << s.second << " to " << x << " " << y - 1 << "." << endl;
+                        // cout << "Draw down edge From " << s.first << " " << s.second << " to " << x << " " << y - 1 << "." << endl;
                         y--;
                     }
                     visited[x][y] = true;
@@ -185,7 +185,7 @@ class AsciiGraph {
                     // Draw vertical line
                     leftEdge++;
                     while( x - 1 >= 0 && garden[x - 1][y] == garden[x][y] && !visited[x - 1][y] && isLeftBoundary( pos( x - 1, y ), garden ) ) {
-                        cout << "Draw left edge From " << s.first << " " << s.second << " to " << x - 1 << " " << y << "." << endl;
+                        // cout << "Draw left edge From " << s.first << " " << s.second << " to " << x - 1 << " " << y << "." << endl;
                         x--;
                     }
                     gardenCanvas[x][y] = '|';
@@ -209,7 +209,7 @@ class AsciiGraph {
                     // Draw vertical line
                     rightEdge++;
                     while( x - 1 >= 0 && garden[x - 1][y] == garden[x][y] && !visited[x - 1][y] && isRightBoundary( pos( x - 1, y ), garden ) ) {
-                        cout << "Draw right edge From " << s.first << " " << s.second << " to " << x - 1 << " " << y << "." << endl;
+                        // cout << "Draw right edge From " << s.first << " " << s.second << " to " << x - 1 << " " << y << "." << endl;
                         x--;
                     }
                     gardenCanvas[x][y] = '|';

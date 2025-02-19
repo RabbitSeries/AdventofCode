@@ -29,7 +29,7 @@ int SolutionTarget = 25;
 
 auto nowTime = chrono::high_resolution_clock::now();
 auto endTime = chrono::high_resolution_clock::now();
-
+auto cost = chrono::duration_cast<chrono::microseconds>( nowTime - nowTime ).count();
 void printProcess() {
     endTime = chrono::high_resolution_clock::now();
     cout
@@ -37,15 +37,16 @@ void printProcess() {
         << fixed << setprecision( 6 ) << right << setw( 15 ) << setfill( ' ' )
         << chrono::duration_cast<chrono::microseconds>( endTime - nowTime ).count() / 1000000.0
         << " seconds." << endl;
+    cost += chrono::duration_cast<chrono::microseconds>( endTime - nowTime ).count();
     if( SolutionStart != SolutionTarget ) {
         // cout << "Cotinuing to next problem" << endl;
         cout << "Cotinuing to next problem in 1 seconds." << endl << endl << endl;
         this_thread::sleep_for( chrono::seconds( 1 ) );
-    }
-    else {
+    } else {
         cout << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
         cout << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
         cout << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
+        cout << "Total cost: " << cost / 1000000.0 << " seconds." << endl;
     }
     SolutionStart++;
     nowTime = chrono::high_resolution_clock::now();
