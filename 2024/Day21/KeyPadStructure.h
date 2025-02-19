@@ -1,16 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template<>
-struct std::hash<pair<vector<char>, int>> {
-    inline size_t operator()( pair<vector<char>, int> const& token ) const {
-        string vList = "";
-        for( auto c : token.first ) {
-            vList += string( 1, c );
-        }
-        return std::hash<string>{}( vList ) ^ ( std::hash<int>{}( token.second ) << 1 );
-    }
-};
 // Head file initialization use static const to avoid CMKAE warnig
 static const unordered_map<char, vector<pair<char, char>>> NUMERIC_KEYPAD{
 

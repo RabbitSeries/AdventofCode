@@ -10,6 +10,7 @@ import DataModel.Point2D;
 public class RocksRoll {
     List<List<Character>> Platform;
     HashMap<String, Integer> memo;
+    List<Integer> resMemoList;
     int row = 0, col = 0;
 
     int getRes() {
@@ -50,6 +51,7 @@ public class RocksRoll {
                 }
             }
         }
+        resMemoList.add(getRes());
         String curHash = getHash();
         if (memo.containsKey(curHash)) {
             return new Point2D(memo.get(curHash), times);
@@ -76,6 +78,7 @@ public class RocksRoll {
         row = Platform.size();
         col = Platform.get(0).size();
         memo = new HashMap<>();
+        resMemoList = new ArrayList<>();
     }
 
     void Solution1() throws IOException {
@@ -106,11 +109,14 @@ public class RocksRoll {
             if (cycleInfo.first.compareTo(0) >= 0) {
                 int cycle = cycleInfo.second - cycleInfo.first, leftOver = target - cycleInfo.second - 1;
                 int targetTilt = leftOver % cycle;
-                for (int j = 0; j < targetTilt; j++) {
-                    i++;
-                    tilt(i);
-                }
-                System.out.println("Solution 2: " + getRes());
+                // for (int j = 0; j < targetTilt; j++) {
+                // i++;
+                // tilt(i);
+                // }
+                System.out.println("Memoization found at preprocessed: " + cycleInfo.first);
+                System.out
+                        .println("Saved " + leftOver + targetTilt);
+                System.out.println("Solution 2: " + resMemoList.get(cycleInfo.first + targetTilt));
                 return;
             }
         }

@@ -1,5 +1,13 @@
 #include "KeyPadStructure.h"
-
+template<>
+struct std::hash<pair<vector<char>, int>> {
+    inline size_t operator()( pair<vector<char>, int> const& token ) const {
+        string vList = accumulate( token.first.begin(), token.first.end(), string(), []( string const res, char c ) {
+            return res + string( 1, c );
+        } );
+        return std::hash<string>{}( vList ) ^ ( std::hash<int>{}( token.second ) << 1 );
+    }
+};
 class CascadingRemote {
 
     typedef unsigned long long ull;
@@ -164,8 +172,7 @@ class CascadingRemote {
                     nextPoint.linkRoad = curPoint.linkRoad;
                     cost[curKey] = curCost + 1;
                     pq.push( { curCost + 1,nextPoint } );
-                }
-                else if( curCost + 1 == cost.at( nextKey ) ) {
+                } else if( curCost + 1 == cost.at( nextKey ) ) {
                     for( auto& path : curPoint.linkRoad )
                         nextPoint.linkRoad.push_back( path );
                     pq.push( { curCost + 1,nextPoint } );
@@ -174,8 +181,7 @@ class CascadingRemote {
         }
         if( endPoint.linkRoad.empty() ) {
             endPoint.linkRoad.push_back( { { 'A' , }, } );
-        }
-        else {
+        } else {
             for( auto& road : endPoint.linkRoad ) {
                 road.push_back( 'A' );
             }
