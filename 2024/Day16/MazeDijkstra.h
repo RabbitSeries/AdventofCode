@@ -23,7 +23,6 @@ struct point2D : public pair<int, int> {
     }
     int cost = 0;
     vector<pair<int, int>> LinkRoad;
-
 };
 
 template <>

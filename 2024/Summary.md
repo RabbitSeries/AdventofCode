@@ -1,4 +1,4 @@
-# 2024 Summaryy
+# 2024 Summary
 
 ## 📜 Worth future utility
 
@@ -46,4 +46,4 @@ Prove:
 
 ### Day 24 Crossed Wires
 
-[Cascading Full adder](./2024/Day24/GatesVisualize.md)
+[Cascading Full adder](./Day24/GatesVisualize.md)
