@@ -43,7 +43,7 @@ public class CharacterMatcher {
         input.close();
     }
 
-    Map<String, Long> memo;
+    HashMap<String, Long> memo;
 
     long iterateMatch(String m, int startPos, List<Integer> groups, int startGroup) {
         if (startGroup == groups.size()) {
@@ -53,10 +53,8 @@ public class CharacterMatcher {
                 }
             }
             return 1;
-        } else {
-            if (memo.containsKey(startPos + "," + startGroup)) {
-                return memo.get(startPos + "," + startGroup);
-            }
+        } else if (memo.containsKey(startPos + "," + startGroup)) {
+            return memo.get(startPos + "," + startGroup);
         }
         long res = 0;
         int curGroupSize = groups.get(startGroup);
@@ -70,6 +68,65 @@ public class CharacterMatcher {
         }
         memo.put(startPos + "," + startGroup, res);
         return res;
+    }// Solution 2: 620189727003627
+
+    class nodeInfo implements Comparable<nodeInfo> {
+        public int pos, group;
+
+        public nodeInfo(int pos, int group) {
+            this.pos = pos;
+            this.group = group;
+        }
+
+        @Override
+        public int compareTo(nodeInfo node1) {
+            return Integer.compare(pos, node1.pos);
+        }
+    }
+
+    // heuristic search
+    long DP(String m, List<Integer> groups) {// error
+        PriorityQueue<nodeInfo> pq = new PriorityQueue<>();
+        HashMap<String, Long> visited = new HashMap<>();
+        pq.add(new nodeInfo(0, 0));
+        while (!pq.isEmpty()) {
+            nodeInfo curNode = pq.poll();
+            int curPos = curNode.pos, curGroup = curNode.group;
+            if (curPos >= m.length()) {
+                continue;
+            }
+            if (curGroup == groups.size()) {
+                boolean cleaned = true;
+                for (int i = curPos; i < m.length(); i++) {
+                    if (m.charAt(i) == '#') {
+                        cleaned = false;
+                    }
+                }
+                if (cleaned) {
+                    long curRes = visited.getOrDefault(m.length() + "," + curGroup, (long) 0);
+                    visited.put(m.length() + "," + curGroup, curRes + 1);
+                }
+                continue;
+            }
+            while (curPos < m.length() && m.charAt(curPos) == '.') {
+                curPos++;
+            }
+            for (int nextPos = curPos; nextPos < m.length(); nextPos++) {
+                if ((nextPos > 0 && m.charAt(nextPos - 1) == '#')) {
+                    break;
+                }
+                if (match(m, nextPos, groups.get(curGroup))) {
+                    if (!visited.containsKey(nextPos + "," + curGroup)) {
+                        visited.put(nextPos + "," + curGroup, (long) 1);
+                        pq.add(new nodeInfo(nextPos + groups.get(curGroup) + 1, curGroup + 1));
+                    } else {
+                        long curRes = visited.get(nextPos + "," + curGroup);
+                        visited.put(nextPos + "," + curGroup, curRes + 1);
+                    }
+                }
+            }
+        }
+        return visited.getOrDefault(m.length() + "," + groups.size(), (long) 0);
     }
 
     void unitTest() {
@@ -107,6 +164,21 @@ public class CharacterMatcher {
         System.out.println("Solution 2: " + res);
     }
 
+    void Solution2_DP() throws IOException {
+        readFile();
+        long res = 0, problemSetSize = SpringLists.size();
+        for (int i = 0; i < problemSetSize; i++) {
+
+            // System.out.println("Processing: " + (i + 1) + "/" + problemSetSize);
+            String unfoldMatchString = Collections.nCopies(5, SpringLists.get(i)).stream()
+                    .collect(Collectors.joining("?"));
+            List<Integer> unfoldGroupts = Collections.nCopies(5, DamagedGroups.get(i)).stream()
+                    .flatMap(groupList -> groupList.stream()).collect(Collectors.toList());
+            res += DP(unfoldMatchString, unfoldGroupts);
+        }
+        System.out.println("Solution 2 DP: " + res);
+    }
+
     public static void main(String[] args) throws IOException {
 
         CharacterMatcher Solution = new CharacterMatcher();
@@ -114,5 +186,6 @@ public class CharacterMatcher {
         Solution.unitTest();
         Solution.Solution1();
         Solution.Solution2();
+        Solution.Solution2_DP();
     }
 }

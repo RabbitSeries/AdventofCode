@@ -114,8 +114,7 @@ public class RocksRoll {
                 // tilt(i);
                 // }
                 System.out.println("Memoization found at preprocessed: " + cycleInfo.first);
-                System.out
-                        .println("Saved " + leftOver + targetTilt);
+                System.out.println("Saved " + leftOver + targetTilt);
                 System.out.println("Solution 2: " + resMemoList.get(cycleInfo.first + targetTilt));
                 return;
             }
