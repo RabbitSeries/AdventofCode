@@ -69,7 +69,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 - [ ] Time efficency: Fixed size array > linked list > bucket> ... > ; stack variable > heap variable
 - [ ] VSCode tracking memory of big HashMap/unordered_map cost extremely massive amount of time, execute the program manually.
 - [ ] Change all dijkstra algorithm to static DP implementation instead of state machine path record within the node in queue.
-- [ ] I think there might be a way to transform top-down memoization recursion to bottom-up DP, and also to heuristic search? But I didn't figured out how.
+- [ ] I think there might be a way to transform top-down memoization recursion (topological sort of the transpose) to bottom-up DP (reverse topological sort), and also to heuristic search? But I haven't figured out how. (See Introduction to Algorithms Ch 15 and 2023 Java Day12).
 
 <!-- <div id="TODOList" style="transform: translateX(30px);padding-bottom: 20px">
     <input type="checkbox" checked="true" disabled="true" >Change day 3 algorithm to <a href="https://en.cppreference.com/w/cpp/regex/ecmascript">regular expression</a> implementation <a href="https://en.cppreference.com/w/cpp/regex">(C++ 11 feature)</a>.<br>
