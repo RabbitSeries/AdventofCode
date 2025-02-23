@@ -27,25 +27,38 @@
 int SolutionStart = 1;
 int SolutionTarget = 25;
 
+priority_queue<tuple<int64_t, int, string>, vector<tuple<int64_t, int, string>>, less<>> pq;
+
 auto nowTime = chrono::high_resolution_clock::now();
 auto endTime = chrono::high_resolution_clock::now();
 auto cost = chrono::duration_cast<chrono::microseconds>( nowTime - nowTime ).count();
 void printProcess() {
     endTime = chrono::high_resolution_clock::now();
-    cout
-        << "Day " << SolutionStart << " problem time cost:" << endl
-        << fixed << setprecision( 6 ) << right << setw( 15 ) << setfill( ' ' )
-        << chrono::duration_cast<chrono::microseconds>( endTime - nowTime ).count() / 1000000.0
-        << " seconds." << endl;
+    pq.emplace( chrono::duration_cast<chrono::microseconds>( endTime - nowTime ).count(), SolutionStart, "Res" );
+    // cout
+    //     << "Day " << SolutionStart << " problem time cost:" << endl
+    //     << fixed << setprecision( 6 ) << right << setw( 15 ) << setfill( ' ' )
+    //     << chrono::duration_cast<chrono::microseconds>( endTime - nowTime ).count() / 1000000.0
+    //     << " seconds." << endl;
     cost += chrono::duration_cast<chrono::microseconds>( endTime - nowTime ).count();
-    if( SolutionStart != SolutionTarget ) {
+    if ( SolutionStart != SolutionTarget ) {
         // cout << "Cotinuing to next problem" << endl;
-        cout << "Cotinuing to next problem in 1 seconds." << endl << endl << endl;
-        this_thread::sleep_for( chrono::seconds( 1 ) );
+        // cout << "Cotinuing to next problem in 1 seconds." << endl
+        //      << endl
+        //      << endl;
+        // this_thread::sleep_for( chrono::seconds( 1 ) );
     } else {
         cout << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
         cout << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
         cout << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
+        while ( !pq.empty() ) {
+            auto [cost, solutionId, info] = pq.top();
+            pq.pop();
+            cout
+                << "Day " << solutionId << " problem time cost:" << endl
+                << fixed << setprecision( 6 ) << right << setw( 15 ) << setfill( ' ' ) << cost / 1000000.0
+                << " seconds." << endl;
+        }
         cout << "Total cost: " << cost / 1000000.0 << " seconds." << endl;
     }
     SolutionStart++;
