@@ -85,8 +85,13 @@ public class CharacterMatcher {
     }
 
     // heuristic search
+    // Yeah, reverse topological order should be starting from m.lenth()-1
+    // Then DP order should also be m[i][j] = m[i+curGroupSize][j], ehhhh I don't
+    // know
     long DP(String m, List<Integer> groups) {// error
-        PriorityQueue<nodeInfo> pq = new PriorityQueue<>();
+        PriorityQueue<nodeInfo> pq = new PriorityQueue<>(Comparator.reverseOrder());
+        String str = "asdasd";
+        Arrays.stream(str.split("asdad")).map(s -> s.length());
         HashMap<String, Long> visited = new HashMap<>();
         pq.add(new nodeInfo(0, 0));
         while (!pq.isEmpty()) {
@@ -152,7 +157,6 @@ public class CharacterMatcher {
         memo = new HashMap<>();
         long res = 0, problemSetSize = SpringLists.size();
         for (int i = 0; i < problemSetSize; i++) {
-
             // System.out.println("Processing: " + (i + 1) + "/" + problemSetSize);
             String unfoldMatchString = Collections.nCopies(5, SpringLists.get(i)).stream()
                     .collect(Collectors.joining("?"));

@@ -152,17 +152,17 @@ public:
             threads.push_back( thread( threadTask, startRow, endRow, guardPos, routeMap ) );
         }
 
-        int lastChecked = 0, curChecked = 0, total = routeMap.size() * routeMap[0].size();
-        while( lastChecked < total ) {
-            curChecked = progress.load();
-            if( curChecked - lastChecked > 500 || curChecked == total ) {
-                lastChecked = curChecked;
-                std::cout << "\033[2J\033[1;1H";
-                cout << "Progress - Part 2" << endl;
-                cout << "Positions checked: " << lastChecked << "/" << total << " (" << ( lastChecked * 100.0 / total ) << "%)" << endl;
-                cout << "Loop positions found: " << distinctPlacement.load() << endl;
-            }
-        }
+        // int lastChecked = 0, curChecked = 0, total = routeMap.size() * routeMap[0].size();
+        // while( lastChecked < total ) {
+        //     curChecked = progress.load();
+        //     if( curChecked - lastChecked > 500 || curChecked == total ) {
+        //         lastChecked = curChecked;
+        //         std::cout << "\033[2J\033[1;1H";
+        //         cout << "Progress - Part 2" << endl;
+        //         cout << "Positions checked: " << lastChecked << "/" << total << " (" << ( lastChecked * 100.0 / total ) << "%)" << endl;
+        //         cout << "Loop positions found: " << distinctPlacement.load() << endl;
+        //     }
+        // }
 
         for( auto& t : threads ) {
             t.join();

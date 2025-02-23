@@ -11,6 +11,7 @@
     // Clean plugin cache on each modification.
     "java.project.outputPath": "compileRuntime/bin",
     "java.project.referencedLibraries": [],
+    "C_Cpp.default.compilerPath": "D:/Build_Tool_Lib/x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0/mingw64/bin/g++.exe",
     // "java.project.referencedLibraries": [
     //     "2024Java/lib/**/*.jar"
     // ],

@@ -2,13 +2,12 @@
 #define BUFFER_SIZE 1024
 using namespace std;
 
-
 class AntinodeHarmonic {
     typedef struct Antenna {
         int x, y;
         Antenna() { x = y = 0; }
         Antenna( int _x, int _y ) : x( _x ), y( _y ) {}
-    }pos;
+    } pos;
 
     bool isValid( pos p, const vector<vector<char>> map ) {
         return p.x >= 0 && p.x < map.size() && p.y >= 0 && p.y < map[p.x].size();
@@ -16,21 +15,21 @@ class AntinodeHarmonic {
 
     void HarmonicAntenna( const pos s, const pos t, vector<vector<char>>& antinodeMap, bool isHarmony ) {
         pos st, ts;
-        for( int harmonicTimes = isHarmony ? 1 : 2; isHarmony ? true : harmonicTimes < 3; harmonicTimes++ ) {
+        for ( int harmonicTimes = isHarmony ? 1 : 2; isHarmony ? true : harmonicTimes < 3; harmonicTimes++ ) {
             bool withinLocale = false;
             st.x = s.x + ( t.x - s.x ) * harmonicTimes;
             st.y = s.y + ( t.y - s.y ) * harmonicTimes;
             ts.x = t.x + ( s.x - t.x ) * harmonicTimes;
             ts.y = t.y + ( s.y - t.y ) * harmonicTimes;
-            if( isValid( st, antinodeMap ) ) {
+            if ( isValid( st, antinodeMap ) ) {
                 antinodeMap[st.x][st.y] = '#';
                 withinLocale = true;
             }
-            if( isValid( ts, antinodeMap ) ) {
+            if ( isValid( ts, antinodeMap ) ) {
                 antinodeMap[ts.x][ts.y] = '#';
                 withinLocale = true;
             }
-            if( !withinLocale ) {
+            if ( !withinLocale ) {
                 break;
             }
         }
@@ -39,16 +38,16 @@ class AntinodeHarmonic {
     }
 
     void antennaEffectZone( const vector<pos> antennaList, vector<vector<char>>& antinodeMap, bool isHarmony ) {
-        for( int i = 0; i < antennaList.size() - 1; i++ ) {
-            for( int j = i + 1; j < antennaList.size(); j++ ) {
+        for ( int i = 0; i < antennaList.size() - 1; i++ ) {
+            for ( int j = i + 1; j < antennaList.size(); j++ ) {
                 HarmonicAntenna( antennaList[i], antennaList[j], antinodeMap, isHarmony );
             }
         }
     }
 
     void showAntinode( const vector<vector<char>> antinodeMap ) {
-        for( auto row : antinodeMap ) {
-            for( auto sign : row ) {
+        for ( auto row : antinodeMap ) {
+            for ( auto sign : row ) {
                 cout << sign;
             }
             cout << endl;
@@ -64,16 +63,16 @@ class AntinodeHarmonic {
         string linebuf;
 
         int posx = 0;
-        while( getline( input, linebuf ) ) {
+        while ( getline( input, linebuf ) ) {
             string line( linebuf );
             vector<char> row;
-            for( int i = 0; i < line.size(); i++ ) {
-                if( line[i] == '\n' || line[i] == '\0' ) {
+            for ( int i = 0; i < line.size(); i++ ) {
+                if ( line[i] == '\n' || line[i] == '\0' ) {
                     continue;
                 } else {
                     row.push_back( line[i] );
-                    if( line[i] != '.' ) {
-                        if( antennaLists.find( line[i] ) == antennaLists.end() ) {
+                    if ( line[i] != '.' ) {
+                        if ( antennaLists.find( line[i] ) == antennaLists.end() ) {
                             antennaLists[line[i]] = vector<pos>();
                             antennaNames.push_back( line[i] );
                         }
@@ -86,23 +85,23 @@ class AntinodeHarmonic {
             // cout << endl;
         }
         int debugLineCnt = 0;
-        for( auto name : antennaNames ) {
-            cout << "Processing antenna name: " << name << ". At " << ++debugLineCnt << "/" << antennaNames.size() << endl;
+        for ( auto name : antennaNames ) {
+            // cout << "Processing antenna name: " << name << ". At " << ++debugLineCnt << "/" << antennaNames.size() << endl;
             antennaEffectZone( antennaLists[name], antinodeMap, isHarmony );
             // showAntinode( antinodeMap );
         }
         int antinodeCnt = 0;
-        for( auto row : antinodeMap ) {
-            for( auto sign : row ) {
-                if( sign == '#' ) {
+        for ( auto row : antinodeMap ) {
+            for ( auto sign : row ) {
+                if ( sign == '#' ) {
                     antinodeCnt++;
                 }
             }
         }
-
-        cout << antinodeCnt << endl;
+        cout << ( !isHarmony ? "Solution 1: " : "Solution 2: " ) << antinodeCnt << endl;
     }
-public:
+
+   public:
     void Solution1() {
         find( false );
     }

@@ -243,7 +243,7 @@ public:
         ll res = 0;
         vector<vector<bool>> counted( lineCnt, vector<bool>( garden[0].size(), false ) );
         for( int i = 0; i < garden.size(); i++ ) {
-            cout << "Processing line " << i << "." << endl;
+            // cout << "Processing line " << i << "." << endl;
             for( int j = 0; j < garden.size(); j++ ) {
                 if( !counted[i][j] ) {
                     auto [area, perimeter] = getBoundarys( pos( i, j ), garden, counted );
@@ -270,7 +270,7 @@ public:
         ll res = 0;
         vector<vector<bool>> counted( lineCnt, vector<bool>( garden[0].size(), false ) );
         for( int i = 0; i < garden.size(); i++ ) {
-            cout << "Processing line " << i << "." << endl;
+            // cout << "Processing line " << i << "." << endl;
             for( int j = 0; j < garden.size(); j++ ) {
                 if( !counted[i][j] ) {
                     vector<pos> boundary;
@@ -279,6 +279,6 @@ public:
                 }
             }
         }
-        cout << "Solution2 : " << res << endl;
+        cout << "Solution 2: " << res << endl;
     }
 };

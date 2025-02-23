@@ -78,7 +78,7 @@ public:
         }
         int twinkle = 25;
         for( int i = 0; i < twinkle; i++ ) {
-            cout << "Times: " << i << endl;
+            // cout << "Times: " << i << endl;
             blink( head, tail );
         }
         Node p = head;
@@ -102,7 +102,7 @@ public:
             }
         }
         for( int twinkle = 0; twinkle < 75; twinkle++ ) {
-            cout << "Twinkle times: " << twinkle << "." << endl;
+            // cout << "Twinkle times: " << twinkle << "." << endl;
             TwinkleList = nextBlink( TwinkleList );
         }
         ll res = 0;
