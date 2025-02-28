@@ -88,7 +88,6 @@ public class StringHasher {
             // System.out.println("After " + "\"" + s + "\":");
             // PrintRes(LensPosList);
             // System.out.println();
-
         }
         System.out.println("Solution 2: " + LensPosList.entrySet().stream().mapToLong(
                 e -> (hash(e.getKey()) + 1) * (e.getValue().first + 1) * e.getValue().second)
