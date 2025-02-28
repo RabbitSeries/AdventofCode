@@ -22,7 +22,9 @@
         "*.vim": "Vimscript",
         "_vimrc": "Vimscript",
         "map": "cpp",
-        "format": "cpp"
+        "format": "cpp",
+        "vector": "cpp",
+        "ranges": "cpp"
     },
     // "java.project.referencedLibraries": [
     //     "2024Java/lib/**/*.jar"

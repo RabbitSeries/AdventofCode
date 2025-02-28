@@ -3,9 +3,11 @@ using namespace std;
 class AsciiGraph {
     const int dx[4]{ -1, 1, 0, 0 };
     const int dy[4]{ 0, 0, 1, -1 };
+
     inline bool isValid( int x, int y, vector<vector<char>> const& map ) {
         return x >= 0 && x < map.size() && y >= 0 && y <= map[0].size();
     }
+
     typedef pair<int, int> pos;
     typedef long long ll;
     int getFence( pos s, vector<vector<char>> const& map ) {
@@ -22,32 +24,26 @@ class AsciiGraph {
         int x = s.first, y = s.second;
         counted[x][y] = true;
         int area = 1, perimeter = getFence( s, map );
-        if ( x - 1 >= 0 && !counted[x - 1][y] && map[x - 1][y] == map[x][y] ) {
-            auto [_area, _perimeter] = getBoundarys( pos( x - 1, y ), map, counted );
-            area += _area;
-            perimeter += _perimeter;
-        }
-        // Down
-        if ( x + 1 < map.size() && !counted[x + 1][y] && map[x + 1][y] == map[x][y] ) {
-            auto [_area, _perimeter] = getBoundarys( pos( x + 1, y ), map, counted );
-            area += _area;
-            perimeter += _perimeter;
-        }
-        // Right
-        if ( y + 1 < map[x].size() && !counted[x][y + 1] && map[x][y + 1] == map[x][y] ) {
-            auto [_area, _perimeter] = getBoundarys( pos( x, y + 1 ), map, counted );
-            area += _area;
-            perimeter += _perimeter;
-        }
-        // Left
-        if ( y - 1 >= 0 && !counted[x][y - 1] && map[x][y - 1] == map[x][y] ) {
-            auto [_area, _perimeter] = getBoundarys( pos( x, y - 1 ), map, counted );
-            area += _area;
-            perimeter += _perimeter;
+        for ( int i = 0; i < 4; i++ ) {
+            int nextX = x + dx[i], nextY = y + dy[i];
+            if ( isValid( nextX, nextY, map ) && !counted[nextX][nextY] && map[nextX][nextY] == map[x][y] ) {
+                auto [_area, _perimeter] = getBoundarys( pos( nextX, nextY ), map, counted );
+                area += _area;
+                perimeter += _perimeter;
+            }
         }
         return pair<int, int>( area, perimeter );
     }
-
+    inline bool isBoundary( pos const& s, vector<vector<char>> const& map ) {
+        int x = s.first, y = s.second;
+        for ( int i = 0; i < 4; i++ ) {
+            int nextX = x + dx[i], nextY = y + dy[i];
+            if ( !isValid( nextX, nextY, map ) || map[nextX][nextY] == map[x][y] ) {
+                return true;
+            }
+        }
+        return false;
+    }
     bool isUpBoundary( const pos s, vector<vector<char>> const& garden ) {
         int x = s.first, y = s.second;
         if ( ( x - 1 >= 0 && garden[x - 1][y] != garden[x][y] ) || x - 1 < 0 ) {
@@ -81,24 +77,14 @@ class AsciiGraph {
         int x = s.first, y = s.second;
         visited[x][y] = true;
         int area = 1;
-        if ( isUpBoundary( s, garden ) || isDownBoundary( s, garden ) || isLeftBoundary( s, garden ) || isRightBoundary( s, garden ) ) {
+        if ( isBoundary( s, garden ) ) {
             boundary.push_back( pos( x, y ) );
         }
-        // Up fence
-        if ( x - 1 >= 0 && !visited[x - 1][y] && garden[x - 1][y] == garden[x][y] ) {
-            area += getBoundarys( pos( x - 1, y ), garden, visited, boundary );
-        }
-        // Down
-        if ( x + 1 < garden.size() && !visited[x + 1][y] && garden[x + 1][y] == garden[x][y] ) {
-            area += getBoundarys( pos( x + 1, y ), garden, visited, boundary );
-        }
-        // Left
-        if ( y - 1 >= 0 && !visited[x][y - 1] && garden[x][y - 1] == garden[x][y] ) {
-            area += getBoundarys( pos( x, y - 1 ), garden, visited, boundary );
-        }
-        // Right
-        if ( y + 1 < garden[x].size() && !visited[x][y + 1] && garden[x][y + 1] == garden[x][y] ) {
-            area += getBoundarys( pos( x, y + 1 ), garden, visited, boundary );
+        for ( int i = 0; i < 4; i++ ) {
+            int nextX = x + dx[i], nextY = y + dy[i];
+            if ( isValid( nextX, nextY, garden ) && !visited[nextX][nextY] && garden[nextX][nextY] == garden[x][y] ) {
+                area += getBoundarys( pos( nextX, nextY ), garden, visited, boundary );
+            }
         }
         return area;
     }
