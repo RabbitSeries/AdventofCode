@@ -1,4 +1,4 @@
-package DataModel;
+package JavaDataModel;
 
 import java.util.List;
 

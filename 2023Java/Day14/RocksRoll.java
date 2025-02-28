@@ -4,8 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.io.*;
 
-import DataModel.Pair;
-import DataModel.Point2D;
+import JavaDataModel.*;
 
 public class RocksRoll {
     List<List<Character>> Platform;

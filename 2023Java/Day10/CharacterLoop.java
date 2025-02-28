@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
 import Day10.PipeModel.*;
-import DataModel.Point2D;
+import JavaDataModel.*;
 
 public class CharacterLoop {
     List<List<Character>> PipeMap;

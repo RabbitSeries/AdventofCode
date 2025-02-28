@@ -1,6 +1,6 @@
-package DataModel;
+package JavaDataModel;
 
-import java.util.*;
+import java.util.Objects;
 
 public class Pair<K, V> {
 

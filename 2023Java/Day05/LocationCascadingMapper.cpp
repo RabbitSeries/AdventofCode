@@ -1,23 +1,24 @@
 #include <bits/stdc++.h>
-#include "../util/StringSpliter.h"
+
+#include "../../utils/StringSpliter.h"
 using namespace std;
 typedef unsigned long long ull;
 
 void readFile( vector<ull>& seedId, vector<vector<pair<pair<ull, ull>, ull>>>& mapperList ) {
     ifstream input( "input.txt" );
     string buf;
-    while( getline( input, buf ) ) {
-        if( buf.find( "seeds" ) != string::npos ) {
-            for( string s : split( trim( split( buf, ":" )[1] ), "\\s" ) ) {
+    while ( getline( input, buf ) ) {
+        if ( buf.find( "seeds" ) != string::npos ) {
+            for ( string s : split( trim( split( buf, ":" )[1] ), "\\s" ) ) {
                 // if( !s.empty() && s != "\n" )
                 seedId.push_back( parseULL( s ) );
             }
         }
 
-        if( buf.find( "map" ) != string::npos ) {
+        if ( buf.find( "map" ) != string::npos ) {
             mapperList.push_back( vector<pair<pair<ull, ull>, ull>>() );
-            while( getline( input, buf ) ) {
-                if( buf.size() <= 1 ) {
+            while ( getline( input, buf ) ) {
+                if ( buf.size() <= 1 ) {
                     break;
                 }
                 vector<string> infoStr = split( buf, "\\s" );
@@ -26,7 +27,7 @@ void readFile( vector<ull>& seedId, vector<vector<pair<pair<ull, ull>, ull>>>& m
                     return parseULL( s );
                 } );
 
-                pair<pair<ull, ull>, ull> mapInfo( { {info[0],info[1]},info[2] } );
+                pair<pair<ull, ull>, ull> mapInfo( { { info[0], info[1] }, info[2] } );
 
                 mapperList.back().push_back( mapInfo );
             }
@@ -41,60 +42,51 @@ void readFile( vector<ull>& seedId, vector<vector<pair<pair<ull, ull>, ull>>>& m
 typedef pair<ull, ull> Interval;
 
 vector<Interval> SearchInterval( vector<pair<pair<ull, ull>, ull>> const& IntervalMapList, Interval const& itv ) {
-
     vector<Interval> resList;
 
     queue<Interval> processList;
     processList.push( itv );
-    while( !processList.empty() ) {
-
+    while ( !processList.empty() ) {
         ull itvStart = processList.front().first, itvEnd = processList.front().second;
         processList.pop();
 
         bool splited = false;
-        for( auto mapRange : IntervalMapList ) {
-
+        for ( auto mapRange : IntervalMapList ) {
             ull mapStart = mapRange.first.second;
             ull mapEnd = mapStart + mapRange.second - 1;
             ull mapToStart = mapRange.first.first;
             ull mapToEnd = mapToStart + mapRange.second - 1;
 
-            if( itvStart >= mapStart && itvStart <= mapEnd ) {
+            if ( itvStart >= mapStart && itvStart <= mapEnd ) {
                 splited = true;
-                if( itvEnd <= mapEnd ) {
+                if ( itvEnd <= mapEnd ) {
                     resList.push_back( Interval( itvStart - mapStart + mapToStart,
-                        itvEnd - mapStart + mapToStart ) );
+                                                 itvEnd - mapStart + mapToStart ) );
                     return resList;
-                }
-                else {
-
+                } else {
                     resList.push_back( Interval( itvStart - mapStart + mapToStart, mapToEnd ) );
                     processList.push( { mapEnd + 1, itvEnd } );
                     break;
                 }
-            }
-            else if( itvStart < mapStart ) {
-                if( itvEnd >= mapStart && itvEnd <= mapEnd ) {
+            } else if ( itvStart < mapStart ) {
+                if ( itvEnd >= mapStart && itvEnd <= mapEnd ) {
                     splited = true;
                     resList.push_back( Interval( mapToStart, itvEnd - itvStart + mapToStart ) );
-                    processList.push( { itvStart,mapStart - 1 } );
+                    processList.push( { itvStart, mapStart - 1 } );
                     break;
-                }
-                else if( itvEnd > mapEnd ) {
+                } else if ( itvEnd > mapEnd ) {
                     splited = true;
                     resList.push_back( Interval( mapToStart, mapToEnd ) );
-                    processList.push( { itvStart,mapStart - 1 } );
-                    processList.push( { mapEnd,itvEnd } );
+                    processList.push( { itvStart, mapStart - 1 } );
+                    processList.push( { mapEnd, itvEnd } );
                     break;
                 }
             }
-
         }
-        if( !splited ) {
+        if ( !splited ) {
             resList.push_back( Interval( itvStart, itvEnd ) );
             return resList;
         }
-
     }
     return resList;
 }
@@ -106,28 +98,25 @@ void Solution2() {
 
     readFile( seedId, mapperList );
 
-    for( int i = 0; i < seedId.size(); i += 2 ) {
-
+    for ( int i = 0; i < seedId.size(); i += 2 ) {
         vector<Interval> curLevelList;
 
         curLevelList.push_back( Interval( seedId[i], seedId[i] + seedId[i + 1] - 1 ) );
 
-        for( auto const& searchList : mapperList ) {
+        for ( auto const& searchList : mapperList ) {
             vector<Interval> nextLevelList;
-            for( Interval const& itv : curLevelList ) {
-                for( auto nextItv : SearchInterval( searchList, itv ) )
+            for ( Interval const& itv : curLevelList ) {
+                for ( auto nextItv : SearchInterval( searchList, itv ) )
                     nextLevelList.push_back( nextItv );
             }
             curLevelList = move( nextLevelList );
         }
 
-        for_each( curLevelList.begin(), curLevelList.end(), [ & ]( Interval itv ) {
+        for_each( curLevelList.begin(), curLevelList.end(), [&]( Interval itv ) {
             res = min( itv.first, res );
         } );
-
     }
     cout << "Solution 2: " + to_string( res ) << endl;
-
 }
 
 int main() {

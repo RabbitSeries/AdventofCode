@@ -2,7 +2,7 @@ package Day11;
 
 import java.io.*;
 import java.util.*;
-import DataModel.Pair;
+import JavaDataModel.*;
 
 public class CosmicDistance {
 
