@@ -38,7 +38,8 @@ public class CharacterMatcher {
         while ((buf = input.readLine()) != null) {
             String[] recordings = buf.split("\\s+");
             SpringLists.add(recordings[0]);
-            DamagedGroups.add(List.of(recordings[1].trim().split(",")).stream().map(s -> Integer.parseInt(s)).toList());
+            DamagedGroups.add(List.of(recordings[1].trim().split(",")).stream()
+                    .map(s -> Integer.parseInt(s)).toList());
         }
         input.close();
     }

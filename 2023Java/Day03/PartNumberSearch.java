@@ -125,15 +125,17 @@ public class PartNumberSearch {
             HashMap<Point2D, Boolean> visit = new HashMap<>();
 
             for (int i = 0; i < 8; i++) {
-                Point2D nextPos = new Point2D(pos.getKey() + Point2D.dx[i], pos.getValue() + Point2D.dy[i]);
+                Point2D nextPos =
+                        new Point2D(pos.getKey() + Point2D.dx[i], pos.getValue() + Point2D.dy[i]);
                 if (Point2D.isValid(rows, cols, nextPos))
                     visit.put(nextPos, false);
             }
 
             for (int i = 0; i < 8; i++) {
-                Point2D nextPos = new Point2D(pos.getKey() + Point2D.dx[i], pos.getValue() + Point2D.dy[i]);
-                if (Point2D.isValid(rows, cols, nextPos)
-                        && Character.isDigit(schematic.get(nextPos.getKey()).get(nextPos.getValue()))) {
+                Point2D nextPos =
+                        new Point2D(pos.getKey() + Point2D.dx[i], pos.getValue() + Point2D.dy[i]);
+                if (Point2D.isValid(rows, cols, nextPos) && Character
+                        .isDigit(schematic.get(nextPos.getKey()).get(nextPos.getValue()))) {
                     try {
                         if (!visit.get(nextPos)) {
                             if (numberCnt < 2) {

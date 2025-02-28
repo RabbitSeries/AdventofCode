@@ -18,8 +18,8 @@ public class Reflection {
                 // IslandMaps.getLast().add(buf.trim().chars().mapToObj(c -> (char)
                 // c).toList());
                 // immutable list
-                IslandMaps.getLast().add(
-                        buf.trim().chars().mapToObj(c -> (char) c).collect(Collectors.toCollection(ArrayList::new)));
+                IslandMaps.getLast().add(buf.trim().chars().mapToObj(c -> (char) c)
+                        .collect(Collectors.toCollection(ArrayList::new)));
             } else {
                 IslandMaps.add(new ArrayList<>());
             }
@@ -42,7 +42,8 @@ public class Reflection {
                 }
                 if (!isMirror) {
                     break;
-                } else if (isMirror && (gap == up || below + gap == row - 1) && ((i + 1) != originalHorizontalLine)) {
+                } else if (isMirror && (gap == up || below + gap == row - 1)
+                        && ((i + 1) != originalHorizontalLine)) {
                     return i + 1;
                 }
             }
@@ -57,14 +58,16 @@ public class Reflection {
             int left = i, right = i + 1, gap = 0;
             for (gap = 0; left - gap >= 0 && right + gap < col; gap++) {
                 for (int j = 0; j < row; j++) {
-                    if (!IslandMap.get(j).get(left - gap).equals(IslandMap.get(j).get(right + gap))) {
+                    if (!IslandMap.get(j).get(left - gap)
+                            .equals(IslandMap.get(j).get(right + gap))) {
                         isMirror = false;
                         break;
                     }
                 }
                 if (!isMirror) {
                     break;
-                } else if (isMirror && (gap == left || right + gap == col - 1) && ((i + 1) != originalVerticalLine)) {
+                } else if (isMirror && (gap == left || right + gap == col - 1)
+                        && ((i + 1) != originalVerticalLine)) {
                     return i + 1;
                 }
             }

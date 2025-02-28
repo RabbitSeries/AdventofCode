@@ -50,7 +50,8 @@ public class LocationCascadingMapper {
                     String[] mapInfo = buf.split("\\s+");
                     mapperList.getLast()
                             .add(new SimpleEntry<>(
-                                    new SimpleEntry<>(Long.parseLong(mapInfo[0]), Long.parseLong(mapInfo[1])),
+                                    new SimpleEntry<>(Long.parseLong(mapInfo[0]),
+                                            Long.parseLong(mapInfo[1])),
                                     Long.parseLong(mapInfo[2])));
                 }
                 // mapperList.getLast().sort(Comparator.comparing(entry ->
@@ -83,7 +84,8 @@ public class LocationCascadingMapper {
         public long t;
     }
 
-    ArrayList<Interval> SearchInterval(ArrayList<Entry<Entry<Long, Long>, Long>> IntervalMapList, Interval itv) {
+    ArrayList<Interval> SearchInterval(ArrayList<Entry<Entry<Long, Long>, Long>> IntervalMapList,
+            Interval itv) {
         // If not sort get error, don't know why yet.
         // IntervalMapList.sort(Comparator.comparing(entry ->
         // entry.getKey().getValue()));

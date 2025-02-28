@@ -65,7 +65,8 @@ public class CardPoints {
 
                 for (int i = 1; i <= bonus; i++) {
                     if (currentLine + i < bonusRecord.size()) {
-                        bonusRecord.set(currentLine + i, bonusRecord.get(currentLine + i) + currentBonus);
+                        bonusRecord.set(currentLine + i,
+                                bonusRecord.get(currentLine + i) + currentBonus);
                     } else {
                         if (!(currentLine + i == bonusRecord.size())) {
                             throw new ExceptionInInitializerError("Not expected.");

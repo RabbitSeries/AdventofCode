@@ -24,6 +24,6 @@ public class Point2D extends Pair<Integer, Integer> {
     }
 
     // up down left right lu ld ru rd
-    public static int[] dy = new int[] { 0, 0, -1, 1, -1, -1, 1, 1 };
-    public static int[] dx = new int[] { -1, 1, 0, 0, -1, 1, -1, 1 };
+    public static int[] dy = new int[] {0, 0, -1, 1, -1, -1, 1, 1};
+    public static int[] dx = new int[] {-1, 1, 0, 0, -1, 1, -1, 1};
 }

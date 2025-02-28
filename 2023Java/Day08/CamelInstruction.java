@@ -100,7 +100,8 @@ public class CamelInstruction {
                 Visited.put(curPos + curInsId, curPathLength);
             } else {
                 if (nextDes.charAt(2) == 'Z') {
-                    PathList.put(start, new SimpleEntry<>(nextDes, Visited.get(nextDes + curInsId)));
+                    PathList.put(start,
+                            new SimpleEntry<>(nextDes, Visited.get(nextDes + curInsId)));
                     // PathList.get(start).put();
                     return;
                 }
@@ -125,9 +126,9 @@ public class CamelInstruction {
         }
         long res = 1;
         for (int i = 0; i < PathList.size(); i++) {
-            System.out.println("" + PathList.keySet().toArray()[i] + " " +
-                    PathList.get(PathList.keySet().toArray()[i]).getKey()
-                    + " " + PathList.get(PathList.keySet().toArray()[i]).getValue());
+            System.out.println("" + PathList.keySet().toArray()[i] + " "
+                    + PathList.get(PathList.keySet().toArray()[i]).getKey() + " "
+                    + PathList.get(PathList.keySet().toArray()[i]).getValue());
             res = lcm(res, PathList.get(PathList.keySet().toArray()[i]).getValue());
         }
         System.out.println("Solution 2: " + res);

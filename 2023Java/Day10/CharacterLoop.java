@@ -62,7 +62,8 @@ public class CharacterLoop {
     }
 
     boolean isValid(Point2D curPos) {
-        return Point2D.isValid(rows, cols, curPos) && PipeMap.get(curPos.getKey()).get(curPos.getValue()) != '.';
+        return Point2D.isValid(rows, cols, curPos)
+                && PipeMap.get(curPos.getKey()).get(curPos.getValue()) != '.';
     }
 
     List<Point2D> Solution1() throws IOException, InterruptedException {
@@ -73,7 +74,8 @@ public class CharacterLoop {
         for (int i = 0; i < 4; i++) {
             Point2D nextPos = Point2D.getNextPosition(StartPos, i);
 
-            if (isValid(nextPos) && PipeModel.NextPipeDirection.get(getPipe(nextPos)).getOrDefault(i, -1) != -1) {
+            if (isValid(nextPos) && PipeModel.NextPipeDirection.get(getPipe(nextPos))
+                    .getOrDefault(i, -1) != -1) {
                 // Start of path, ClockOrder is null;
                 q.add(new SimpleEntry<>(nextPos, i));
                 visited.put(new SimpleEntry<>(nextPos, i), true);
@@ -99,18 +101,19 @@ public class CharacterLoop {
                 // Destination process
                 if (curPos.equals(StartPos)) {
                     System.out.println("Solution 1: " + loopLen / 2);
-                    return new ArrayList<>(
-                            curPos.pathList.stream().map(entry -> new Point2D(entry.getKey(), entry.getValue()))
-                                    .toList());
+                    return new ArrayList<>(curPos.pathList.stream()
+                            .map(entry -> new Point2D(entry.getKey(), entry.getValue())).toList());
                 }
 
                 // Construct nextPos info
-                int nextFace = PipeModel.NextPipeDirection.get(getPipe(curPos)).getOrDefault(curFace, -1);
+                int nextFace =
+                        PipeModel.NextPipeDirection.get(getPipe(curPos)).getOrDefault(curFace, -1);
                 if (nextFace != -1) {
                     Point2D nextPos = Point2D.getNextPosition(curPos, nextFace);
 
                     // Enqueue
-                    if (isValid(nextPos) && !visited.getOrDefault(new SimpleEntry<>(nextPos, nextFace), false)) {
+                    if (isValid(nextPos)
+                            && !visited.getOrDefault(new SimpleEntry<>(nextPos, nextFace), false)) {
                         nextPos.pathList = new ArrayList<>(curPos.pathList);
                         q.add(new SimpleEntry<>(nextPos, nextFace));
                         visited.put(new SimpleEntry<>(nextPos, nextFace), true);
@@ -179,7 +182,8 @@ public class CharacterLoop {
     }
 
     List<Point2D> getInnerAdjacents(Point2D curPos, Point2D prePos,
-            HashMap<Character, HashMap<Integer, List<Integer>>> QueryModel, HashMap<Point2D, Boolean> visited) {
+            HashMap<Character, HashMap<Integer, List<Integer>>> QueryModel,
+            HashMap<Point2D, Boolean> visited) {
         int inDirection = -1;
         int dx = curPos.getKey() - prePos.getKey(), dy = curPos.getValue() - prePos.getValue();
         if (dx == 0) {

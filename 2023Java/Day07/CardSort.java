@@ -13,13 +13,7 @@ public class CardSort {
     static String Rule2Cards = "AKQT98765432J";
 
     enum Priority {
-        HighCar,
-        OnePair,
-        TwoPair,
-        ThreeOfAKind,
-        FullHouse,
-        FourOfAKind,
-        FiveOfAKind
+        HighCar, OnePair, TwoPair, ThreeOfAKind, FullHouse, FourOfAKind, FiveOfAKind
     }
 
     int cardHoldCompare(String hold1, String hold2, String rule) {
@@ -35,8 +29,9 @@ public class CardSort {
     Priority rule1Priority(String str) {
         // Be familiar with stream programming, but also learn yourself the way of
         // manual implementation.
-        long maxSameChCnt = str.chars().boxed().collect(Collectors.groupingBy(l -> l, Collectors.counting())).values()
-                .stream().max(Long::compareTo).orElse(0l);
+        long maxSameChCnt =
+                str.chars().boxed().collect(Collectors.groupingBy(l -> l, Collectors.counting()))
+                        .values().stream().max(Long::compareTo).orElse(0l);
 
         Priority[] priorityValues = Priority.values();
 
@@ -44,9 +39,8 @@ public class CardSort {
             return Priority.HighCar;
 
         if (maxSameChCnt == 2) {
-            if (str.chars().boxed().collect(Collectors.groupingBy(l -> l, Collectors.counting())).values().stream()
-                    .filter(l -> (int) (long) l == 2)
-                    .count() == 2) {
+            if (str.chars().boxed().collect(Collectors.groupingBy(l -> l, Collectors.counting()))
+                    .values().stream().filter(l -> (int) (long) l == 2).count() == 2) {
                 return Priority.TwoPair;
             } else {
                 return Priority.OnePair;
@@ -54,8 +48,8 @@ public class CardSort {
         }
 
         if (maxSameChCnt == 3) {
-            var list = str.chars().boxed().collect(Collectors.groupingBy(l -> l))
-                    .values().stream().collect(Collectors.groupingBy(List::size)).getOrDefault(2, null);
+            var list = str.chars().boxed().collect(Collectors.groupingBy(l -> l)).values().stream()
+                    .collect(Collectors.groupingBy(List::size)).getOrDefault(2, null);
             if (list == null) {
                 return Priority.ThreeOfAKind;
             } else {
@@ -74,8 +68,8 @@ public class CardSort {
         }
 
         long maxSameChCnt = str.chars().filter(ascii -> (char) ascii != 'J').boxed()
-                .collect(Collectors.groupingBy(l -> l, Collectors.counting()))
-                .values().stream().max((l1, l2) -> Long.compare(l1, l2)).orElse(0l);
+                .collect(Collectors.groupingBy(l -> l, Collectors.counting())).values().stream()
+                .max((l1, l2) -> Long.compare(l1, l2)).orElse(0l);
 
         long totalSameChCnt = wildCardCnt + maxSameChCnt;
 

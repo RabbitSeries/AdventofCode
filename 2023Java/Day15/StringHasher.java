@@ -40,22 +40,24 @@ public class StringHasher {
     void PrintRes(HashMap<String, Pair<Integer, Integer>> LensPosList) {
         List<List<Entry<String, Pair<Integer, Integer>>>> output = LensPosList.entrySet().stream()
                 .collect(Collectors.groupingBy(l -> hash(l.getKey()))).entrySet().stream()
-                .sorted((e1, e2) -> Integer.compare(e1.getKey(), e2.getKey())).map(entry -> entry.getValue()).toList();
+                .sorted((e1, e2) -> Integer.compare(e1.getKey(), e2.getKey()))
+                .map(entry -> entry.getValue()).toList();
         for (int curBox = 0; curBox < output.size(); curBox++) {
             List<Entry<String, Pair<Integer, Integer>>> curPrintBox = output.get(curBox);
             System.out.print("Box " + hash(curPrintBox.getFirst().getKey()) + ": ");
             curPrintBox.sort((e1, e2) -> Integer.compare(e1.getValue().first, e2.getValue().first));
-            curPrintBox.forEach(
-                    e -> System.out.print(e.getValue().first + ": [" + e.getKey() + " " + e.getValue().second + "] "));
+            curPrintBox.forEach(e -> System.out.print(
+                    e.getValue().first + ": [" + e.getKey() + " " + e.getValue().second + "] "));
             System.out.println();
         }
     }
 
     void Solution2() throws IOException {
-        List<ArrayList<Pair<String, Integer>>> BoxList = Collections
-                .nCopies(256, new ArrayList<Pair<String, Integer>>()).stream().map(list -> new ArrayList<>(list))
-                .toList();
-        HashMap<String, Pair<Integer, Integer>> LensPosList = new HashMap<>();// Label -> Slot,focalLength
+        List<ArrayList<Pair<String, Integer>>> BoxList =
+                Collections.nCopies(256, new ArrayList<Pair<String, Integer>>()).stream()
+                        .map(list -> new ArrayList<>(list)).toList();
+        HashMap<String, Pair<Integer, Integer>> LensPosList = new HashMap<>();// Label ->
+                                                                              // Slot,focalLength
         for (var s : stepList) {
             String label = extractLabel(s);
             List<Pair<String, Integer>> SlotList = BoxList.get(hash(label));
@@ -78,7 +80,8 @@ public class StringHasher {
                     SlotList.remove(whichSlot);
                     LensPosList.remove(label);
                     for (int i = 0; i < SlotList.size(); i++) {
-                        LensPosList.put(SlotList.get(i).first, new Pair<Integer, Integer>(i, SlotList.get(i).second));
+                        LensPosList.put(SlotList.get(i).first,
+                                new Pair<Integer, Integer>(i, SlotList.get(i).second));
                     }
                 }
             }
@@ -87,9 +90,8 @@ public class StringHasher {
             // System.out.println();
 
         }
-        System.out.println("Solution 2: " + LensPosList.entrySet().stream()
-                .mapToLong(e -> (hash(e.getKey()) + 1) * (e.getValue().first + 1) *
-                        e.getValue().second)
+        System.out.println("Solution 2: " + LensPosList.entrySet().stream().mapToLong(
+                e -> (hash(e.getKey()) + 1) * (e.getValue().first + 1) * e.getValue().second)
                 .sum());
     }
 

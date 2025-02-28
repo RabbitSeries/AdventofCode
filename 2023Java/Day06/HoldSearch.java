@@ -16,8 +16,7 @@ public class HoldSearch {
         while ((buf = input.readLine()) != null) {
             if (buf.indexOf("Time:") != -1) {
                 for (Integer timeout : Arrays.stream(buf.split(":")[1].trim().split("\\s+"))
-                        .map(Integer::parseInt)
-                        .toList()) {
+                        .map(Integer::parseInt).toList()) {
                     recordList.add(new SimpleEntry<>(timeout, 0));
                 }
             } else if (buf.indexOf("Distance") != -1) {
@@ -25,8 +24,7 @@ public class HoldSearch {
                 for (Integer integer : Arrays.stream(buf.split(":")[1].trim().split("\\s+"))
                         .map(token -> {
                             return Integer.parseInt(token);
-                        })
-                        .toList()) {
+                        }).toList()) {
                     recordList.get(id).setValue(integer);
                     id++;
                 }
@@ -66,10 +64,10 @@ public class HoldSearch {
 
     void Solution2() throws IOException {
         readFile();
-        long realTimeout = Long
-                .parseLong(recordList.stream().map(token -> token.getKey().toString()).collect(Collectors.joining()));
-        long realDistance = Long
-                .parseLong(recordList.stream().map(token -> token.getValue().toString()).collect(Collectors.joining()));
+        long realTimeout = Long.parseLong(recordList.stream()
+                .map(token -> token.getKey().toString()).collect(Collectors.joining()));
+        long realDistance = Long.parseLong(recordList.stream()
+                .map(token -> token.getValue().toString()).collect(Collectors.joining()));
         long targetCnt = 1;
 
         targetCnt *= binarySearch(realTimeout, realDistance);
