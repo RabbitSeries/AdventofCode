@@ -17,6 +17,16 @@
             }
         },
         {
+            "name": "Ninja Release Configure",
+            "displayName": "Ninja Release Configure",
+            "hidden": false,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
             "name": "MinGW Debug Configure",
             "displayName": "MinGW Debug Configure",
             "hidden": false,
