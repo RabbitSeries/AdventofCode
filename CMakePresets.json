@@ -23,6 +23,7 @@
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build",
             "cacheVariables": {
+                "///CMAKE_CXX_FLAGS": "-O1",
                 "CMAKE_BUILD_TYPE": "Release"
             }
         },

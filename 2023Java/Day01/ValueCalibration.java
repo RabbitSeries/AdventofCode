@@ -21,17 +21,17 @@ public class ValueCalibration {
 
     void InitDataModel() {
         res = 0;
-        digits = new HashMap<>();
-        digits.put("zero", 0);
-        digits.put("one", 1);
-        digits.put("two", 2);
-        digits.put("three", 3);
-        digits.put("four", 4);
-        digits.put("five", 5);
-        digits.put("six", 6);
-        digits.put("seven", 7);
-        digits.put("eight", 8);
-        digits.put("nine", 9);
+        digits = new HashMap<>(Map.of(
+                "zero", 0,
+                "one", 1,
+                "two", 2,
+                "three", 3,
+                "four", 4,
+                "five", 5,
+                "six", 6,
+                "seven", 7,
+                "eight", 8,
+                "nine", 9));
     }
 
     void isDigit(String line, int index, boolean reverse) {

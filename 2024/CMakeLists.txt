@@ -9,4 +9,6 @@ FILES_MATCHING
 PATTERN "*.txt")
 message("Copying input resources -- done")
 # Add the executable
+
+# add_compile_options(-O1)
 add_executable(solution main.cc ${SOURCES})
