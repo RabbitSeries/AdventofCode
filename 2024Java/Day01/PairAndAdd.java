@@ -18,7 +18,8 @@ public class PairAndAdd {
                     pair.add(Integer.valueOf(m.group(0), 10));
                 }
                 if (pair.size() == 2) {
-                    numList.add(new AbstractMap.SimpleEntry<Integer, Integer>(pair.get(0), pair.get(1)));
+                    numList.add(new AbstractMap.SimpleEntry<Integer, Integer>(pair.get(0),
+                            pair.get(1)));
                 }
             }
         } catch (IOException e) {

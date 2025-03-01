@@ -8,19 +8,15 @@ import java.util.stream.Collectors;
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 
-import DataModel.Point2D;
+import JavaDataModel.*;
 
 public class PatrolRoute {
 
-    static Character[] face = new Character[] { '^', '>', 'v', '<' };
-    static HashMap<Character, Integer> faceId = new HashMap<>(
-            Map.of(
-                    '^', 0,
-                    '>', 1,
-                    'v', 2,
-                    '<', 3));
-    static int[] dx = new int[] { -1, 0, 1, 0 };
-    static int[] dy = new int[] { 0, 1, 0, -1 };
+    static Character[] face = new Character[] {'^', '>', 'v', '<'};
+    static HashMap<Character, Integer> faceId =
+            new HashMap<>(Map.of('^', 0, '>', 1, 'v', 2, '<', 3));
+    static int[] dx = new int[] {-1, 0, 1, 0};
+    static int[] dy = new int[] {0, 1, 0, -1};
     Point2D guardPos;
 
     List<List<Character>> readFile() throws IOException {
@@ -28,8 +24,8 @@ public class PatrolRoute {
         String linebuf;
         BufferedReader input = new BufferedReader(new FileReader("./Day06/input.txt"));
         while ((linebuf = input.readLine()) != null) {
-            List<Character> row = linebuf.chars().mapToObj(l -> (char) l).collect(ArrayList::new, ArrayList::add,
-                    ArrayList::addAll);
+            List<Character> row = linebuf.chars().mapToObj(l -> (char) l).collect(ArrayList::new,
+                    ArrayList::add, ArrayList::addAll);
             if (!linebuf.isEmpty() && linebuf.matches(".*[\\^>v<].*")) {
                 guardPos = new Point2D(routeMap.size(), linebuf.split("[\\^>v<]")[0].length());
             }
@@ -47,7 +43,8 @@ public class PatrolRoute {
         while (Point2D.isValid(rows, cols, curPos)) {
             // Determine the face
             curFace = faceId.get(routeMap.get(curPos.getKey()).get(curPos.getValue()));
-            Point2D nextPos = new Point2D(dx[curFace] + curPos.getKey(), dy[curFace] + curPos.getValue());
+            Point2D nextPos =
+                    new Point2D(dx[curFace] + curPos.getKey(), dy[curFace] + curPos.getValue());
             if (Point2D.isValid(rows, cols, nextPos)) {
                 if (routeMap.get(nextPos.getKey()).get(nextPos.getValue()).equals('#')) {
                     curFace = (curFace + 1) % 4;
@@ -85,9 +82,10 @@ public class PatrolRoute {
     boolean isPatrolCircle(Point2D curPos, List<List<Character>> routeMap, int rows, int cols) {
         boolean isCircle = false;
         // HashMap<Point2D, Entry<Boolean, Character>> passed = new HashMap<>();
-        List<List<Entry<Boolean, Character>>> passed = routeMap.stream().map(
-                line -> line.stream().map(
-                        cell -> (Entry<Boolean, Character>) new SimpleEntry<>(false, '.')).collect(Collectors.toList()))
+        List<List<Entry<Boolean, Character>>> passed = routeMap.stream()
+                .map(line -> line.stream()
+                        .map(cell -> (Entry<Boolean, Character>) new SimpleEntry<>(false, '.'))
+                        .collect(Collectors.toList()))
                 .collect(Collectors.toList());
         // int times = 0;
         int curFace = faceId.get(routeMap.get(curPos.getKey()).get(curPos.getValue()));
@@ -99,9 +97,11 @@ public class PatrolRoute {
                 return true;
             }
             // Determine the face
-            Point2D nextPos = new Point2D(dx[curFace] + curPos.getKey(), dy[curFace] + curPos.getValue());
+            Point2D nextPos =
+                    new Point2D(dx[curFace] + curPos.getKey(), dy[curFace] + curPos.getValue());
             if (Point2D.isValid(rows, cols, nextPos)) {
-                passed.get(curPos.getKey()).set(curPos.getValue(), new SimpleEntry<>(true, face[curFace]));
+                passed.get(curPos.getKey()).set(curPos.getValue(),
+                        new SimpleEntry<>(true, face[curFace]));
                 if (routeMap.get(nextPos.getKey()).get(nextPos.getValue()).equals('#')) {
                     curFace = (curFace + 1) % 4;
                 } else {
@@ -115,7 +115,8 @@ public class PatrolRoute {
         return isCircle;
     }
 
-    int threadTask(int startRow, int endRow, Point2D guardPos, List<List<Character>> routeMap, AtomicInteger count) {
+    int threadTask(int startRow, int endRow, Point2D guardPos, List<List<Character>> routeMap,
+            AtomicInteger count) {
         int distinctPlacementLocal = 0;
         for (int i = startRow; i < endRow; i++) {
             for (int j = 0; j < routeMap.get(i).size(); j++) {
@@ -180,7 +181,8 @@ public class PatrolRoute {
         executor.shutdown();
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
+    public static void main(String[] args)
+            throws IOException, InterruptedException, ExecutionException {
         var now = System.currentTimeMillis();
         PatrolRoute Day06 = new PatrolRoute();
         Day06.Solution1();

@@ -11,7 +11,8 @@ public class OrderingUpdates {
         BufferedReader RuleInput = new BufferedReader(new FileReader("RuleInput.txt"));
         String linebuf;
         while ((linebuf = RuleInput.readLine()) != null) {
-            int num1 = Integer.parseInt(linebuf.split("\\|")[0]), num2 = Integer.parseInt(linebuf.split("\\|")[1]);
+            int num1 = Integer.parseInt(linebuf.split("\\|")[0]),
+                    num2 = Integer.parseInt(linebuf.split("\\|")[1]);
             rules.putIfAbsent(num1, new HashSet<>());
             rules.get(num1).add(num2);
         }
@@ -25,8 +26,8 @@ public class OrderingUpdates {
         BufferedReader UpdatesInput = new BufferedReader(new FileReader("UpdatesInput.txt"));
         while ((linebuf = UpdatesInput.readLine()) != null) {
             if (!linebuf.isEmpty()) {
-                List<Integer> update = Arrays.asList(linebuf.trim().split(",")).stream().map(l -> Integer.parseInt(l))
-                        .collect(Collectors.toList());
+                List<Integer> update = Arrays.asList(linebuf.trim().split(",")).stream()
+                        .map(l -> Integer.parseInt(l)).collect(Collectors.toList());
 
                 updates.add(update);
             }

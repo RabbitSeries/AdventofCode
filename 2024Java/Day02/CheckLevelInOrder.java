@@ -57,7 +57,8 @@ public class CheckLevelInOrder {
         if (!enableRemoval) {
             return checkDecrease(Levels) || checkIncrease(Levels);
         } else {
-            return checkDecrease(Levels) || checkIncrease(Levels) || canBeSafeByRemovingOneLevel(Levels);
+            return checkDecrease(Levels) || checkIncrease(Levels)
+                    || canBeSafeByRemovingOneLevel(Levels);
         }
     }
 

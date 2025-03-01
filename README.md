@@ -83,9 +83,9 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ## Statistics
 
-Language    |files|blank|comment|code
---------    |-----|-----|-------|----
-C++         |41   |358  |448    |4102
-Java        |13   |180  |40     |1467
-C/C++ Header|6    |44   |82     |633
-SUM:        |60   |582  |570    |6202
+Language           |         files     |    blank   |    comment   |       code
+-------------------|-------------------|------------|--------------|-----------
+C/C++ Header       |            29     |      328   |        328   |       3707
+Java               |            26     |      338   |        115   |       2714
+C++                |            14     |      229   |        109   |       1387
+SUM:               |            69     |      895   |        552   |       7808

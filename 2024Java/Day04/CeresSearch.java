@@ -6,39 +6,14 @@ import java.util.*;
 
 class CeresSearch {
 
-    static int[][] dx = new int[][] {
-            { 0, 0, 0, 0 },
-            { 0, 0, 0, 0 },
-            { 0, 1, 2, 3 },
-            { 0, 1, 2, 3 },
-            { 0, 1, 2, 3 },
-            { 0, -1, -2, -3 },
-            { 0, -1, -2, -3 },
-            { 0, -1, -2, -3 },
-    };
-    static int[][] dy = new int[][] {
-            { 0, 1, 2, 3 },
-            { 0, -1, -2, -3 },
-            { 0, 1, 2, 3 },
-            { 0, 0, 0, 0 },
-            { 0, -1, -2, -3 },
-            { 0, 1, 2, 3 },
-            { 0, 0, 0, 0 },
-            { 0, -1, -2, -3 }
+    static int[][] dx = new int[][] {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 1, 2, 3}, {0, 1, 2, 3},
+            {0, 1, 2, 3}, {0, -1, -2, -3}, {0, -1, -2, -3}, {0, -1, -2, -3},};
+    static int[][] dy = new int[][] {{0, 1, 2, 3}, {0, -1, -2, -3}, {0, 1, 2, 3}, {0, 0, 0, 0},
+            {0, -1, -2, -3}, {0, 1, 2, 3}, {0, 0, 0, 0}, {0, -1, -2, -3}
 
     };
-    static int[][] xdx = new int[][] {
-            { -1, 0, 1 },
-            { -1, 0, 1 },
-            { 1, 0, -1 },
-            { 1, 0, -1 }
-    };
-    static int[][] xdy = new int[][] {
-            { -1, 0, 1 },
-            { 1, 0, -1 },
-            { -1, 0, 1 },
-            { 1, 0, -1 },
-    };
+    static int[][] xdx = new int[][] {{-1, 0, 1}, {-1, 0, 1}, {1, 0, -1}, {1, 0, -1}};
+    static int[][] xdy = new int[][] {{-1, 0, 1}, {1, 0, -1}, {-1, 0, 1}, {1, 0, -1},};
 
     boolean isXMAS(int i, int j, int k, ArrayList<ArrayList<Character>> m) {
         int rows = m.size(), rols = m.get(0).size();
@@ -51,8 +26,9 @@ class CeresSearch {
 
     boolean isCrossMAS(int i, int j, int k, ArrayList<ArrayList<Character>> m) {
         int rows = m.size(), rols = m.get(0).size();
-        return i + xdx[k][2] >= 0 && i + xdx[k][2] < rows && j + xdy[k][2] >= 0 && j + xdy[k][2] < rols &&
-                i + xdx[k][0] >= 0 && i + xdx[k][0] < rows && j + xdy[k][0] >= 0 && j + xdy[k][0] < rols
+        return i + xdx[k][2] >= 0 && i + xdx[k][2] < rows && j + xdy[k][2] >= 0
+                && j + xdy[k][2] < rols && i + xdx[k][0] >= 0 && i + xdx[k][0] < rows
+                && j + xdy[k][0] >= 0 && j + xdy[k][0] < rols
                 && m.get(i + xdx[k][0]).get(j + xdy[k][0]) == 'M'
                 && m.get(i + xdx[k][1]).get(j + xdy[k][1]) == 'A'
                 && m.get(i + xdx[k][2]).get(j + xdy[k][2]) == 'S';

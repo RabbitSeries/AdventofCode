@@ -1,4 +1,5 @@
 package Day15;
+
 import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
@@ -18,7 +19,8 @@ public class GameCore {
         gameCore.playMyself(id2BoxPos, arcade, start);
     }
 
-    void playMyself(Vector<boxPos> id2BoxPos, Vector<Vector<Integer>> arcade, pos curPos) throws IOException {
+    void playMyself(Vector<boxPos> id2BoxPos, Vector<Vector<Integer>> arcade, pos curPos)
+            throws IOException {
         printGUI(arcade, curPos);
         while (true) {
             if (freshGUI(id2BoxPos, arcade, curPos))
@@ -107,15 +109,16 @@ public class GameCore {
         }
     }
 
-    boolean getNextBoxVertical(Vector<boxPos> id2BoxPos, Vector<Vector<Integer>> arcade, Vector<boxPos> curLevel,
-            Vector<boxPos> nextLevel, char control, boolean isBlocked) {
+    boolean getNextBoxVertical(Vector<boxPos> id2BoxPos, Vector<Vector<Integer>> arcade,
+            Vector<boxPos> curLevel, Vector<boxPos> nextLevel, char control, boolean isBlocked) {
         Map<Integer, Integer> nextLevelID = new HashMap<>();
         // Vector<boxPos> nextLevel = new Vector<>();
         for (int i = 0; i < curLevel.size() && !isBlocked; i++) {
             boxPos curBox = curLevel.elementAt(i);
             {
                 pos l = getNextPos(control, curBox.l), r = getNextPos(control, curBox.r);
-                int nextIDL = arcade.elementAt(l.x).get(l.y), nextIDR = arcade.elementAt(r.x).get(r.y);
+                int nextIDL = arcade.elementAt(l.x).get(l.y),
+                        nextIDR = arcade.elementAt(r.x).get(r.y);
                 if (nextIDL == CELLWALL || nextIDR == CELLWALL) {
                     isBlocked = true;
                     nextLevel.clear();
@@ -158,8 +161,8 @@ public class GameCore {
 
     }
 
-    void pushBoxVertical(Vector<boxPos> boxList, Vector<boxPos> id2BoxPos, Vector<Vector<Integer>> arcade,
-            char control) {
+    void pushBoxVertical(Vector<boxPos> boxList, Vector<boxPos> id2BoxPos,
+            Vector<Vector<Integer>> arcade, char control) {
         for (boxPos b : boxList) {
             pos l = b.l, r = b.r;
             int boxId = arcade.elementAt(l.x).get(l.y);
@@ -173,8 +176,8 @@ public class GameCore {
         }
     }
 
-    void pushBoxHorizontal(Vector<boxPos> boxList, Vector<boxPos> id2BoxPos, Vector<Vector<Integer>> arcade,
-            char control) {
+    void pushBoxHorizontal(Vector<boxPos> boxList, Vector<boxPos> id2BoxPos,
+            Vector<Vector<Integer>> arcade, char control) {
         assert (boxList.size() == 1);
         for (boxPos b : boxList) {
             pos l = new pos(b.l.x, b.l.y), r = new pos(b.r.x, b.r.y);
@@ -191,7 +194,8 @@ public class GameCore {
         }
     }
 
-    void pushBox(Vector<boxPos> id2BoxPos, Vector<Vector<Integer>> arcade, pos curPos, char control) {
+    void pushBox(Vector<boxPos> id2BoxPos, Vector<Vector<Integer>> arcade, pos curPos,
+            char control) {
         boolean isBlocked = false;
         Stack<Vector<boxPos>> boxPath = new Stack<>();
         Vector<boxPos> curLevel = new Vector<>();
@@ -202,9 +206,11 @@ public class GameCore {
         while (!isBlocked && !curLevel.isEmpty()) {
             Vector<boxPos> nextLevel = new Vector<>();
             if (control == 'v' || control == '^') {
-                isBlocked = getNextBoxVertical(id2BoxPos, arcade, curLevel, nextLevel, control, isBlocked);
+                isBlocked = getNextBoxVertical(id2BoxPos, arcade, curLevel, nextLevel, control,
+                        isBlocked);
             } else {
-                isBlocked = getNextBoxHorizental(id2BoxPos, arcade, curLevel, nextLevel, control, isBlocked);
+                isBlocked = getNextBoxHorizental(id2BoxPos, arcade, curLevel, nextLevel, control,
+                        isBlocked);
             }
             if (!isBlocked) {
                 if (!nextLevel.isEmpty())
@@ -229,7 +235,8 @@ public class GameCore {
         }
     }
 
-    boolean freshGUI(Vector<boxPos> id2BoxPos, Vector<Vector<Integer>> arcade, pos curPos) throws IOException {
+    boolean freshGUI(Vector<boxPos> id2BoxPos, Vector<Vector<Integer>> arcade, pos curPos)
+            throws IOException {
         char c = getMoveMent();
         if (c == 'q') {
             return false;
@@ -314,6 +321,7 @@ public class GameCore {
 
 }
 
+
 class pos {
     int x, y;
 
@@ -322,6 +330,7 @@ class pos {
         this.y = y;
     }
 }
+
 
 class boxPos {
     pos l, r;
