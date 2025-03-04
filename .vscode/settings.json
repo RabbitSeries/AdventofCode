@@ -13,20 +13,6 @@
     "java.project.outputPath": "compileRuntime/bin",
     "java.project.referencedLibraries": [],
     "C_Cpp.default.compilerPath": "D:/Build_Tool_Lib/x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0/mingw64/bin/g++.exe",
-    "files.associations": {
-        "*.cpp": "cpp",
-        "*.c": "c",
-        ".py": "python",
-        "*.stact": "st",
-        "*.stdut": "st",
-        "*.stfb": "st",
-        "*.vim": "Vimscript",
-        "_vimrc": "Vimscript",
-        "map": "cpp",
-        "format": "cpp",
-        "vector": "cpp",
-        "ranges": "cpp"
-    },
     // "java.project.referencedLibraries": [
     //     "2024Java/lib/**/*.jar"
     // ],

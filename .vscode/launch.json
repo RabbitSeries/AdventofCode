@@ -33,6 +33,7 @@
             "vmArgs": "-ea",
             "cwd": "${fileDirname}",
             "mainClass": "${file}",
+            // "console": "externalTerminal",
             "projectName": "aocjava",
         },
         {
