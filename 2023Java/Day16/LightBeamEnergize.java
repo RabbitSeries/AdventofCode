@@ -27,9 +27,6 @@ public class LightBeamEnergize {
                     new HashMap<>(Map.of(0, 2, 1, 3, 2, 0, 3, 1))));
 
     int energizeTiles(Point2D entry, int face) {
-        if (memo.containsKey(new Pair<>(entry, face))) {
-            return memo.get(new Pair<>(entry, face));
-        }
         HashSet<Point2D> resSet = new HashSet<>();
         int rows = ContraptionLayout.size(),
                 cols = ContraptionLayout.get(0).size();
@@ -79,8 +76,6 @@ public class LightBeamEnergize {
         System.out
                 .println("Solution 1: " + energizeTiles(new Point2D(0, 0), 3));
     }
-
-    HashMap<Pair<Point2D, Integer>, Integer> memo = new HashMap<>();
 
     void Solution2() {
         int maxEnergizedTiles = 0;
