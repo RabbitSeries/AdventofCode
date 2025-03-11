@@ -56,7 +56,7 @@ public class LavaLoss {
         });
     }
 
-    int Dijkstra(Point2D startPos, Point2D endPos, boolean isFindAllPath, int lowerBound, int upperBound) {
+    int Dijkstra(Point2D startPos, Point2D endPos, int lowerBound, int upperBound) {
         int rows = LavaMap.size(), cols = LavaMap.get(0).size();
         PriorityQueue<PosInfo> pq = new PriorityQueue<>((p1, p2) -> p1.first - p2.first);
         List<List<HashMap<String, Integer>>> LossMap = Collections.nCopies(rows, Collections.nCopies(cols, new HashMap<String, Integer>()))
@@ -68,7 +68,6 @@ public class LavaLoss {
             if (Point2D.isValid(rows, cols, nextPos)) {
                 LossMap.get(nextPos.first).get(nextPos.second).put(1 + "," + i, LavaMap.get(nextPos.first).get(nextPos.second));
                 pq.add(new PosInfo(LavaMap.get(nextPos.first).get(nextPos.second), 1, i, nextPos));
-
             }
         }
         int minLoss = Integer.MAX_VALUE;
@@ -85,9 +84,8 @@ public class LavaLoss {
             if (curPos.equals(endPos) && curLoss <= minLoss && curStraightCnt >= lowerBound) {
                 minLoss = curLoss;
                 // printPathList(LavaMap, curPos.pathList);
-                if (!isFindAllPath) {
-                    break;
-                }
+                // if(!isFindAllPath)
+                break;
             } else if (minLoss != Integer.MAX_VALUE && curLoss != minLoss) {
                 break;
             }
@@ -121,15 +119,14 @@ public class LavaLoss {
         readFile();
         int rows = LavaMap.size(), cols = LavaMap.get(0).size();
         Point2D startPos = new Point2D(0, 0), endPos = new Point2D(rows - 1, cols - 1);
-        System.out.println("Solution 1: " + Dijkstra(startPos, endPos, false, 1, 3));
+        System.out.println("Solution 1: " + Dijkstra(startPos, endPos, 1, 3));
         return;
     }
 
     void Solution2() throws IOException {
         int rows = LavaMap.size(), cols = LavaMap.get(0).size();
         Point2D startPos = new Point2D(0, 0), endPos = new Point2D(rows - 1, cols - 1);
-        Dijkstra(startPos, endPos, false, 4, 10);
-        System.out.println("Solution 2: " + Dijkstra(startPos, endPos, false, 4, 10));
+        System.out.println("Solution 2: " + Dijkstra(startPos, endPos, 4, 10));
         return;
     }
 
@@ -140,8 +137,10 @@ public class LavaLoss {
     }
 
     public static void main(String[] args) throws IOException {
+        var now = System.currentTimeMillis();
         LavaLoss Day17 = new LavaLoss();
         Day17.Solution1();
         Day17.Solution2();
+        System.out.println("Time usage: " + (System.currentTimeMillis() - now) + " ms");
     }
 }
