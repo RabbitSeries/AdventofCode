@@ -4,7 +4,9 @@
             "type": "shell",
             "label": "[Windows] Clean workspace",
             "command": "${workspaceFolder}/.vscode/clean_noConfirm.bat",
-            "isBackground": true,
+            "presentation": {
+                "reveal": "silent"
+            },
             "args": [
                 "${workspaceFolder}"
             ],
@@ -14,31 +16,23 @@
             "type": "shell",
             "label": "[ArchLinux] Clean workspace",
             "command": "${workspaceFolder}/.vscode/clean_noConfirm.sh",
-            "isBackground": true,
+            "presentation": {
+                "reveal": "silent"
+            },
             "args": [
                 "${workspaceFolder}"
             ],
             "problemMatcher": []
         },
         {
-            "type": "shell",
-            "label": "[ArchLinux] [Release] Run program",
-            "command": "${fileDirname}/exe_${fileBasenameNoExtension}",
-            "options": {
-                "cwd": "${fileDirname}"
-            },
-            "args": [],
-            "problemMatcher": []
-        },
-        {
             "type": "cppbuild",
-            "label": "[ArchLinux] C/C++: g++ build active file",
-            "command": "/usr/bin/g++",
+            "label": "[ArchLinux] [Debug Build] [C/C++]: g++ build active file",
+            "command": "g++",
             "args": [
                 "-fdiagnostics-color=always",
                 "-std=c++17",
                 "-g",
-                "${fileBasenameNoExtension}.cpp",
+                "${file}",
                 "-o",
                 "${fileDirname}/exe_${fileBasenameNoExtension}"
             ],
@@ -55,103 +49,24 @@
         {
             "type": "cppbuild",
             "label": "[ArchLinux] [Release Build] [C/C++]: g++ build active file",
-            "command": "/usr/bin/g++",
+            "command": "g++",
             "args": [
                 "-fdiagnostics-color=always",
                 "-std=c++17",
                 "-O1",
-                "${fileBasenameNoExtension}.cpp",
-                "-o",
-                "${fileDirname}/exe_${fileBasenameNoExtension}"
-            ],
-            "options": {
-                "cwd": "${fileDirname}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
-                "kind": "build"
-            }
-        },
-        {
-            "type": "cppbuild",
-            "label": "[ArchLinux] [Debug Build] [C/C++]: g++ build active file with debug info",
-            "command": "/usr/bin/g++",
-            "args": [
-                "-fdiagnostics-color=always",
-                "-lstdc++",
-                "-std=c++17",
-                "-g",
-                "${fileBasenameNoExtension}.cpp",
-                "-o",
-                "${fileDirname}/exe_${fileBasenameNoExtension}"
-            ],
-            "options": {
-                "cwd": "${fileDirname}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
-                "kind": "build"
-            }
-        },
-        {
-            "type": "cmake",
-            "label": "[CMake] [Debug]: build",
-            "command": "build",
-            "preset": "MinGW Build Debug",
-            "presentation": {
-                "reveal": "silent"
-            },
-        },
-        {
-            "type": "cmake",
-            "label": "[CMake] [Debug]: clean rebuild",
-            "command": "cleanRebuild",
-            "preset": "MinGW Build Debug",
-            "presentation": {
-                "reveal": "silent"
-            }
-        },
-        {
-            "type": "cmake",
-            "label": "[CMake] [Release]: build",
-            "command": "build",
-            "preset": "MinGW Build Release",
-            "presentation": {
-                "reveal": "silent"
-            },
-        },
-        {
-            "type": "cmake",
-            "label": "[CMake] [Release]: clean rebuild",
-            "command": "cleanRebuild",
-            "preset": "MinGW Build Release",
-            "presentation": {
-                "reveal": "silent"
-            }
-        },
-        {
-            "type": "cppbuild",
-            "label": "[MinGW] [Debug] C/C++: g++.exe build active file",
-            "command": "D:/Build_Tool_Lib/x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0/mingw64/bin/g++.exe",
-            "args": [
-                "-fdiagnostics-color=always",
-                "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                "${fileDirname}/exe_${fileBasenameNoExtension}"
             ],
             "options": {
-                "cwd": "D:/Build_Tool_Lib/x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0/mingw64/bin"
+                "cwd": "${fileDirname}"
             },
             "problemMatcher": [
                 "$gcc"
             ],
-            "group": "build",
-            "detail": "compiler: D:/Build_Tool_Lib/x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0/mingw64/bin/g++.exe"
+            "group": {
+                "kind": "build"
+            }
         }
     ],
     "version": "2.0.0"

@@ -1,31 +1,6 @@
 {
     "configurations": [
         {
-            "name": "(gdb) Launch",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${fileDirname}/${fileBasenameNoExtension}.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${fileDirname}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "D:\\Build_Tool_Lib\\x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0\\mingw64\\bin\\gdb.exe",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                },
-                {
-                    "description": "Set Disassembly Flavor to Intel",
-                    "text": "-gdb-set disassembly-flavor intel",
-                    "ignoreFailures": true
-                }
-            ]
-        },
-        {
             "name": "Java: java build and debug active file",
             "type": "java",
             "request": "launch",
@@ -45,21 +20,7 @@
             "cwd": "${fileDirname}"
         },
         {
-            "name": "[CMake] [Debug] [MinGW]: debug build and gdb",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}\\build\\${relativeFileDirname}\\solution.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}\\${relativeFileDirname}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "D:\\Build_Tool_Lib\\x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0\\mingw64\\bin\\gdb.exe",
-            "preLaunchTask": "[CMake] [Debug]: build"
-        },
-        {
-            "name": "[ArchLinux] [Debug Launch] [C/C++]: g++ build and debug active file",
+            "name": "[C/C++] [Debug Launch]",
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/exe_${fileBasenameNoExtension}",
@@ -69,7 +30,7 @@
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "/usr/bin/gdb",
+            "miDebuggerPath": "gdb",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
@@ -82,10 +43,10 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "[ArchLinux] [Debug Build] [C/C++]: g++ build active file with debug info"
+            "preLaunchTask": "[ArchLinux] [Debug Build] [C/C++]: g++ build active file"
         },
         {
-            "name": "[ArchLinux] [Release Launch] [C/C++]: g++ launch release active file",
+            "name": "[C/C++] [Release Launch]",
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/exe_${fileBasenameNoExtension}",
@@ -95,34 +56,8 @@
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "/usr/bin/gdb",
+            "miDebuggerPath": "gdb",
             "preLaunchTask": "[ArchLinux] [Release Build] [C/C++]: g++ build active file"
-        },
-        {
-            "name": "[ArchLinux] C/C++: gcc build and debug active file",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${fileDirname}/exe_${fileBasenameNoExtension}",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${fileDirname}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "/usr/bin/gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                },
-                {
-                    "description": "Set Disassembly Flavor to Intel",
-                    "text": "-gdb-set disassembly-flavor intel",
-                    "ignoreFailures": true
-                }
-            ],
-            "preLaunchTask": "[ArchLinux] C/C++: gcc build active file"
         }
     ],
     "version": "2.0.0"

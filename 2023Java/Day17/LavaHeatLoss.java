@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import JavaDataModel.Point2D;
 import JavaDataModel.Pair;
 
-public class LavaLoss {
+public class LavaHeatLoss {
     void readFile() throws IOException {
         LavaMap = new ArrayList<>();
         String buf;
@@ -60,8 +60,10 @@ public class LavaLoss {
         int rows = LavaMap.size(), cols = LavaMap.get(0).size();
         PriorityQueue<PosInfo> pq = new PriorityQueue<>((p1, p2) -> p1.first - p2.first);
         List<List<HashMap<String, Integer>>> LossMap = Collections.nCopies(rows, Collections.nCopies(cols, new HashMap<String, Integer>()))
-                .stream().map(row -> (List<HashMap<String, Integer>>) row.stream().map(loss -> new HashMap<>(loss)).collect(Collectors.toCollection(ArrayList::new)))
-                .collect(Collectors.toCollection(ArrayList::new));
+                .stream().map(row -> row
+                        .stream().map(loss -> new HashMap<>(loss))
+                        .toList())
+                .toList();
         for (int i = 0; i < 4; i++) {
             // LossMap.get(startPos.first).get(startPos.second).set(i, 0);
             Point2D nextPos = new Point2D(startPos.first + dx[i], startPos.second + dy[i]);
@@ -138,7 +140,7 @@ public class LavaLoss {
 
     public static void main(String[] args) throws IOException {
         var now = System.currentTimeMillis();
-        LavaLoss Day17 = new LavaLoss();
+        LavaHeatLoss Day17 = new LavaHeatLoss();
         Day17.Solution1();
         Day17.Solution2();
         System.out.println("Time usage: " + (System.currentTimeMillis() - now) + " ms");
