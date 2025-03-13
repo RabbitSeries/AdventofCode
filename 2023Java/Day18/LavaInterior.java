@@ -21,7 +21,7 @@ public class LavaInterior {
             Matcher m = Pattern.compile("(\\w)\\s(\\d+)\\s\\(#([\\d\\w]+)\\)").matcher(buf);
             // Perform find first;
             if (m.find()) {
-                DigPlanList.add(new DigPlan(DirectionTranslate.get(m.group(1)), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3), 16)));
+                DigPlanList.add(new DigPlan(DirectionTranslate.get(m.group(1)), Integer.parseInt(m.group(2)), m.group(3)));
             }
         }
         input.close();
@@ -60,6 +60,13 @@ public class LavaInterior {
             }
         }
         System.out.println("Solution 1: " + interiorCnt);
+    }
+
+    void Solution2() {
+        // Scan by Line Segment
+        for (var digplan : DigPlanList) {
+            digplan.update();
+        }
     }
 
     boolean BFS(Point2D curPos, HashSet<Point2D> curVisited) {
@@ -112,9 +119,15 @@ public class LavaInterior {
         Day18.Solution1();
     }
 
-    class DigPlan extends Pair<Integer, Pair<Integer, Integer>> {
-        public DigPlan(int direction, int depth, Integer hexRGB) {
+    class DigPlan extends Pair<Integer, Pair<Integer, String>> {
+        public DigPlan(int direction, int depth, String hexRGB) {
             super(direction, new Pair<>(depth, hexRGB));
+        }
+
+        void update() {
+            String hexRGB = this.second.second;
+            this.second.first = Integer.parseInt(hexRGB.substring(0, hexRGB.length() - 1));
+            this.first = Integer.parseInt(hexRGB.substring(hexRGB.length() - 1));
         }
     }
 }
