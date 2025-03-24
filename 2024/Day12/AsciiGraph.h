@@ -202,9 +202,8 @@ class AsciiGraph {
     void Solution1() {
         vector<vector<char>> garden;
         ifstream input( "Day12/input.txt" );
-        string buf;
         int lineCnt = 0;
-        while ( getline( input, buf ) ) {
+        for ( string buf; getline( input, buf ); ) {
             vector<char> row;
             for ( char c : buf ) {
                 row.push_back( c );
@@ -229,9 +228,8 @@ class AsciiGraph {
     void Solution2() {
         vector<vector<char>> garden;
         ifstream input( "Day12/input.txt" );
-        string buf;
         int lineCnt = 0;
-        while ( getline( input, buf ) ) {
+        for ( string buf; getline( input, buf ); ) {
             vector<char> row;
             for ( char c : buf ) {
                 row.push_back( c );

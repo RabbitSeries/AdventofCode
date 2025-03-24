@@ -35,7 +35,6 @@ struct std::hash<point2D> {
 };
 
 class MazeDijkstra {
-
     // ! If the Penalty is 0, then this is a simple undirected graph problem.
     // static const int PENALTY = 1
     // static const int PENALTY = 0
@@ -45,23 +44,21 @@ class MazeDijkstra {
         CELLEMPTY = -1
     };
 
-    const int dx[4]{ 0,1,0,-1 };
-    const int dy[4]{ 1,0,-1,0 };
+    const int dx[4]{ 0, 1, 0, -1 };
+    const int dy[4]{ 1, 0, -1, 0 };
 
-    void printPathInMaze( vector<pair<int, int>>const& curPath, vector<vector<int>> m ) {
+    void printPathInMaze( vector<pair<int, int>> const& curPath, vector<vector<int>> m ) {
         // system( "clear" );
         // m[e.first][e.second] = 'E';
-        for_each( curPath.begin(), curPath.end(), [ & ]( pair<int, int> road ) {m[road.first][road.second] = 0; } );
-        for( auto line : m ) {
+        for_each( curPath.begin(), curPath.end(), [&]( pair<int, int> road ) { m[road.first][road.second] = 0; } );
+        for ( auto line : m ) {
             string row = "";
-            for( auto cell : line ) {
-                if( cell == CELLWALL ) {
+            for ( auto cell : line ) {
+                if ( cell == CELLWALL ) {
                     row += '#';
-                }
-                else if( cell == CELLEMPTY ) {
+                } else if ( cell == CELLEMPTY ) {
                     row += ' ';
-                }
-                else {
+                } else {
                     row += '0';
                 }
             }
@@ -69,10 +66,9 @@ class MazeDijkstra {
         }
     }
 
-
     void printAllPath( vector<vector<pair<int, int>>> const& pathRecord, vector<vector<int>> const& maze ) {
         int curPathCnt = 0;
-        for_each( pathRecord.begin(), pathRecord.end(), [ & ]( vector<pair<int, int>> curPath ) {
+        for_each( pathRecord.begin(), pathRecord.end(), [&]( vector<pair<int, int>> curPath ) {
             cout << "Path " << curPathCnt++ << ":" << endl;
             printPathInMaze( curPath, maze );
             cout << endl;
@@ -92,18 +88,18 @@ class MazeDijkstra {
         int rows = maze.size();
         int cols = maze[0].size();
 
-        auto isValid = [ & ]( point2D const& p ) -> bool {
+        auto isValid = [&]( point2D const& p ) -> bool {
             return p.first >= 0 && p.first < rows && p.second >= 0 && p.second < cols && maze[p.first][p.second] == CELLEMPTY;
         };
 
         start.cost = 0;
-        pq.push( { 0,start } );
+        pq.push( { 0, start } );
         pathCost.emplace( start, 0 );
         int endCost = INT_MAX;
         size_t max_process = 0;
 
         bool found = false;
-        while( !pq.empty() ) {
+        while ( !pq.empty() ) {
             max_process = max( max_process, pq.size() );
             // 55 ms
             // auto defaults to copy instead of reference.
@@ -111,7 +107,7 @@ class MazeDijkstra {
             // 39 ms
             auto [curCost, curPoint] = move( const_cast<pair<int, point2D>&>( pq.top() ) );
 
-            if( found && curCost > endCost ) {
+            if ( found && curCost > endCost ) {
                 break;
             }
             pq.pop();
@@ -122,56 +118,53 @@ class MazeDijkstra {
             // printPathInMaze( curPoint.LinkRoad, maze );
             // this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
             // ! This happens when turning cost 1 penalty, and the input is inputCutOptimize.txt.
-            if( pathCost.count( curPoint ) != 0 && curCost > pathCost[curPoint] ) {
+            if ( pathCost.count( curPoint ) != 0 && curCost > pathCost[curPoint] ) {
                 foo++;
                 // Once the point is visited in this visit, it should be optimized therefore the following visit should be excluded except that this vertex is shared by different shortest path.
                 continue;
             }
 
-            if( curPoint.isSameLocation( end ) ) {
+            if ( curPoint.isSameLocation( end ) ) {
                 found = true;
-                if( curCost < endCost ) {
+                if ( curCost < endCost ) {
                     // Here enters only once.
                     endCost = curCost;
                     pathSeats.clear();
                     pathRecord.clear();
                     pathRecord.emplace_back( curPoint.LinkRoad );
-                    for_each( curPoint.LinkRoad.begin(), curPoint.LinkRoad.end(), [ & ]( pair<int, int> seat ) {pathSeats.insert( seat ); } );
-                }
-                else if( curCost == endCost ) {
+                    for_each( curPoint.LinkRoad.begin(), curPoint.LinkRoad.end(), [&]( pair<int, int> seat ) { pathSeats.insert( seat ); } );
+                } else if ( curCost == endCost ) {
                     pathRecord.emplace_back( curPoint.LinkRoad );
-                    for_each( curPoint.LinkRoad.begin(), curPoint.LinkRoad.end(), [ & ]( pair<int, int> seat ) {pathSeats.insert( seat ); } );
+                    for_each( curPoint.LinkRoad.begin(), curPoint.LinkRoad.end(), [&]( pair<int, int> seat ) { pathSeats.insert( seat ); } );
                 }
                 continue;
             }
 
-            for( int i = 0; i < 4; i++ ) {
+            for ( int i = 0; i < 4; i++ ) {
                 Direction nDir = Direction( ( curDir + i ) % 4 );
                 point2D nextPoint = point2D( curPoint.first + dx[nDir], curPoint.second + dy[nDir], nDir );
                 int nextCost = curCost + 1;
-                if( nDir != curDir ) {
-                    if( nDir == ( curDir + 2 ) % 4 ) {
+                if ( nDir != curDir ) {
+                    if ( nDir == ( curDir + 2 ) % 4 ) {
                         continue;
-                    }
-                    else {
+                    } else {
                         nextCost += PENALTY;
                     }
                 }
-                if( isValid( nextPoint ) ) {
+                if ( isValid( nextPoint ) ) {
                     // Reachable in Dijkstra.
                     // if( pathCost.count( nextState ) == 0 ) {
-                    if( pathCost.count( nextPoint ) == 0 ) {
+                    if ( pathCost.count( nextPoint ) == 0 ) {
                         // Unvisited before.
                         pathCost.emplace( nextPoint, nextCost );
                         nextPoint.LinkRoad = curPoint.LinkRoad;
-                        pq.push( { nextCost,nextPoint } );
-                    }
-                    else {
-                        if( nextCost <= pathCost[nextPoint] ) {
+                        pq.push( { nextCost, nextPoint } );
+                    } else {
+                        if ( nextCost <= pathCost[nextPoint] ) {
                             // Visited and can be relaxed or same path.
-                            pathCost[nextPoint] = nextCost; // This line doesn't affect the result.
+                            pathCost[nextPoint] = nextCost;  // This line doesn't affect the result.
                             nextPoint.LinkRoad = curPoint.LinkRoad;
-                            pq.push( { nextCost,nextPoint } );
+                            pq.push( { nextCost, nextPoint } );
                         }
                     }
                 }
@@ -186,29 +179,24 @@ class MazeDijkstra {
         cout << "Solution 2: Pile these paths in one maze, there are " << pathSeats.size() << " comfotable spots to enjoy the event." << endl;
     }
 
-
     void readFile( vector<vector<int>>& m, pair<int, int>& s, pair<int, int>& e ) {
         // ! To change test example, choose the following code to uncomment:
         // FILE* input = fopen( "input_example1.txt", "r" );
         // FILE* input = fopen( "input_example2.txt", "r" );
         // FILE* input = fopen( "inputCutOptimize.txt", "r" );
         ifstream input( "Day16/input.txt" );
-        string buf;
-        while( getline( input, buf ) ) {
+        for ( string buf; getline( input, buf ); ) {
             vector<int> row;
-            for( char c : buf ) {
-                if( c != '\n' && c != '\0' ) {
-                    if( c == '#' ) {
+            for ( char c : buf ) {
+                if ( c != '\n' && c != '\0' ) {
+                    if ( c == '#' ) {
                         row.push_back( CELLWALL );
-                    }
-                    else if( c == '.' ) {
+                    } else if ( c == '.' ) {
                         row.push_back( CELLEMPTY );
-                    }
-                    else if( c == 'S' ) {
+                    } else if ( c == 'S' ) {
                         s = { m.size(), row.size() };
                         row.push_back( CELLEMPTY );
-                    }
-                    else if( c == 'E' ) {
+                    } else if ( c == 'E' ) {
                         e = { m.size(), row.size() };
                         row.push_back( CELLEMPTY );
                     }
@@ -217,18 +205,18 @@ class MazeDijkstra {
             m.push_back( row );
         }
     }
-public:
+
+   public:
     void Solution() {
         auto now = chrono::high_resolution_clock::now();
         vector<vector<int>> m;
         pair<int, int> s, e;
         readFile( m, s, e );
         // seekCost( m, { s.first,s.second,EAST }, { e.first,e.second } );
-        countSeats( m, { s.first,s.second,EAST }, { e.first,e.second } );
+        countSeats( m, { s.first, s.second, EAST }, { e.first, e.second } );
         auto end = chrono::high_resolution_clock::now();
         // Slightly quicker
         // Fastest at 45.699 ms
         cout << chrono::duration_cast<chrono::microseconds>( end - now ).count() / 1000.0 << " ms" << endl;
-
     }
 };

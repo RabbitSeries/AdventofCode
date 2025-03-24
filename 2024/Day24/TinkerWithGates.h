@@ -2,14 +2,13 @@
 
 using namespace std;
 class TinkerWithGates {
-
     bool gateResult( string op, bool operand1, bool operand2 ) {
-        if( op == "AND" )
-            return  operand1 & operand2;
-        else if( op == "OR" )
-            return  operand1 | operand2;
-        else if( op == "XOR" )
-            return  operand1 ^ operand2;
+        if ( op == "AND" )
+            return operand1 & operand2;
+        else if ( op == "OR" )
+            return operand1 | operand2;
+        else if ( op == "XOR" )
+            return operand1 ^ operand2;
         else {
             cerr << "Error operator" << endl;
         }
@@ -26,8 +25,8 @@ class TinkerWithGates {
     };
 
     void resetGates( map<string, wire>& wireList ) {
-        for( auto& w : wireList ) {
-            if( w.first[0] != 'x' && w.first[0] != 'y' ) {
+        for ( auto& w : wireList ) {
+            if ( w.first[0] != 'x' && w.first[0] != 'y' ) {
                 wireList[w.first].isValid = false;
                 wireList[w.first].data = false;
             }
@@ -40,22 +39,20 @@ class TinkerWithGates {
         // ifstream input( "example3.txt" );
         // ifstream input( "example4.txt" );
         ifstream input( "Day24/input.txt" );
-        string buf;
         regex initWire( "([xy].+):\\s+([0-9])" );
         regex initGate( "\\b(.+)\\b\\s+(XOR|AND|OR)\\s+\\b(.+)\\b\\s+->\\s+(.+)" );
-        while( getline( input, buf ) ) {
+        for ( string buf; getline( input, buf ); ) {
             smatch m;
-            if( regex_search( buf, m, initWire ) ) {
+            if ( regex_search( buf, m, initWire ) ) {
                 wireList[m[1]].data = stoi( m[2] );
                 wireList[m[1]].isValid = true;
-            }
-            else if( regex_search( buf, m, initGate ) ) {
+            } else if ( regex_search( buf, m, initGate ) ) {
                 string wire1Name = m[1], gateType = m[2], wire2Name = m[3], outWireName = m[4];
-                vector<string> inputSort{ wire1Name,wire2Name };
+                vector<string> inputSort{ wire1Name, wire2Name };
                 sort( inputSort.begin(), inputSort.end(), less<string>() );
-                outWireList[outWireName] = { gateType,inputSort[0],inputSort[1] };
-                wireList[wire1Name].outWireList.push_back( { { m[2], wire2Name}, outWireName } );
-                wireList[wire2Name].outWireList.push_back( { { m[2], wire1Name}, outWireName } );
+                outWireList[outWireName] = { gateType, inputSort[0], inputSort[1] };
+                wireList[wire1Name].outWireList.push_back( { { m[2], wire2Name }, outWireName } );
+                wireList[wire2Name].outWireList.push_back( { { m[2], wire1Name }, outWireName } );
             }
         }
     }
@@ -64,30 +61,29 @@ class TinkerWithGates {
         resetGates( wireList );
         bool addFound = false, carrierFound = false;
         tuple<vector<string>, bool, bool> curProcessList;
-        while( !wireQueue.empty() ) {
+        while ( !wireQueue.empty() ) {
             string curWireName = wireQueue.front();
             wire& curWire = wireList[curWireName];
             wireQueue.pop();
-            if( staged ) {
+            if ( staged ) {
                 get<0>( curProcessList ).push_back( curWireName );
-                if( curWireName[0] == 'z' ) {
+                if ( curWireName[0] == 'z' ) {
                     addFound = true;
                     get<1>( curProcessList ) = curWire.data;
                 }
-                if( curID == 0 && get<0>( curProcessList ).size() == 4 ) {
+                if ( curID == 0 && get<0>( curProcessList ).size() == 4 ) {
                     return curProcessList;
-                }
-                else if( curID != 0 && get<0>( curProcessList ).size() == 8 ) {
+                } else if ( curID != 0 && get<0>( curProcessList ).size() == 8 ) {
                     return curProcessList;
                 }
             }
-            for( auto gateInfo : curWire.outWireList ) {
+            for ( auto gateInfo : curWire.outWireList ) {
                 string outWireName = gateInfo.second;
                 string nextWireName = gateInfo.first.second;
                 wire& outWire = wireList[outWireName];
                 wire& nextWire = wireList[nextWireName];
-                if( nextWire.isValid ) {
-                    if( !outWire.isValid ) {
+                if ( nextWire.isValid ) {
+                    if ( !outWire.isValid ) {
                         outWire.isValid = true;
                         wireQueue.push( outWireName );
                         string operaterName = gateInfo.first.first;
@@ -105,8 +101,8 @@ class TinkerWithGates {
         map<string, tuple<string, string, string>> outWireList;
         readFile( wireList, outWireList );
         map<string, string> binaryDigits;
-        for( auto wireInfo : wireList ) {
-            if( wireInfo.first[0] == 'x' )
+        for ( auto wireInfo : wireList ) {
+            if ( wireInfo.first[0] == 'x' )
                 binaryDigits[wireInfo.first] = 'y' + wireInfo.first.substr( 1 );
         }
         // This queue
@@ -114,7 +110,7 @@ class TinkerWithGates {
         wireQueue.push( "x00" );
         resetGates( wireList );
         string input1 = "x00", input2 = "y00", carrier = "";
-        tuple < vector<string>, bool, bool> curProcessList;
+        tuple<vector<string>, bool, bool> curProcessList;
         vector<string> swapList;
 
         // while( stoi( input1.substr( 1 ) ) < binaryDigits.size() ) {
@@ -126,21 +122,22 @@ class TinkerWithGates {
         // }
     }
 
-public:
+   public:
     void Solution1() {
-        map<string, wire> wireList; map<string, tuple<string, string, string>> outWireList;
+        map<string, wire> wireList;
+        map<string, tuple<string, string, string>> outWireList;
         readFile( wireList, outWireList );
         // This queue
         queue<string> wireQueue;
-        for( auto wire : wireList ) {
-            if( wire.first[0] == 'x' || wire.first[0] == 'y' ) {
+        for ( auto wire : wireList ) {
+            if ( wire.first[0] == 'x' || wire.first[0] == 'y' ) {
                 wireQueue.push( wire.first );
             }
         }
         runGates( wireQueue, wireList );
         string res = "";
-        for( auto wireInfo : wireList ) {
-            if( wireInfo.first[0] == 'z' )
+        for ( auto wireInfo : wireList ) {
+            if ( wireInfo.first[0] == 'z' )
                 res = to_string( wireInfo.second.data ) + res;
         }
         cout << "-" << res << "-" << endl;
@@ -153,15 +150,15 @@ public:
         readFile( wireList, outWireList );
         map<string, string> binaryDigits;
         vector<string> swapList;
-        for( auto wireInfo : wireList ) {
-            if( wireInfo.first[0] == 'x' )
+        for ( auto wireInfo : wireList ) {
+            if ( wireInfo.first[0] == 'x' )
                 binaryDigits[wireInfo.first] = 'y' + wireInfo.first.substr( 1 );
         }
-        auto findGate = [ & ]( string input1, string input2, string gateType ) -> string {
-            for( auto wireInfo : outWireList ) {
+        auto findGate = [&]( string input1, string input2, string gateType ) -> string {
+            for ( auto wireInfo : outWireList ) {
                 auto outWireInfo = wireInfo.second;
-                if( get<0>( outWireInfo ) == gateType ) {
-                    if( ( get<1>( outWireInfo ) == input1 && get<2>( outWireInfo ) == input2 ) || ( get<1>( outWireInfo ) == input2 && get<2>( outWireInfo ) == input1 ) ) {
+                if ( get<0>( outWireInfo ) == gateType ) {
+                    if ( ( get<1>( outWireInfo ) == input1 && get<2>( outWireInfo ) == input2 ) || ( get<1>( outWireInfo ) == input2 && get<2>( outWireInfo ) == input1 ) ) {
                         return wireInfo.first;
                     }
                 }
@@ -169,34 +166,32 @@ public:
             return "";
         };
         string input1 = "x00", input2 = "y00", nextCarrier = "";
-        for( int i = 0; i < binaryDigits.size(); i++ ) {
+        for ( int i = 0; i < binaryDigits.size(); i++ ) {
             // Add XOR
             string add1 = findGate( input1, input2, "XOR" );
-            // Carrier AND 
+            // Carrier AND
             string carrier1 = findGate( input1, input2, "AND" );
 
-            if( nextCarrier.empty() ) {
+            if ( nextCarrier.empty() ) {
                 // Possible swap situation 1.
-                if( add1 != "z" + input1.substr( 1 ) ) {
+                if ( add1 != "z" + input1.substr( 1 ) ) {
                     swapList.push_back( add1 );
                     swapList.push_back( carrier1 );
                     tie( add1, carrier1 ) = { carrier1, add1 };
                 }
                 // The first adder. No further checking.
                 nextCarrier = carrier1;
-            }
-            else {
+            } else {
                 // Carrier Add
                 string add2 = findGate( nextCarrier, add1, "XOR" );
-                if( add2.empty() ) {
+                if ( add2.empty() ) {
                     // Possible swap situation 2.
                     swap( add1, carrier1 );
                     // tie( add1, carrier1 ) = { carrier1, add1 };
                     add2 = findGate( nextCarrier, add1, "XOR" );
                     swapList.push_back( add1 );
                     swapList.push_back( carrier1 );
-                }
-                else if( carrier1 == "z" + input1.substr( 1 ) ) {
+                } else if ( carrier1 == "z" + input1.substr( 1 ) ) {
                     // Possible swap situation 3.
                     swap( add2, carrier1 );
                     swapList.push_back( add2 );
@@ -204,15 +199,15 @@ public:
                 }
                 // Carrier Add's Carrier
                 string carrier2 = findGate( nextCarrier, add1, "AND" );
-                if( carrier2 == "z" + input1.substr( 1 ) ) {
+                if ( carrier2 == "z" + input1.substr( 1 ) ) {
                     // Possible swap situation 4.
                     swap( add2, carrier2 );
                     swapList.push_back( add2 );
                     swapList.push_back( carrier2 );
                 }
-                // Next Carrier 
+                // Next Carrier
                 nextCarrier = findGate( carrier2, carrier1, "OR" );
-                if( nextCarrier == "z" + input1.substr( 1 ) ) {
+                if ( nextCarrier == "z" + input1.substr( 1 ) ) {
                     // Possible swap situation 5.
                     swap( add2, nextCarrier );
                     swapList.push_back( add2 );

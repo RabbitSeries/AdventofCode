@@ -8,7 +8,7 @@ class Calibration {
         vector<pair<ll, vector<ll>>> numList;
         ifstream input( "Day07/input.txt" );
         string buf;
-        while ( getline( input, buf ) ) {
+        for ( string buf; getline( input, buf ); ) {
             stringstream ss( buf );
             ll test = 0;
             vector<ll> nums;
