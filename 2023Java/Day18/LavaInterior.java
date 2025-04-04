@@ -63,10 +63,16 @@ public class LavaInterior {
     }
 
     void Solution2() {
-        // Scan by Line Segment
-        for (var digplan : DigPlanList) {
-            digplan.update();
+        for (var digPlan : DigPlanList) {
+            digPlan.update();
         }
+        List<DigPlan> VerticalOrderList = new ArrayList<>(), HorizontalList = new ArrayList<>();
+        VerticalOrderList.addAll(DigPlanList.stream().filter(p -> p.first.compareTo(0) == 0 || p.first.compareTo(1) == 0).map(p -> new DigPlan(p)).sorted((p1, p2) -> Integer.compare(p1.first, p2.first)).toList());
+        HorizontalList.addAll(DigPlanList.stream().map(p -> new DigPlan(p)).toList());
+        VerticalOrderList.sort((p1, p2) -> {
+            return 0;
+        });
+
     }
 
     boolean BFS(Point2D curPos, HashSet<Point2D> curVisited) {
@@ -87,26 +93,7 @@ public class LavaInterior {
                 }
             }
         }
-        // if (DFS(curPos, curVisited)) {
-        // interiorCnt += curVisited.size();
-        // }
         visited.addAll(curVisited);
-        return isInterior;
-    }
-
-    boolean DFS(Point2D curPos, HashSet<Point2D> curVisited) {
-        boolean isInterior = true;
-        curVisited.add(curPos);
-        for (int i = 0; i < 4; i++) {
-            Point2D nextPos = Point2D.getNextPosition(curPos, i);
-            if (isValid(corner1, corner2, curPos)) {
-                if (!Boundary.contains(nextPos) && !curVisited.contains(nextPos)) {
-                    curVisited.add(nextPos);
-                    isInterior = isInterior && DFS(nextPos, curVisited);
-                }
-            } else
-                isInterior = false;
-        }
         return isInterior;
     }
 
@@ -120,8 +107,12 @@ public class LavaInterior {
     }
 
     class DigPlan extends Pair<Integer, Pair<Integer, String>> {
-        public DigPlan(int direction, int depth, String hexRGB) {
-            super(direction, new Pair<>(depth, hexRGB));
+        public DigPlan(int direction, int length, String hexRGB) {
+            super(direction, new Pair<>(length, hexRGB));
+        }
+
+        public DigPlan(DigPlan other) {
+            super(other.first, new Pair<>(other.second.first, other.second.second));
         }
 
         void update() {
