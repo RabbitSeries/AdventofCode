@@ -11,9 +11,17 @@ import JavaDataModel.Point2D;
 public class LavaInterior {
     List<DigPlan> DigPlanList;
 
-    HashMap<String, Integer> DirectionTranslate = new HashMap<>(Map.of("U", 0, "D", 1, "L", 2, "R", 3));
+    HashMap<String, Integer> DirectionTranslate = new HashMap<>(Map.of("U", 3, "D", 1, "L", 2, "R", 0));
 
-    void readFile() throws IOException {
+    final static int[] dx = new int[] {
+            0, 1, 0, -1
+    };
+
+    final static int[] dy = new int[] {
+            1, 0, -1, 0
+    };
+
+    public List<DigPlan> readFile() throws IOException {
         DigPlanList = new ArrayList<>();
         BufferedReader input = new BufferedReader(new FileReader("input.txt"));
         String buf;
@@ -25,6 +33,7 @@ public class LavaInterior {
             }
         }
         input.close();
+        return DigPlanList;
     }
 
     HashSet<Point2D> Boundary, visited;
@@ -37,8 +46,8 @@ public class LavaInterior {
         for (DigPlan curPlan : DigPlanList) {
             int curDirection = curPlan.first, curPushLen = curPlan.second.first;
             for (int i = 0; i < curPushLen; i++) {
-                startPos.first += Point2D.dx[curDirection];
-                startPos.second += Point2D.dy[curDirection];
+                startPos.first += dx[curDirection];
+                startPos.second += dy[curDirection];
                 Boundary.add(new Point2D(startPos.first, startPos.second));
                 corner1.first = Math.min(corner1.first, startPos.first);
                 corner1.second = Math.min(corner1.second, startPos.second);
@@ -66,13 +75,24 @@ public class LavaInterior {
         for (var digPlan : DigPlanList) {
             digPlan.update();
         }
-        List<DigPlan> VerticalOrderList = new ArrayList<>(), HorizontalList = new ArrayList<>();
-        VerticalOrderList.addAll(DigPlanList.stream().filter(p -> p.first.compareTo(0) == 0 || p.first.compareTo(1) == 0).map(p -> new DigPlan(p)).sorted((p1, p2) -> Integer.compare(p1.first, p2.first)).toList());
-        HorizontalList.addAll(DigPlanList.stream().map(p -> new DigPlan(p)).toList());
-        VerticalOrderList.sort((p1, p2) -> {
-            return 0;
-        });
-
+        long x = 0, y = 0;
+        long perimeter = 0;
+        long area = 0;
+        for (DigPlan plan : DigPlanList) {
+            int direction = plan.first;
+            long length = plan.second.first;
+            long newX = x + dx[direction] * length;
+            long newY = y + dy[direction] * length;
+            area += x * newY - y * newX;
+            perimeter += length;
+            x = newX;
+            y = newY;
+        }
+        // Calculate area using shoelace formula
+        area = Math.abs(area) / 2;
+        // Apply Pick's Theorem adjustment
+        long total = area + (perimeter / 2) + 1;
+        System.out.println("Solution 2: " + total);
     }
 
     boolean BFS(Point2D curPos, HashSet<Point2D> curVisited) {
@@ -104,6 +124,7 @@ public class LavaInterior {
     public static void main(String[] args) throws IOException {
         LavaInterior Day18 = new LavaInterior();
         Day18.Solution1();
+        Day18.Solution2();
     }
 
     class DigPlan extends Pair<Integer, Pair<Integer, String>> {
@@ -117,8 +138,8 @@ public class LavaInterior {
 
         void update() {
             String hexRGB = this.second.second;
-            this.second.first = Integer.parseInt(hexRGB.substring(0, hexRGB.length() - 1));
-            this.first = Integer.parseInt(hexRGB.substring(hexRGB.length() - 1));
+            this.second.first = Integer.parseInt(hexRGB.substring(0, hexRGB.length() - 1), 16);
+            this.first = Integer.parseInt(hexRGB.substring(hexRGB.length() - 1), 16);
         }
     }
 }
