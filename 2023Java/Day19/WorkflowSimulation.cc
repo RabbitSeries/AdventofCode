@@ -3,13 +3,13 @@
 #include "../../utils/RegexIter.hpp"
 using namespace std;
 class WorkflowSimulation {
-    struct condition {
-        string destination;
+    struct Condition {
+        string dest;
         char property;
         function<bool( int, int )> cmp;
         int threshold;
-        condition( string dest, char p = 0, function<bool( int, int )> cp = less{}, int tsh = 0 )
-            : destination( dest ),
+        Condition( string dest, char p = 0, function<bool( int, int )> cp = less{}, int tsh = 0 )
+            : dest( dest ),
               property( p ),
               cmp( cp ),
               threshold( tsh ) {}
@@ -30,11 +30,11 @@ class WorkflowSimulation {
         }
     };
 
-    map<string, vector<condition>> ruleLists;
+    map<string, vector<Condition>> ruleLists;
     vector<Part const*> acceptedList, rejectedList;
     vector<Part> PartList;
 
-    unordered_map<char, function<bool( int, int )>> comparator{
+    unordered_map<char, function<bool( int, int )>> Comparator{
         { '<', less<int>{} },
         { '>', greater<int>{} },
         { '=', equal_to<int>{} } };
@@ -66,8 +66,8 @@ class WorkflowSimulation {
                         char propery = parser.group( 1 )[0];
                         char cmp = parser.group( 2 )[0];
                         int threshold = stoi( parser.group( 3 ) );
-                        string destination = parser.group( 4 );
-                        ruleLists[workflowName].emplace_back( destination, propery, comparator[cmp], threshold );
+                        string dest = parser.group( 4 );
+                        ruleLists[workflowName].emplace_back( dest, propery, Comparator[cmp], threshold );
                     } else {
                         ruleLists[workflowName].emplace_back( curCondition );
                     }
@@ -86,13 +86,13 @@ class WorkflowSimulation {
     }
     void Simulate( Part const& p ) {
         string curDest( "in" );
-        vector<condition> curRuleList;
-        while ( curDest != "R" && curDest != "A" ) {
+        vector<Condition> curRuleList;
+        while ( !curDest.starts_with( "R" ) && !curDest.starts_with( "A" ) ) {
             curRuleList = ruleLists.at( curDest );
             auto it = curRuleList.cbegin();
             for ( ; it != curRuleList.cend(); it++ ) {
                 if ( it == curRuleList.cend() - 1 || it->cmp( p[it->property], it->threshold ) ) {
-                    curDest = it->destination;
+                    curDest = it->dest;
                     break;
                 }
             }
@@ -102,6 +102,114 @@ class WorkflowSimulation {
         } else {
             acceptedList.emplace_back( &p );
         }
+    }
+    struct Constraint {
+        map<char, set<pair<int, int>>> propConstraints;
+        optional<Constraint> joinedAt( char prop, pair<int, int> const& rhsItv ) {
+            auto const curItvSet = propConstraints.at( prop );
+            auto itr = curItvSet.begin();
+            while ( itr != curItvSet.end() && rhsItv.first > itr->second ) {
+                itr++;
+            }
+            set<pair<int, int>> joinedConstraint;
+            for ( ; itr != curItvSet.end(); itr++ ) {
+                int l = max( itr->first, rhsItv.first ), r = min( itr->second, rhsItv.second );
+                if ( l > r ) {
+                    break;
+                }
+                joinedConstraint.emplace( l, r );
+            }
+            if ( !joinedConstraint.empty() ) {
+                return this->ReplacedAt( prop, move( joinedConstraint ) );
+            }
+            return nullopt;
+        }
+        optional<Constraint> joined( Condition const& rhs ) {
+            pair<int, int> rhsItv = getItv( rhs );
+            return joinedAt( rhs.property, rhsItv );
+        }
+        optional<Constraint> excluded( Condition rhs ) {
+            pair<int, int> rhsItv = getItv( rhs );
+            if ( rhsItv.first == 1 ) {
+                return joinedAt( rhs.property, { rhs.threshold, 4000 } );
+            } else if ( rhsItv.second == 4000 ) {
+                return joinedAt( rhs.property, { 1, rhs.threshold } );
+            } else {
+                return joinedAt( rhs.property, { 1, rhs.threshold - 1 } )
+                    .value_or( *this )
+                    .joinedAt( rhs.property, { rhs.threshold + 1, 4000 } );
+            }
+            return joined( rhs );
+        }
+        using ull = unsigned long long;
+        ull CountProp() const {
+            ull res = 1;
+            for ( auto& [_, itvList] : propConstraints ) {
+                res *= accumulate( itvList.begin(), itvList.end(), 0ll, []( long long init, pair<int, int> const& itv ) {
+                    return init - itv.first + itv.second + 1;
+                } );
+            }
+            return res;
+        }
+
+       private:
+        Constraint ReplacedAt( char const& prop, set<pair<int, int>>&& itv ) {
+            auto tmp = *this;
+            tmp.propConstraints[prop] = move( itv );
+            return tmp;
+        }
+        pair<int, int> getItv( Condition const& rhs ) {
+            if ( rhs.cmp( 0, rhs.threshold ) ) {  // cmp is less
+                return { 1, rhs.threshold - 1 };
+            } else if ( rhs.cmp( 4001, rhs.threshold ) ) {  // cmp is greater
+                return { rhs.threshold + 1, 4000 };
+            }
+            return { rhs.threshold, rhs.threshold };  // cmp is equal_to
+        }
+    };
+
+    pair<vector<Constraint>, vector<vector<string>>> BFSPathList() {
+        vector<Constraint> pathList;
+        vector<vector<string>> nameList;
+        queue<tuple<string, vector<string>, Constraint>> q{
+            {
+                {
+                    "in"s,  // string
+                    {},     // vector
+                    {
+                        { { 'x', { { 1, 4000 } } },
+                          { 'm', { { 1, 4000 } } },
+                          { 'a', { { 1, 4000 } } },
+                          { 's', { { 1, 4000 } } } }  // map
+                    }  // Constriant
+                }  // tuple
+            }  // deque
+        };
+        while ( !q.empty() ) {
+            auto [curWkflN, curPath, curCstr] = move( const_cast<tuple<string, vector<string>, Constraint>&>( q.front() ) );
+            q.pop();
+            curPath.emplace_back( curWkflN );
+            if ( curPath.back() == "A" ) {
+                pathList.emplace_back( curCstr );
+                nameList.emplace_back( curPath );
+                continue;
+            }
+            if ( ruleLists.contains( curWkflN ) ) {
+                auto const& CdtList = ruleLists.at( curWkflN );
+                auto itr = CdtList.cbegin();
+                optional<Constraint> flowCstr = curCstr;
+                for ( ; itr != CdtList.cend() - 1 && flowCstr.has_value(); itr++ ) {
+                    auto nCstr = flowCstr.value().joined( *itr );
+                    if ( nCstr.has_value() ) {
+                        q.emplace( itr->dest, curPath, move( nCstr.value() ) );
+                    }
+                    flowCstr = move( flowCstr.value().excluded( *itr ) );
+                }
+                if ( itr == CdtList.cend() - 1 && flowCstr.has_value() )
+                    q.emplace( itr->dest, curPath, move( flowCstr.value() ) );
+            }
+        }
+        return { pathList, nameList };
     }
 
    public:
@@ -116,10 +224,20 @@ class WorkflowSimulation {
                 return init + prop.second;
             } );
         }
-        cout << "Solution 1: " << res;
+        cout << "Solution 1: " << res << endl;
+    }
+
+    void Solution2() {
+        auto [PathList, nameList] = BFSPathList();
+        using ull = unsigned long long;
+        ull res = accumulate( PathList.begin(), PathList.end(), 0ull, []( ull init, Constraint const& elem ) {
+            return init + elem.CountProp();
+        } );
+        cout << "Solution 2: " << res << endl;
     }
 };
 int main() {
     WorkflowSimulation Day19;
     Day19.Solution1();
+    Day19.Solution2();
 }

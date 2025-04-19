@@ -1,18 +1,5 @@
 #include <bits/stdc++.h>
 class RegexIter {
-    // struct iterator {
-    //     std::string matchStr;
-    //     std::regex pattern;
-
-    //    public:
-    //     explicit iterator( std::string _matchStr, std::string _pattern ) : matchStr( _matchStr ), pattern( _pattern ) {
-    //     }
-    //     iterator& operator++() {
-    //         return *this;
-    //     }
-    //     bool operator==( RegexIter const& rhs ) const {
-    //     }
-    // };
     std::string matchStr, pattern;
     class itr {
         std::string matchStr;
@@ -67,7 +54,7 @@ class RegexIter {
     std::vector<std::string> groups() {
         std::ptrdiff_t size = groupCount();
         std::vector<std::string> totalGroups;
-        totalGroups.reserve( size-1 );
+        totalGroups.reserve( size - 1 );
         for ( int i = 1; i < size; i++ ) {
             totalGroups.emplace_back( move( group( i ) ) );
         }
