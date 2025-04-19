@@ -105,30 +105,11 @@ class WorkflowSimulation {
     }
     struct Constraint {
         map<char, set<pair<int, int>>> propConstraints;
-        optional<Constraint> joinedAt( char prop, pair<int, int> const& rhsItv ) {
-            auto const curItvSet = propConstraints.at( prop );
-            auto itr = curItvSet.begin();
-            while ( itr != curItvSet.end() && rhsItv.first > itr->second ) {
-                itr++;
-            }
-            set<pair<int, int>> joinedConstraint;
-            for ( ; itr != curItvSet.end(); itr++ ) {
-                int l = max( itr->first, rhsItv.first ), r = min( itr->second, rhsItv.second );
-                if ( l > r ) {
-                    break;
-                }
-                joinedConstraint.emplace( l, r );
-            }
-            if ( !joinedConstraint.empty() ) {
-                return this->ReplacedAt( prop, move( joinedConstraint ) );
-            }
-            return nullopt;
-        }
-        optional<Constraint> joined( Condition const& rhs ) {
+        optional<Constraint> joined( Condition const& rhs ) const {
             pair<int, int> rhsItv = getItv( rhs );
             return joinedAt( rhs.property, rhsItv );
         }
-        optional<Constraint> excluded( Condition rhs ) {
+        optional<Constraint> excluded( Condition rhs ) const {
             pair<int, int> rhsItv = getItv( rhs );
             if ( rhsItv.first == 1 ) {
                 return joinedAt( rhs.property, { rhs.threshold, 4000 } );
@@ -153,12 +134,31 @@ class WorkflowSimulation {
         }
 
        private:
-        Constraint ReplacedAt( char const& prop, set<pair<int, int>>&& itv ) {
+        optional<Constraint> joinedAt( char prop, pair<int, int> const& rhsItv ) const {
+            auto const curItvSet = propConstraints.at( prop );
+            auto itr = curItvSet.begin();
+            while ( itr != curItvSet.end() && rhsItv.first > itr->second ) {
+                itr++;
+            }
+            set<pair<int, int>> joinedConstraint;
+            for ( ; itr != curItvSet.end(); itr++ ) {
+                int l = max( itr->first, rhsItv.first ), r = min( itr->second, rhsItv.second );
+                if ( l > r ) {
+                    break;
+                }
+                joinedConstraint.emplace( l, r );
+            }
+            if ( !joinedConstraint.empty() ) {
+                return this->ReplacedAt( prop, move( joinedConstraint ) );
+            }
+            return nullopt;
+        }
+        Constraint ReplacedAt( char const& prop, set<pair<int, int>>&& itv ) const {
             auto tmp = *this;
             tmp.propConstraints[prop] = move( itv );
             return tmp;
         }
-        pair<int, int> getItv( Condition const& rhs ) {
+        pair<int, int> getItv( Condition const& rhs ) const {
             if ( rhs.cmp( 0, rhs.threshold ) ) {  // cmp is less
                 return { 1, rhs.threshold - 1 };
             } else if ( rhs.cmp( 4001, rhs.threshold ) ) {  // cmp is greater
@@ -168,14 +168,11 @@ class WorkflowSimulation {
         }
     };
 
-    pair<vector<Constraint>, vector<vector<string>>> BFSPathList() {
-        vector<Constraint> pathList;
-        vector<vector<string>> nameList;
-        queue<tuple<string, vector<string>, Constraint>> q{
+    generator<Constraint> BFSPathList() {
+        queue<tuple<string, Constraint>> q{
             {
                 {
                     "in"s,  // string
-                    {},     // vector
                     {
                         { { 'x', { { 1, 4000 } } },
                           { 'm', { { 1, 4000 } } },
@@ -186,12 +183,10 @@ class WorkflowSimulation {
             }  // deque
         };
         while ( !q.empty() ) {
-            auto [curWkflN, curPath, curCstr] = move( const_cast<tuple<string, vector<string>, Constraint>&>( q.front() ) );
+            auto [curWkflN, curCstr] = move( const_cast<tuple<string, Constraint>&>( q.front() ) );
             q.pop();
-            curPath.emplace_back( curWkflN );
-            if ( curPath.back() == "A" ) {
-                pathList.emplace_back( curCstr );
-                nameList.emplace_back( curPath );
+            if ( curWkflN == "A" ) {
+                co_yield curCstr;
                 continue;
             }
             if ( ruleLists.contains( curWkflN ) ) {
@@ -201,15 +196,15 @@ class WorkflowSimulation {
                 for ( ; itr != CdtList.cend() - 1 && flowCstr.has_value(); itr++ ) {
                     auto nCstr = flowCstr.value().joined( *itr );
                     if ( nCstr.has_value() ) {
-                        q.emplace( itr->dest, curPath, move( nCstr.value() ) );
+                        q.emplace( itr->dest, move( nCstr.value() ) );
                     }
                     flowCstr = move( flowCstr.value().excluded( *itr ) );
                 }
                 if ( itr == CdtList.cend() - 1 && flowCstr.has_value() )
-                    q.emplace( itr->dest, curPath, move( flowCstr.value() ) );
+                    q.emplace( itr->dest, move( flowCstr.value() ) );
             }
         }
-        return { pathList, nameList };
+        co_return;
     }
 
    public:
@@ -228,11 +223,11 @@ class WorkflowSimulation {
     }
 
     void Solution2() {
-        auto [PathList, nameList] = BFSPathList();
         using ull = unsigned long long;
-        ull res = accumulate( PathList.begin(), PathList.end(), 0ull, []( ull init, Constraint const& elem ) {
-            return init + elem.CountProp();
-        } );
+        ull res = 0;
+        for ( auto constraint : BFSPathList() ) {
+            res += constraint.CountProp();
+        }
         cout << "Solution 2: " << res << endl;
     }
 };
