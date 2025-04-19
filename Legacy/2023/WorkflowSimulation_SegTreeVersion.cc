@@ -36,7 +36,9 @@ class WorkflowSimulation {
 
     unordered_map<char, function<bool( int, int )>> Comparator{
         { '<', less<int>{} },
-        { '>', greater<int>{} } };
+        { '>', greater<int>{} }
+        // ,        { '=', equal_to<int>{} } // eh, there is no equal_to case
+    };
 
     generator<string> split( string const match, string pattern ) {
         string suffix;
@@ -103,7 +105,7 @@ class WorkflowSimulation {
         }
     }
     struct Constraint {
-        map<char, pair<int, int>> propConstraints;
+        map<char, set<pair<int, int>>> propConstraints;
         optional<Constraint> joined( Condition const& rhs ) const {
             pair<int, int> rhsItv = getItv( rhs );
             return joinedAt( rhs.property, rhsItv );
@@ -115,26 +117,44 @@ class WorkflowSimulation {
             } else {  // if ( rhsItv.second == 4000 )
                 return joinedAt( rhs.property, { 1, rhs.threshold } );
             }
+            // else {
+            //     return joinedAt( rhs.property, { 1, rhs.threshold - 1 } )
+            //         .value_or( *this )
+            //         .joinedAt( rhs.property, { rhs.threshold + 1, 4000 } );
+            // }
         }
         using ull = unsigned long long;
         ull CountProp() const {
             ull res = 1;
-            for ( auto& [_, itv] : propConstraints ) {
-                res *= itv.second - itv.first + 1;
+            for ( auto& [_, itvList] : propConstraints ) {
+                res *= accumulate( itvList.begin(), itvList.end(), 0ll, []( long long init, pair<int, int> const& itv ) {
+                    return init - itv.first + itv.second + 1;
+                } );
             }
             return res;
         }
 
        private:
         optional<Constraint> joinedAt( char prop, pair<int, int> const& rhsItv ) const {
-            auto const curItv = propConstraints.at( prop );
-            int l = max( curItv.first, rhsItv.first ), r = min( curItv.second, rhsItv.second );
-            if ( l > r ) {
-                return nullopt;
+            auto const curItvSet = propConstraints.at( prop );
+            auto itr = curItvSet.begin();
+            while ( itr != curItvSet.end() && rhsItv.first > itr->second ) {
+                itr++;
             }
-            return ReplacedAt( prop, { l, r } );
+            set<pair<int, int>> joinedConstraint;
+            for ( ; itr != curItvSet.end(); itr++ ) {
+                int l = max( itr->first, rhsItv.first ), r = min( itr->second, rhsItv.second );
+                if ( l > r ) {
+                    break;
+                }
+                joinedConstraint.emplace( l, r );
+            }
+            if ( !joinedConstraint.empty() ) {
+                return ReplacedAt( prop, move( joinedConstraint ) );
+            }
+            return nullopt;
         }
-        Constraint ReplacedAt( char const& prop, pair<int, int>&& itv ) const {
+        Constraint ReplacedAt( char const& prop, set<pair<int, int>>&& itv ) const {
             auto tmp = *this;
             tmp.propConstraints[prop] = move( itv );
             return tmp;
@@ -142,28 +162,29 @@ class WorkflowSimulation {
         pair<int, int> getItv( Condition const& rhs ) const {
             if ( rhs.cmp( 0, rhs.threshold ) ) {  // cmp is less
                 return { 1, rhs.threshold - 1 };
-            } else {  // if ( rhs.cmp( 4001, rhs.threshold ) ) cmp is greater
+            } else if ( rhs.cmp( 4001, rhs.threshold ) ) {  // cmp is greater
                 return { rhs.threshold + 1, 4000 };
-            }
+            } else
+                return { rhs.threshold, rhs.threshold };  // cmp is equal_to
         }
     };
 
     generator<Constraint> BFSPathList() {
-        queue<pair<string, Constraint>> q{
+        queue<tuple<string, Constraint>> q{
             {
                 {
                     "in"s,  // string
                     {
-                        { { 'x', { 1, 4000 } },
-                          { 'm', { 1, 4000 } },
-                          { 'a', { 1, 4000 } },
-                          { 's', { 1, 4000 } } }  // map
+                        { { 'x', { { 1, 4000 } } },
+                          { 'm', { { 1, 4000 } } },
+                          { 'a', { { 1, 4000 } } },
+                          { 's', { { 1, 4000 } } } }  // map
                     }  // Constriant
-                }  // pair
+                }  // tuple
             }  // deque
         };
         while ( !q.empty() ) {
-            auto [curWkflN, curCstr] = move( const_cast<pair<string, Constraint>&>( q.front() ) );
+            auto [curWkflN, curCstr] = move( const_cast<tuple<string, Constraint>&>( q.front() ) );
             q.pop();
             if ( curWkflN == "A" ) {
                 co_yield curCstr;
@@ -195,9 +216,9 @@ class WorkflowSimulation {
         }
         unsigned long long res = 0;
         for ( auto& p : acceptedList ) {
-            for ( auto& [_, rating] : p->prop ) {
-                res += rating;
-            }
+            res += accumulate( p->prop.cbegin(), p->prop.cend(), 0ull, []( unsigned long long init, pair<const char, int> const& prop ) {
+                return init + prop.second;
+            } );
         }
         cout << "Solution 1: " << res << endl;
     }
@@ -212,10 +233,7 @@ class WorkflowSimulation {
     }
 };
 int main() {
-    auto _now = chrono::high_resolution_clock::now();
     WorkflowSimulation Day19;
     Day19.Solution1();
     Day19.Solution2();
-    auto _end = chrono::high_resolution_clock::now();
-    cout << chrono::duration_cast<chrono::milliseconds>( _end - _now ).count();
 }

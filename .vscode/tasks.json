@@ -53,7 +53,7 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-std=c++23",
-                "-O1",
+                "-O2",
                 "${file}",
                 "-o",
                 "${fileDirname}/exe_${fileBasenameNoExtension}"
