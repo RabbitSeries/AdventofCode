@@ -81,6 +81,7 @@ class WorkflowSimulation {
                 return init + " " + group;
             } ) ) );
         }
+        input.close();
     }
     void Simulate( Part const& p ) {
         string curDest( "in" );
