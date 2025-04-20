@@ -57,7 +57,7 @@ class WorkflowSimulation {
             RegexIter workflowMatch( buf, R"(^.+(?=\{.*\}$))" );
             if ( workflowMatch.matched() ) {
                 string workflowName = workflowMatch.str();
-                buf = RegexIter( buf, R"((?=\{)(.+)((?=\})))" ).str();
+                buf = RegexIter( buf, R"((?:\{)(.+)((?:\})))" ).group(1);
                 for ( string curCondition : split( buf, R"(,)" ) ) {
                     RegexIter parser( curCondition, R"((\w)([><=])(\d+):(\w+))" );
                     if ( parser.matched() ) {

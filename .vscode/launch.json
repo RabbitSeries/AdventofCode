@@ -43,7 +43,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "[ArchLinux] [Debug Build] [C/C++]: g++ build active file"
+            "preLaunchTask": "[Arch/Windows] [Debug Build] [C/C++]: g++ build active file"
         },
         {
             "name": "[C/C++] [Release Launch]",
@@ -57,7 +57,7 @@
             "externalConsole": false,
             "MIMode": "gdb",
             "miDebuggerPath": "gdb",
-            "preLaunchTask": "[ArchLinux] [Release Build] [C/C++]: g++ build active file"
+            "preLaunchTask": "[Arch/Windows] [Release Build] [C/C++]: g++ build active file"
         }
     ],
     "version": "2.0.0"

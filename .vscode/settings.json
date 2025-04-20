@@ -4,13 +4,13 @@
     },
     // Compile sources
     "java.project.sourcePaths": [
-        "2024Java",
         "2023Java",
+        "2024Java",
         "utils"
     ],
     // Default classpath search place
     // Clean plugin cache on each modification.
-    "java.project.outputPath": "compileRuntime/bin",
+    "java.project.outputPath": "compileRuntime\\bin",
     "java.project.referencedLibraries": [],
     // "java.project.referencedLibraries": [
     //     "2024Java/lib/**/*.jar"
