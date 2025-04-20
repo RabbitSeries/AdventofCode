@@ -1,12 +1,12 @@
 name: CMake Build 2024 Solution
 
 on:
-  push:
-    branches:
-      - main  # Trigger workflow on pushes to the main branch
+  # push:
+  #   branches:
+  #     - main 
   pull_request:
     branches:
-      - main  # Trigger workflow on pull requests targeting the main branch
+      - main
 
 jobs:
   windows_build:
@@ -37,7 +37,7 @@ jobs:
     - name: Check out the code
       uses: actions/checkout@v2
 
-    - name: Configure CMake with MinGW
+    - name: Configure CMake with Ninja
       run: |
         mkdir ./build && cmake -S ./ -B ./build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
 

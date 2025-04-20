@@ -85,7 +85,8 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 Language           |         files     |    blank   |    comment   |       code
 -------------------|-------------------|------------|--------------|-----------
-C/C++ Header       |            29     |      328   |        328   |       3707
-Java               |            26     |      338   |        115   |       2714
-C++                |            14     |      229   |        109   |       1387
-SUM:               |            69     |      895   |        552   |       7808
+C/C++ Header       |            32     |      308   |        344   |       3848
+Java               |            31     |      433   |        123   |       3329
+C++                |            17     |      221   |        110   |       1725
+C                  |            1      |      154   |        61    |       690
+SUM:               |            81     |      1116  |        638   |       9592
