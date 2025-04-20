@@ -8,8 +8,8 @@ class WorkflowSimulation {
         char property;
         function<bool( int, int )> cmp;
         int threshold;
-        Condition( string dest, char p = 0, function<bool( int, int )> cp = less{}, int tsh = 0 )
-            : dest( dest ),
+        Condition( string dst, char p = 0, function<bool( int, int )> cp = less{}, int tsh = 0 )
+            : dest( dst ),
               property( p ),
               cmp( cp ),
               threshold( tsh ) {}
@@ -18,7 +18,7 @@ class WorkflowSimulation {
     struct Part {
         int x, m, a, s;
         map<char, int> prop;
-        Part( istringstream&& is ) {
+        Part( istringstream is ) {
             is >> x >> m >> a >> s;
             prop['x'] = x;
             prop['m'] = m;
@@ -33,7 +33,6 @@ class WorkflowSimulation {
     map<string, vector<Condition>> ruleLists;
     vector<Part const*> acceptedList, rejectedList;
     vector<Part> PartList;
-
     unordered_map<char, function<bool( int, int )>> Comparator{
         { '<', less<int>{} },
         { '>', greater<int>{} } };
@@ -58,7 +57,7 @@ class WorkflowSimulation {
             RegexIter workflowMatch( buf, R"(^.+(?=\{.*\}$))" );
             if ( workflowMatch.matched() ) {
                 string workflowName = workflowMatch.str();
-                buf = RegexIter( buf, R"(\{(.+)\})" ).group( 1 );
+                buf = RegexIter( buf, R"((?=\{)(.+)((?=\})))" ).str();
                 for ( string curCondition : split( buf, R"(,)" ) ) {
                     RegexIter parser( curCondition, R"((\w)([><=])(\d+):(\w+))" );
                     if ( parser.matched() ) {
@@ -85,11 +84,9 @@ class WorkflowSimulation {
     }
     void Simulate( Part const& p ) {
         string curDest( "in" );
-        vector<Condition> curRuleList;
         while ( !curDest.starts_with( "R" ) && !curDest.starts_with( "A" ) ) {
-            curRuleList = ruleLists.at( curDest );
-            auto it = curRuleList.cbegin();
-            for ( ; it != curRuleList.cend(); it++ ) {
+            vector<Condition> const& curRuleList = ruleLists.at( curDest );
+            for ( auto it = curRuleList.cbegin(); it != curRuleList.cend(); it++ ) {
                 if ( it == curRuleList.cend() - 1 || it->cmp( p[it->property], it->threshold ) ) {
                     curDest = it->dest;
                     break;
@@ -127,14 +124,14 @@ class WorkflowSimulation {
 
        private:
         optional<Constraint> joinedAt( char prop, pair<int, int> const& rhsItv ) const {
-            auto const curItv = propConstraints.at( prop );
+            auto const& curItv = propConstraints.at( prop );
             int l = max( curItv.first, rhsItv.first ), r = min( curItv.second, rhsItv.second );
             if ( l > r ) {
                 return nullopt;
             }
             return ReplacedAt( prop, { l, r } );
         }
-        Constraint ReplacedAt( char const& prop, pair<int, int>&& itv ) const {
+        Constraint ReplacedAt( char const& prop, pair<int, int> itv ) const {
             auto tmp = *this;
             tmp.propConstraints[prop] = move( itv );
             return tmp;

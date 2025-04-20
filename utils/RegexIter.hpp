@@ -54,7 +54,7 @@ class RegexIter {
     std::vector<std::string> groups() {
         std::ptrdiff_t size = groupCount();
         std::vector<std::string> totalGroups;
-        totalGroups.reserve( size - 1 );
+        totalGroups.reserve( size - 1 >= 0 ? size - 1 : 0 );
         for ( int i = 1; i < size; i++ ) {
             totalGroups.emplace_back( move( group( i ) ) );
         }

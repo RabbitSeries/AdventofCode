@@ -26,7 +26,7 @@
         },
         {
             "type": "cppbuild",
-            "label": "[ArchLinux] [Debug Build] [C/C++]: g++ build active file",
+            "label": "[Arch/Windows] [Debug Build] [C/C++]: g++ build active file",
             "command": "g++",
             "args": [
                 "-fdiagnostics-color=always",
@@ -48,7 +48,7 @@
         },
         {
             "type": "cppbuild",
-            "label": "[ArchLinux] [Release Build] [C/C++]: g++ build active file",
+            "label": "[Arch/Windows] [Release Build] [C/C++]: g++ build active file",
             "command": "g++",
             "args": [
                 "-fdiagnostics-color=always",
