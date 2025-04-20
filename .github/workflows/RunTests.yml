@@ -1,15 +1,15 @@
 name: CMake Build 2024 Solution
 
 on:
-  # push:
-    # branches:
-      # - main  # Trigger workflow on pushes to the main branch
+  push:
+    branches:
+      - main  # Trigger workflow on pushes to the main branch
   pull_request:
     branches:
       - main  # Trigger workflow on pull requests targeting the main branch
 
 jobs:
-  build:
+  windows_build:
     runs-on: windows-latest  # Use Windows runner for MinGW builds
 
     steps:
@@ -27,5 +27,25 @@ jobs:
       working-directory: .\build\2024
       run: |
         # Run the executable on Windows (using MinGW, executable will have .exe extension)
-        echo %cd% && .\solution.exe
+        echo %cd% && dir && .\solution.exe
       shell: cmd
+
+  linux_build:
+    runs-on: ubuntu-latest 
+
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v2
+
+    - name: Configure CMake with MinGW
+      run: |
+        mkdir ./build && cmake -S ./ -B ./build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build project
+      run: cmake --build ./build --config Release
+
+    - name: Run executable on Linux
+      working-directory: ./build/2024
+      run: |
+        pwd && ls && ./solution
+      shell: bash
