@@ -62,5 +62,5 @@ if not session_cookie:
     raise ValueError("Missing AOC_SESSION_COOKIE environment variable")
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.abspath(os.path.join(script_dir, "."))
+project_root = os.path.abspath(os.path.join(script_dir, "../../"))
 process_all_inputs(session_cookie, project_root)
