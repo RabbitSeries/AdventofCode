@@ -70,9 +70,7 @@ jobs:
 
     - name: Configure CMake
       run: |
-        cmake -S . -B ${{ env.BUILD_DIR }} \
-          -G "${{ matrix.generator }}" \
-          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+        cmake -S . -B ${{ env.BUILD_DIR }} -G "${{ matrix.generator }}" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
 
     - name: Build project
       run: |
