@@ -1,7 +1,7 @@
-*.html
 exe_*
 *.exe
-test.py
-compileRuntime
-build
+/compileRuntime
+/build
 *.class
+/.env
+input.txt

@@ -14,13 +14,13 @@ echo "$workingPath"
 
 # Check if any files with the specified extensions exist, then delete them
 # shopt -s nullglob  # To avoid errors if no files are found
-files=$(find "$workingPath" -type f \( -name "*.exe" -o -name "exe_*" -o -name "*.dll" -o -name "*.o" -o -name "*.obj" -o -name "*.pdb" -o -name "*.ilk" -o -name "*.out" \))
+files=$(find "$workingPath" -type f \( -name "*.exe" -o -name "exe_*" -o -name "*.dll" -o -name "*.o" -o -name "*.obj" -o -name "*.pdb" -o -name "*.ilk" -o -name "*.out" -o -name "input.txt" \))
 
 if [ -n "$files" ]; then
     echo "Deleting files:"
     echo "$files"
     rm -f $files
-    echo "Deleted *.exe, *.dll, *.o, *.obj, *.pdb, *.ilk, *.out in $workingPath recursively."
+    echo "Deleted *.exe, *.dll, *.o, *.obj, *.pdb, *.ilk, *.out input.txt in $workingPath recursively."
 else
     echo "No matching files to delete in $workingPath."
 fi

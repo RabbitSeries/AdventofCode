@@ -1,51 +1,97 @@
-name: CMake Build 2024 Solution
+name: Advent of Code CI
 
 on:
-  # push:
-  #   branches:
-  #     - main 
+  push:
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
+
+env:
+  BUILD_TYPE: Release
+  BUILD_DIR: build
 
 jobs:
-  windows_build:
-    runs-on: windows-latest  # Use Windows runner for MinGW builds
+  build-and-test:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+        include:
+          - os: windows-latest
+            generator: "MinGW Makefiles"
+            shell: cmd
+            exe_extension: .exe
+          - os: ubuntu-latest
+            generator: "Ninja"
+            shell: bash
+            exe_extension: ""
+
+    runs-on: ${{ matrix.os }}
 
     steps:
-    - name: Check out the code
-      uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
-    - name: Configure CMake with MinGW
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Download AoC inputs
+      env:
+        AOC_SESSION_COOKIE: ${{ secrets.AOC_SESSION_COOKIE }}
       run: |
-        mkdir .\build && cmake -S .\ -B .\build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
+        python -m pip install --upgrade pip
+        python utils/InputDownloader/downloader.py
+
+    - name: Cache CMake build
+      uses: actions/cache@v3
+      with:
+        path: ${{ env.BUILD_DIR }}
+        key: ${{ runner.os }}-cmake-${{ hashFiles('CMakeLists.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-cmake-
+
+    - name: Install dependencies (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ninja-build g++
+
+    - name: Install dependencies (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        choco install mingw -y
+
+    - name: Configure CMake
+      run: |
+        cmake -S . -B ${{ env.BUILD_DIR }} \
+          -G "${{ matrix.generator }}" \
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
 
     - name: Build project
-      run: cmake --build .\build --config Release
-
-    - name: Run executable on Windows
-      working-directory: .\build\2024
       run: |
-        # Run the executable on Windows (using MinGW, executable will have .exe extension)
-        echo %cd% && dir && .\solution.exe
-      shell: cmd
+        cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }}
 
-  linux_build:
-    runs-on: ubuntu-latest 
-
-    steps:
-    - name: Check out the code
-      uses: actions/checkout@v2
-
-    - name: Configure CMake with Ninja
-      run: |
-        mkdir ./build && cmake -S ./ -B ./build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
-
-    - name: Build project
-      run: cmake --build ./build --config Release
-
-    - name: Run executable on Linux
-      working-directory: ./build/2024
+    - name: Run tests (Linux)
+      if: matrix.os == 'ubuntu-latest'
+      working-directory: ${{ env.BUILD_DIR }}/2024
+      shell: bash
       run: |
         pwd && ls && ./solution
-      shell: bash
+
+    - name: Run tests (Windows)
+      if: matrix.os == 'windows-latest'
+      working-directory: ${{ env.BUILD_DIR }}/2024
+      shell: cmd
+      run: |
+        dir && solution.exe
+  
+
+    - name: Upload artifacts on failure
+      if: failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-output-${{ runner.os }}
+        path: ${{ env.BUILD_DIR }}
