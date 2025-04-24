@@ -56,7 +56,8 @@ jobs:
         key: ${{ runner.os }}-cmake-${{ hashFiles('CMakeLists.txt') }}
         restore-keys: |
           ${{ runner.os }}-cmake-
-
+            
+    # these denpendencies are already compensated
     # - name: Install dependencies (Linux)
     #   if: runner.os == 'Linux'
     #   run: |
@@ -67,6 +68,26 @@ jobs:
     #   if: runner.os == 'Windows'
     #   run: |
     #     choco install mingw -y
+
+    - name: Set up Java & Maven
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'microsoft'
+        java-version: '21'
+  
+    - name: Compile Java files
+      run: mvn compile
+    
+    - name: Run Java AoC solutions
+      run: |
+        echo "Running all Java main classes..."
+        find . -type f -regex '.*/[0-9]{4}java/Day[0-9]+/[^/]*\.java' | while read -r file; do
+          main_class=$(echo "$file" | sed -E 's#^\./##; s#/+#.#g; s#\.java$##')
+          echo "Running: $main_class"
+          mvn exec:java -Dexec.mainClass="$main_class" || exit 1
+        done
+      shell: bash
+    
 
     - name: Configure CMake
       run: |
