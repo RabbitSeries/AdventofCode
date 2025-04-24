@@ -81,7 +81,7 @@ jobs:
     - name: Run Java AoC solutions
       run: |
         echo "Running all Java main classes..."
-        find . -type f -regex '.*/[0-9]{4}java/Day[0-9]+/[^/]*\.java' | while read -r file; do
+        find . -type f -regex '.*/[0-9]+Java/Day[0-9]+/[^/]*\.java' | while read -r file; do
           main_class=$(echo "$file" | sed -E 's#^\./##; s#/+#.#g; s#\.java$##')
           echo "Running: $main_class"
           mvn exec:java -Dexec.mainClass="$main_class" || exit 1
