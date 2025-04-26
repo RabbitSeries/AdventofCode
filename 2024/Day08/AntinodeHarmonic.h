@@ -2,7 +2,8 @@
 #define BUFFER_SIZE 1024
 using namespace std;
 
-class AntinodeHarmonic {
+#include "../../utils/SolutionBase.h"
+class AntinodeHarmonic : public SolutionBase {
     typedef struct Antenna {
         int x, y;
         Antenna() { x = y = 0; }

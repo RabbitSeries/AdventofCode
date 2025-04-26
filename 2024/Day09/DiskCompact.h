@@ -1,7 +1,8 @@
 #include "bits/stdc++.h"
 using namespace std;
 
-class DiskCompact {
+#include "../../utils/SolutionBase.h"
+class DiskCompact : public SolutionBase {
     typedef long long ll;
 
     void appendFileBlock( int id, int size, vector<int>& disk ) {

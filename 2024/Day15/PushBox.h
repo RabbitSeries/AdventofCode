@@ -6,7 +6,8 @@ using namespace std;
 // const int BOT = -3;
 // const int BUF = 4096;
 
-class PushBox {
+#include "../../utils/SolutionBase.h"
+class PushBox : public SolutionBase {
     // Simple data member is able to initialize
     const int CELLWALL = -1;
     const int CELLEMPTY = -2;

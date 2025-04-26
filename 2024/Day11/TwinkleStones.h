@@ -1,7 +1,8 @@
 #include "bits/stdc++.h"
 using namespace std;
 
-class TwinkleStones {
+#include "../../utils/SolutionBase.h"
+class TwinkleStones : public SolutionBase {
     typedef long long ll;
     typedef struct dualLinkList {
         dualLinkList() {};

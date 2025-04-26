@@ -1,3 +1,4 @@
+#include "../utils/SolutionBase.h"
 #include "Day01/PairAndAdd.h"
 #include "Day02/CheckLevelInOrder.h"
 #include "Day03/PreciseMul.h"
@@ -24,6 +25,7 @@
 #include "Day24/TinkerWithGates.h"
 #include "Day25/KeyPair.h"
 
+int SolutionBase::id = 0;
 int SolutionStart = 1;
 int SolutionTarget = 25;
 
@@ -120,8 +122,7 @@ int main() {
     printProcess();
     RobotPatrol Day14 = RobotPatrol();
     Day14.Solution1();
-    // Easter egg
-    // Day14.Solution2();
+    Day14.Solution2();
     printProcess();
     PushBox Day15 = PushBox();
     Day15.Solution1();

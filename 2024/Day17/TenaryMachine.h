@@ -2,10 +2,11 @@
 using namespace std;
 
 namespace data {
-    typedef unsigned long long ull;
+typedef unsigned long long ull;
 };
 
-class TenaryMachine {
+#include "../../utils/SolutionBase.h"
+class TenaryMachine : public SolutionBase {
     typedef unsigned long long ull;
     static int pc;
     static ull ra, rb, rc;
@@ -33,7 +34,7 @@ class TenaryMachine {
     }
 
     static void jnz( int operand ) {
-        if( ra == 0 ) {
+        if ( ra == 0 ) {
             pc += 2;
             return;
         } else {
@@ -64,19 +65,19 @@ class TenaryMachine {
     static string outBuf;
 
     static ull combo( int operand ) {
-        if( operand <= 3 ) {
+        if ( operand <= 3 ) {
             return (ull)operand;
         }
-        switch( operand ) {
-        case 4:
-            return ra;
-        case 5:
-            return rb;
-        case 6:
-            return rc;
-        default:
-            cerr << "invild" << endl;
-            break;
+        switch ( operand ) {
+            case 4:
+                return ra;
+            case 5:
+                return rb;
+            case 6:
+                return rc;
+            default:
+                cerr << "invild" << endl;
+                break;
         }
         return 0;
     }
@@ -93,11 +94,12 @@ class TenaryMachine {
 
     static void operation( int opcode, int operand ) {
         fun[opcode]( operand );
-        if( fun[opcode] != jnz ) {
+        if ( fun[opcode] != jnz ) {
             pc += 2;
         }
     }
-public:
+
+   public:
     void Solution1() {
         regex re( "[0-9]+" );
         vector<int> instruction;
@@ -105,19 +107,19 @@ public:
         char buf[1024] = "\0";
         long long tra = 0, trb = 0, trc = 0;
         string program = "";
-        while( !feof( input ) && fgets( buf, 1024, input ) ) {
+        while ( !feof( input ) && fgets( buf, 1024, input ) ) {
             string pattern( buf );
             sregex_iterator it( pattern.begin(), pattern.end(), re ), end_it;
-            if( distance( it, end_it ) == 1 ) {
-                if( pattern.find( "A" ) != string::npos ) {
+            if ( distance( it, end_it ) == 1 ) {
+                if ( pattern.find( "A" ) != string::npos ) {
                     tra = stoi( ( *it ).str() );
-                } else if( pattern.find( "B" ) != string::npos ) {
+                } else if ( pattern.find( "B" ) != string::npos ) {
                     rb = trb = stoi( ( *it ).str() );
                 } else {
                     rc = trc = stoi( ( *it ).str() );
                 }
             } else {
-                while( it != end_it ) {
+                while ( it != end_it ) {
                     instruction.push_back( stoi( ( *it ).str() ) );
                     program += "," + ( *it ).str();
                     it++;
@@ -126,7 +128,7 @@ public:
         }
         // tra = 7;
         InitProgram( tra, 0, 0 );
-        while( pc < instruction.size() ) {
+        while ( pc < instruction.size() ) {
             int opcode = instruction[pc];
             int operand = instruction[pc + 1];
             operation( opcode, operand );
@@ -142,37 +144,37 @@ public:
         char buf[1024] = "\0";
         ull tra = 0, trb = 0, trc = 0;
         string program = "";
-        while( !feof( input ) && fgets( buf, 1024, input ) ) {
+        while ( !feof( input ) && fgets( buf, 1024, input ) ) {
             string pattern( buf );
             sregex_iterator it( pattern.begin(), pattern.end(), re ), end_it;
-            if( distance( it, end_it ) == 1 ) {
-                if( pattern.find( "A" ) != string::npos ) {
+            if ( distance( it, end_it ) == 1 ) {
+                if ( pattern.find( "A" ) != string::npos ) {
                     tra = stoi( ( *it ).str() );
-                } else if( pattern.find( "B" ) != string::npos ) {
+                } else if ( pattern.find( "B" ) != string::npos ) {
                     rb = trb = stoi( ( *it ).str() );
                 } else {
                     rc = trc = stoi( ( *it ).str() );
                 }
             } else {
-                while( it != end_it ) {
+                while ( it != end_it ) {
                     instruction.push_back( stoi( ( *it ).str() ) );
                     program += "," + ( *it ).str();
                     it++;
                 }
             }
         }
-        ull  p = 1;
+        ull p = 1;
         // Yeah, I nailed it.
         priority_queue<ull, vector<ull>, greater<>> processQue;
         processQue.push( p );
         int filterdTimes = 0;
-        while( !processQue.empty() ) {
+        while ( !processQue.empty() ) {
             ull searchBase = processQue.top();
             processQue.pop();
             int i = 0;
             bool flag = false;
             // This boundary is determined by the constant literal value after opcode 0: 0,3, 1<<3 = 8.
-            for( ; i < 8; i++ ) {
+            for ( ; i < 8; i++ ) {
                 ull curRA = searchBase + i;
                 InitProgram( curRA, 0, 0 );
                 // while( pc < instruction.size() ) {
@@ -184,16 +186,18 @@ public:
                 do {
                     outBuf = outBuf + "," + to_string( ( ( ( ( copy % 8 ) ^ 7 ) ^ ( copy / (ull)( pow( 2, ( copy % 8 ) ^ 7 ) ) ) ) ^ 7 ) % 8 );
                     copy /= 8;
-                } while( copy != 0 );
+                } while ( copy != 0 );
 
-                if( outBuf.size() <= program.size() && outBuf == program.substr( program.size() - outBuf.size(), outBuf.size() ) ) {
+                if ( outBuf.size() <= program.size() && outBuf == program.substr( program.size() - outBuf.size(), outBuf.size() ) ) {
                     processQue.push( curRA << 3 );
                     flag = true;
                     // cout << outBuf << endl;
-                    if( outBuf == program ) {
-                        cout << "Found register A: " << curRA << endl;
-                        cout << (ull)( 0xFFFFFFFFFFFFFFFFull ) << endl;
+                    if ( outBuf == program ) {
+                        cout << "Solution 2: " << curRA << endl;
+                        // cout << "Found register A: " << curRA << endl;
+                        // cout << (ull)( 0xFFFFFFFFFFFFFFFFull ) << endl;
                         // Break here instead.
+                        return;
                     }
                     // Don't break me!
                     // break;
@@ -201,8 +205,8 @@ public:
                     // There are multiple choice in 0-7 that can reach the current result, but some of them is invalid.
                 }
             }
-            if( i == 8 && !flag ) {
-                cout << "Filtered, times " << ++filterdTimes << ", value " << searchBase << endl;
+            if ( i == 8 && !flag ) {
+                // cout << "Filtered, times " << ++filterdTimes << ", value " << searchBase << endl;
             }
         }
     }

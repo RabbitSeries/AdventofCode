@@ -1,6 +1,7 @@
 #include "bits/stdc++.h"
 using namespace std;
-class Calibration {
+#include "../../utils/SolutionBase.h"
+class Calibration : public SolutionBase {
     typedef long long ll;
     static const char operators[3];
 

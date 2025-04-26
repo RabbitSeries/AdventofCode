@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
-class LinenLayout {
+#include "../../utils/SolutionBase.h"
+class LinenLayout : public SolutionBase {
     typedef unsigned long long ull;
     vector<string> readKeys( ifstream& input ) {
         vector<string> keys;

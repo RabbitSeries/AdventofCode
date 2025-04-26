@@ -1,11 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
-class CheckLevelInOrder {
+class CheckLevelInOrder : SolutionBase {
     inline bool checkDecrease( vector<int> const& Levels ) {
         bool res = true;
         int i = 0;
-        while( i < Levels.size() - 1 ) {
-            if( !( Levels[i] > Levels[i + 1] && Levels[i] - Levels[i + 1] <= 3 ) ) {
+        while ( i < Levels.size() - 1 ) {
+            if ( !( Levels[i] > Levels[i + 1] && Levels[i] - Levels[i + 1] <= 3 ) ) {
                 return false;
             }
             i++;
@@ -16,8 +16,8 @@ class CheckLevelInOrder {
     inline bool checkIncrease( vector<int> const& Levels ) {
         bool res = true;
         int i = 0;
-        while( i < Levels.size() - 1 ) {
-            if( !( Levels[i] < Levels[i + 1] && Levels[i + 1] - Levels[i] <= 3 ) ) {
+        while ( i < Levels.size() - 1 ) {
+            if ( !( Levels[i] < Levels[i + 1] && Levels[i + 1] - Levels[i] <= 3 ) ) {
                 return false;
             }
             i++;
@@ -27,11 +27,11 @@ class CheckLevelInOrder {
 
     bool canBeSafeByRemovingOneLevel( vector<int> const& Levels ) {
         // Try removing each level and check if the result is safe
-        for( int i = 0; i < Levels.size(); ++i ) {
+        for ( int i = 0; i < Levels.size(); ++i ) {
             vector<int> newLevels = Levels;
             newLevels.erase( newLevels.begin() + i );
 
-            if( checkDecrease( newLevels ) || checkIncrease( newLevels ) ) {
+            if ( checkDecrease( newLevels ) || checkIncrease( newLevels ) ) {
                 return true;
             }
         }
@@ -40,48 +40,44 @@ class CheckLevelInOrder {
 
     bool AnalyseInOrder( ifstream& input, bool enableRemoval ) {
         string buf;
-        if( !getline( input, buf ) )
+        if ( !getline( input, buf ) )
             return false;
         stringstream lineInput( buf );
         int tmpLevel = 0;
         vector<int> Levels;
-        while( lineInput >> tmpLevel ) {
+        while ( lineInput >> tmpLevel ) {
             Levels.push_back( tmpLevel );
         }
         // Line check
-        if( Levels.empty() ) return false;
-        if( !enableRemoval ) {
+        if ( Levels.empty() ) return false;
+        if ( !enableRemoval ) {
             return checkDecrease( Levels ) || checkIncrease( Levels );
-        }
-        else {
+        } else {
             return checkDecrease( Levels ) || checkIncrease( Levels ) || canBeSafeByRemovingOneLevel( Levels );
         }
     }
 
-public:
+   public:
     void Solution1() {
         ifstream input( "Day02/input.txt" );
         int cnt = 0;
-        while( !input.eof() ) {
-            if( AnalyseInOrder( input, false ) ) {
+        while ( !input.eof() ) {
+            if ( AnalyseInOrder( input, false ) ) {
                 cnt++;
             }
         }
-        cout << "Solution 1: " << cnt << endl;
+        printRes(1,cnt);
     }
 
     void Solution2() {
         ifstream input( "Day02/input.txt" );
         int cnt = 0;
 
-        while( !input.eof() ) {
-            if( AnalyseInOrder( input, true ) ) {
+        while ( !input.eof() ) {
+            if ( AnalyseInOrder( input, true ) ) {
                 cnt++;
             }
         }
-
-        cout << "Solution 2: " << cnt << endl;
-        return;
+        printRes(2,cnt);
     }
-
 };

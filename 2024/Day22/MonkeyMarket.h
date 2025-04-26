@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class MonkeyMarket {
+#include "../../utils/SolutionBase.h"
+class MonkeyMarket : public SolutionBase {
     typedef unsigned long long ull;
 
     static ull getNextSecret( ull derival ) {
@@ -161,11 +162,11 @@ class MonkeyMarket {
             }
             cur++;
         }
-        for ( int change : ( *maxIt ).first ) {
-            cout << change << " ";
-        }
-        cout << endl;
-        cout << found << endl;
+        // for ( int change : ( *maxIt ).first ) {
+        //     cout << change << " ";
+        // }
+        // cout << endl;
+        // cout << found << endl;
         cout << "Solution 2: " << ( *maxIt ).second << endl;
         return;
     }

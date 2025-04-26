@@ -2,7 +2,8 @@
 #include "../../utils/ProgressBar.h"
 
 using namespace std;
-class RaceCondition {
+#include "../../utils/SolutionBase.h"
+class RaceCondition : public SolutionBase {
 
     typedef pair<int, int> pos;
 
@@ -173,8 +174,8 @@ public:
         readMap( start, end, roadMap, path );
         int pathCnt = path.size();
         int processCnt = 0;
-        for( auto [startPos, curCost] : path ) {
-            showProgressBar( ++processCnt, pathCnt );
+        for( auto const &[startPos, _] : path ) {
+            // showProgressBar( ++processCnt, pathCnt );
             res += getCheatZone( startPos, roadMap, end, path );
         }
         cout << "Solution 2: " << res << endl;

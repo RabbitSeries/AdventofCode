@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-class TinkerWithGates {
+#include "../../utils/SolutionBase.h"
+class TinkerWithGates : public SolutionBase {
     bool gateResult( string op, bool operand1, bool operand2 ) {
         if ( op == "AND" )
             return operand1 & operand2;
@@ -140,7 +141,7 @@ class TinkerWithGates {
             if ( wireInfo.first[0] == 'z' )
                 res = to_string( wireInfo.second.data ) + res;
         }
-        cout << "-" << res << "-" << endl;
+        // cout << "-" << res << "-" << endl;
         cout << "Solution 1: " << stoll( res, nullptr, 2 ) << endl;
     }
 
@@ -150,7 +151,7 @@ class TinkerWithGates {
         readFile( wireList, outWireList );
         map<string, string> binaryDigits;
         vector<string> swapList;
-        for ( auto wireInfo : wireList ) {
+        for ( auto const& wireInfo : wireList ) {
             if ( wireInfo.first[0] == 'x' )
                 binaryDigits[wireInfo.first] = 'y' + wireInfo.first.substr( 1 );
         }
@@ -220,6 +221,7 @@ class TinkerWithGates {
             input2 = "y" + nextIndex.str();
         }
         sort( swapList.begin(), swapList.end(), less<string>() );
+        cout << "Solution 2: ";
         cout << swapList[0];
         for_each( swapList.begin() + 1, swapList.end(), []( string res ) {
             cout << "," << res;

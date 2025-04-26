@@ -1,6 +1,7 @@
 #include "bits/stdc++.h"
 using namespace std;
-class AsciiGraph {
+#include "../../utils/SolutionBase.h"
+class AsciiGraph : public SolutionBase {
     const int dx[4]{ -1, 1, 0, 0 };
     const int dy[4]{ 0, 0, 1, -1 };
 

@@ -1,7 +1,8 @@
 #include "bits/stdc++.h"
 using namespace std;
 
-class RobotPatrol {
+#include "../../utils/SolutionBase.h"
+class RobotPatrol : public SolutionBase {
     typedef struct robot {
         robot() {};
         robot( int leftDis, int topDis, int horizenVel, int verticalVel ) : curPos( leftDis, topDis ),
@@ -41,7 +42,7 @@ class RobotPatrol {
     vector<robot> specs;
 
     void readFile() {
-        ifstream input( "input.txt" );
+        ifstream input( "Day14/input.txt" );
         regex re( "p=([0-9]+),([0-9]+).*v=(-?[0-9]+),(-?[0-9]+)" );
         smatch m;
         for ( string buf; getline( input, buf ); ) {
@@ -83,9 +84,6 @@ class RobotPatrol {
     }
 
    public:
-    RobotPatrol() {
-        cout << "Day 14:" << endl;
-    }
     void Solution1() {
         readFile();
         cout << "\tSolution 1: " << quadrantCount( step( specs, 100 ) ) << endl;

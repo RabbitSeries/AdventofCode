@@ -1,6 +1,7 @@
 #include "bits/stdc++.h"
 using namespace std;
-class CeresSearch {
+#include "../../utils/SolutionBase.h"
+class CeresSearch : public SolutionBase {
 
     static const int dx[8][4];
 

@@ -16,7 +16,7 @@
     //     "2024Java/lib/**/*.jar"
     // ],
     // "cmake.debugConfig": {
-    //     "cwd": "${{workspaceFolder}/2024}"
+        // "cwd": "${workspaceFolder}/2024}"
     // },
     "cmake.options.statusBarVisibility": "visible",
     "cmake.buildDirectory": "${workspaceFolder}/builds/${buildKit}/${buildType}"

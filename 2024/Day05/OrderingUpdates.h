@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class OrderingUpdates {
+#include "../../utils/SolutionBase.h"
+class OrderingUpdates : public SolutionBase {
 
     bool isCorrectOrder( const vector<int>& update, const unordered_map<int, set<int>>& rules ) {
         for( int i = 0; i < update.size(); i++ ) {

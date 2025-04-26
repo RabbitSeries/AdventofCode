@@ -6,7 +6,7 @@ file(GLOB_RECURSE SOURCES "${CMAKE_SOURCE_DIR}/2024/**/*.cpp")
 message("Copying input resources")
 file(COPY ${CMAKE_SOURCE_DIR}/2024 DESTINATION ${CMAKE_BINARY_DIR}
 FILES_MATCHING
-PATTERN "*.txt")
+PATTERN "input.txt")
 message("Copying input resources -- done")
 # Add the executable
 

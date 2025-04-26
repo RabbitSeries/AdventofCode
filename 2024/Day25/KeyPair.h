@@ -1,6 +1,7 @@
 #include "bits/stdc++.h"
 using namespace std;
-class KeyPair  {
+#include "../../utils/SolutionBase.h"
+class KeyPair  : public SolutionBase {
     typedef vector<int> schematics;
     // TODO Change this algorithm to schema hash code and mapping.
     bool isUnique( schematics schema, vector<schematics> schemaList ) {

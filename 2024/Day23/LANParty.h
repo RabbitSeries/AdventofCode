@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class LANParty {
+#include "../../utils/SolutionBase.h"
+class LANParty : public SolutionBase {
     void readFile( map<string, map<string, bool>>& LANNetwork ) {
         ifstream input( "Day23/input.txt" );
         for ( string buf; getline( input, buf ); ) {

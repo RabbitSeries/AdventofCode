@@ -34,7 +34,8 @@ struct std::hash<point2D> {
     }
 };
 
-class MazeDijkstra {
+#include "../../utils/SolutionBase.h"
+class MazeDijkstra : public SolutionBase {
     // ! If the Penalty is 0, then this is a simple undirected graph problem.
     // static const int PENALTY = 1
     // static const int PENALTY = 0
@@ -172,11 +173,13 @@ class MazeDijkstra {
         }
         // ! To print the path, uncomment the following code.
         // printAllPath( pathRecord, maze );
-        cout << "Optmized " << foo << " x 4 times." << endl;
-        cout << "The mission in queue to process reach maximum " << max_process << " in this maze problem." << endl;
-        cout << "There are " << pathRecord.size() << " different ways that can reach destination at same cost." << endl;
-        cout << "Solution 1: The final lowest score is " << endCost << "." << endl;
-        cout << "Solution 2: Pile these paths in one maze, there are " << pathSeats.size() << " comfotable spots to enjoy the event." << endl;
+        // cout << "Optmized " << foo << " x 4 times." << endl;
+        // cout << "The mission in queue to process reach maximum " << max_process << " in this maze problem." << endl;
+        // cout << "There are " << pathRecord.size() << " different ways that can reach destination at same cost." << endl;
+        // cout << "Solution 1: The final lowest score is " << endCost << "." << endl;
+        cout << "Solution 1: " << endCost << endl;
+        // cout << "Solution 2: Pile these paths in one maze, there are " << pathSeats.size() << " comfotable spots to enjoy the event." << endl;
+        cout << "Solution 2: " << pathSeats.size() << endl;
     }
 
     void readFile( vector<vector<int>>& m, pair<int, int>& s, pair<int, int>& e ) {
@@ -208,7 +211,6 @@ class MazeDijkstra {
 
    public:
     void Solution() {
-        auto now = chrono::high_resolution_clock::now();
         vector<vector<int>> m;
         pair<int, int> s, e;
         readFile( m, s, e );
@@ -217,6 +219,5 @@ class MazeDijkstra {
         auto end = chrono::high_resolution_clock::now();
         // Slightly quicker
         // Fastest at 45.699 ms
-        cout << chrono::duration_cast<chrono::microseconds>( end - now ).count() / 1000.0 << " ms" << endl;
     }
 };

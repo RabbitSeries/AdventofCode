@@ -1,7 +1,8 @@
 #include "bits/stdc++.h"
 using namespace std;
 
-class TrailScore {
+#include "../../utils/SolutionBase.h"
+class TrailScore : public SolutionBase {
 
     typedef pair<int, int> pos;
     typedef pair<pos, int> posInfo;

@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
-class RAMRun {
+#include "../../utils/SolutionBase.h"
+class RAMRun : public SolutionBase {
 #define BUF_SIZE 100
 #define SPACE 71
 

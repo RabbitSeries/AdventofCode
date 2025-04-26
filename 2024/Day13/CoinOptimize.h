@@ -1,7 +1,8 @@
 #include "bits/stdc++.h"
 
 using namespace std;
-class CoinOptimize {
+#include "../../utils/SolutionBase.h"
+class CoinOptimize : public SolutionBase {
 
 #define BUFFER_SIZE 1024
 #define TOP_UP 10000000000000

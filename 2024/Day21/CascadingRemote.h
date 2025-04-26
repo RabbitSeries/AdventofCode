@@ -20,7 +20,8 @@ struct commandHash {
                token.second;
     }
 };
-class CascadingRemote {
+#include "../../utils/SolutionBase.h"
+class CascadingRemote : public SolutionBase {
     typedef unsigned long long ull;
 
     unordered_map<pair<vector<char>, int>, ull, commandHash> cacheMap;
@@ -231,12 +232,12 @@ class CascadingRemote {
         vector<vector<char>> passwordList = readPassword();
         for ( auto password : passwordList ) {
             int manCommand = numericCommand( password, 3 );
-            cout << "Password: " << string( password.begin(), password.end() )
-                 << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
+            // cout << "Password: " << string( password.begin(), password.end() )
+                //  << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
             res += stoi( string( password.begin(), password.end() - 1 ) ) * manCommand;
         }
         cout << "Solution 1: " << res << endl;
-        cout << "Cache size: " << cacheMap.size() << endl;
+        // cout << "Cache size: " << cacheMap.size() << endl;
     }
     void Solution2() {
         ull res = 0;
@@ -244,11 +245,11 @@ class CascadingRemote {
 
         for ( auto password : passwordList ) {
             ull manCommand = numericCommand( password, 26 );
-            cout << "Password: " << string( password.begin(), password.end() )
-                 << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
+            // cout << "Password: " << string( password.begin(), password.end() )
+                //  << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
             res += stoll( string( password.begin(), password.end() - 1 ) ) * manCommand;
         }
         cout << "Solution 2: " << res << endl;
-        cout << "Cache size: " << cacheMap.size() << endl;
+        // cout << "Cache size: " << cacheMap.size() << endl;
     }
 };

@@ -3,7 +3,8 @@ using namespace std;
 
 typedef pair<int, int> pos;
 
-class PatrolRoute {
+#include "../../utils/SolutionBase.h"
+class PatrolRoute : public SolutionBase {
 
 
     static atomic<int> distinctPlacement;
