@@ -55,10 +55,17 @@ public class PulsePropagation {
         while (!q.isEmpty()) {
             var curPulse = q.poll();
             for (String outWire : OutputLists.get(curPulse.first)) {
-                if (!curPulse.second)
+                if (!curPulse.second) {
                     lowCnt++;
-                else
+                    if (outWire.equals("rx")) {
+                        rxLowCnt++;
+                    }
+                } else {
                     highCnt++;
+                    if (outWire.equals("rx")) {
+                        rxHightCnt++;
+                    }
+                }
                 if (Modules.containsKey(outWire)) {
                     Optional<Boolean> nextPulse = Optional.empty();
                     if (Modules.get(outWire).first.equals(ModuleType.Conjunction)) {
@@ -96,8 +103,23 @@ public class PulsePropagation {
         System.out.println("Solution 1: " + lowRes * highRes);
     }
 
-    public void Solution2() {
+    long rxLowCnt = 0, rxHightCnt = 0;
 
+    void clear() {
+        rxLowCnt = 0;
+        rxHightCnt = 0;
+    }
+
+    public void Solution2() {
+        long i = 0;
+        for (;; i++) {
+            PulseSimulate();
+            if (rxLowCnt == 1 && rxHightCnt == 0) {
+                break;
+            }
+            clear();
+        }
+        System.out.println("Solution 2: " + i);
     }
 
     public static void main(String[] args) throws IOException {

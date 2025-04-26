@@ -2,10 +2,6 @@
 using namespace std;
 
 class RobotPatrol {
-#define BUFFER_SIZE 1024
-#define WIDTH 101
-#define HEIGHT 103
-    typedef vector<vector<int>> room;
     typedef struct robot {
         robot() {};
         robot( int leftDis, int topDis, int horizenVel, int verticalVel ) : curPos( leftDis, topDis ),
@@ -13,21 +9,15 @@ class RobotPatrol {
         pair<int, int> curPos;
         pair<int, int> vel;
     } robot;
-    typedef vector<robot> specs;
-    typedef long long ll;
-    ll quadrantCount( specs s ) {
+    const int WIDTH = 101, HEIGHT = 103;
+    using ull = unsigned long long;
+    ull quadrantCount( vector<robot> const& s ) {
         // vector<vector<bool>> stacked( HEIGHT, vector<bool>( WIDTH, false ) );
         int wmiddle = WIDTH / 2, hmiddle = HEIGHT / 2;
-        ll q1 = 0, q2 = 0, q3 = 0, q4 = 0;
-        for ( auto rbt : s ) {
-            /**
-             * i : distance to top
-             * j : distance to left
-             */
+        ull q1 = 0, q2 = 0, q3 = 0, q4 = 0;
+        for ( auto const& rbt : s ) {
             int i = rbt.curPos.second;
             int j = rbt.curPos.first;
-            // 214325760
-            // if( !stacked[i][j] ) {
             if ( i < hmiddle && j < wmiddle ) {
                 q1++;
             } else if ( i > hmiddle && j < wmiddle ) {
@@ -37,54 +27,76 @@ class RobotPatrol {
             } else if ( i < hmiddle && j > wmiddle ) {
                 q4++;
             }
-            // }
-            // stacked[i][j] = true;
         }
         return q1 * q2 * q3 * q4;
     }
 
-    void step( specs& s ) {
+    vector<robot> step( vector<robot> s, int cnt ) {
         for ( auto& rbt : s ) {
-            rbt.curPos.first = ( WIDTH + rbt.curPos.first + rbt.vel.first ) % WIDTH;
-            rbt.curPos.second = ( HEIGHT + rbt.curPos.second + rbt.vel.second ) % HEIGHT;
+            rbt.curPos.first = ( rbt.curPos.first + ( WIDTH + rbt.vel.first ) * cnt ) % WIDTH;
+            rbt.curPos.second = ( rbt.curPos.second + ( HEIGHT + rbt.vel.second ) * cnt ) % HEIGHT;
         }
-        return;
+        return s;
     }
+    vector<robot> specs;
 
-   public:
-    void Solution1() {
-        FILE* input = fopen( "Day14/input.txt", "r" );
-        // p=40,80 v=-83,31
+    void readFile() {
+        ifstream input( "input.txt" );
         regex re( "p=([0-9]+),([0-9]+).*v=(-?[0-9]+),(-?[0-9]+)" );
         smatch m;
-        char buf[BUFFER_SIZE] = "\0";
-        vector<robot> specs;
-        while ( !feof( input ) && fgets( buf, BUFFER_SIZE, input ) ) {
-            string tmp( buf );
-            regex_search( tmp, m, re );
+        for ( string buf; getline( input, buf ); ) {
+            regex_search( buf, m, re );
             if ( m.size() == 5 ) {
                 specs.push_back( robot( stoi( m[1] ), stoi( m[2] ), stoi( m[3] ), stoi( m[4] ) ) );
             }
         }
-        int elapseTime = 0;
-        int everyHundred = 0;
-        while ( elapseTime++ < 6286 ) {
-            // This pattern is funny. U can see the line align aside.
-            // Solution2
-            // while( 1 ) {
-            // if( elapseTime == 6000 ) {
-            //     int foo = 0;
-            // }
-            step( specs );
-            if ( elapseTime > 0 && elapseTime >= everyHundred * 100 && elapseTime % 100 == ( 23 + everyHundred ) % 100 ) {
-                everyHundred = everyHundred + 1;
-                // std::cout << "\033[2J\033[1;1H";
-                cout << elapseTime << endl;
-                cout << "Current quadrantCount: " << quadrantCount( specs ) << endl;
-            }
-            if ( elapseTime == 100 ) {
-                cout << "Solution 1: " << quadrantCount( specs ) << endl;
-            }
+    }
+    template <typename T>
+    T getter( pair<T, T> const& p, bool getFirst ) {
+        return getFirst ? p.first : p.second;
+    }
+    int centerVariance( int stepCnt, vector<robot> const& specs, bool isFirst, int SCALE ) {
+        int var = 0;
+        for ( const auto& rbt : specs ) {
+            var += abs( ( getter( rbt.curPos, isFirst ) + ( SCALE + getter( rbt.vel, isFirst ) ) * stepCnt ) % SCALE - ( SCALE - 1 ) / 2 );
         }
+        return var;
+    }
+    int extendGCD( int a, int b, int& x, int& y ) {
+        if ( !b ) {
+            x = 1, y = 0;
+            return a;
+        }
+        int x1, y1;
+        int gcd = extendGCD( b, a % b, x1, y1 );
+        x = y1;
+        y = x1 - a / b * y1;
+        return gcd;
+    }
+    int reverseMod( int a, int b ) {
+        int x, y;
+        assert( extendGCD( a, b, x, y ) == 1 );
+        return x;
+    }
+    int positiveMod( int a, int b ) {
+        return ( b + a % b ) % b;
+    }
+
+   public:
+    RobotPatrol() {
+        cout << "Day 14:" << endl;
+    }
+    void Solution1() {
+        readFile();
+        cout << "\tSolution 1: " << quadrantCount( step( specs, 100 ) ) << endl;
+    }
+    void Solution2() {
+        int minDxX = *ranges::min_element( views::iota( 0, WIDTH ),
+                                           {},
+                                           bind( mem_fn( &RobotPatrol::centerVariance ), *this, std::placeholders::_1, cref( specs ), true, WIDTH ) );
+        int minDyY = *ranges::min_element( views::iota( 0, HEIGHT ),
+                                           {},
+                                           bind( &RobotPatrol::centerVariance, this, std::placeholders::_1, cref( specs ), false, HEIGHT ) );
+        cout << "\tSolution 2: " << positiveMod( reverseMod( WIDTH, HEIGHT ) * ( minDyY - minDxX ), HEIGHT ) * WIDTH + minDxX << endl;
     }
 };

@@ -69,19 +69,19 @@ jobs:
     #   run: |
     #     choco install mingw -y
 
-    - name: Set up Java & Maven
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'microsoft'
-        java-version: '21'
+    # - name: Set up Java & Maven
+    #   uses: actions/setup-java@v4
+    #   with:
+    #     distribution: 'microsoft'
+    #     java-version: '21'
   
-    - name: Compile Java files
-      run: mvn compile
+    # - name: Compile Java files
+    #   run: mvn compile
     
-    - name: Run Java AoC solutions
-      run: |
-        sh ./.vscode/JavaTest.sh
-      shell: bash
+    # - name: Run Java AoC solutions
+    #   run: |
+    #     sh ./.vscode/JavaTest.sh
+    #   shell: bash
     
 
     - name: Configure CMake
