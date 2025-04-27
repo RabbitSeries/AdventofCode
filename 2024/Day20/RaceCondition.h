@@ -123,15 +123,15 @@ class RaceCondition : public SolutionBase {
     }
 
     /*
-     *
-     * *
-     *   *
-     *     *
+         *
+        * *
+       *   *
+      *     *
      *   +   *
-     *     *
-     *   *
-     * *
-     *
+      *     *
+       *   *
+        * *
+         *
      */
     int getCheatZone( pos const& curPos, vector<vector<cellStatus>> const& roadMap, pos end, map<pos, int> const& path ) {
         int cnt = 0;

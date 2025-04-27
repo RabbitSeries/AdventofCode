@@ -37,6 +37,13 @@ class WorkflowSimulation {
         { '<', less<int>{} },
         { '>', greater<int>{} } };
 
+    generator<string> split( string const match, char delim ) {
+        istringstream ss( match );
+        for ( string buf; getline( ss, buf, delim ); ) {
+            co_yield buf;
+        }
+    }
+
     generator<string> split( string const match, string pattern ) {
         string suffix;
         regex re( pattern );
@@ -57,8 +64,9 @@ class WorkflowSimulation {
             RegexIter workflowMatch( buf, R"(^.+(?=\{.*\}$))" );
             if ( workflowMatch.matched() ) {
                 string workflowName = workflowMatch.str();
-                buf = RegexIter( buf, R"((?:\{)(.+)((?:\})))" ).group(1);
-                for ( string curCondition : split( buf, R"(,)" ) ) {
+                buf = RegexIter( buf, R"((?:\{)(.+)((?:\})))" ).group( 1 );
+                for ( string curCondition : split( buf, ',' ) ) {
+                    // for ( string curCondition : split( buf, R"(,)" ) ) {
                     RegexIter parser( curCondition, R"((\w)([><=])(\d+):(\w+))" );
                     if ( parser.matched() ) {
                         char propery = parser.group( 1 )[0];
@@ -215,5 +223,5 @@ int main() {
     Day19.Solution1();
     Day19.Solution2();
     auto _end = chrono::high_resolution_clock::now();
-    cout << chrono::duration_cast<chrono::milliseconds>( _end - _now ).count();
+    cout << chrono::duration_cast<chrono::milliseconds>( _end - _now ).count() << endl;
 }

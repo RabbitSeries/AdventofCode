@@ -47,3 +47,30 @@ Prove:
 ### Day 24 Crossed Wires
 
 [Cascading Full adder](./Day24/GatesVisualize.md)
+
+
+## 📆 TODOs
+
+- [x] Change day 3 algorithm to [regular expression](https://en.cppreference.com/w/cpp/regex/ecmascript) implementation ([C++ 11 feature](https://en.cppreference.com/w/cpp/regex)).
+- [x] What is day 13 algorithm trying to testify?
+- [ ] Building java repo.
+- [ ] Construct the project to a CMake test project.
+- [ ] Add cache to Dijkstra in Day 21 solution.
+- [ ] ~~Add A*algorithm to Day 16 solution.~~ Nah, A* algo is not suitable for penalty shortest path problem.
+- [ ] Change Day 20 distance calculation to Manhattan distance.
+- [ ] Github issue at: [13110](https://github.com/microsoft/vscode-cpptools/issues/13110)
+- [ ] Time efficency: Mutex > future async > single thread algorithm (VSCode debugger will try tracking the allocation variable data, thus recursive algorithm will be slowed down severely).
+- [ ] Time efficency: Fixed size array > linked list > bucket> ... > ; stack variable > heap variable
+- [ ] VSCode tracking memory of big HashMap/unordered_map cost extremely massive amount of time, execute the program manually.
+- [ ] Change all dijkstra algorithm to static DP implementation instead of state machine path record within the node in queue.
+- [ ] I think there might be a way to transform top-down memoization recursion (topological sort of the transpose) to bottom-up DP (reverse topological sort), and also to heuristic search? But I haven't figured out how. (See Introduction to Algorithms Ch 15 and 2023 Java Day12).
+
+<!-- <div id="TODOList" style="transform: translateX(30px);padding-bottom: 20px">
+    <input type="checkbox" checked="true" disabled="true" >Change day 3 algorithm to <a href="https://en.cppreference.com/w/cpp/regex/ecmascript">regular expression</a> implementation <a href="https://en.cppreference.com/w/cpp/regex">(C++ 11 feature)</a>.<br>
+    <input type="checkbox" disabled="true" >What is day 13 algorithm trying to testify?<br>
+    <input type="checkbox" disabled="true" >Get a lisence.<br>
+    <input type="checkbox" disabled="true" >Construct the project to a CMake test project.<br>
+    <input type="checkbox" disabled="true" >Add cache to Dijkstra in Day 21 solution.<br>
+    <input type="checkbox" disabled="true" >Github issue at: <a href="https://github.com/microsoft/vscode-cpptools/issues/13110">13110</a><br>
+    <input type="checkbox" disabled="true" >Mutex > future async > normal algorithm (vscode debugger will try tracking the calling stack, thus recursive algorithm will be slowed down serverely)<br>
+</div> -->

@@ -27,7 +27,7 @@ def find_aoc_directories(root_dir: str = None, overwrite: bool = False) -> Dict[
                     year = int(YearMatch.group("year"))
                     day = int(DayMatch.group("day"))
                     found.setdefault((year, day), []).append(rel_path)
-    return found
+    return dict(sorted(found.items(), key=lambda item: (item[0][0], item[0][1])))
 
 
 def download_input(year: int, day: int, session_cookie: str) -> str:

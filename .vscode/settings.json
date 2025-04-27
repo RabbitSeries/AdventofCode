@@ -16,7 +16,8 @@
     //     "2024Java/lib/**/*.jar"
     // ],
     // "cmake.debugConfig": {
-    // "cwd": "${workspaceFolder}/2024}"
+    //     "cwd": "${workspaceFolder}/2024}",
+    //     "dumpPath": ""
     // },
     "cmake.options.statusBarVisibility": "visible",
     // "cmake.useCMakePresets":"auto",//Use CMakePresets.json to configure drive CMake configure, build, and test. When using CMakePresets.json, kits, variants, and some settings in settings.json will be ignored, such as:
