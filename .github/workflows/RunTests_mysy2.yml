@@ -1,0 +1,86 @@
+name: Advent of Code CI
+
+on: [push, pull_request]
+
+env:
+  BUILD_TYPE: Release
+  BUILD_DIR: build
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r utils/InputDownloader/requirements.txt
+
+    - name: Download AoC inputs
+      env:
+        AOC_SESSION_COOKIE: ${{ secrets.AOC_SESSION_COOKIE }}
+      run: |
+        python utils/InputDownloader/downloader.py
+
+    - name: Cache CMake build
+      uses: actions/cache@v3
+      with:
+        path: ${{ env.BUILD_DIR }}
+        key: ${{ runner.os }}-cmake-${{ hashFiles('CMakeLists.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-cmake-
+            
+    # these denpendencies are already compensated
+    # - name: Install dependencies (Linux)
+    #   if: runner.os == 'Linux'
+    #   run: |
+    #     sudo apt-get update
+    #     sudo apt-get install -y ninja-build g++
+
+    # - name: Install dependencies (Windows)
+    #   if: runner.os == 'Windows'
+    #   run: |
+    #     choco install mingw -y
+
+    # - name: Run Java AoC solutions
+    #   run: |
+    #     sh ./.vscode/JavaTest.sh
+    #   shell: bash
+    
+    - name: Prepare msys2 (Windows)
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: mingw64
+        install: >-
+          base-devel
+          mingw-w64-x86_64-cmake
+          mingw-w64-x86_64-toolchain
+
+    - name: Configure CMake && build
+      run: |
+        cmake -S . -B ${{ env.BUILD_DIR }} -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+        cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }}
+      shell: msys2 {0}
+
+    - name: Run tests (Windows)
+      working-directory: ${{ env.BUILD_DIR }}/2024
+      shell: msys2 {0}
+      run: |
+        pwd && ls && ./solution
+
+    - name: Upload artifacts on failure
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-output-${{ runner.os }}
+        path: ${{ env.BUILD_DIR }}
