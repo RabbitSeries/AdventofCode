@@ -4,6 +4,13 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ## 🚀 Solutions
 
+### Overall
+
+ Year | Progress
+:----:|:----------:
+2023  | 19.5/25 ⭐⭐
+2024  | 25/25 ⭐⭐
+
 ### 2024 Progress: 25/25 ⭐⭐
 
  Day                                                                                                                                  | Part 1 | Part 2 | Cpp Solution                                                                                                | Java Solution
@@ -34,15 +41,9 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 [![Day 24](https://img.shields.io/badge/Day%2024-Crossed%20Wires-blue?logo=Archlinux)](https://adventofcode.com/2024/day/24)          |   ⭐   |   ⭐   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day24/TinkerWithGates.h)     | -
 [![Day 25](https://img.shields.io/badge/Day%2025-Code%20Chroncile-blue?logo=Archlinux)](https://adventofcode.com/2024/day/25)         |   ⭐   |   💫   | [![Solution](https://img.shields.io/badge/C%2B%2B-purple?logo=C%2B%2B)](2024/Day25/KeyPair.h)             | -
 
-### Other years
-
- Year | Progress
-:----:|:----------:
-2023  | 19/25 ⭐⭐
-
 ## 💻 Tools
 
-- IDE : [![VSCode](<Images/code-stable.png>)](https://code.visualstudio.com) [![VsCode](https://img.shields.io/badge/VsCode-blue)](https://code.visualstudio.com)
+- IDE : [![VSCode](<2024/Images/code-stable.png>)](https://code.visualstudio.com) [![VsCode](https://img.shields.io/badge/VsCode-blue)](https://code.visualstudio.com)
 - Cpp Compiler: ![G++](https://img.shields.io/badge/(GCC)%2014.2.1%2020240910-grey)
 - C++ standard: ![C++23](https://img.shields.io/badge/C%2B%2B-23-purple?logo=C%2B%2B)
 - JVM Version: ![Solution](https://img.shields.io/badge/OpenJDK-21-white?logo=OpenJDK)
@@ -63,7 +64,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 Language           | files | blank | comment | code
 -------------------|-------|-------|---------|-----
-C/C++ Header       |    31 |   248 |     299 | 3560
+C/C++ Header       |    31 |   248 |     301 | 3558
 Java               |    32 |   425 |     114 | 3195
-C++                |    13 |    61 |      30 |  867
-SUM:               |    76 |   734 |     443 | 7622
+C++                |    13 |    58 |      28 |  867
+SUM:               |    76 |   731 |     443 | 7620
