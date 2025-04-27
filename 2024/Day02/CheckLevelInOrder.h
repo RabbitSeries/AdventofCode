@@ -33,18 +33,20 @@ class CheckLevelInOrder : SolutionBase {
         }
         return false;
     }
+    vector<vector<int>> LevelLists;
 
-    bool AnalyseInOrder( ifstream& input, bool enableRemoval ) {
-        string buf;
-        if ( !getline( input, buf ) )
-            return false;
-        stringstream lineInput( buf );
-        int tmpLevel = 0;
+    void readFile() {
+        ifstream input( "Day02/input.txt" );
         vector<int> Levels;
-        while ( lineInput >> tmpLevel ) {
-            Levels.push_back( tmpLevel );
+        for ( string buf; getline( input, buf ); ) {
+            istringstream ss( buf );
+            copy( istream_iterator<int>( ss ), istream_iterator<int>(), back_inserter( Levels ) );
+            LevelLists.emplace_back( move( Levels ) );
+            Levels.clear();
         }
-        // Line check
+        input.close();
+    }
+    bool AnalyseInOrder( vector<int>& Levels, bool enableRemoval ) {
         if ( Levels.empty() ) return false;
         if ( !enableRemoval ) {
             return checkDecrease( Levels ) || checkIncrease( Levels );
@@ -55,10 +57,10 @@ class CheckLevelInOrder : SolutionBase {
 
    public:
     void Solution1() {
-        ifstream input( "Day02/input.txt" );
+        readFile();
         int cnt = 0;
-        while ( !input.eof() ) {
-            if ( AnalyseInOrder( input, false ) ) {
+        for ( auto& Levels : LevelLists ) {
+            if ( AnalyseInOrder( Levels, false ) ) {
                 cnt++;
             }
         }
@@ -66,11 +68,9 @@ class CheckLevelInOrder : SolutionBase {
     }
 
     void Solution2() {
-        ifstream input( "Day02/input.txt" );
         int cnt = 0;
-
-        while ( !input.eof() ) {
-            if ( AnalyseInOrder( input, true ) ) {
+        for ( auto& Levels : LevelLists ) {
+            if ( AnalyseInOrder( Levels, true ) ) {
                 cnt++;
             }
         }

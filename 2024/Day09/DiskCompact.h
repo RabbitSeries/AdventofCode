@@ -44,7 +44,7 @@ class DiskCompact : public SolutionBase {
         return checkSum;
     }
 
-    void readFile( vector<int>& disk, vector<int>& fileSizeTable, vector<pair<int, int>>& freeSpaceTable ) {
+    void readFile() {
         ifstream input( "Day09/input.txt" );
         string linebuf;
         int fileId = 0;
@@ -86,7 +86,7 @@ class DiskCompact : public SolutionBase {
     void scanFreeSpace( vector<int> disk, vector<pair<int, int>>& freeSpaceTable ) {
     }
 
-    ll fileCompack( vector<int> disk, const vector<int> fileSizeTable, vector<pair<int, int>>& freeSpaceTable ) {
+    ll fileCompack( vector<int> disk, const vector<int>& fileSizeTable, vector<pair<int, int>>& freeSpaceTable ) {
         // printDisk( disk, "Day09/original.txt" );
         int denseHead = freeSpaceTable[0].second;
         ll checkSum = 0;
@@ -165,21 +165,17 @@ class DiskCompact : public SolutionBase {
         // printDisk( disk, "Day09/output.txt" );
         return checkSum;
     }
+    vector<int> disk;
+    vector<int> fileSizeTable;
+    vector<pair<int, int>> freeSpaceTable;
 
    public:
     void Solution1() {
-        vector<int> disk;
-        vector<int> fileSizeTable;
-        vector<pair<int, int>> freeSpaceTable;
-        readFile( disk, fileSizeTable, freeSpaceTable );
+        readFile();
         printRes( 1, fileCompack( disk ) );
     }
 
     void Solution2() {
-        vector<int> disk;
-        vector<int> fileSizeTable;
-        vector<pair<int, int>> freeSpaceTable;
-        readFile( disk, fileSizeTable, freeSpaceTable );
         printRes( 2, fileCompack( disk, fileSizeTable, freeSpaceTable ) );
     }
 };

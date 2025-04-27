@@ -3,7 +3,7 @@ using namespace std;
 
 #include "../../utils/SolutionBase.h"
 class LANParty : public SolutionBase {
-    void readFile( map<string, map<string, bool>>& LANNetwork ) {
+    void readFile() {
         ifstream input( "Day23/input.txt" );
         for ( string buf; getline( input, buf ); ) {
             regex re( "([a-z]+)-([a-z]+)" );
@@ -81,13 +81,13 @@ class LANParty : public SolutionBase {
             it++;
         }
     }
+    map<string, map<string, bool>> LANNetwork;
 
    public:
     void Solution1() {
         map<string, string> connections;
         mutex connectionsMutex;
-        map<string, map<string, bool>> LANNetwork;
-        readFile( LANNetwork );
+        readFile();
         bool enableMultiThreading = false;
         int maxThread = thread::hardware_concurrency();
         int processPerThread = LANNetwork.size() / maxThread;
@@ -116,8 +116,6 @@ class LANParty : public SolutionBase {
     void Solution2() {
         map<string, string> connections;
         mutex connectionsMutex;
-        map<string, map<string, bool>> LANNetwork;
-        readFile( LANNetwork );
         std::map<std::string, std::map<std::string, bool>>::const_iterator it = LANNetwork.begin(), end = LANNetwork.end();
         size_t res = 0;
         while ( it != end ) {
@@ -151,7 +149,7 @@ class LANParty : public SolutionBase {
             passWord.push_back( maxConnection.substr( i, 2 ) );
         }
         ostringstream ss;
-        sort( passWord.begin(), passWord.end(), less<string>() );
+        sort( passWord.begin(), passWord.end(), less<>{} );
         ss << passWord[0];
         for_each( passWord.begin() + 1, passWord.end(), [&]( string host ) {
             ss << "," << host;

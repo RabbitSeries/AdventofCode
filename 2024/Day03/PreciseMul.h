@@ -110,34 +110,32 @@ class PreciseMul : SolutionBase {
    public:
     void Solution1() {
         ifstream input( "Day03/input.txt" );
-        string linebuffer;
         ll addUp = 0;
         string leftOver = "";
-        while ( getline( input, linebuffer ) ) {
-            string currentLine( linebuffer );
-            if ( !currentLine.empty() ) {
-                currentLine = leftOver + currentLine;
-                addUp += getLineResult( currentLine );
-                leftOver = currentLine;
+        for ( string buf; getline( input, buf ); ) {
+            if ( !buf.empty() ) {
+                buf = leftOver + buf;
+                addUp += getLineResult( buf );
+                leftOver = buf;
             }
         }
-        cout << "\tSolution 1: " << addUp << endl;
+        input.close();
+        printRes( 1, addUp );
     }
 
     void Solution2() {
         ifstream input( "Day03/input.txt" );
-        string linebuffer;
         ll addUp = 0;
         bool enabled = true;
         string leftOver = "";
-        while ( getline( input, linebuffer ) ) {
-            string currentLine( linebuffer );
-            if ( !currentLine.empty() ) {
-                currentLine = leftOver + currentLine;
-                addUp += getLineResult( currentLine, enabled );
-                leftOver = currentLine;
+        for ( string buf; getline( input, buf ); ) {
+            if ( !buf.empty() ) {
+                buf = leftOver + buf;
+                addUp += getLineResult( buf, enabled );
+                leftOver = buf;
             }
         }
-        cout << "\tSolution 2: " << addUp << endl;
+        input.close();
+        printRes( 2, addUp );
     }
 };

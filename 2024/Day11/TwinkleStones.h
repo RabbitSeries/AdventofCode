@@ -91,11 +91,9 @@ class TwinkleStones : public SolutionBase {
     void Solution2() {
         map<ll, ll> TwinkleList;
         ifstream input( "Day11/input.txt" );
-        string linebuf;
-        while ( getline( input, linebuf ) ) {
+        for ( string linebuf; getline( input, linebuf ); ) {
             stringstream line( linebuf );
-            int tmp = 0;
-            while ( line >> tmp ) {
+            for ( int tmp = 0; line >> tmp; ) {
                 TwinkleList[tmp]++;
             }
         }

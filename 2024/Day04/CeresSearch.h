@@ -21,8 +21,7 @@ class CeresSearch : public SolutionBase {
                i + xdx[k][0] >= 0 && i + xdx[k][0] < rows && j + xdy[k][0] >= 0 && j + xdy[k][0] < rols && m[i + xdx[k][0]][j + xdy[k][0]] == 'M' && m[i + xdx[k][1]][j + xdy[k][1]] == 'A' && m[i + xdx[k][2]][j + xdy[k][2]] == 'S';
     }
 
-    vector<vector<char>> readFile() {
-        vector<vector<char>> m;
+    void readFile() {
         ifstream input( "Day04/input.txt" );
         string line;
         while ( getline( input, line ) ) {
@@ -34,12 +33,12 @@ class CeresSearch : public SolutionBase {
             }
             m.push_back( row );
         }
-        return m;
     }
+    vector<vector<char>> m;
 
    public:
     void Solution1() {
-        vector<vector<char>> const& m = readFile();
+        readFile();
         int res = 0;
         for ( size_t i = 0; i < m.size(); i++ ) {
             for ( size_t j = 0; j < m[i].size(); j++ ) {
@@ -54,7 +53,6 @@ class CeresSearch : public SolutionBase {
     }
 
     void Solution2() {
-        vector<vector<char>> const& m = readFile();
         int res = 0;
         for ( size_t i = 0; i < m.size(); i++ ) {
             for ( size_t j = 0; j < m[i].size(); j++ ) {

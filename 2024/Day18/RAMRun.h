@@ -15,35 +15,33 @@ class RAMRun : public SolutionBase {
     const int dx[4]{ 0, 0, 1, -1 };
     const int dy[4]{ 1, -1, 0, 0 };
 
-    vector<pos> readSpaceStamp( int time, ifstream& input ) {
-        vector<pos> bytePos;
+    void readSpaceStamp( int time, ifstream &input ) {
         string buf;
         regex re( "[0-9]+" );
-        for ( int i = 0; i < time && getline( input, buf ); i++ ) {
+        for ( int i = 0; i < time && getline( input, buf ) && !buf.empty(); i++ ) {
             string bufStr( buf );
             sregex_iterator it( bufStr.begin(), bufStr.end(), re ), end_it;
             int x, y;
             if ( distance( it, end_it ) == 2 ) {
-                //          |
-                //          |
-                //          |
-                //          |
-                //          V y
                 // ---------> X
+                // |
+                // |
+                // |
+                // |
+                // V y
                 x = stoi( ( *( it++ ) ).str() );
                 y = stoi( ( *( it++ ) ).str() );
-                bytePos.push_back( { x, y } );
+                bytePos.emplace_back( x, y );
             }
         }
-        return bytePos;
     }
 
-    bool isValid( pos const coordinate, vector<vector<cellStatus>> const stamp ) {
+    bool isValid( pos const &coordinate, vector<vector<cellStatus>> const &stamp ) {
         int x = coordinate.first, y = coordinate.second;
         return x >= 0 && x < SPACE && y >= 0 && y < SPACE && stamp[y][x] == good;
     }
 
-    int dijkstra( vector<vector<cellStatus>> stamp ) {
+    int dijkstra( vector<vector<cellStatus>> const &stamp ) {
         vector<vector<int>> step( SPACE, vector<int>( SPACE, INT_MAX ) );
         priority_queue<pair<int, pos>, vector<pair<int, pos>>, greater<>> pq;
         step[0][0] = 0;
@@ -68,7 +66,7 @@ class RAMRun : public SolutionBase {
         return 0;
     }
 
-    int countCorrupted( vector<vector<cellStatus>> stamp ) {
+    int countCorrupted( vector<vector<cellStatus>> const &stamp ) {
         int cnt = 0;
         for ( auto row : stamp ) {
             for ( auto col : row ) {
@@ -79,12 +77,13 @@ class RAMRun : public SolutionBase {
         }
         return cnt;
     }
+    vector<pos> bytePos;
+    ifstream input{ "Day18/input.txt" };
 
    public:
     void Solution1() {
         vector<vector<cellStatus>> stamp( SPACE, vector<cellStatus>( SPACE, good ) );
-        ifstream input( "Day18/input.txt" );
-        vector<pos> bytePos = readSpaceStamp( 1024, input );
+        readSpaceStamp( 1024, input );
         for_each( bytePos.begin(), bytePos.end(), [&]( pos cur ) {
             stamp[cur.second][cur.first] = bad;
         } );
@@ -99,8 +98,7 @@ class RAMRun : public SolutionBase {
 
     void Solution2() {
         vector<vector<cellStatus>> stamp( SPACE, vector<cellStatus>( SPACE, good ) );
-        ifstream input( "Day18/input.txt" );
-        vector<pos> bytePos = readSpaceStamp( INT_MAX, input );
+        readSpaceStamp( INT_MAX, input );
         int left = 0, right = bytePos.size() - 1;
         while ( left < right ) {
             vector<vector<cellStatus>> curStamp = stamp;

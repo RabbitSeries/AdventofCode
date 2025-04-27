@@ -14,7 +14,7 @@ class AntinodeHarmonic : public SolutionBase {
         return p.x >= 0 && p.x < map.size() && p.y >= 0 && p.y < map[p.x].size();
     }
 
-    void HarmonicAntenna( const pos s, const pos t, vector<vector<char>>& antinodeMap, bool isHarmony ) {
+    void HarmonicAntenna( const pos& s, const pos& t, vector<vector<char>>& antinodeMap, bool isHarmony ) {
         pos st, ts;
         for ( int harmonicTimes = isHarmony ? 1 : 2; isHarmony ? true : harmonicTimes < 3; harmonicTimes++ ) {
             bool withinLocale = false;
@@ -38,7 +38,7 @@ class AntinodeHarmonic : public SolutionBase {
         return;
     }
 
-    void antennaEffectZone( const vector<pos> antennaList, vector<vector<char>>& antinodeMap, bool isHarmony ) {
+    void antennaEffectZone( const vector<pos>& antennaList, vector<vector<char>>& antinodeMap, bool isHarmony ) {
         for ( size_t i = 0; i < antennaList.size() - 1; i++ ) {
             for ( size_t j = i + 1; j < antennaList.size(); j++ ) {
                 HarmonicAntenna( antennaList[i], antennaList[j], antinodeMap, isHarmony );
@@ -46,9 +46,9 @@ class AntinodeHarmonic : public SolutionBase {
         }
     }
 
-    void showAntinode( const vector<vector<char>> antinodeMap ) {
-        for ( auto row : antinodeMap ) {
-            for ( auto sign : row ) {
+    void showAntinode( const vector<vector<char>>& antinodeMap ) {
+        for ( auto& row : antinodeMap ) {
+            for ( auto& sign : row ) {
                 cout << sign;
             }
             cout << endl;
@@ -61,23 +61,20 @@ class AntinodeHarmonic : public SolutionBase {
         vector<vector<char>> antinodeMap;
         ifstream input( "Day08/input.txt" );
         // char (*linebuf)[BUFFER_SIZE+1] = {'\0'}; //argument of type "char (*)[1025]" is incompatible with parameter of type "char *"C/C++(167)
-        string linebuf;
-
         int posx = 0;
-        while ( getline( input, linebuf ) ) {
-            string line( linebuf );
+        for ( string linebuf; getline( input, linebuf ); ) {
             vector<char> row;
-            for ( size_t i = 0; i < line.size(); i++ ) {
-                if ( line[i] == '\n' || line[i] == '\0' ) {
+            for ( size_t i = 0; i < linebuf.size(); i++ ) {
+                if ( linebuf[i] == '\n' || linebuf[i] == '\0' ) {
                     continue;
                 } else {
-                    row.push_back( line[i] );
-                    if ( line[i] != '.' ) {
-                        if ( antennaLists.find( line[i] ) == antennaLists.end() ) {
-                            antennaLists[line[i]] = vector<pos>();
-                            antennaNames.push_back( line[i] );
+                    row.push_back( linebuf[i] );
+                    if ( linebuf[i] != '.' ) {
+                        if ( antennaLists.find( linebuf[i] ) == antennaLists.end() ) {
+                            antennaLists[linebuf[i]] = vector<pos>();
+                            antennaNames.push_back( linebuf[i] );
                         }
-                        antennaLists[line[i]].push_back( pos( posx, i ) );
+                        antennaLists[linebuf[i]].push_back( pos( posx, i ) );
                     }
                 }
             }
@@ -92,8 +89,8 @@ class AntinodeHarmonic : public SolutionBase {
             // showAntinode( antinodeMap );
         }
         int antinodeCnt = 0;
-        for ( auto row : antinodeMap ) {
-            for ( auto sign : row ) {
+        for ( auto& row : antinodeMap ) {
+            for ( auto& sign : row ) {
                 if ( sign == '#' ) {
                     antinodeCnt++;
                 }

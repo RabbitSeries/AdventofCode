@@ -5,7 +5,6 @@ class LinenLayout : public SolutionBase {
     typedef unsigned long long ull;
     vector<string> readKeys( ifstream& input ) {
         vector<string> keys;
-        string buf;
         regex pattern( R"(\b(.*?)(?:,|$))" );
         for ( string buf; getline( input, buf ) && !buf.empty(); ) {
             sregex_iterator it( buf.begin(), buf.end(), pattern ), end_it;
@@ -18,7 +17,7 @@ class LinenLayout : public SolutionBase {
         return keys;
     }
 
-    bool match( vector<string> keys, string design, size_t curpos = 0 ) {
+    bool match( vector<string> const& keys, string const& design, size_t curpos = 0 ) {
         if ( curpos == design.size() ) {
             // cout << design << endl;
             return true;
@@ -36,7 +35,7 @@ class LinenLayout : public SolutionBase {
         return false;
     }
 
-    ull ALLMatch( vector<string> keys, string design ) {
+    ull ALLMatch( vector<string> const& keys, string const& design ) {
         vector<ull> dp( design.size() + 1, 0 );
         dp[0] = 1;
         for ( size_t i = 1; i <= design.size(); i++ ) {
@@ -65,7 +64,7 @@ class LinenLayout : public SolutionBase {
 
     void Solution2() {
         ull res = 0;
-        for_each( designs.begin(), designs.end(), [&]( string design ) {
+        for_each( designs.begin(), designs.end(), [&]( string const& design ) {
             res += ALLMatch( keys, design );
             // cout << "Curruntly thre are: " << res << " ways" << endl;
         } );

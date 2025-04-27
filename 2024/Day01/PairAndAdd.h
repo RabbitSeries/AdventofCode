@@ -5,8 +5,7 @@ using namespace std;
 class PairAndAdd : public SolutionBase {
     using ull = unsigned long long;
 
-    vector<pair<int, int>> readFile( string filePath ) {
-        vector<pair<int, int>> numList;
+    void readFile( string filePath ) {
         regex re( "[0-9]+" );
         ifstream in( filePath );
         string buf;
@@ -16,12 +15,12 @@ class PairAndAdd : public SolutionBase {
                 numList.push_back( { stoi( ( *it ).str() ), stoi( ( *( ++it ) ).str() ) } );
             }
         }
-        return numList;
     }
+    vector<pair<int, int>> numList;
 
    public:
     void Solution1() {
-        vector<pair<int, int>> numList = readFile( "Day01/input.txt" );
+        readFile( "Day01/input.txt" );
         priority_queue<int, vector<int>, greater<>> pq1, pq2;
         for ( auto [num1, num2] : numList ) {
             pq1.push( num1 );
@@ -38,7 +37,6 @@ class PairAndAdd : public SolutionBase {
     }
 
     void Solution2() {
-        vector<pair<int, int>> numList = readFile( "Day01/input.txt" );
         unordered_map<int, int> elemCount;
         for ( auto [num1, num2] : numList ) {
             elemCount[num2]++;

@@ -49,7 +49,7 @@ class RaceCondition : public SolutionBase {
                 pos nextPos( curPos.first + dx[i], curPos.second + dy[i] );
                 if ( isValid( rows, cols, nextPos, roadMap ) && curCost + 1 < cost[nextPos.first][nextPos.second] ) {
                     cost[nextPos.first][nextPos.second] = curCost + 1;
-                    pq.push( { curCost + 1, nextPos } );
+                    pq.emplace( curCost + 1, move( nextPos ) );
                     path.emplace( nextPos, curCost + 1 );
                 }
             }
@@ -58,7 +58,7 @@ class RaceCondition : public SolutionBase {
         return 0;
     }
 
-    void readMap( pos& start, pos& end, vector<vector<cellStatus>>& roadMap, map<pos, int>& path ) {
+    void readMap() {
         ifstream input( "Day20/input.txt" );
         // FILE* input( fopen( "example.txt", "r" ) );
         string strBuf;
@@ -121,18 +121,17 @@ class RaceCondition : public SolutionBase {
         printRes( 1, res );
         return;
     }
-
-    /*
-         *
-        * *
-       *   *
-      *     *
-     *   +   *
-      *     *
-       *   *
-        * *
-         *
-     */
+    // /*
+    //      *
+    //     * *
+    //    *   *
+    //   *     *
+    //  *   +   *
+    //   *     *
+    //    *   *
+    //     * *
+    //      *
+    //  */
     int getCheatZone( pos const& curPos, vector<vector<cellStatus>> const& roadMap, pos end, map<pos, int> const& path ) {
         int cnt = 0;
         int rows = roadMap.size(), cols = roadMap[0].size();
@@ -150,23 +149,19 @@ class RaceCondition : public SolutionBase {
         }
         return cnt;
     }
+    vector<vector<cellStatus>> roadMap;
+    pos start, end;
+    map<pos, int> path;
 
    public:
     void Solution1() {
-        vector<vector<cellStatus>> roadMap;
-        pos start, end;
-        map<pos, int> path;
-        readMap( start, end, roadMap, path );
+        readMap();
         cheat( end, roadMap, path );
         return;
     }
 
     void Solution2() {
         int res = 0;
-        vector<vector<cellStatus>> roadMap;
-        pos start, end;
-        map<pos, int> path;
-        readMap( start, end, roadMap, path );
         // int pathCnt = path.size();
         // int processCnt = 0;
         for ( auto const& [startPos, _] : path ) {

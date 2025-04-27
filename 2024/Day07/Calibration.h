@@ -5,7 +5,7 @@ class Calibration : public SolutionBase {
     typedef long long ll;
     static const char operators[3];
 
-    vector<pair<ll, vector<ll>>> readFile() {
+    void readFile() {
         vector<pair<ll, vector<ll>>> numList;
         ifstream input( "Day07/input.txt" );
         string buf;
@@ -24,7 +24,6 @@ class Calibration : public SolutionBase {
             // numList.insert( { test, nums } );
             numList.emplace_back( test, nums );
         }
-        return numList;
     }
 
     static ll parse( vector<ll> nums, vector<char> op ) {
@@ -109,10 +108,11 @@ class Calibration : public SolutionBase {
         }
         return res;
     }
+    vector<pair<ll, vector<ll>>> numList;
 
    public:
     void Solution1() {
-        vector<pair<ll, vector<ll>>> numList = readFile();
+        readFile();
         size_t res = 0;
         int maxThread = thread::hardware_concurrency();
         int taskPerThread = numList.size() / maxThread;
@@ -125,12 +125,11 @@ class Calibration : public SolutionBase {
         for ( auto& task : taskList ) {
             res += task.get();
         }
-        printRes(1,res);
+        printRes( 1, res );
     }
 
     void Solution2() {
         rowCnt = 0;
-        vector<pair<ll, vector<ll>>> numList = readFile();
         size_t res = 0;
         int maxThread = thread::hardware_concurrency();
         int taskPerThread = numList.size() / maxThread;
@@ -153,6 +152,6 @@ class Calibration : public SolutionBase {
         for ( auto& task : taskList ) {
             res += task.get();
         }
-        printRes(2,res);
+        printRes( 2, res );
     }
 };

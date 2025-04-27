@@ -13,19 +13,12 @@ class MonkeyMarket : public SolutionBase {
         return curSecret;
     }
 
-    vector<ull> readFile() {
-        vector<ull> secrets;
+    void readFile() {
         ifstream input( "Day22/input.txt" );
         for ( string buf; getline( input, buf ); ) {
-            if ( !buf.empty() ) {
-                ull tmp = 0;
-                stringstream ss( buf );
-                ss >> tmp;
-                secrets.push_back( tmp );
-            }
+            secrets.push_back( stoi( buf ) );
         }
         input.close();
-        return secrets;
     }
 
     static ull getSecret( ull curSecret ) {
@@ -78,10 +71,11 @@ class MonkeyMarket : public SolutionBase {
         }
         return zoneAcc;
     }
+    vector<ull> secrets;
 
    public:
     void Solution1() {
-        vector<ull> secrets = readFile();
+        readFile();
         int maxThread = thread::hardware_concurrency();
         int taskPerthread = secrets.size() / maxThread;
         vector<future<ull>> threadList;
@@ -100,7 +94,6 @@ class MonkeyMarket : public SolutionBase {
     }
 
     void Solution2() {
-        vector<ull> secrets = readFile();
         bool enableMultiThreading = true;
         vector<future<map<int, int>>> threadList;
         if ( int maxThread = thread::hardware_concurrency(), taskPerthread = secrets.size() / maxThread; enableMultiThreading ) {

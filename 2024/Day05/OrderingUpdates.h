@@ -17,27 +17,27 @@ class OrderingUpdates : public SolutionBase {
         return true;
     }
 
-    unordered_map<int, set<int>> readRules( ifstream& input ) {
-        unordered_map<int, set<int>> rules;
-        string linebuf;
-        while ( getline( input, linebuf ) ) {
-            if ( linebuf.empty() ) {
+    unordered_map<int, set<int>> rules;
+
+    void readFile() {
+        ifstream input = ifstream( "Day05/input.txt" );
+        for ( string buf; getline( input, buf ); ) {
+            if ( buf.empty() ) {
                 break;
             }
-            stringstream ss( linebuf );
+            stringstream ss( buf );
             int num1 = 0, num2 = 0;
             char sep = '\0';
             ss >> num1 >> sep >> num2;
             rules[num1].insert( num2 );
         }
-        return rules;
+        readUpdates( input );
     }
+    vector<vector<int>> updates;
 
-    vector<vector<int>> readUpdates( ifstream& input ) {
-        vector<vector<int>> updates;
-        string linebuf;
-        while ( getline( input, linebuf ) ) {
-            stringstream ss( linebuf );
+    void readUpdates( ifstream& input ) {
+        for ( string buf; getline( input, buf ); ) {
+            stringstream ss( buf );
             int tmp = 0;
             vector<int> update;
             while ( ss >> tmp ) {
@@ -50,10 +50,10 @@ class OrderingUpdates : public SolutionBase {
             if ( update.size() > 0 )
                 updates.push_back( update );
         }
-        return updates;
+        input.close();
     }
 
-    void reOrder( vector<int>& update, const unordered_map<int, set<int>>& rules ) {
+    vector<int> reOrder( vector<int> update, const unordered_map<int, set<int>>& rules ) {
         for ( size_t i = 0; i < update.size(); i++ ) {
             for ( size_t j = i; j < update.size(); j++ ) {
                 bool ahead = true;
@@ -72,13 +72,12 @@ class OrderingUpdates : public SolutionBase {
                 }
             }
         }
+        return update;
     }
 
    public:
     void Solution1() {
-        ifstream input = ifstream( "Day05/input.txt" );
-        unordered_map<int, set<int>> rules = readRules( input );
-        vector<vector<int>> updates = readUpdates( input );
+        readFile();
         int sum = 0;
         for ( const auto& update : updates ) {
             if ( isCorrectOrder( update, rules ) ) {
@@ -90,15 +89,12 @@ class OrderingUpdates : public SolutionBase {
     }
 
     void Solution2() {
-        ifstream input = ifstream( "Day05/input.txt" );
-        unordered_map<int, set<int>> rules = readRules( input );
-        vector<vector<int>> updates = readUpdates( input );
         int sum = 0;
-        for ( vector<int> update : updates ) {
+        for ( vector<int> const& update : updates ) {
             if ( !isCorrectOrder( update, rules ) ) {
-                reOrder( update, rules );
-                int middle = update.size() / 2;
-                sum += update[middle];
+                auto res = reOrder( update, rules );
+                int middle = res.size() / 2;
+                sum += res[middle];
             }
         }
         printRes( 2, sum );
