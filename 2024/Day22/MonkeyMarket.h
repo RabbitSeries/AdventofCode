@@ -5,12 +5,12 @@ using namespace std;
 class MonkeyMarket : public SolutionBase {
     typedef unsigned long long ull;
 
-    static ull getNextSecret( ull derival ) {
+    static ull getNextSecret( ull curSecret ) {
         // This algorithm is too random, there is no need to dp.
-        derival = ( ( derival * 64 ) ^ derival ) % 16777216;
-        derival = ( ( derival / 32 ) ^ derival ) % 16777216;
-        derival = ( ( derival * 2048 ) ^ derival ) % 16777216;
-        return derival;
+        curSecret = ( ( curSecret * 64 ) ^ curSecret ) % 16777216;
+        curSecret = ( ( curSecret / 32 ) ^ curSecret ) % 16777216;
+        curSecret = ( ( curSecret * 2048 ) ^ curSecret ) % 16777216;
+        return curSecret;
     }
 
     vector<ull> readFile() {
@@ -28,100 +28,72 @@ class MonkeyMarket : public SolutionBase {
         return secrets;
     }
 
-    static ull getSecret( ull derival, int curDepth = 0, int targetDepth = 2000 ) {
-        vector<ull> deriveList;
-        deriveList.push_back( derival );
-        while ( curDepth < targetDepth ) {
-            ull nextSecret = getNextSecret( derival );
-            deriveList.push_back( nextSecret );
-            derival = nextSecret;
-            curDepth++;
+    static ull getSecret( ull curSecret ) {
+        for ( int i = 0; i < 2000; i++ ) {
+            curSecret = getNextSecret( curSecret );
         }
-        return deriveList.back();
+        return curSecret;
     }
 
-    static ull threadAcc;
-    static mutex accMutex;
-    static void threadTask( int rowStart, int rowEnd, vector<ull> const& secrets ) {
+    static ull threadTask( int rowStart, int rowEnd, vector<ull> const& secrets ) {
         ull res = 0;
         for ( int i = rowStart; i < rowEnd; i++ ) {
             ull part = getSecret( secrets[i] );
             res += part;
         }
-        lock_guard<mutex> accLock( accMutex );
-        threadAcc += res;
-        return;
+        return res;
     }
 
-    // deque is too slow.
-    // map<deque<int>, int> threadAcc2;
-    static map<string, int> threadAcc2;
-    static mutex accMutex2;
-    static void findSequence( ull derival, int curDepth = 0, int targetDepth = 2000 ) {
-        vector<ull> deriveList;
-
-        string curChanges;
-
-        deriveList.push_back( derival );
-
-        ull nextSecret = derival;
-        int curOffer = ( to_string( derival ).back() - '0' );
-
-        // TODO Change the mapping to map<tuple<int,int,int,int>,int>
-        map<string, int> optimal;
-
-        while ( curDepth < targetDepth ) {
-            if ( curChanges.size() == 4 ) {
-                if ( optimal.find( curChanges ) != optimal.end() ) {
-                    if ( curOffer > optimal.at( curChanges ) ) {
-                        // Dont't update. The monkey sells once seen the change sequence
-                        // optimal[curChanges] = curOffer;
-                    }
-                } else {
-                    optimal.emplace( curChanges, curOffer );
-                }
-                // Nervertheless
-                curChanges = curChanges.substr( 1 );
-            }
-
-            nextSecret = getNextSecret( derival );
-            curOffer = ( to_string( nextSecret ).back() - '0' );
-            curChanges.push_back( to_string( nextSecret ).back() - to_string( derival ).back() );
-
-            deriveList.push_back( nextSecret );
-            derival = nextSecret;
-            curDepth++;
-        }
-
-        lock_guard<mutex> updateAcc( accMutex2 );
-        for ( auto [changes, offer] : optimal ) {
-            threadAcc2[changes] += offer;
-        }
-        return;
+    static int index( deque<int> const& dq ) {
+        return accumulate( dq.begin(), dq.end(), 0, []( int init, int e ) {
+            return init * 19 + e;
+        } );
     }
 
-    static void threadTask2( int rowStart, int rowEnd, vector<ull> const& secrets ) {
+    static map<int, int> threadTask2( int rowStart, int rowEnd, vector<ull> const& secrets ) {
+        map<int, int> zoneAcc;
         for ( int i = rowStart; i < rowEnd; i++ ) {
-            findSequence( secrets[i] );
+            int curSecret = secrets[i];
+            string curChanges;
+            ull nextSecret = curSecret;
+            int curOffer = 0;
+            map<int, int> optimal;
+            deque<int> window;
+            for ( int i = 0; i < 2000; i++ ) {
+                nextSecret = getNextSecret( curSecret );
+                curOffer = ( to_string( nextSecret ).back() - '0' );
+                window.push_back( to_string( nextSecret ).back() - to_string( curSecret ).back() + 10 );
+                curSecret = nextSecret;
+                if ( window.size() == 4 ) {
+                    int wId = index( window );
+                    if ( !optimal.contains( wId ) ) {  // Dont't update. The monkey sells once seen the change sequence
+                        optimal.emplace( wId, curOffer );
+                    }
+                    window.pop_front();
+                }
+            }
+            for ( auto& p : optimal ) {
+                zoneAcc[p.first] += p.second;
+            }
         }
-        return;
+        return zoneAcc;
     }
 
    public:
     void Solution1() {
         vector<ull> secrets = readFile();
-        // ull res = 0;
         int maxThread = thread::hardware_concurrency();
         int taskPerthread = secrets.size() / maxThread;
-        vector<thread> threadList;
+        vector<future<ull>> threadList;
+        threadList.reserve( maxThread );
         for ( int i = 0; i < maxThread; i++ ) {
             int rowStart = i * taskPerthread;
             int rowEnd = ( i == maxThread - 1 ) ? secrets.size() : ( i + 1 ) * taskPerthread;
-            threadList.push_back( thread( threadTask, rowStart, rowEnd, ref( secrets ) ) );
+            threadList.push_back( async( threadTask, rowStart, rowEnd, ref( secrets ) ) );
         }
-
+        ull threadAcc = 0;
         for ( auto& t : threadList ) {
-            t.join();
+            threadAcc += t.get();
         }
         printRes( 1, threadAcc );
         return;
@@ -129,45 +101,26 @@ class MonkeyMarket : public SolutionBase {
 
     void Solution2() {
         vector<ull> secrets = readFile();
-        // ull res = 0;
         bool enableMultiThreading = true;
-
-        int maxThread = thread::hardware_concurrency();
-        int taskPerthread = secrets.size() / maxThread;
-        threadAcc = 0;
-        vector<thread> threadList;
-        if ( enableMultiThreading ) {
+        vector<future<map<int, int>>> threadList;
+        if ( int maxThread = thread::hardware_concurrency(), taskPerthread = secrets.size() / maxThread; enableMultiThreading ) {
             for ( int i = 0; i < maxThread; i++ ) {
                 int rowStart = i * taskPerthread;
                 int rowEnd = ( i == maxThread - 1 ) ? secrets.size() : ( i + 1 ) * taskPerthread;
-                threadList.push_back( thread( threadTask2, rowStart, rowEnd, ref( secrets ) ) );
+                threadList.push_back( async( threadTask2, rowStart, rowEnd, ref( secrets ) ) );
             }
         } else {
-            threadList.push_back( thread( threadTask2, 0, secrets.size(), ref( secrets ) ) );
+            threadList.push_back( async( threadTask2, 0, secrets.size(), ref( secrets ) ) );
         }
+        map<int, int> threadAcc;
         for ( auto& t : threadList ) {
-            t.join();
-        }
-
-        int maxIncome = INT_MIN;
-        int found = 0;
-        map<string, int>::iterator maxIt = threadAcc2.end(), cur = threadAcc2.begin();
-        while ( cur != threadAcc2.end() ) {
-            if ( ( *cur ).second > maxIncome ) {
-                found = 1;
-                maxIt = cur;
-                maxIncome = ( *cur ).second;
-            } else if ( ( *cur ).second == maxIncome ) {
-                found++;
+            for ( auto& p : t.get() ) {
+                threadAcc[p.first] += p.second;
             }
-            cur++;
         }
-        // for ( int change : ( *maxIt ).first ) {
-        //     cout << change << " ";
-        // }
-        // cout << endl;
-        // cout << found << endl;
-        printRes( 2, ( *maxIt ).second );
+        printRes( 2, ranges::max_element( threadAcc.begin(), threadAcc.end(), {}, []( pair<const int, int>& p ) {
+                         return p.second;
+                     } )->second );
         return;
     }
 };

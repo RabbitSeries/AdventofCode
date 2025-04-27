@@ -1,8 +1,6 @@
 #include "PatrolRoute.h"
 atomic<int> PatrolRoute::distinctPlacement{ 0 };
 mutex PatrolRoute::mtx;
-atomic<int> PatrolRoute::progress{ 0 };
-mutex PatrolRoute::progressMtx;
 const char PatrolRoute::face[]{ '^','>','v','<' };
 const  unordered_map<char, int> PatrolRoute::faceId{
     { '^',0 },

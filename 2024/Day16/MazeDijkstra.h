@@ -177,9 +177,11 @@ class MazeDijkstra : public SolutionBase {
         // cout << "The mission in queue to process reach maximum " << max_process << " in this maze problem." << endl;
         // cout << "There are " << pathRecord.size() << " different ways that can reach destination at same cost." << endl;
         // cout << "Solution 1: The final lowest score is " << endCost << "." << endl;
-        cout << "Solution 1: " << endCost << endl;
+        // cout << "Solution 1: " << endCost << endl;
+        printRes( 1, endCost );
         // cout << "Solution 2: Pile these paths in one maze, there are " << pathSeats.size() << " comfotable spots to enjoy the event." << endl;
-        cout << "Solution 2: " << pathSeats.size() << endl;
+        printRes( 2, pathSeats.size() );
+        // cout << "Solution 2: " << pathSeats.size() << endl;
     }
 
     void readFile( vector<vector<int>>& m, pair<int, int>& s, pair<int, int>& e ) {

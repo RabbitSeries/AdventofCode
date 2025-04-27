@@ -90,7 +90,7 @@ class RAMRun : public SolutionBase {
         } );
         int res = dijkstra( stamp );
         if ( res )
-            cout << "Solution 1: " << res << endl;
+            printRes( 1, res );
         else {
             cout << "Solution 1 failed." << endl;
             exit( -1 );
@@ -114,6 +114,8 @@ class RAMRun : public SolutionBase {
                 right = mid;
             }
         }
-        cout << "Solution 2: " << bytePos[left].first << "," << bytePos[left].second << endl;
+        ostringstream ss;
+        ss << bytePos[left].first << "," << bytePos[left].second;
+        printRes( 2, ss.str() );
     }
 };

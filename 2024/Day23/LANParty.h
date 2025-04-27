@@ -110,7 +110,7 @@ class LANParty : public SolutionBase {
                 res++;
             }
         }
-        cout << "Solution 1: " << res << endl;
+        printRes( 1, res );
     }
 
     void Solution2() {
@@ -150,13 +150,13 @@ class LANParty : public SolutionBase {
         for ( size_t i = 0; i < maxConnection.size(); i += 2 ) {
             passWord.push_back( maxConnection.substr( i, 2 ) );
         }
-        cout << "Solution 2: ";
+        ostringstream ss;
         sort( passWord.begin(), passWord.end(), less<string>() );
-        cout << passWord[0];
-        for_each( passWord.begin() + 1, passWord.end(), []( string host ) {
-            cout << "," << host;
+        ss << passWord[0];
+        for_each( passWord.begin() + 1, passWord.end(), [&]( string host ) {
+            ss << "," << host;
         } );
-        cout << endl;
+        printRes( 2, ss.str() );
         return;
     }
 };

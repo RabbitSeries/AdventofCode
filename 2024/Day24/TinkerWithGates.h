@@ -143,7 +143,7 @@ class TinkerWithGates : public SolutionBase {
                 res = to_string( wireInfo.second.data ) + res;
         }
         // cout << "-" << res << "-" << endl;
-        cout << "Solution 1: " << stoll( res, nullptr, 2 ) << endl;
+        printRes( 1, stoll( res, nullptr, 2 ) );
     }
 
     void Solution2() {
@@ -222,11 +222,11 @@ class TinkerWithGates : public SolutionBase {
             input2 = "y" + nextIndex.str();
         }
         sort( swapList.begin(), swapList.end(), less<string>() );
-        cout << "Solution 2: ";
-        cout << swapList[0];
-        for_each( swapList.begin() + 1, swapList.end(), []( string res ) {
-            cout << "," << res;
+        ostringstream ss;
+        ss << swapList[0];
+        for_each( swapList.begin() + 1, swapList.end(), [&]( string res ) {
+            ss << "," << res;
         } );
-        cout << endl;
+        printRes( 2, ss.str() );
     }
 };

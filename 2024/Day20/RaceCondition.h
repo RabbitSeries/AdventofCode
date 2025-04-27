@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
+
 #include "../../utils/ProgressBar.h"
 
 using namespace std;
 #include "../../utils/SolutionBase.h"
 class RaceCondition : public SolutionBase {
-
     typedef pair<int, int> pos;
 
     enum cellStatus {
@@ -12,18 +12,17 @@ class RaceCondition : public SolutionBase {
         EMPTY
     };
 
-
-    int dx[4]{ 0,0,1,-1 };
-    int dy[4]{ 1,-1,0,0 };
+    int dx[4]{ 0, 0, 1, -1 };
+    int dy[4]{ 1, -1, 0, 0 };
 
     bool isValid( int const& rows, int const& cols, pos const& curPos, vector<vector<cellStatus>> const& roadMap ) {
         return curPos.first < rows && curPos.second < cols && curPos.first >= 0 && curPos.second >= 0 && roadMap[curPos.first][curPos.second] == EMPTY;
     }
-    inline bool isWall( int const& rows, int const& cols, pos const& curPos, vector<vector<cellStatus>>const& roadMap ) {
+    inline bool isWall( int const& rows, int const& cols, pos const& curPos, vector<vector<cellStatus>> const& roadMap ) {
         return curPos.first < rows && curPos.second < cols && curPos.first >= 0 && curPos.second >= 0 && roadMap[curPos.first][curPos.second] == WALL;
     }
     inline pos getNextPos( pos curPos, int id ) {
-        return pos{ curPos.first + dx[id],curPos.second + dy[id] };
+        return pos{ curPos.first + dx[id], curPos.second + dy[id] };
     }
 
     int Dijkstra( pos const start, pos const end, vector<vector<cellStatus>> const& roadMap, map<pos, int>& path ) {
@@ -32,25 +31,25 @@ class RaceCondition : public SolutionBase {
         vector<vector<int>> optimized( rows, vector<int>( cols, false ) );
         priority_queue<pair<int, pos>, vector<pair<int, pos>>, greater<>> pq;
 
-        pq.push( { 0,start } );
+        pq.push( { 0, start } );
         cost[start.first][start.second] = 0;
         path.emplace( start, 0 );
-        while( !pq.empty() ) {
+        while ( !pq.empty() ) {
             auto [curCost, curPos] = pq.top();
             pq.pop();
             // // TODO how to filter curCost == cost[start.first][start.second]
-            if( optimized[curPos.first][curPos.second] || curCost > cost[curPos.first][curPos.second] ) {
+            if ( optimized[curPos.first][curPos.second] || curCost > cost[curPos.first][curPos.second] ) {
                 continue;
             }
             optimized[curPos.first][curPos.second] = true;
-            if( curPos == end ) {
+            if ( curPos == end ) {
                 return curCost;
             }
-            for( int i = 0; i < 4; i++ ) {
+            for ( int i = 0; i < 4; i++ ) {
                 pos nextPos( curPos.first + dx[i], curPos.second + dy[i] );
-                if( isValid( rows, cols, nextPos, roadMap ) && curCost + 1 < cost[nextPos.first][nextPos.second] ) {
+                if ( isValid( rows, cols, nextPos, roadMap ) && curCost + 1 < cost[nextPos.first][nextPos.second] ) {
                     cost[nextPos.first][nextPos.second] = curCost + 1;
-                    pq.push( { curCost + 1,nextPos } );
+                    pq.push( { curCost + 1, nextPos } );
                     path.emplace( nextPos, curCost + 1 );
                 }
             }
@@ -63,30 +62,28 @@ class RaceCondition : public SolutionBase {
         ifstream input( "Day20/input.txt" );
         // FILE* input( fopen( "example.txt", "r" ) );
         string strBuf;
-        while( getline( input, strBuf ) ) {
+        while ( getline( input, strBuf ) ) {
             vector<cellStatus> row;
-            for( auto c : strBuf ) {
+            for ( auto c : strBuf ) {
+                switch ( c ) {
+                    case '#':
+                        row.push_back( WALL );
+                        break;
+                    case '.':
+                        row.push_back( EMPTY );
+                        break;
+                    case 'S':
+                        start = { roadMap.size(), row.size() };
+                        row.push_back( EMPTY );
+                        break;
+                    case 'E':
+                        end = { roadMap.size(), row.size() };
+                        row.push_back( EMPTY );
+                        break;
 
-                switch( c ) {
-                case '#':
-                    row.push_back( WALL );
-                    break;
-                case '.':
-                    row.push_back( EMPTY );
-                    break;
-                case 'S':
-                    start = { roadMap.size(),row.size() };
-                    row.push_back( EMPTY );
-                    break;
-                case 'E':
-                    end = { roadMap.size(),row.size() };
-                    row.push_back( EMPTY );
-                    break;
-
-                default:
-                    break;
+                    default:
+                        break;
                 }
-
             }
             roadMap.push_back( row );
         }
@@ -102,61 +99,59 @@ class RaceCondition : public SolutionBase {
         // for( int target : targets ) {
         int res = 0;
         int rows = roadMap.size(), cols = roadMap[0].size();
-        for( auto [curPos, curCost] : path ) {
-            if( isValid( rows, cols, curPos, roadMap ) ) {
-                for( int k = 0; k < 4; k++ ) {
+        for ( auto [curPos, curCost] : path ) {
+            if ( isValid( rows, cols, curPos, roadMap ) ) {
+                for ( int k = 0; k < 4; k++ ) {
                     pos wallPos = getNextPos( curPos, k );
                     pos throughPos = getNextPos( wallPos, k );
-                    if( isWall( rows, cols, wallPos, roadMap ) && isValid( rows, cols, throughPos, roadMap ) ) {
+                    if ( isWall( rows, cols, wallPos, roadMap ) && isValid( rows, cols, throughPos, roadMap ) ) {
                         int cheatCost = 2 + path.at( end ) - path.at( throughPos );
                         int savedTime = path.at( end ) - curCost - cheatCost;
-                        if( savedTime > 0 ) {
+                        if ( savedTime > 0 ) {
                             // cheatPos.push_back( { {curPos,throughPos},savedTime } );
                             // if( savedTime == target ) {
-                            if( savedTime >= 100 ) {
+                            if ( savedTime >= 100 ) {
                                 res++;
                             }
                         }
                     }
                 }
             }
-
-
         }
-        cout << "Solution 1: " << res << endl;
+        printRes( 1, res );
         return;
     }
 
-
     /*
-         *
-        * *
-       *   *
-      *     *
+     *
+     * *
+     *   *
+     *     *
      *   +   *
-      *     *
-       *   *
-        * *
-         *
-    */
-    int getCheatZone( pos const& curPos, vector<vector<cellStatus>>  const& roadMap, pos end, map<pos, int> const& path ) {
+     *     *
+     *   *
+     * *
+     *
+     */
+    int getCheatZone( pos const& curPos, vector<vector<cellStatus>> const& roadMap, pos end, map<pos, int> const& path ) {
         int cnt = 0;
         int rows = roadMap.size(), cols = roadMap[0].size();
-        for( int i = -min( curPos.first, 20 ); i <= min( rows - 1 - curPos.first, 20 ); i++ ) {
-            for( int j = -min( curPos.second, ( 20 - abs( i ) ) ); j <= min( cols - 1 - curPos.second, ( 20 - abs( i ) ) ); j++ ) {
-                pos checkPos{ curPos.first + i,curPos.second + j };
+        for ( int i = -min( curPos.first, 20 ); i <= min( rows - 1 - curPos.first, 20 ); i++ ) {
+            for ( int j = -min( curPos.second, ( 20 - abs( i ) ) ); j <= min( cols - 1 - curPos.second, ( 20 - abs( i ) ) ); j++ ) {
+                pos checkPos{ curPos.first + i, curPos.second + j };
                 int cheatCost = abs( i ) + abs( j );
-                if( isValid( rows, cols, checkPos, roadMap ) ) {
+                if ( isValid( rows, cols, checkPos, roadMap ) ) {
                     int proceedCost = cheatCost + path.at( end ) - path.at( checkPos );
                     int savedTime = path.at( end ) - path.at( curPos ) - proceedCost;
-                    if( savedTime >= 100 )
+                    if ( savedTime >= 100 )
                         cnt++;
                 }
             }
         }
         return cnt;
     }
-public:
+
+   public:
     void Solution1() {
         vector<vector<cellStatus>> roadMap;
         pos start, end;
@@ -165,7 +160,7 @@ public:
         cheat( end, roadMap, path );
         return;
     }
-    
+
     void Solution2() {
         int res = 0;
         vector<vector<cellStatus>> roadMap;
@@ -174,12 +169,10 @@ public:
         readMap( start, end, roadMap, path );
         // int pathCnt = path.size();
         // int processCnt = 0;
-        for( auto const &[startPos, _] : path ) {
+        for ( auto const& [startPos, _] : path ) {
             // showProgressBar( ++processCnt, pathCnt );
             res += getCheatZone( startPos, roadMap, end, path );
         }
-        cout << "Solution 2: " << res << endl;
-
+        printRes( 2, res );
     }
-
 };

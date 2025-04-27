@@ -62,10 +62,7 @@ class TrailScore : public SolutionBase {
             vector<vector<bool>> visited( topomap.size(), vector<bool>( topomap[0].size(), false ) );
             res += trail( head.first, head.second, topomap, visited, isSolution2 );
         }
-        if ( !isSolution2 )
-            cout << "Solution 1: " << res << endl;
-        else
-            cout << "Solution 2: " << res << endl;
+        !isSolution2 ? printRes( 1, res ) : printRes( 2, res );
     }
 
    public:

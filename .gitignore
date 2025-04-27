@@ -5,3 +5,4 @@ exe_*
 *.class
 /.env
 input.txt
+/[oO]ut

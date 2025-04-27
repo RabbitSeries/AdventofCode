@@ -75,7 +75,7 @@ class RobotPatrol : public SolutionBase {
         return gcd;
     }
     int reverseMod( int a, int b ) {
-        int x, y;
+        [[maybe_unused]] int x = 0, y;
         assert( extendGCD( a, b, x, y ) == 1 );
         return x;
     }

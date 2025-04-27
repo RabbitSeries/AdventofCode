@@ -224,7 +224,7 @@ class AsciiGraph : public SolutionBase {
                 }
             }
         }
-        cout << "Solution 1: " << res << endl;
+        printRes( 1, res );
     }
     void Solution2() {
         vector<vector<char>> garden;
@@ -251,6 +251,6 @@ class AsciiGraph : public SolutionBase {
                 }
             }
         }
-        cout << "Solution 2: " << res << endl;
+        printRes( 2, res );
     }
 };

@@ -236,7 +236,7 @@ class CascadingRemote : public SolutionBase {
             //  << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
             res += stoi( string( password.begin(), password.end() - 1 ) ) * manCommand;
         }
-        cout << "Solution 1: " << res << endl;
+        printRes( 1, res );
         // cout << "Cache size: " << cacheMap.size() << endl;
     }
     void Solution2() {
@@ -249,7 +249,7 @@ class CascadingRemote : public SolutionBase {
             //  << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
             res += stoll( string( password.begin(), password.end() - 1 ) ) * manCommand;
         }
-        cout << "Solution 2: " << res << endl;
+        printRes( 2, res );
         // cout << "Cache size: " << cacheMap.size() << endl;
     }
 };

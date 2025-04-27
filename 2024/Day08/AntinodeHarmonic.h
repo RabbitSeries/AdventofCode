@@ -99,7 +99,7 @@ class AntinodeHarmonic : public SolutionBase {
                 }
             }
         }
-        cout << ( !isHarmony ? "Solution 1: " : "Solution 2: " ) << antinodeCnt << endl;
+        !isHarmony ? printRes( 1, antinodeCnt ) : printRes( 2, antinodeCnt );
     }
 
    public:
