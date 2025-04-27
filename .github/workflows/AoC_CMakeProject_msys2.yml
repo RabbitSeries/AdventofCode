@@ -1,10 +1,6 @@
 name: Advent of Code CI
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+on: [push, pull_request]
 
 env:
   BUILD_TYPE: Release
@@ -12,20 +8,7 @@ env:
 
 jobs:
   build-and-test:
-    strategy:
-      matrix:
-        os: [windows-latest, ubuntu-latest]
-        include:
-          - os: windows-latest
-            generator: "MinGW Makefiles"
-            shell: cmd
-            exe_extension: .exe
-          - os: ubuntu-latest
-            generator: "Ninja"
-            shell: bash
-            exe_extension: ""
-
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
 
     steps:
     - name: Checkout code
@@ -48,14 +31,6 @@ jobs:
         AOC_SESSION_COOKIE: ${{ secrets.AOC_SESSION_COOKIE }}
       run: |
         python utils/InputDownloader/downloader.py
-
-    - name: Cache CMake build
-      uses: actions/cache@v3
-      with:
-        path: ${{ env.BUILD_DIR }}
-        key: ${{ runner.os }}-cmake-${{ hashFiles('CMakeLists.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-cmake-
             
     # these denpendencies are already compensated
     # - name: Install dependencies (Linux)
@@ -69,43 +44,32 @@ jobs:
     #   run: |
     #     choco install mingw -y
 
-    # - name: Set up Java & Maven
-    #   uses: actions/setup-java@v4
-    #   with:
-    #     distribution: 'microsoft'
-    #     java-version: '21'
-  
-    # - name: Compile Java files
-    #   run: mvn compile
-    
     # - name: Run Java AoC solutions
     #   run: |
     #     sh ./.vscode/JavaTest.sh
     #   shell: bash
     
+    - name: Prepare msys2 (Windows)
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: mingw64
+        install: >-
+          base-devel
+          mingw-w64-x86_64-cmake
+          mingw-w64-x86_64-gcc
+          mingw-w64-x86_64-toolchain
 
-    - name: Configure CMake
+    - name: Configure CMake && build
       run: |
-        cmake -S . -B ${{ env.BUILD_DIR }} -G "${{ matrix.generator }}" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
-
-    - name: Build project
-      run: |
+        cmake -S . -B ${{ env.BUILD_DIR }} -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
         cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }}
-
-    - name: Run tests (Linux)
-      if: matrix.os == 'ubuntu-latest'
-      working-directory: ${{ env.BUILD_DIR }}/2024
-      shell: bash
-      run: |
-        pwd && ls && ./solution
+      shell: msys2 {0}
 
     - name: Run tests (Windows)
-      if: matrix.os == 'windows-latest'
       working-directory: ${{ env.BUILD_DIR }}/2024
-      shell: cmd
+      shell: msys2 {0}
       run: |
-        dir && solution.exe
-  
+        pwd && ls && ./solution
 
     - name: Upload artifacts on failure
       if: failure()
