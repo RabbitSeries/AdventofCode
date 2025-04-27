@@ -1,9 +1,9 @@
 name: AoC Windows msys2
 
 on: 
-  # push:
-    # branches : [main]
-  pull_request
+  push:
+    branches : [main]
+  pull_request:
 
 env:
   BUILD_TYPE: Release
@@ -16,8 +16,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -35,23 +33,6 @@ jobs:
       run: |
         python utils/InputDownloader/downloader.py
             
-    # these denpendencies are already compensated
-    # - name: Install dependencies (Linux)
-    #   if: runner.os == 'Linux'
-    #   run: |
-    #     sudo apt-get update
-    #     sudo apt-get install -y ninja-build g++
-
-    # - name: Install dependencies (Windows)
-    #   if: runner.os == 'Windows'
-    #   run: |
-    #     choco install mingw -y
-
-    # - name: Run Java AoC solutions
-    #   run: |
-    #     sh ./.vscode/JavaTest.sh
-    #   shell: bash
-    
     - name: Prepare msys2 (Windows)
       uses: msys2/setup-msys2@v2
       with:
@@ -61,6 +42,15 @@ jobs:
           mingw-w64-x86_64-cmake
           mingw-w64-x86_64-gcc
           mingw-w64-x86_64-toolchain
+
+              - name: Prepare msys2 (Windows)
+
+    - name: Update?
+      shell: msys2 {0}
+      run: |
+          pacman -Syu --noconfirm
+          pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain
+        
 
     - name: Configure CMake && build
       run: |

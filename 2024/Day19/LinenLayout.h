@@ -6,10 +6,10 @@ class LinenLayout : public SolutionBase {
     vector<string> readKeys( ifstream& input ) {
         vector<string> keys;
         string buf;
-        regex pattern( "\\b(.*?)(?:,|$|\\n)" );
-        for ( string buf; getline( input, buf ); ) {
+        regex pattern( R"(\b(.*?)(?:,|$))" );
+        for ( string buf; getline( input, buf ) && !buf.empty(); ) {
             sregex_iterator it( buf.begin(), buf.end(), pattern ), end_it;
-            while ( distance( it, end_it ) != 0 ) {
+            while ( it != end_it ) {
                 if ( !( *it )[1].str().empty() )
                     keys.push_back( ( *it )[1] );
                 it++;
@@ -48,34 +48,27 @@ class LinenLayout : public SolutionBase {
         }
         return dp[design.size()];
     }
+    vector<string> keys, designs;
 
    public:
     void Solution1() {
-        vector<string> keys, designs;
-        // FILE* keyInput( fopen( "ExampleKeys.txt", "r" ) ), * designInput( fopen( "ExampleInput.txt", "r" ) );
-        ifstream keyInput( "Day19/keys.txt" ), designInput( "Day19/input.txt" );
+        ifstream keyInput( "Day19/input.txt" );
         keys = readKeys( keyInput );
-        designs = readKeys( designInput );
+        designs = readKeys( keyInput );
         int res = 0;
         for_each( designs.begin(), designs.end(), [&]( string design ) {
             if ( match( keys, design ) ) res++;
         } );
-        cout << "Solution 1: " << res << endl;
-        keyInput.close(), designInput.close();
+        printRes( 1, res );
+        keyInput.close();
     }
 
     void Solution2() {
-        vector<string> keys, designs;
-        // FILE* keyInput( fopen( "ExampleKeys.txt", "r" ) ), * designInput( fopen( "ExampleInput.txt", "r" ) );
-        ifstream keyInput( "Day19/keys.txt" ), designInput( "Day19/input.txt" );
-        keys = readKeys( keyInput );
-        designs = readKeys( designInput );
         ull res = 0;
         for_each( designs.begin(), designs.end(), [&]( string design ) {
             res += ALLMatch( keys, design );
             // cout << "Curruntly thre are: " << res << " ways" << endl;
         } );
-        cout << "Solution 2: " << res << endl;
-        keyInput.close(), designInput.close();
+        printRes( 2, res );
     }
 };
