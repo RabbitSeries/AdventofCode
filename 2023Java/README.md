@@ -4,6 +4,10 @@
 
 ~~Suprisingly, Java solution is 1/4 faster than cpp solution.~~(on windows)
 
+## Day20
+
+I don't know what circuit [this](./Day20/mermaid.md) is, but it seems that the circuit can be seperated into four parts the LCM to the final result using chaos index.
+
 ## Regex diff
 
 Lang    | Regex URL

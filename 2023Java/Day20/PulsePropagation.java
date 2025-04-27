@@ -12,11 +12,14 @@ public class PulsePropagation {
         Conjunction, BroadCaster, FlipFlop
     }
 
+    // A module's ModuleType and Optional On/Off status
     HashMap<String, Pair<ModuleType, Optional<Boolean>>> Modules = new HashMap<>();
 
+    // A module's output module namelist
     HashMap<String, List<String>> OutputLists = new HashMap<>();
 
-    HashMap<String, HashMap<String, Boolean>> InputStatus = new HashMap<>();
+    // Conjunction Module's input module status memory
+    HashMap<String, HashMap<String, Boolean>> CjctModuleInputStatus = new HashMap<>();
 
     void readFile() throws IOException {
         BufferedReader input = new BufferedReader(new FileReader("input.txt"));
@@ -39,8 +42,8 @@ public class PulsePropagation {
                 OutputLists.putIfAbsent(InWire, new ArrayList<>());
                 OutputLists.get(InWire).addAll(OutWireList);
                 for (String s : OutWireList) {
-                    InputStatus.putIfAbsent(s, new HashMap<>());
-                    InputStatus.get(s).putIfAbsent(InWire, false);
+                    CjctModuleInputStatus.putIfAbsent(s, new HashMap<>());
+                    CjctModuleInputStatus.get(s).putIfAbsent(InWire, false);
                 }
             }
         }
@@ -69,8 +72,8 @@ public class PulsePropagation {
                 if (Modules.containsKey(outWire)) {
                     Optional<Boolean> nextPulse = Optional.empty();
                     if (Modules.get(outWire).first.equals(ModuleType.Conjunction)) {
-                        InputStatus.get(outWire).put(curPulse.first, curPulse.second);
-                        nextPulse = Optional.of(!InputStatus.get(outWire).values().stream().reduce(true, (init, e) -> init && e));
+                        CjctModuleInputStatus.get(outWire).put(curPulse.first, curPulse.second);
+                        nextPulse = Optional.of(!CjctModuleInputStatus.get(outWire).values().stream().reduce(true, (init, e) -> init && e));
                     } else {// if (Modules.get(outWire).first.equals(ModuleType.FlipFlop)) {
                         if (curPulse.second == false) {// low pulse
                             if (Modules.get(outWire).second.get().equals(false)) { // off

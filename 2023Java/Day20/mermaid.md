@@ -1,63 +1,65 @@
-```mermaid
-flowchart-elk TD
+# Day20 Visualize
 
-hm --> cr
-qc --> nd
-dh --> rm
-ph --> zz
-ps --> kc & dt
-qb --> dt
-jl --> vt & tb
-fh --> dm & gr
+```mermaid
+flowchart LR
 broadcaster --> np & mg & vd & xr
 zz --> sq
-rm --> rx
 nd --> br
-nx --> vr & vt
-qf --> dt & dv
-np --> xm & ph
-dm --> nf & gr
 sq --> kj
-bv --> fp & xm
 br --> kt
-mg --> dz & gr
-dt --> vd & dv & dh & hm & ks & hd & kq
 ks --> qf
-qd --> rm
-xr --> vt & rn
-vr --> tg & vt
-lc --> xm
-tq --> gr & fh
-cr --> kq & dt
-vd --> dt & ks
 tb --> nx
-dz --> gr & fd
-gr --> dp & mg & fd & qn
-nf --> gr
 dv --> hm
-qj --> lc & xm
-kc --> dt & gf
-gf --> dt & qb
-vh --> xm & sv
-sr --> vt
-fp --> qg & xm
 kj --> vh
-pc --> tq & gr
 kq --> hd
-xd --> xg & gr
-tg --> sr & vt
-bb --> rm
-rn --> vt & qc
 hd --> ps
-qg --> xm & qj
-dp --> rm
 qn --> pc
 kt --> jl
-sv --> bv
-vt --> bb & nd & qc & xr & br & tb & kt
 fd --> mx
-xm --> zz & sv & sq & ph & kj & np & qd
-xg --> gr & qn
-mx --> gr & xd
+hm --> cr
+qc --> nd
+sv --> bv
+&ph --> zz
+lc --> &xm
+nf --> &gr
+qb --> &dt
+sr --> &vt
+np --> &xm & &ph
+jl --> &vt & tb
+ps --> kc & &dt
+fh --> dm & &gr
+bv --> &fp & &xm
+&fp --> qg & &xm
+rn --> &vt & qc
+nx --> vr & &vt
+dm --> nf & &gr
+xr --> &vt & rn
+vr --> tg & &vt
+tq --> &gr & fh
+cr --> kq & &dt
+vd --> &dt & ks
+dz --> &gr & fd
+qj --> lc & &xm
+kc --> &dt & gf
+gf --> &dt & qb
+vh --> &xm & sv
+xd --> xg & &gr
+tg --> sr & &vt
+qg --> &xm & qj
+mx --> &gr & xd
+pc --> tq & &gr
+xg --> &gr & qn
+qf --> &dt & dv
+mg --> dz & &gr
 
+&qd --> &rm
+&dh --> &rm
+&dp --> &rm
+&bb --> &rm
+&rm --> rx
+
+&vt --> &bb & nd & qc & xr & br & tb & kt
+&gr --> &dp & mg & fd & qn
+&dt --> vd & dv & &dh & hm & ks & hd & kq
+&xm --> zz & sv & sq & &ph & kj & np & &qd
 ```
