@@ -75,8 +75,8 @@ class RobotPatrol : public SolutionBase {
         return gcd;
     }
     int reverseMod( int a, int b ) {
-        [[maybe_unused]] int x = 0, y;
-        int res = extendGCD( a, b, x, y );
+        int x = 0, y;
+        [[maybe_unused]] int res = extendGCD( a, b, x, y );
         // assert( extendGCD( a, b, x, y ) == 1 );// release mode will skip assert
         assert( res == 1 );
         return x;
