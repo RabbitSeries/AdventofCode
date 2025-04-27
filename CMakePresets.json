@@ -34,6 +34,15 @@
             }
         },
         {
+            "name": "Ninja RelWithDebInfo Configure",
+            "displayName": "Ninja RelWithDebInfo Configure",
+            "hidden": false,
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+            }
+        },
+        {
             "name": "MinGW Debug Configure",
             "displayName": "MinGW Debug Configure",
             "hidden": false,

@@ -7,8 +7,8 @@ class RobotPatrol : public SolutionBase {
         robot() {};
         robot( int leftDis, int topDis, int horizenVel, int verticalVel ) : curPos( leftDis, topDis ),
                                                                             vel( horizenVel, verticalVel ) {};
-        pair<int, int> curPos;
-        pair<int, int> vel;
+        pair<int, int> curPos{};
+        pair<int, int> vel{};
     } robot;
     const int WIDTH = 101, HEIGHT = 103;
     using ull = unsigned long long;
@@ -76,11 +76,13 @@ class RobotPatrol : public SolutionBase {
     }
     int reverseMod( int a, int b ) {
         [[maybe_unused]] int x = 0, y;
-        assert( extendGCD( a, b, x, y ) == 1 );
+        int res = extendGCD( a, b, x, y );
+        // assert( extendGCD( a, b, x, y ) == 1 );// release mode will skip assert
+        assert( res == 1 );
         return x;
     }
     int positiveMod( int a, int b ) {
-        return ( b + a % b ) % b;
+        return ( b + ( a % b ) ) % b;
     }
 
    public:

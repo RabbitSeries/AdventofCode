@@ -16,4 +16,5 @@ add_executable(solution main.cc ${SOURCES})
 target_compile_options(solution PRIVATE
     $<$<CONFIG:Debug>:-g>
     $<$<CONFIG:Release>:-O3>
+    $<$<CONFIG:RelWithDebInfo>: -g -O2 -DNDEBUG>
 )
