@@ -5,8 +5,8 @@ using namespace std;
 class OrderingUpdates : public SolutionBase {
 
     bool isCorrectOrder( const vector<int>& update, const unordered_map<int, set<int>>& rules ) {
-        for( int i = 0; i < update.size(); i++ ) {
-            for( int j = 0; j < i; j++ ) {
+        for( size_t i = 0; i < update.size(); i++ ) {
+            for( size_t j = 0; j < i; j++ ) {
                 if( rules.count( update[i] ) != 0 ) {
                     if( rules.at( update[i] ).count( update[j] ) != 0 )
                         return false;
@@ -31,7 +31,7 @@ class OrderingUpdates : public SolutionBase {
             ss >> num1 >> sep >> num2;
             rules[num1].insert( num2 );
         }
-        return move( rules );
+        return rules;
     }
 
     vector<vector<int>> readUpdates( ifstream& input ) {
@@ -51,14 +51,14 @@ class OrderingUpdates : public SolutionBase {
             if( update.size() > 0 )
                 updates.push_back( update );
         }
-        return move( updates );
+        return updates;
     }
 
     void reOrder( vector<int>& update, const unordered_map<int, set<int>>& rules ) {
-        for( int i = 0; i < update.size(); i++ ) {
-            for( int j = i; j < update.size(); j++ ) {
+        for( size_t i = 0; i < update.size(); i++ ) {
+            for( size_t j = i; j < update.size(); j++ ) {
                 bool ahead = true;
-                for( int k = i; k < update.size(); k++ ) {
+                for( size_t k = i; k < update.size(); k++ ) {
                     if( k == j ) { continue; }
                     if( rules.count( update[k] ) != 0 && rules.at( update[k] ).count( update[j] ) != 0 ) { ahead = false; break; }
                 }

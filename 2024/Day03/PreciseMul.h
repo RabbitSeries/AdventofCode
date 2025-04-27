@@ -4,7 +4,7 @@ using namespace std;
 class PreciseMul : SolutionBase {
     typedef long long ll;
     int getNum( string str, int pos ) {
-        int i = pos, num = 0;
+        size_t i = pos, num = 0;
         while ( i < str.length() && isdigit( str[i] ) ) {
             num = num * 10 + stoi( string( 1, str[i] ) );
             i++;

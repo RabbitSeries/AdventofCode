@@ -8,7 +8,7 @@ typedef unsigned long long ull;
 #include "../../utils/SolutionBase.h"
 class TenaryMachine : public SolutionBase {
     typedef unsigned long long ull;
-    static int pc;
+    static size_t pc;
     static ull ra, rb, rc;
 
     // It turns out that only opcode 0 will change the value of ra, and the example of this problem always use literal num to change its value. Within one round ra is only changed once, and was all the way devided to zero.
@@ -90,7 +90,7 @@ class TenaryMachine : public SolutionBase {
         outBuf.clear();
     }
 
-    static void ( *( fun[8] ) )( int operand );
+    static void ( *fun[8] )( int operand );
 
     static void operation( int opcode, int operand ) {
         fun[opcode]( operand );
@@ -98,22 +98,19 @@ class TenaryMachine : public SolutionBase {
             pc += 2;
         }
     }
+    vector<int> instruction;
+    size_t tra = 0, trb = 0, trc = 0;
+    string program = "";
 
-   public:
-    void Solution1() {
+    void readFile() {
         regex re( "[0-9]+" );
-        vector<int> instruction;
-        FILE* input( fopen( "Day17/input.txt", "r" ) );
-        char buf[1024] = "\0";
-        long long tra = 0, trb = 0, trc = 0;
-        string program = "";
-        while ( !feof( input ) && fgets( buf, 1024, input ) ) {
-            string pattern( buf );
-            sregex_iterator it( pattern.begin(), pattern.end(), re ), end_it;
+        ifstream input( "Day17/input.txt" );
+        for ( string buf; getline( input, buf ); ) {
+            sregex_iterator it( buf.begin(), buf.end(), re ), end_it;
             if ( distance( it, end_it ) == 1 ) {
-                if ( pattern.find( "A" ) != string::npos ) {
+                if ( buf.find( "A" ) != string::npos ) {
                     tra = stoi( ( *it ).str() );
-                } else if ( pattern.find( "B" ) != string::npos ) {
+                } else if ( buf.find( "B" ) != string::npos ) {
                     rb = trb = stoi( ( *it ).str() );
                 } else {
                     rc = trc = stoi( ( *it ).str() );
@@ -126,48 +123,27 @@ class TenaryMachine : public SolutionBase {
                 }
             }
         }
-        // tra = 7;
+    }
+
+   public:
+    void Solution1() {
+        readFile();
         InitProgram( tra, 0, 0 );
         while ( pc < instruction.size() ) {
             int opcode = instruction[pc];
             int operand = instruction[pc + 1];
             operation( opcode, operand );
         }
-        cout << "Solution 1: " << outBuf.substr( 1 ) << endl;
+        printRes( 1, outBuf.substr( 1 ) );
     }
 
     void Solution2() {
-        regex re( "[0-9]+" );
-        vector<int> instruction;
-        // FILE* input( fopen( "inputExample.txt", "r" ) );
-        FILE* input( fopen( "Day17/input.txt", "r" ) );
-        char buf[1024] = "\0";
-        ull tra = 0, trb = 0, trc = 0;
-        string program = "";
-        while ( !feof( input ) && fgets( buf, 1024, input ) ) {
-            string pattern( buf );
-            sregex_iterator it( pattern.begin(), pattern.end(), re ), end_it;
-            if ( distance( it, end_it ) == 1 ) {
-                if ( pattern.find( "A" ) != string::npos ) {
-                    tra = stoi( ( *it ).str() );
-                } else if ( pattern.find( "B" ) != string::npos ) {
-                    rb = trb = stoi( ( *it ).str() );
-                } else {
-                    rc = trc = stoi( ( *it ).str() );
-                }
-            } else {
-                while ( it != end_it ) {
-                    instruction.push_back( stoi( ( *it ).str() ) );
-                    program += "," + ( *it ).str();
-                    it++;
-                }
-            }
-        }
+        InitProgram( tra, 0, 0 );
         ull p = 1;
         // Yeah, I nailed it.
         priority_queue<ull, vector<ull>, greater<>> processQue;
         processQue.push( p );
-        int filterdTimes = 0;
+        // int filterdTimes = 0;
         while ( !processQue.empty() ) {
             ull searchBase = processQue.top();
             processQue.pop();
@@ -193,7 +169,7 @@ class TenaryMachine : public SolutionBase {
                     flag = true;
                     // cout << outBuf << endl;
                     if ( outBuf == program ) {
-                        cout << "Solution 2: " << curRA << endl;
+                        printRes( 2, curRA );
                         // cout << "Found register A: " << curRA << endl;
                         // cout << (ull)( 0xFFFFFFFFFFFFFFFFull ) << endl;
                         // Break here instead.

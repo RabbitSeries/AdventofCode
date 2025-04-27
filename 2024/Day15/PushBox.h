@@ -12,7 +12,6 @@ class PushBox : public SolutionBase {
     const int CELLWALL = -1;
     const int CELLEMPTY = -2;
     const int BOT = -3;
-    const int BUF = 4096;
 
     typedef long long ll;
     typedef struct pos {
@@ -91,44 +90,48 @@ class PushBox : public SolutionBase {
             }
         }
     }
-
+    queue<char> control;
     void readMap( vector<vector<int>>& arcade, vector<boxPos>& id2BoxPos, pos& start ) {
         ifstream input( "Day15/input.txt" );
-        for ( string buf; getline( input, buf ); ) {
+        for ( string buf; getline( input, buf ) && !buf.empty(); ) {
             vector<int> row;
             for ( char c : buf ) {
-                if ( c != '\n' && c != '\0' ) {
-                    switch ( c ) {
-                        case '#':
-                            row.push_back( CELLWALL );
-                            row.push_back( CELLWALL );
-                            break;
-                        case '.':
-                            row.push_back( CELLEMPTY );
-                            row.push_back( CELLEMPTY );
-                            break;
-                        case 'O':
-                            row.push_back( id2BoxPos.size() );
-                            row.push_back( id2BoxPos.size() );
-                            id2BoxPos.push_back( boxPos( pos( arcade.size(), row.size() - 2 ), pos( arcade.size(), row.size() - 1 ) ) );
-                            break;
-                        case '@':
-                            start = pos( arcade.size(), row.size() );
-                            row.push_back( CELLEMPTY );
-                            row.push_back( CELLEMPTY );
-                            break;
-                        default:
-                            break;
-                    }
+                switch ( c ) {
+                    case '#':
+                        row.push_back( CELLWALL );
+                        row.push_back( CELLWALL );
+                        break;
+                    case '.':
+                        row.push_back( CELLEMPTY );
+                        row.push_back( CELLEMPTY );
+                        break;
+                    case 'O':
+                        row.push_back( id2BoxPos.size() );
+                        row.push_back( id2BoxPos.size() );
+                        id2BoxPos.push_back( boxPos( pos( arcade.size(), row.size() - 2 ), pos( arcade.size(), row.size() - 1 ) ) );
+                        break;
+                    case '@':
+                        start = pos( arcade.size(), row.size() );
+                        row.push_back( CELLEMPTY );
+                        row.push_back( CELLEMPTY );
+                        break;
+                    default:
+                        break;
                 }
             }
             arcade.push_back( row );
         }
     }
-
-    ll sumCoordinates( vector<boxPos> const id2BoxPos, vector<vector<int>> const acrade ) {
+    void readControl( ifstream& input ) {
+        for ( string buf; getline( input, buf ); ) {
+            for ( char c : buf ) {
+                control.push( c );
+            }
+        }
+    }
+    ll sumCoordinates( vector<boxPos> const& id2BoxPos, vector<vector<int>> const& acrade ) {
         ll res = 0;
-        for ( auto boxPos : id2BoxPos ) {
+        for ( auto& boxPos : id2BoxPos ) {
             res += 100 * boxPos.l.x + boxPos.l.y;
         }
         return res;
@@ -136,8 +139,8 @@ class PushBox : public SolutionBase {
 
     int countWall( vector<vector<int>> const acrade ) {
         int wallCnt = 0;
-        for ( int i = 0; i < acrade.size(); i++ ) {
-            for ( int j = 0; j < acrade[i].size(); j++ ) {
+        for ( size_t i = 0; i < acrade.size(); i++ ) {
+            for ( size_t j = 0; j < acrade[i].size(); j++ ) {
                 if ( acrade[i][j] == CELLWALL ) {
                     // cout << "Pos" << i << "," << j << endl;
                     wallCnt++;
@@ -206,7 +209,7 @@ class PushBox : public SolutionBase {
     vector<boxPos> getNextBoxVertical( vector<boxPos> const id2BoxPos, vector<vector<int>> const arcade, vector<boxPos> const curLevel, char const control, bool& isBlocked ) {
         map<int, int> nextLevelID;
         vector<boxPos> nextLevel;
-        for ( int i = 0; i < curLevel.size() && !isBlocked; i++ ) {
+        for ( size_t i = 0; i < curLevel.size() && !isBlocked; i++ ) {
             boxPos curBox = curLevel[i];
             {
                 pos l = getNextPos( control, curBox.l ), r = getNextPos( control, curBox.r );
@@ -364,10 +367,9 @@ class PushBox : public SolutionBase {
     void Solution1() {
         vector<pos> id2Pos;
         vector<vector<int>> pos2Id;
-        char buf[BUF] = "\0";
         pos start;
-        FILE* input = fopen( "Day15/input.txt", "r" );
-        while ( !feof( input ) && fgets( buf, BUF, input ) ) {
+        ifstream input( "Day15/input.txt" );
+        for ( string buf; getline( input, buf ) && !buf.empty(); ) {
             vector<int> row;
             for ( char c : buf ) {
                 if ( c != '\n' && c != '\0' ) {
@@ -393,17 +395,10 @@ class PushBox : public SolutionBase {
             }
             pos2Id.push_back( row );
         }
-        FILE* move = fopen( "Day15/move.txt", "r" );
-        queue<char> control;
-        while ( !feof( move ) && fgets( buf, BUF, move ) ) {
-            for ( char c : buf ) {
-                if ( c != '\n' && c != '\0' ) {
-                    control.push( c );
-                }
-            }
-        }
+        readControl( input );
         play( id2Pos, pos2Id, start, control );
-        cout << "Solution 1: " << sumCoordinates( id2Pos, pos2Id ) << endl;
+        printRes( 1, sumCoordinates( id2Pos, pos2Id ) );
+        input.close();
     }
 
     void Solution2() {
@@ -411,17 +406,7 @@ class PushBox : public SolutionBase {
         vector<vector<int>> arcade;
         pos start;
         readMap( arcade, id2BoxPos, start );
-        ifstream move( "Day15/move.txt" );
-        queue<char> control;
-        string buf = "\0";
-        while ( getline( move, buf ) ) {
-            for ( char c : buf ) {
-                if ( c != '\n' && c != '\0' ) {
-                    control.push( c );
-                }
-            }
-        }
         play( id2BoxPos, arcade, start, control );
-        cout << "Solution 2: " << sumCoordinates( id2BoxPos, arcade ) << endl;
+        printRes( 2, sumCoordinates( id2BoxPos, arcade ) );
     }
 };

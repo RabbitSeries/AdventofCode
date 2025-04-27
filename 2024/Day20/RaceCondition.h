@@ -172,8 +172,8 @@ public:
         pos start, end;
         map<pos, int> path;
         readMap( start, end, roadMap, path );
-        int pathCnt = path.size();
-        int processCnt = 0;
+        // int pathCnt = path.size();
+        // int processCnt = 0;
         for( auto const &[startPos, _] : path ) {
             // showProgressBar( ++processCnt, pathCnt );
             res += getCheatZone( startPos, roadMap, end, path );

@@ -20,7 +20,7 @@ class LANParty : public SolutionBase {
 
     static inline bool isConnected( string const& Host, string const& ConnectionNextwork, map<string, map<string, bool>> const& LANNetWork ) {
         bool connected = true;
-        for ( int i = 0; i < ConnectionNextwork.size(); i += 2 ) {
+        for ( size_t i = 0; i < ConnectionNextwork.size(); i += 2 ) {
             if ( LANNetWork.at( Host ).count( ConnectionNextwork.substr( i, 2 ) ) == 0 ) {
                 connected = false;
                 return false;
@@ -73,7 +73,7 @@ class LANParty : public SolutionBase {
         while ( distance( it, LANNetWork.end() ) != endRow - startRow ) {
             it++;
         }
-        int left = 0, right = LANNetWork.size() - 1;
+        // int left = 0, right = LANNetWork.size() - 1;
 
         while ( it != end ) {
             // findConnection( LANNetWork, ( *it ).first, ( *it ).first );
@@ -147,7 +147,7 @@ class LANParty : public SolutionBase {
             res = max( connection.size() / 2, res );
         }
         vector<string> passWord;
-        for ( int i = 0; i < maxConnection.size(); i += 2 ) {
+        for ( size_t i = 0; i < maxConnection.size(); i += 2 ) {
             passWord.push_back( maxConnection.substr( i, 2 ) );
         }
         cout << "Solution 2: ";

@@ -6,37 +6,37 @@ class DiskCompact : public SolutionBase {
     typedef long long ll;
 
     void appendFileBlock( int id, int size, vector<int>& disk ) {
-        while( size-- ) {
+        while ( size-- ) {
             disk.push_back( id );
         }
     }
 
     void appendEmptyBlock( int size, vector<int>& disk ) {
-        while( size-- ) {
+        while ( size-- ) {
             disk.push_back( -1 );
         }
     }
 
-    ll fileCompack( vector<int>disk ) {
+    ll fileCompack( vector<int> disk ) {
         ll checkSum = 0;
-        int i = 0, j = disk.size() - 1;
-        while( i < disk.size() && j>i ) {
-            if( disk[i] == -1 ) {
-                while( j > i ) {
-                    if( disk[j] == -1 ) j--;
-                    else break;
+        size_t i = 0, j = disk.size() - 1;
+        while ( i < disk.size() && j > i ) {
+            if ( disk[i] == -1 ) {
+                while ( j > i ) {
+                    if ( disk[j] == -1 )
+                        j--;
+                    else
+                        break;
                 }
-                if( j > i ) {
+                if ( j > i ) {
                     disk[i] = disk[j];
                     disk[j] = -1;
                     checkSum += disk[i] * i;
                     i++;
-                }
-                else {
+                } else {
                     break;
                 }
-            }
-            else {
+            } else {
                 checkSum += disk[i] * i;
                 i++;
             }
@@ -49,18 +49,17 @@ class DiskCompact : public SolutionBase {
         string linebuf;
         int fileId = 0;
         bool isFile = true;
-        while( getline( input, linebuf ) ) {
-            for( int i = 0; i < linebuf.size(); i++ ) {
-                if( linebuf[i] != '\n' && linebuf[i] != '\0' ) {
-                    if( isFile ) {
+        while ( getline( input, linebuf ) ) {
+            for ( size_t i = 0; i < linebuf.size(); i++ ) {
+                if ( linebuf[i] != '\n' && linebuf[i] != '\0' ) {
+                    if ( isFile ) {
                         appendFileBlock( fileId++, linebuf[i] - '0', disk );
                         fileSizeTable.push_back( linebuf[i] - '0' );
                         isFile = false;
-                    }
-                    else {
+                    } else {
                         // atoi convets string to integer, but requires and end sign '\0' in the string;
                         appendEmptyBlock( linebuf[i] - '0', disk );
-                        if( linebuf[i] - '0' != 0 ) {
+                        if ( linebuf[i] - '0' != 0 ) {
                             freeSpaceTable.push_back( pair<int, int>( linebuf[i] - '0', disk.size() - ( linebuf[i] - '0' ) ) );
                         }
                         isFile = true;
@@ -70,16 +69,14 @@ class DiskCompact : public SolutionBase {
         }
     }
 
-
-    void printDisk( const vector<int>disk, const string path ) {
-        int cnt = 0;
+    void printDisk( const vector<int> disk, const string path ) {
+        // int cnt = 0;
         FILE* output = fopen( path.c_str(), "w" );
-        for( int diskId = 0; diskId < disk.size(); diskId++ ) {
-            if( disk[diskId] == -1 ) {
+        for ( size_t diskId = 0; diskId < disk.size(); diskId++ ) {
+            if ( disk[diskId] == -1 ) {
                 // cout << ".";
                 fprintf( output, "_" );
-            }
-            else {
+            } else {
                 fprintf( output, "%s", "X" );
             }
         }
@@ -87,78 +84,72 @@ class DiskCompact : public SolutionBase {
     }
 
     void scanFreeSpace( vector<int> disk, vector<pair<int, int>>& freeSpaceTable ) {
-
     }
 
-    ll fileCompack( vector<int>disk, const vector<int> fileSizeTable, vector<pair<int, int>>& freeSpaceTable ) {
+    ll fileCompack( vector<int> disk, const vector<int> fileSizeTable, vector<pair<int, int>>& freeSpaceTable ) {
         printDisk( disk, "Day09/original.txt" );
         int denseHead = freeSpaceTable[0].second;
         ll checkSum = 0;
         int j = disk.size() - 1;
-        while( j > denseHead ) {
-            if( disk[j] == -1 ) {
+        while ( j > denseHead ) {
+            if ( disk[j] == -1 ) {
                 j--;
-            }
-            else {
+            } else {
                 int fileId = disk[j];
                 int fileSize = fileSizeTable[fileId];
                 j = j - fileSize;
-                int s = 0;
+                size_t s = 0;
                 bool flag = false;
-                for( s = 0; freeSpaceTable[s].second <= j && s < freeSpaceTable.size(); s++ ) {
-                    if( freeSpaceTable[s].first >= fileSize ) {
+                for ( s = 0; freeSpaceTable[s].second <= j && s < freeSpaceTable.size(); s++ ) {
+                    if ( freeSpaceTable[s].first >= fileSize ) {
                         flag = true;
                         break;
                     }
                 }
-                if( flag ) {
+                if ( flag ) {
                     pair<int, int> blockInfo = freeSpaceTable[s];
-                    for( int fill = 0; fill < fileSize; fill++ ) {
+                    for ( int fill = 0; fill < fileSize; fill++ ) {
                         disk[j + 1 + fill] = -1;
                         disk[blockInfo.second + fill] = fileId;
                     }
                     // Consume free space
                     // printDisk( disk );
-                    if( fileSize == blockInfo.first ) {
+                    if ( fileSize == blockInfo.first ) {
                         freeSpaceTable[s].first = 0;
                         freeSpaceTable.erase( freeSpaceTable.begin() + s );
-                    }
-                    else {
+                    } else {
                         freeSpaceTable[s].first -= fileSize;
                         freeSpaceTable[s].second += fileSize;
                     }
                     // Create free space
-                    int former = j, latter = j + 1 + fileSize;
-                    if( disk[former] == -1 ) {
-                        if( latter < disk.size() && disk[j + fileSize] == -1 ) {
+                    size_t former = j, latter = j + 1 + fileSize;
+                    if ( disk[former] == -1 ) {
+                        if ( latter < disk.size() && disk[j + fileSize] == -1 ) {
                             // Merge former and latter
-                            for( int i = 0; i < freeSpaceTable.size(); i++ ) {
-                                if( freeSpaceTable[i].second + freeSpaceTable[i].first - 1 == former ) {
+                            for ( size_t i = 0; i < freeSpaceTable.size(); i++ ) {
+                                if ( freeSpaceTable[i].second + freeSpaceTable[i].first - 1ull == former ) {
                                     freeSpaceTable[i].first += ( fileSize + freeSpaceTable[i + 1].first );
                                     freeSpaceTable.erase( freeSpaceTable.begin() + i + 1 );
                                 }
                             }
-                        }
-                        else {
+                        } else {
                             // Merge former only
-                            for( int i = 0; i < freeSpaceTable.size(); i++ ) {
-                                if( freeSpaceTable[i].second + freeSpaceTable[i].first - 1 == former ) {
+                            for ( size_t i = 0; i < freeSpaceTable.size(); i++ ) {
+                                if ( freeSpaceTable[i].second + freeSpaceTable[i].first - 1ull == former ) {
                                     freeSpaceTable[i].first += fileSize;
                                 }
                             }
                         }
-                    }
-                    else {
-                        if( latter < disk.size() && disk[j + fileSize] == -1 ) {
+                    } else {
+                        if ( latter < disk.size() && disk[j + fileSize] == -1 ) {
                             // Merge latter only
-                            for( int i = 0; i < freeSpaceTable.size(); i++ ) {
-                                if( freeSpaceTable[i].second == latter ) {
+                            for ( size_t i = 0; i < freeSpaceTable.size(); i++ ) {
+                                if ( freeSpaceTable[i].second + 0ull == latter ) {
                                     freeSpaceTable[i].first += fileSize;
                                     freeSpaceTable[i].second = j + 1;
                                 }
                             }
-                        }
-                        else {
+                        } else {
                             // Don't Merge
                             ;
                         }
@@ -167,20 +158,21 @@ class DiskCompact : public SolutionBase {
                 }
             }
         }
-        for( int diskId = 0; diskId < disk.size(); diskId++ ) {
-            if( disk[diskId] != -1 )
+        for ( size_t diskId = 0; diskId < disk.size(); diskId++ ) {
+            if ( disk[diskId] != -1 )
                 checkSum += diskId * disk[diskId];
         }
         printDisk( disk, "Day09/output.txt" );
         return checkSum;
     }
-public:
+
+   public:
     void Solution1() {
         vector<int> disk;
         vector<int> fileSizeTable;
         vector<pair<int, int>> freeSpaceTable;
         readFile( disk, fileSizeTable, freeSpaceTable );
-        cout << "Solution 1: " << fileCompack( disk ) << endl;
+        printRes( 1, fileCompack( disk ) );
     }
 
     void Solution2() {
@@ -188,6 +180,6 @@ public:
         vector<int> fileSizeTable;
         vector<pair<int, int>> freeSpaceTable;
         readFile( disk, fileSizeTable, freeSpaceTable );
-        cout << "Solution 2: " << fileCompack( disk, fileSizeTable, freeSpaceTable ) << endl;
+        printRes( 2, fileCompack( disk, fileSizeTable, freeSpaceTable ) );
     }
 };

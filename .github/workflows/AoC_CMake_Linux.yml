@@ -1,4 +1,4 @@
-name: Advent of Code CI
+name: AoC CMake Linux
 
 on:
   push:
@@ -12,20 +12,7 @@ env:
 
 jobs:
   build-and-test:
-    strategy:
-      matrix:
-        os: [windows-latest, ubuntu-latest]
-        include:
-          - os: windows-latest
-            generator: "MinGW Makefiles"
-            shell: cmd
-            exe_extension: .exe
-          - os: ubuntu-latest
-            generator: "Ninja"
-            shell: bash
-            exe_extension: ""
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
@@ -51,26 +38,17 @@ jobs:
 
     - name: Configure CMake
       run: |
-        cmake -S . -B ${{ env.BUILD_DIR }} -G "${{ matrix.generator }}" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+        cmake -S . -B ${{ env.BUILD_DIR }} -G "Ninja" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
 
     - name: Build project
       run: |
         cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }}
 
     - name: Run tests (Linux)
-      if: matrix.os == 'ubuntu-latest'
       working-directory: ${{ env.BUILD_DIR }}/2024
       shell: bash
       run: |
         pwd && ls && ./solution
-
-    - name: Run tests (Windows)
-      if: matrix.os == 'windows-latest'
-      working-directory: ${{ env.BUILD_DIR }}/2024
-      shell: cmd
-      run: |
-        dir && solution.exe
-  
 
     - name: Upload artifacts on failure
       if: failure()

@@ -216,8 +216,5 @@ class MazeDijkstra : public SolutionBase {
         readFile( m, s, e );
         // seekCost( m, { s.first,s.second,EAST }, { e.first,e.second } );
         countSeats( m, { s.first, s.second, EAST }, { e.first, e.second } );
-        auto end = chrono::high_resolution_clock::now();
-        // Slightly quicker
-        // Fastest at 45.699 ms
     }
 };

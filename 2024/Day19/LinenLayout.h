@@ -18,7 +18,7 @@ class LinenLayout : public SolutionBase {
         return keys;
     }
 
-    bool match( vector<string> keys, string design, int curpos = 0 ) {
+    bool match( vector<string> keys, string design, size_t curpos = 0 ) {
         if ( curpos == design.size() ) {
             // cout << design << endl;
             return true;
@@ -39,8 +39,8 @@ class LinenLayout : public SolutionBase {
     ull ALLMatch( vector<string> keys, string design ) {
         vector<ull> dp( design.size() + 1, 0 );
         dp[0] = 1;
-        for ( int i = 1; i <= design.size(); i++ ) {
-            for ( auto key : keys ) {
+        for ( size_t i = 1; i <= design.size(); i++ ) {
+            for ( auto& key : keys ) {
                 if ( key.size() <= i && design.substr( i - key.size(), key.size() ) == key ) {
                     dp[i] += dp[i - key.size()];
                 }

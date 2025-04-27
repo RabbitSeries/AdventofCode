@@ -5,9 +5,9 @@ using namespace std;
 #include "../../utils/SolutionBase.h"
 class AntinodeHarmonic : public SolutionBase {
     typedef struct Antenna {
-        int x, y;
+        size_t x, y;
         Antenna() { x = y = 0; }
-        Antenna( int _x, int _y ) : x( _x ), y( _y ) {}
+        Antenna( size_t _x, size_t _y ) : x( _x ), y( _y ) {}
     } pos;
 
     bool isValid( pos p, const vector<vector<char>> map ) {
@@ -39,8 +39,8 @@ class AntinodeHarmonic : public SolutionBase {
     }
 
     void antennaEffectZone( const vector<pos> antennaList, vector<vector<char>>& antinodeMap, bool isHarmony ) {
-        for ( int i = 0; i < antennaList.size() - 1; i++ ) {
-            for ( int j = i + 1; j < antennaList.size(); j++ ) {
+        for ( size_t i = 0; i < antennaList.size() - 1; i++ ) {
+            for ( size_t j = i + 1; j < antennaList.size(); j++ ) {
                 HarmonicAntenna( antennaList[i], antennaList[j], antinodeMap, isHarmony );
             }
         }
@@ -67,7 +67,7 @@ class AntinodeHarmonic : public SolutionBase {
         while ( getline( input, linebuf ) ) {
             string line( linebuf );
             vector<char> row;
-            for ( int i = 0; i < line.size(); i++ ) {
+            for ( size_t i = 0; i < line.size(); i++ ) {
                 if ( line[i] == '\n' || line[i] == '\0' ) {
                     continue;
                 } else {
@@ -85,7 +85,7 @@ class AntinodeHarmonic : public SolutionBase {
             posx++;
             // cout << endl;
         }
-        int debugLineCnt = 0;
+        // int debugLineCnt = 0;
         for ( auto name : antennaNames ) {
             // cout << "Processing antenna name: " << name << ". At " << ++debugLineCnt << "/" << antennaNames.size() << endl;
             antennaEffectZone( antennaLists[name], antinodeMap, isHarmony );

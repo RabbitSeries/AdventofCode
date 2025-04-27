@@ -38,22 +38,22 @@ class CeresSearch : public SolutionBase {
         string line;
         while( getline( input, line ) ) {
             vector<char> row;
-            for( int i = 0; i < line.length(); i++ ) {
+            for( size_t i = 0; i < line.length(); i++ ) {
                 if( line[i] == '\n' )
                     continue;
                 row.push_back( line[i] );
             }
             m.push_back( row );
         }
-        return move( m );
+        return m;
     }
 
 public:
     void Solution1() {
         vector<vector<char>> const& m = readFile();
         int res = 0;
-        for( int i = 0; i < m.size(); i++ ) {
-            for( int j = 0; j < m[i].size(); j++ ) {
+        for( size_t i = 0; i < m.size(); i++ ) {
+            for( size_t j = 0; j < m[i].size(); j++ ) {
                 for( int k = 0; k < 8; k++ ) {
                     if( isXMAS( i, j, k, m ) ) {
                         res++;
@@ -68,8 +68,8 @@ public:
     void Solution2() {
         vector<vector<char>> const& m = readFile();
         int res = 0;
-        for( int i = 0; i < m.size(); i++ ) {
-            for( int j = 0; j < m[i].size(); j++ ) {
+        for( size_t i = 0; i < m.size(); i++ ) {
+            for( size_t j = 0; j < m[i].size(); j++ ) {
                 int crossTimes = 0;
                 for( int k = 0; k < 4; k++ ) {
                     if( isCrossMAS( i, j, k, m ) ) {

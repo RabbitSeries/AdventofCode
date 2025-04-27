@@ -12,3 +12,8 @@ message("Copying input resources -- done")
 
 # add_compile_options(-O1)
 add_executable(solution main.cc ${SOURCES})
+
+target_compile_options(solution PRIVATE
+    $<$<CONFIG:Debug>:-g>
+    $<$<CONFIG:Release>:-O3>
+)

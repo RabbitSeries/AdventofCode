@@ -17,13 +17,22 @@
             }
         },
         {
+            "name": "Ninja Debug Configure",
+            "displayName": "Ninja Debug Configure",
+            "hidden": false,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
             "name": "Ninja Release Configure",
             "displayName": "Ninja Release Configure",
             "hidden": false,
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build",
             "cacheVariables": {
-                "///CMAKE_CXX_FLAGS": "-O1",
                 "CMAKE_BUILD_TYPE": "Release"
             }
         },

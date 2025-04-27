@@ -3,31 +3,27 @@ using namespace std;
 class CheckLevelInOrder : SolutionBase {
     inline bool checkDecrease( vector<int> const& Levels ) {
         bool res = true;
-        int i = 0;
-        while ( i < Levels.size() - 1 ) {
+        for ( size_t i = 0; i < Levels.size() - 1; i++ ) {
             if ( !( Levels[i] > Levels[i + 1] && Levels[i] - Levels[i + 1] <= 3 ) ) {
                 return false;
             }
-            i++;
         }
         return res;
     }
 
     inline bool checkIncrease( vector<int> const& Levels ) {
         bool res = true;
-        int i = 0;
-        while ( i < Levels.size() - 1 ) {
+        for ( size_t i = 0; i < Levels.size() - 1; i++ ) {
             if ( !( Levels[i] < Levels[i + 1] && Levels[i + 1] - Levels[i] <= 3 ) ) {
                 return false;
             }
-            i++;
         }
         return res;
     }
 
     bool canBeSafeByRemovingOneLevel( vector<int> const& Levels ) {
         // Try removing each level and check if the result is safe
-        for ( int i = 0; i < Levels.size(); ++i ) {
+        for ( size_t i = 0; i < Levels.size(); ++i ) {
             vector<int> newLevels = Levels;
             newLevels.erase( newLevels.begin() + i );
 
@@ -66,7 +62,7 @@ class CheckLevelInOrder : SolutionBase {
                 cnt++;
             }
         }
-        printRes(1,cnt);
+        printRes( 1, cnt );
     }
 
     void Solution2() {
@@ -78,6 +74,6 @@ class CheckLevelInOrder : SolutionBase {
                 cnt++;
             }
         }
-        printRes(2,cnt);
+        printRes( 2, cnt );
     }
 };

@@ -5,8 +5,6 @@ typedef pair<int, int> pos;
 
 #include "../../utils/SolutionBase.h"
 class PatrolRoute : public SolutionBase {
-
-
     static atomic<int> distinctPlacement;
     static mutex mtx;
     static atomic<int> progress;
@@ -33,51 +31,47 @@ class PatrolRoute : public SolutionBase {
         vector<vector<char>> routeMap;
         char lineBuf[BUFSIZ] = { '\0' };
         FILE* input = fopen( "Day06/input.txt", "r" );
-        while( fgets( lineBuf, BUFSIZ, input ) ) {
+        while ( fgets( lineBuf, BUFSIZ, input ) ) {
             vector<char> row;
             int i = 0;
-            while( lineBuf[i] != '\n' && lineBuf[i] != '\0' ) {
-                if( lineBuf[i] == '<' || lineBuf[i] == '>' || lineBuf[i] == '^' || lineBuf[i] == 'v' ) {
+            while ( lineBuf[i] != '\n' && lineBuf[i] != '\0' ) {
+                if ( lineBuf[i] == '<' || lineBuf[i] == '>' || lineBuf[i] == '^' || lineBuf[i] == 'v' ) {
                     guardPos.first = routeMap.size();
                     guardPos.second = i;
                 }
                 row.push_back( lineBuf[i] );
                 i++;
             }
-            if( !row.empty() ) {
+            if ( !row.empty() ) {
                 routeMap.push_back( row );
             }
         }
         fclose( input );
-        return move( routeMap );
+        return routeMap;
     }
 
     vector<vector<bool>> patrol( pos curPos, vector<vector<char>> const& routeMap ) {
         vector<vector<bool>> visited( routeMap.size(), vector<bool>( routeMap.at( 0 ).size(), false ) );
         int rows = routeMap.size(), cols = routeMap[0].size();
         int curFace = faceId.at( routeMap[curPos.first][curPos.second] );
-        while( isValid( curPos, rows, cols ) ) {
-            pos nextPos{ dx[curFace] + curPos.first,dy[curFace] + curPos.second };
-            if( isValid( nextPos, rows, cols ) ) {
-                if( !visited[curPos.first][curPos.second] ) {
+        while ( isValid( curPos, rows, cols ) ) {
+            pos nextPos{ dx[curFace] + curPos.first, dy[curFace] + curPos.second };
+            if ( isValid( nextPos, rows, cols ) ) {
+                if ( !visited[curPos.first][curPos.second] ) {
                     visited[curPos.first][curPos.second] = true;
                     distinctPosCnt++;
                 }
-                if( routeMap[nextPos.first][nextPos.second] == '#' ) {
+                if ( routeMap[nextPos.first][nextPos.second] == '#' ) {
                     curFace = ( curFace + 1 ) % 4;
-                }
-                else {
+                } else {
                     curPos = nextPos;
                 }
-            }
-            else {
-                return move( visited );
+            } else {
+                return visited;
             }
         }
-        return move( visited );
+        return visited;
     }
-
-
 
     // Thus reduced the copy time consumption.
     static bool isPatrolCircle( pos curPos, vector<vector<char>> const& routeMap, int rows, int cols ) {
@@ -85,40 +79,38 @@ class PatrolRoute : public SolutionBase {
         vector<vector<array<bool, 4>>> passed( rows, vector<array<bool, 4>>( cols, array<bool, 4>() ) );
         int curFace = faceId.at( routeMap[curPos.first][curPos.second] );
         bool curStatus;
-        while( isValid( curPos, rows, cols ) ) {
+        while ( isValid( curPos, rows, cols ) ) {
             curStatus = passed[curPos.first][curPos.second][curFace];
-            if( curStatus ) {
+            if ( curStatus ) {
                 return true;
             }
-            pos nextPos{ dx[curFace] + curPos.first,dy[curFace] + curPos.second };
-            if( isValid( nextPos, rows, cols ) ) {
+            pos nextPos{ dx[curFace] + curPos.first, dy[curFace] + curPos.second };
+            if ( isValid( nextPos, rows, cols ) ) {
                 // There is no need to update before turnning directions, cause this location's direction must not be updated if this location is a loop's end and it will be updated if this location is not loop's end.
                 // However, in general mark every status on this block can be another useful approach
                 passed[curPos.first][curPos.second][curFace] = true;
-                if( routeMap[nextPos.first][nextPos.second] == '#' ) {
+                if ( routeMap[nextPos.first][nextPos.second] == '#' ) {
                     curFace = ( curFace + 1 ) % 4;
-                }
-                else {
+                } else {
                     curPos = nextPos;
                 }
-            }
-            else {
+            } else {
                 return false;
             }
         }
         return isCircle;
     }
 
-    static void threadTask( int startRow, int endRow, pair<int, int> guardPos, vector<vector<char>> routeMap ) {
-        for( int i = startRow; i < endRow; i++ ) {
-            for( int j = 0; j < routeMap[i].size(); j++ ) {
+    static void threadTask( int startRow, size_t endRow, pair<size_t, size_t> guardPos, vector<vector<char>> routeMap ) {
+        for ( size_t i = startRow; i < endRow; i++ ) {
+            for ( size_t j = 0; j < routeMap[i].size(); j++ ) {
                 progressIncrement();
-                if( i == guardPos.first && j == guardPos.second || routeMap[i][j] == '#' ) {
+                if ( ( i == guardPos.first && j == guardPos.second ) || routeMap[i][j] == '#' ) {
                     continue;
                 }
                 char curCell = routeMap[i][j];
                 routeMap[i][j] = '#';
-                if( isPatrolCircle( guardPos, routeMap, routeMap.size(), routeMap[0].size() ) ) {
+                if ( isPatrolCircle( guardPos, routeMap, routeMap.size(), routeMap[0].size() ) ) {
                     lock_guard<mutex> resultLock( mtx );
                     distinctPlacement++;
                 }
@@ -128,7 +120,8 @@ class PatrolRoute : public SolutionBase {
     }
 
     int distinctPosCnt = 0;
-public:
+
+   public:
     void Solution1() {
         pos guardPos( 0, 0 );
         vector<vector<char>> routeMap = readFile( guardPos );
@@ -144,9 +137,7 @@ public:
 
         int rowsPerThread = routeMap.size() / numThreads;
 
-
-
-        for( int t = 0; t < numThreads; t++ ) {
+        for ( int t = 0; t < numThreads; t++ ) {
             int startRow = t * rowsPerThread;
             int endRow = ( t == numThreads - 1 ) ? routeMap.size() : ( t + 1 ) * rowsPerThread;
 
@@ -165,12 +156,11 @@ public:
         //     }
         // }
 
-        for( auto& t : threads ) {
+        for ( auto& t : threads ) {
             t.join();
         }
 
         cout << "Solution 1: " << distinctPosCnt << endl;
         cout << "Solution 2: " << distinctPlacement.load() << endl;
     }
-
 };

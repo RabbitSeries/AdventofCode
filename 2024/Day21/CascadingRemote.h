@@ -14,7 +14,7 @@ struct std::hash<pair<vector<char>, int>> {
 struct commandHash {
     inline size_t operator()( pair<vector<char>, int> const& token ) const {
         return ( accumulate( token.first.begin(), token.first.end(), 0ull, []( unsigned long long const& init, char const& c ) {
-                     return init << 8 + c;
+                     return ( init << 8 ) + c;
                  } )
                  << 8 ) +
                token.second;
@@ -42,7 +42,7 @@ class CascadingRemote : public SolutionBase {
             return curLen;
         }
         ull res = 0;
-        for ( int i = 0; i < curComm.size(); i++ ) {
+        for ( size_t i = 0; i < curComm.size(); i++ ) {
             vector<vector<char>> nextRobotCommList = getKeyPadAllPath( i == 0 ? 'A' : curComm[i - 1], curComm[i], DIRECTIONAL_KEYPAD );
             ull curLen = ULONG_LONG_MAX;
             for ( auto nextRobotComm : nextRobotCommList ) {
@@ -56,7 +56,7 @@ class CascadingRemote : public SolutionBase {
 
     ull numericCommand( vector<char> const password, int robotCnt ) {
         ull res = 0;
-        for ( int i = 0; i < password.size(); i++ ) {
+        for ( size_t i = 0; i < password.size(); i++ ) {
             vector<vector<char>> nextRobotCommList = getKeyPadAllPath( i == 0 ? 'A' : password[i - 1], password[i], NUMERIC_KEYPAD );
             ull curLen = ULONG_LONG_MAX;
             for ( auto nextRobotComm : nextRobotCommList ) {
@@ -233,7 +233,7 @@ class CascadingRemote : public SolutionBase {
         for ( auto password : passwordList ) {
             int manCommand = numericCommand( password, 3 );
             // cout << "Password: " << string( password.begin(), password.end() )
-                //  << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
+            //  << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
             res += stoi( string( password.begin(), password.end() - 1 ) ) * manCommand;
         }
         cout << "Solution 1: " << res << endl;
@@ -246,7 +246,7 @@ class CascadingRemote : public SolutionBase {
         for ( auto password : passwordList ) {
             ull manCommand = numericCommand( password, 26 );
             // cout << "Password: " << string( password.begin(), password.end() )
-                //  << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
+            //  << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
             res += stoll( string( password.begin(), password.end() - 1 ) ) * manCommand;
         }
         cout << "Solution 2: " << res << endl;

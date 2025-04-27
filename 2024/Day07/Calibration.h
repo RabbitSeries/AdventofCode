@@ -24,11 +24,11 @@ class Calibration : public SolutionBase {
             // numList.insert( { test, nums } );
             numList.emplace_back( test, nums );
         }
-        return move( numList );
+        return numList;
     }
 
     static ll parse( vector<ll> nums, vector<char> op ) {
-        int i = 0;
+        size_t i = 0;
         ll res = 0;
         while ( i < op.size() ) {
             if ( op[i] == '+' ) {
@@ -76,9 +76,9 @@ class Calibration : public SolutionBase {
         return;
     }
 
-    static inline ll dfsParse( ll test, vector<ll> const& nums, const ll curPos, const ll curRes, const int options ) {
+    static inline size_t dfsParse( size_t test, vector<ll> const& nums, const size_t curPos, const size_t curRes, const int options ) {
         if ( curPos == nums.size() - 1 ) return ( curRes == test ? test : 0 );
-        vector<ll> nextRes{ curRes + nums[curPos + 1], curRes * nums[curPos + 1], stoll( to_string( curRes ) + to_string( nums[curPos + 1] ) ) };
+        vector<size_t> nextRes{ curRes + nums[curPos + 1], curRes * nums[curPos + 1], stoull( to_string( curRes ) + to_string( nums[curPos + 1] ) ) };
         for ( int i = 0; i < options; i++ ) {
             if ( nextRes[i] <= test && dfsParse( test, nums, curPos + 1, nextRes[i], options ) == test ) {
                 return test;
@@ -94,8 +94,8 @@ class Calibration : public SolutionBase {
         rowCnt++;
     }
 
-    static ll threadTask( const int startRow, const int endRow, const int options, vector<pair<ll, vector<ll>>> numList ) {
-        ll res = 0;
+    static size_t threadTask( const int startRow, const int endRow, const int options, vector<pair<ll, vector<ll>>> numList ) {
+        size_t res = 0;
         for ( int i = startRow; i < endRow; i++ ) {
             progressIncreament();
             auto& [test, nums] = numList[i];
@@ -113,10 +113,10 @@ class Calibration : public SolutionBase {
    public:
     void Solution1() {
         vector<pair<ll, vector<ll>>> numList = readFile();
-        ll res = 0;
+        size_t res = 0;
         int maxThread = thread::hardware_concurrency();
         int taskPerThread = numList.size() / maxThread;
-        vector<future<ll>> taskList;
+        vector<future<size_t>> taskList;
         for ( int i = 0; i < maxThread; i++ ) {
             int startRow = i * taskPerThread;
             int endRow = ( i == maxThread - 1 ) ? numList.size() : ( i + 1 ) * taskPerThread;
@@ -125,16 +125,16 @@ class Calibration : public SolutionBase {
         for ( auto& task : taskList ) {
             res += task.get();
         }
-        cout << "Solution 1: " << res << endl;
+        printRes(1,res);
     }
 
     void Solution2() {
         rowCnt = 0;
         vector<pair<ll, vector<ll>>> numList = readFile();
-        ll res = 0;
+        size_t res = 0;
         int maxThread = thread::hardware_concurrency();
         int taskPerThread = numList.size() / maxThread;
-        vector<future<ll>> taskList;
+        vector<future<size_t>> taskList;
         for ( int i = 0; i < maxThread; i++ ) {
             int startRow = i * taskPerThread;
             int endRow = ( i == maxThread - 1 ) ? numList.size() : ( i + 1 ) * taskPerThread;
@@ -153,6 +153,6 @@ class Calibration : public SolutionBase {
         for ( auto& task : taskList ) {
             res += task.get();
         }
-        cout << "Solution 2: " << res << endl;
+        printRes(2,res);
     }
 };

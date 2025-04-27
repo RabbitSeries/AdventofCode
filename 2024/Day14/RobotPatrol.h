@@ -86,7 +86,7 @@ class RobotPatrol : public SolutionBase {
    public:
     void Solution1() {
         readFile();
-        cout << "\tSolution 1: " << quadrantCount( step( specs, 100 ) ) << endl;
+        printRes( 1, quadrantCount( step( specs, 100 ) ) );
     }
     void Solution2() {
         int minDxX = *ranges::min_element( views::iota( 0, WIDTH ),
@@ -95,6 +95,6 @@ class RobotPatrol : public SolutionBase {
         int minDyY = *ranges::min_element( views::iota( 0, HEIGHT ),
                                            {},
                                            bind( &RobotPatrol::centerVariance, this, std::placeholders::_1, cref( specs ), false, HEIGHT ) );
-        cout << "\tSolution 2: " << positiveMod( reverseMod( WIDTH, HEIGHT ) * ( minDyY - minDxX ), HEIGHT ) * WIDTH + minDxX << endl;
+        printRes( 2, positiveMod( reverseMod( WIDTH, HEIGHT ) * ( minDyY - minDxX ), HEIGHT ) * WIDTH + minDxX );
     }
 };

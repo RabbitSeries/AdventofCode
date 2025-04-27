@@ -53,7 +53,7 @@ vector<vector<char>> readFile( pair<int, int>& guardPos ) {
         }
     }
     fclose( input );
-    return move( routeMap );
+    return routeMap;
 }
 
 void patrol( Point2D curPos, vector<vector<char>>& routeMap ) {
@@ -159,7 +159,7 @@ bool isPatrolCircle( Point2D curPos, vector<vector<char>> const& routeMap, int r
 int threadTask( int startRow, int endRow, Point2D guardPos, vector<vector<char>> routeMap, atomic<int>& count ) {
     int distinctPlacementLocal = 0;
     for( int i = startRow; i < endRow; i++ ) {
-        for( int j = 0; j < routeMap[i].size(); j++ ) {
+        for( size_t j = 0; j < routeMap[i].size(); j++ ) {
             // count++;
             if( i == guardPos.first && j == guardPos.second || routeMap[i][j] == '#' ) {
                 continue;

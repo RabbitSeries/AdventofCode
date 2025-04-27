@@ -6,7 +6,7 @@ class AsciiGraph : public SolutionBase {
     const int dy[4]{ 0, 0, 1, -1 };
 
     inline bool isValid( int x, int y, vector<vector<char>> const& map ) {
-        return x >= 0 && x < map.size() && y >= 0 && y <= map[0].size();
+        return x >= 0 && (size_t)x < map.size() && y >= 0 && (size_t)y <= map[0].size();
     }
 
     typedef pair<int, int> pos;
@@ -53,14 +53,14 @@ class AsciiGraph : public SolutionBase {
         return false;
     }
     bool isDownBoundary( const pos s, vector<vector<char>> const& garden ) {
-        int x = s.first, y = s.second;
-        if ( x + 1 < garden.size() && garden[x + 1][y] != garden[x][y] || x + 1 >= garden.size() ) {
+        size_t x = s.first, y = s.second;
+        if ( ( x + 1 < garden.size() && garden[x + 1][y] != garden[x][y] ) || (size_t)( x + 1 ) >= garden.size() ) {
             return true;
         }
         return false;
     }
     bool isRightBoundary( const pos s, vector<vector<char>> const& garden ) {
-        int x = s.first, y = s.second;
+        size_t x = s.first, y = s.second;
         if ( ( y + 1 < garden[x].size() && garden[x][y + 1] != garden[x][y] ) || y + 1 >= garden[x].size() ) {
             return true;
         }
@@ -68,7 +68,7 @@ class AsciiGraph : public SolutionBase {
     }
     bool isLeftBoundary( const pos s, vector<vector<char>> const& garden ) {
         int x = s.first, y = s.second;
-        if ( ( y - 1 >= 0 && garden[x][y - 1] != garden[x][y] ) || y - 1 < 0 ) {
+        if ( ( y >= 1 && garden[x][y - 1] != garden[x][y] ) || y < 1 ) {
             return true;
         }
         return false;
@@ -91,8 +91,8 @@ class AsciiGraph : public SolutionBase {
     }
 
     void printGarden( vector<vector<char>> const& garden ) {
-        for ( int i = 0; i < garden.size(); i++ ) {
-            for ( int j = 0; j < garden.size(); j++ ) {
+        for ( size_t i = 0; i < garden.size(); i++ ) {
+            for ( size_t j = 0; j < garden.size(); j++ ) {
                 cout << garden[i][j];
             }
             cout << endl;
@@ -105,7 +105,7 @@ class AsciiGraph : public SolutionBase {
         vector<vector<char>> gardenCanvas = garden;
         // Up
         int upedge = 0;
-        for ( int i = 0; i < boundary.size(); i++ ) {
+        for ( size_t i = 0; i < boundary.size(); i++ ) {
             pos s = boundary[i];
             int x = s.first, y = s.second;
             if ( !visited[x][y] ) {
@@ -119,7 +119,7 @@ class AsciiGraph : public SolutionBase {
                     }
                     visited[x][y] = true;
                     gardenCanvas[x][y] = '-';
-                    while ( y + 1 < garden[x].size() && garden[x][y + 1] == garden[x][y] && !visited[x][y + 1] && isUpBoundary( pos( x, y + 1 ), garden ) ) {
+                    while ( (size_t)( y + 1 ) < garden[x].size() && garden[x][y + 1] == garden[x][y] && !visited[x][y + 1] && isUpBoundary( pos( x, y + 1 ), garden ) ) {
                         visited[x][++y] = true;
                         gardenCanvas[x][y] = '-';
                     }
@@ -129,7 +129,7 @@ class AsciiGraph : public SolutionBase {
         fill( visited.begin(), visited.end(), vector<bool>( garden[0].size(), false ) );
         // Down
         int downEdge = 0;
-        for ( int i = 0; i < boundary.size(); i++ ) {
+        for ( size_t i = 0; i < boundary.size(); i++ ) {
             pos s = boundary[i];
             int x = boundary[i].first, y = boundary[i].second;
             if ( !visited[x][y] ) {
@@ -142,7 +142,7 @@ class AsciiGraph : public SolutionBase {
                     }
                     visited[x][y] = true;
                     gardenCanvas[x][y] = '-';
-                    while ( y + 1 < garden[x].size() && garden[x][y + 1] == garden[x][y] && !visited[x][y + 1] && isDownBoundary( pos( x, y + 1 ), garden ) ) {
+                    while ( (size_t)( y + 1 ) < garden[x].size() && garden[x][y + 1] == garden[x][y] && !visited[x][y + 1] && isDownBoundary( pos( x, y + 1 ), garden ) ) {
                         visited[x][++y] = true;
                         gardenCanvas[x][y] = '-';
                     }
@@ -152,7 +152,7 @@ class AsciiGraph : public SolutionBase {
         fill( visited.begin(), visited.end(), vector<bool>( garden[0].size(), false ) );
         // Left
         int leftEdge = 0;
-        for ( int i = 0; i < boundary.size(); i++ ) {
+        for ( size_t i = 0; i < boundary.size(); i++ ) {
             pos s = boundary[i];
             int x = boundary[i].first, y = boundary[i].second;
             if ( !visited[x][y] ) {
@@ -165,7 +165,7 @@ class AsciiGraph : public SolutionBase {
                     }
                     gardenCanvas[x][y] = '|';
                     visited[x][y] = true;
-                    while ( x + 1 < garden.size() && garden[x + 1][y] == garden[x][y] && !visited[x + 1][y] && isLeftBoundary( pos( x + 1, y ), garden ) ) {
+                    while ( (size_t)( x + 1 ) < garden.size() && garden[x + 1][y] == garden[x][y] && !visited[x + 1][y] && isLeftBoundary( pos( x + 1, y ), garden ) ) {
                         visited[++x][y] = true;
                         gardenCanvas[x][y] = '|';
                     }
@@ -175,7 +175,7 @@ class AsciiGraph : public SolutionBase {
         fill( visited.begin(), visited.end(), vector<bool>( garden[0].size(), false ) );
         // Right
         int rightEdge = 0;
-        for ( int i = 0; i < boundary.size(); i++ ) {
+        for ( size_t i = 0; i < boundary.size(); i++ ) {
             pos s = boundary[i];
             int x = boundary[i].first, y = boundary[i].second;
             if ( !visited[x][y] ) {
@@ -188,7 +188,7 @@ class AsciiGraph : public SolutionBase {
                     }
                     gardenCanvas[x][y] = '|';
                     visited[x][y] = true;
-                    while ( x + 1 < garden.size() && garden[x + 1][y] == garden[x][y] && !visited[x + 1][y] && isRightBoundary( pos( x + 1, y ), garden ) ) {
+                    while ( (size_t)( x + 1 ) < garden.size() && garden[x + 1][y] == garden[x][y] && !visited[x + 1][y] && isRightBoundary( pos( x + 1, y ), garden ) ) {
                         visited[++x][y] = true;
                         gardenCanvas[x][y] = '|';
                     }
@@ -215,9 +215,9 @@ class AsciiGraph : public SolutionBase {
 
         ll res = 0;
         vector<vector<bool>> counted( lineCnt, vector<bool>( garden[0].size(), false ) );
-        for ( int i = 0; i < garden.size(); i++ ) {
+        for ( size_t i = 0; i < garden.size(); i++ ) {
             // cout << "Processing line " << i << "." << endl;
-            for ( int j = 0; j < garden.size(); j++ ) {
+            for ( size_t j = 0; j < garden.size(); j++ ) {
                 if ( !counted[i][j] ) {
                     auto [area, perimeter] = getBoundarys( pos( i, j ), garden, counted );
                     res += area * perimeter;
@@ -241,9 +241,9 @@ class AsciiGraph : public SolutionBase {
 
         ll res = 0;
         vector<vector<bool>> counted( lineCnt, vector<bool>( garden[0].size(), false ) );
-        for ( int i = 0; i < garden.size(); i++ ) {
+        for ( size_t i = 0; i < garden.size(); i++ ) {
             // cout << "Processing line " << i << "." << endl;
-            for ( int j = 0; j < garden.size(); j++ ) {
+            for ( size_t j = 0; j < garden.size(); j++ ) {
                 if ( !counted[i][j] ) {
                     vector<pos> boundary;
                     int area = getBoundarys( pos( i, j ), garden, counted, boundary );

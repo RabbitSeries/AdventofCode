@@ -25,7 +25,7 @@ class MonkeyMarket : public SolutionBase {
             }
         }
         input.close();
-        return move( secrets );
+        return secrets;
     }
 
     static ull getSecret( ull derival, int curDepth = 0, int targetDepth = 2000 ) {
@@ -110,7 +110,7 @@ class MonkeyMarket : public SolutionBase {
    public:
     void Solution1() {
         vector<ull> secrets = readFile();
-        ull res = 0;
+        // ull res = 0;
         int maxThread = thread::hardware_concurrency();
         int taskPerthread = secrets.size() / maxThread;
         vector<thread> threadList;
@@ -123,13 +123,13 @@ class MonkeyMarket : public SolutionBase {
         for ( auto& t : threadList ) {
             t.join();
         }
-        cout << "Solution 1: " << threadAcc << endl;
+        printRes( 1, threadAcc );
         return;
     }
 
     void Solution2() {
         vector<ull> secrets = readFile();
-        ull res = 0;
+        // ull res = 0;
         bool enableMultiThreading = true;
 
         int maxThread = thread::hardware_concurrency();
@@ -167,7 +167,7 @@ class MonkeyMarket : public SolutionBase {
         // }
         // cout << endl;
         // cout << found << endl;
-        cout << "Solution 2: " << ( *maxIt ).second << endl;
+        printRes( 2, ( *maxIt ).second );
         return;
     }
 };

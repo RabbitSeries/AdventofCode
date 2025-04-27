@@ -60,7 +60,8 @@ class TinkerWithGates : public SolutionBase {
 
     tuple<vector<string>, bool, bool> runGates( queue<string> wireQueue, map<string, wire>& wireList, bool staged = false, int curID = 0 ) {
         resetGates( wireList );
-        bool addFound = false, carrierFound = false;
+        // bool addFound = false;
+        // carrierFound = false;
         tuple<vector<string>, bool, bool> curProcessList;
         while ( !wireQueue.empty() ) {
             string curWireName = wireQueue.front();
@@ -69,7 +70,7 @@ class TinkerWithGates : public SolutionBase {
             if ( staged ) {
                 get<0>( curProcessList ).push_back( curWireName );
                 if ( curWireName[0] == 'z' ) {
-                    addFound = true;
+                    // addFound = true;
                     get<1>( curProcessList ) = curWire.data;
                 }
                 if ( curID == 0 && get<0>( curProcessList ).size() == 4 ) {
@@ -167,7 +168,7 @@ class TinkerWithGates : public SolutionBase {
             return "";
         };
         string input1 = "x00", input2 = "y00", nextCarrier = "";
-        for ( int i = 0; i < binaryDigits.size(); i++ ) {
+        for ( size_t i = 0; i < binaryDigits.size(); i++ ) {
             // Add XOR
             string add1 = findGate( input1, input2, "XOR" );
             // Carrier AND
