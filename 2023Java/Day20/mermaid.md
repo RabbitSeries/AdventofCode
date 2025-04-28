@@ -19,17 +19,17 @@ fd --> mx
 hm --> cr
 qc --> nd
 sv --> bv
-&ph --> zz
+ph --> zz
 lc --> &xm
 nf --> &gr
 qb --> &dt
 sr --> &vt
-np --> &xm & &ph
+np --> &xm & ph
 jl --> &vt & tb
 ps --> kc & &dt
 fh --> dm & &gr
-bv --> &fp & &xm
-&fp --> qg & &xm
+bv --> fp & &xm
+fp --> qg & &xm
 rn --> &vt & qc
 nx --> vr & &vt
 dm --> nf & &gr
@@ -61,5 +61,26 @@ mg --> dz & &gr
 &vt --> &bb & nd & qc & xr & br & tb & kt
 &gr --> &dp & mg & fd & qn
 &dt --> vd & dv & &dh & hm & ks & hd & kq
-&xm --> zz & sv & sq & &ph & kj & np & &qd
+&xm --> zz & sv & sq & ph & kj & np & &qd
+```
+
+## Keypoint
+
+There is exactly one low pulse sent to rm (the module before rx) in each part.
+
+```txt
+Solution 1: 800830848
+Low 1 High 3147 Push loop at 3001
+                Low pulse at 3001 Push 0th Pulse
+
+Low 1 High 5256 Push loop at 3027
+                Low pulse at 3027 Push 0th Pulse
+
+Low 1 High 3714 Push loop at 2877
+                Low pulse at 2877 Push 0th Pulse
+
+Low 1 High 4434 Push loop at 2907
+                Low pulse at 2907 Push 0th Pulse
+
+Solution 2: 244055946148853
 ```

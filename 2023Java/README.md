@@ -6,7 +6,7 @@
 
 ## Day20
 
-I don't know what circuit [this](./Day20/mermaid.md) is, but it seems that the circuit can be seperated into four parts the LCM to the final result using chaos index.
+I don't know what circuit [this](./Day20/mermaid.md) is, but it seems that the circuit can be seperated into four parts then LCM to the final result using sort of system chaos index.
 
 ## Regex diff
 

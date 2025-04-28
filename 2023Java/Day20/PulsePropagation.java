@@ -50,7 +50,10 @@ public class PulsePropagation {
         input.close();
     }
 
+    List<Boolean> pulseList;
+
     Pair<Long, Long> PulseSimulate(String From, boolean stat, String To) {
+        pulseList = new ArrayList<>();
         Queue<Pair<String, Boolean>> q = new LinkedList<>();
         q.add(new Pair<>(From, stat));
         long lowCnt = 1, highCnt = 0;
@@ -65,8 +68,9 @@ public class PulsePropagation {
                 if (Modules.containsKey(outWire)) {
                     Optional<Boolean> nextPulse = Optional.empty();
                     if (Modules.get(outWire).first.equals(ModuleType.Conjunction)) {
-                        if (To != null && curPulse.first.equals(To)) {
-                            continue;
+                        if (curPulse.first.equals(To)) {
+                            pulseList.add(curPulse.second);
+                            continue;// Forbit the conjunction module's propagation to next conjunction module
                         }
                         CjctModuleInputStatus.get(outWire).put(curPulse.first, curPulse.second);
                         nextPulse = Optional.of(!CjctModuleInputStatus.get(outWire).values().stream().reduce(true, (init, e) -> init && e));
@@ -140,6 +144,7 @@ public class PulsePropagation {
                 }
             }
         }
+        List<Pair<List<Boolean>, Integer>> signals = new ArrayList<>();
         HashMap<String, Integer> ChaosIndexList = new HashMap<>();
         for (String branchName : BranchNameList) {
             String To = BranchOutputName.get(branchName);
@@ -148,11 +153,32 @@ public class PulsePropagation {
                 Modules.get(branchName).second = Optional.of(!Modules.get(branchName).second.get());
                 PulseSimulate(branchName, Modules.get(branchName).second.get(), To);
                 push++;
+                signals.add(new Pair<>(pulseList, push));
             } while (!SystemReseted(branchName, To));
+            signals.forEach(p -> {
+                for (int at = 0; at < p.first.size(); at++) {
+                    if (!p.first.get(at)) {
+                        lowCnt++;
+                        LowPulseAt.first = p.second;
+                        LowPulseAt.second = at;
+                    } else {
+                        hightCnt++;
+                    }
+                }
+            });
+            signals.clear();
+            System.out.println("Low " + lowCnt + " High " + hightCnt + " Push loop at " + push);
+            System.out.println("\t\tLow pulse at " + LowPulseAt.first + " Push " + LowPulseAt.second + "th Pulse\n");
+            lowCnt = 0;
+            hightCnt = 0;
             ChaosIndexList.put(branchName, 1000 + push);
         }
         System.out.println("Solution 2: " + ChaosIndexList.values().stream().mapToLong(l -> (long) l).reduce(1L, (init, l) -> lcm(init, l)));
     }
+
+    int lowCnt = 0, hightCnt = 0;
+
+    Pair<Integer, Integer> LowPulseAt = new Pair<>(0, 0);
 
     long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
