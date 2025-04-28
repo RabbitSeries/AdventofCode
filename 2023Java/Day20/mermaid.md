@@ -66,7 +66,7 @@ mg --> dz & &gr
 
 ## Keypoint
 
-There is exactly one low pulse sent to rm (the module before rx) in each part.
+There is exactly one low pulse sent to rm (the module before rx) in each part(I haven't figured out why).
 
 ```txt
 Solution 1: 800830848
@@ -84,3 +84,7 @@ Low 1 High 4434 Push loop at 2907
 
 Solution 2: 244055946148853
 ```
+
+And if the low pulse is not at final push's first pulse. Then the problem will be a very complex CRT (Chinese Remainder Theory) problem.
+
+Actually [2024 Day 14 Restroom Redoubt](../../2024/Day14/RobotPatrol.h) utilized a implemention of this theory.
