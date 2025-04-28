@@ -115,7 +115,6 @@ class LANParty : public SolutionBase {
 
     void Solution2() {
         map<string, string> connections;
-        mutex connectionsMutex;
         std::map<std::string, std::map<std::string, bool>>::const_iterator it = LANNetwork.begin(), end = LANNetwork.end();
         size_t res = 0;
         while ( it != end ) {

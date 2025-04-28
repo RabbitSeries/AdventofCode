@@ -1,7 +1,4 @@
 #include <bits/stdc++.h>
-
-#include "../../utils/ProgressBar.h"
-
 using namespace std;
 #include "../../utils/SolutionBase.h"
 class RaceCondition : public SolutionBase {
@@ -15,17 +12,17 @@ class RaceCondition : public SolutionBase {
     int dx[4]{ 0, 0, 1, -1 };
     int dy[4]{ 1, -1, 0, 0 };
 
-    bool isValid( int const& rows, int const& cols, pos const& curPos, vector<vector<cellStatus>> const& roadMap ) {
+    bool isValid( int rows, int cols, pos const& curPos, vector<vector<cellStatus>> const& roadMap ) {
         return curPos.first < rows && curPos.second < cols && curPos.first >= 0 && curPos.second >= 0 && roadMap[curPos.first][curPos.second] == EMPTY;
     }
-    inline bool isWall( int const& rows, int const& cols, pos const& curPos, vector<vector<cellStatus>> const& roadMap ) {
+    bool isWall( int rows, int cols, pos const& curPos, vector<vector<cellStatus>> const& roadMap ) {
         return curPos.first < rows && curPos.second < cols && curPos.first >= 0 && curPos.second >= 0 && roadMap[curPos.first][curPos.second] == WALL;
     }
-    inline pos getNextPos( pos curPos, int id ) {
-        return pos{ curPos.first + dx[id], curPos.second + dy[id] };
+    pos getNextPos( pos const& curPos, int id ) {
+        return { curPos.first + dx[id], curPos.second + dy[id] };
     }
 
-    int Dijkstra( pos const start, pos const end, vector<vector<cellStatus>> const& roadMap, map<pos, int>& path ) {
+    int Dijkstra( pos const& start, pos const& end, vector<vector<cellStatus>> const& roadMap, map<pos, int>& path ) {
         int rows = roadMap.size(), cols = roadMap[0].size();
         vector<vector<int>> cost( rows, vector<int>( cols, INT_MAX ) );
         vector<vector<int>> optimized( rows, vector<int>( cols, false ) );
@@ -35,7 +32,7 @@ class RaceCondition : public SolutionBase {
         cost[start.first][start.second] = 0;
         path.emplace( start, 0 );
         while ( !pq.empty() ) {
-            auto [curCost, curPos] = pq.top();
+            auto [curCost, curPos] = move( const_cast<pair<int, pos>&>( pq.top() ) );
             pq.pop();
             // // TODO how to filter curCost == cost[start.first][start.second]
             if ( optimized[curPos.first][curPos.second] || curCost > cost[curPos.first][curPos.second] ) {
@@ -88,11 +85,10 @@ class RaceCondition : public SolutionBase {
             roadMap.push_back( row );
         }
         input.close();
-        Dijkstra( start, end, roadMap, path );
         return;
     }
 
-    void cheat( pos end, vector<vector<cellStatus>> const& roadMap, map<pos, int> const& path ) {
+    int cheat() {
         // Benchmark satisfied.
         // vector<int> targets{ 2,4,6,8,10,12,20,36,38,40,64 };
         // vector<pair<pair<pos, pos>, int>> cheatPos;
@@ -118,8 +114,7 @@ class RaceCondition : public SolutionBase {
                 }
             }
         }
-        printRes( 1, res );
-        return;
+        return res;
     }
     // /*
     //      *
@@ -132,7 +127,7 @@ class RaceCondition : public SolutionBase {
     //     * *
     //      *
     //  */
-    int getCheatZone( pos const& curPos, vector<vector<cellStatus>> const& roadMap, pos end, map<pos, int> const& path ) {
+    int getCheatZone( pos const& curPos ) {
         int cnt = 0;
         int rows = roadMap.size(), cols = roadMap[0].size();
         for ( int i = -min( curPos.first, 20 ); i <= min( rows - 1 - curPos.first, 20 ); i++ ) {
@@ -156,7 +151,8 @@ class RaceCondition : public SolutionBase {
    public:
     void Solution1() {
         readMap();
-        cheat( end, roadMap, path );
+        Dijkstra( start, end, roadMap, path );
+        printRes( 1, cheat() );
         return;
     }
 
@@ -166,7 +162,7 @@ class RaceCondition : public SolutionBase {
         // int processCnt = 0;
         for ( auto const& [startPos, _] : path ) {
             // showProgressBar( ++processCnt, pathCnt );
-            res += getCheatZone( startPos, roadMap, end, path );
+            res += getCheatZone( startPos );
         }
         printRes( 2, res );
     }

@@ -48,7 +48,6 @@ Prove:
 
 [Cascading Full adder](./Day24/GatesVisualize.md)
 
-
 ## 📆 TODOs
 
 - [x] Change day 3 algorithm to [regular expression](https://en.cppreference.com/w/cpp/regex/ecmascript) implementation ([C++ 11 feature](https://en.cppreference.com/w/cpp/regex)).
@@ -74,3 +73,28 @@ Prove:
     <input type="checkbox" disabled="true" >Github issue at: <a href="https://github.com/microsoft/vscode-cpptools/issues/13110">13110</a><br>
     <input type="checkbox" disabled="true" >Mutex > future async > normal algorithm (vscode debugger will try tracking the calling stack, thus recursive algorithm will be slowed down serverely)<br>
 </div> -->
+
+## Valgind log
+
+```bash
+cmake -S . -B ./out/build -G "Ninja" -DCMAKE_BUILD_TYPE=RelWithDebInfo
+cmake --build ./out/build --config RelWithDebInfo
+cd ./out/build/2024 && ./solution
+valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./solution > out.log 2> valgrind.lo
+```
+
+```log
+==172910== Memcheck, a memory error detector
+==172910== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==172910== Using Valgrind-3.24.0 and LibVEX; rerun with -h for copyright info
+==172910== Command: ./solution
+==172910== 
+==172910== 
+==172910== HEAP SUMMARY:
+==172910==     in use at exit: 0 bytes in 0 blocks
+==172910==   total heap usage: 13,171,628 allocs, 13,171,628 frees, 2,357,129,255 bytes allocated
+==172910== 
+==172910== All heap blocks were freed -- no leaks are possible
+==172910== 
+==172910== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+```

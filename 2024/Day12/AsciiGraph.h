@@ -5,13 +5,14 @@ class AsciiGraph : public SolutionBase {
     const int dx[4]{ -1, 1, 0, 0 };
     const int dy[4]{ 0, 0, 1, -1 };
 
-    inline bool isValid( int x, int y, vector<vector<char>> const& map ) {
-        return x >= 0 && (size_t)x < map.size() && y >= 0 && (size_t)y <= map[0].size();
+    bool isValid( int x, int y, vector<vector<char>> const& map ) {
+        // return x >= 0 && (size_t)x < map.size() && y >= 0 && (size_t)y <= map[0].size();// Address 0x4e3f8cc is 0 bytes after a block of size 140 alloc'd
+        return x >= 0 && (size_t)x < map.size() && y >= 0 && (size_t)y < map[0].size();  // Address 0x4e3f8cc is 0 bytes after a block of size 140 alloc'd
     }
 
     typedef pair<int, int> pos;
     typedef long long ll;
-    int getFence( pos s, vector<vector<char>> const& map ) {
+    int getFence( pos const& s, vector<vector<char>> const& map ) {
         int x = s.first, y = s.second;
         int fence = 0;
         for ( int i = 0; i < 4; i++ ) {
@@ -33,9 +34,9 @@ class AsciiGraph : public SolutionBase {
                 perimeter += _perimeter;
             }
         }
-        return pair<int, int>( area, perimeter );
+        return { area, perimeter };
     }
-    inline bool isBoundary( pos const& s, vector<vector<char>> const& map ) {
+    bool isBoundary( pos const& s, vector<vector<char>> const& map ) {
         int x = s.first, y = s.second;
         for ( int i = 0; i < 4; i++ ) {
             int nextX = x + dx[i], nextY = y + dy[i];
@@ -45,28 +46,28 @@ class AsciiGraph : public SolutionBase {
         }
         return false;
     }
-    bool isUpBoundary( const pos s, vector<vector<char>> const& garden ) {
+    bool isUpBoundary( const pos& s, vector<vector<char>> const& garden ) {
         int x = s.first, y = s.second;
         if ( ( x - 1 >= 0 && garden[x - 1][y] != garden[x][y] ) || x - 1 < 0 ) {
             return true;
         }
         return false;
     }
-    bool isDownBoundary( const pos s, vector<vector<char>> const& garden ) {
+    bool isDownBoundary( const pos& s, vector<vector<char>> const& garden ) {
         size_t x = s.first, y = s.second;
         if ( ( x + 1 < garden.size() && garden[x + 1][y] != garden[x][y] ) || (size_t)( x + 1 ) >= garden.size() ) {
             return true;
         }
         return false;
     }
-    bool isRightBoundary( const pos s, vector<vector<char>> const& garden ) {
+    bool isRightBoundary( const pos& s, vector<vector<char>> const& garden ) {
         size_t x = s.first, y = s.second;
         if ( ( y + 1 < garden[x].size() && garden[x][y + 1] != garden[x][y] ) || y + 1 >= garden[x].size() ) {
             return true;
         }
         return false;
     }
-    bool isLeftBoundary( const pos s, vector<vector<char>> const& garden ) {
+    bool isLeftBoundary( const pos& s, vector<vector<char>> const& garden ) {
         int x = s.first, y = s.second;
         if ( ( y >= 1 && garden[x][y - 1] != garden[x][y] ) || y < 1 ) {
             return true;
@@ -198,26 +199,29 @@ class AsciiGraph : public SolutionBase {
         // printGarden( gardenCanvas );
         return upedge + downEdge + leftEdge + rightEdge;
     }
-
-   public:
-    void Solution1() {
-        vector<vector<char>> garden;
+    vector<vector<char>> garden;
+    void readFile() {
         ifstream input( "Day12/input.txt" );
-        int lineCnt = 0;
-        for ( string buf; getline( input, buf ); ) {
+        for ( string buf; getline( input, buf ) && !buf.empty(); ) {
             vector<char> row;
+            // row.reserve( buf.size() );  // Reserve memory so push_back doesn't reallocate weirdly
             for ( char c : buf ) {
                 row.push_back( c );
             }
-            garden.push_back( row );
-            lineCnt++;
+            // if ( !row.empty() ) {  // Only move non-empty rows
+            garden.emplace_back( std::move( row ) );
+            // }
         }
+    }
 
+   public:
+    void Solution1() {
+        readFile();
         ll res = 0;
-        vector<vector<bool>> counted( lineCnt, vector<bool>( garden[0].size(), false ) );
+        vector<vector<bool>> counted( garden.size(), vector<bool>( garden[0].size(), false ) );
         for ( size_t i = 0; i < garden.size(); i++ ) {
             // cout << "Processing line " << i << "." << endl;
-            for ( size_t j = 0; j < garden.size(); j++ ) {
+            for ( size_t j = 0; j < garden[0].size(); j++ ) {
                 if ( !counted[i][j] ) {
                     auto [area, perimeter] = getBoundarys( pos( i, j ), garden, counted );
                     res += area * perimeter;
@@ -227,25 +231,13 @@ class AsciiGraph : public SolutionBase {
         printRes( 1, res );
     }
     void Solution2() {
-        vector<vector<char>> garden;
-        ifstream input( "Day12/input.txt" );
-        int lineCnt = 0;
-        for ( string buf; getline( input, buf ); ) {
-            vector<char> row;
-            for ( char c : buf ) {
-                row.push_back( c );
-            }
-            garden.push_back( row );
-            lineCnt++;
-        }
-
         ll res = 0;
-        vector<vector<bool>> counted( lineCnt, vector<bool>( garden[0].size(), false ) );
+        vector<vector<bool>> counted( garden.size(), vector<bool>( garden[0].size(), false ) );
         for ( size_t i = 0; i < garden.size(); i++ ) {
             // cout << "Processing line " << i << "." << endl;
-            for ( size_t j = 0; j < garden.size(); j++ ) {
+            for ( size_t j = 0; j < garden[0].size(); j++ ) {
                 if ( !counted[i][j] ) {
-                    vector<pos> boundary;
+                    vector<pos> boundary{};
                     int area = getBoundarys( pos( i, j ), garden, counted, boundary );
                     res += area * getBoundaryEdges( boundary, garden );
                 }

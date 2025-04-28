@@ -1,6 +1,7 @@
 package Day20;
 
 import java.io.*;
+import java.lang.classfile.instruction.BranchInstruction;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,12 +52,15 @@ public class PulsePropagation {
     }
 
     // TODO Add chaos index for System reset flag.
-    Pair<Long, Long> PulseSimulate() {
+    Pair<Long, Long> PulseSimulate(String From, boolean stat, String To) {
         Queue<Pair<String, Boolean>> q = new LinkedList<>();
-        q.add(new Pair<>("broadcaster", false));
+        q.add(new Pair<>(From, stat));
         long lowCnt = 1, highCnt = 0;
         while (!q.isEmpty()) {
             var curPulse = q.poll();
+            if (To != null && curPulse.first.equals(To)) {
+                continue;
+            }
             for (String outWire : OutputLists.get(curPulse.first)) {
                 if (!curPulse.second) {
                     lowCnt++;
@@ -99,11 +103,16 @@ public class PulsePropagation {
         readFile();
         long lowRes = 0, highRes = 0;
         for (int i = 0; i < 1000; i++) {
-            var res = PulseSimulate();
+            var res = PulseSimulate("broadcaster", false, null);
             lowRes += res.first;
             highRes += res.second;
         }
         System.out.println("Solution 1: " + lowRes * highRes);
+    }
+
+    int SystemChaos(String InModule, String OutModule) {
+        int chaos = 0;
+        return chaos;
     }
 
     long rxLowCnt = 0, rxHightCnt = 0;
@@ -114,15 +123,40 @@ public class PulsePropagation {
     }
 
     public void Solution2() {
-        long i = 0;
-        for (;; i++) {
-            PulseSimulate();
-            if (rxLowCnt == 1 && rxHightCnt == 0) {
-                break;
+        List<String> branchNameList = OutputLists.get("broadcaster");
+        HashMap<String, String> branchOutputName = new HashMap<>();
+        for (String branchName : branchNameList) {
+            Queue<String> q = new LinkedList<>();
+            q.add(branchName);
+            HashSet<String> visited = new HashSet<>();
+            visited.add(branchName);
+            while (!q.isEmpty()) {
+                String curModule = q.poll();
+                if (Modules.get(curModule).first.equals(ModuleType.Conjunction)) {
+                    branchOutputName.put(branchName, curModule);
+                    break;
+                }
+                for (String output : OutputLists.get(branchName)) {
+                    if (!visited.contains(output)) {
+                        q.add(output);
+                    }
+                }
             }
-            clear();
         }
-        System.out.println("Solution 2: " + i);
+        HashMap<String, Integer> ChaosIndexList = new HashMap<>();
+        for (int i = 0; i < branchNameList.size(); i++) {
+            String branchName = branchNameList.get(i);
+            Modules.get(branchName).second = Optional.of(!Modules.get(branchName).second.get());
+            for (int push = 0;; push++) {
+                String To = branchOutputName.get(branchName);
+                PulseSimulate(branchName, Modules.get(branchName).second.get(), To);
+                if (SystemChaos(branchName, To) == 0) {
+                    ChaosIndexList.put(branchName, push);
+                    break;
+                }
+            }
+        }
+        System.out.println("Solution 2: ");
     }
 
     public static void main(String[] args) throws IOException {

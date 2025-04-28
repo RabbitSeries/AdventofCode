@@ -3,17 +3,14 @@
 using namespace std;
 #include "../../utils/SolutionBase.h"
 class CoinOptimize : public SolutionBase {
-#define BUFFER_SIZE 1024
-#define TOP_UP 10000000000000
-#define MAX_ATTEMPT 100
     typedef long long ll;
+    const ll TOP_UP = 10000000000000;
     typedef pair<ll, ll> point2D;
     typedef struct problem {
-        point2D a, b;
-        point2D prize;
+        point2D a, b, prize;
     } problem;
 
-    ll solve( const problem p ) {
+    ll solve( const problem& p ) {
         // Restriction: ta : button a attempt count, tb : button b
         // a.fitst*ta+b.first*tb = prize.first
         // a.second*ta+b.second*tb = prize.second
@@ -36,25 +33,13 @@ class CoinOptimize : public SolutionBase {
         return -1;
     }
 
-    void createProblem( vector<problem>& problemSet, ll top_up = 0 ) {
-        FILE* input = fopen( "Day13/input.txt", "r" );
-        char buf[BUFFER_SIZE + 1];
-        // Regex "^.*\+([0-9]+),.*\+([0-9]+)$"
-        // Regex "\+([0-9]+).*\+([0-9]+)"
-        // Regex "(?=(\+.*?)[0-9]+,)\1([0-9]+)(?=(.*\+)[0-9])\3([0-9]+)"
-        regex re( "[\\+=]([0-9]+).*[\\+=]([0-9]+)" );
+    void createProblem() {
+        ifstream input( "Day13/input.txt" );
+        regex re( R"([\+=]([0-9]+).*[\+=]([0-9]+))" );
         smatch m;
         ll inProblem = 0;
-        while ( !feof( input ) && fgets( buf, BUFFER_SIZE + 1, input ) ) {
-            // _GLIBCXX_RESOLVE_LIB_DEFECTS
-            // 2329. regex_search() with match_results should forbid temporary strings
-            /// Prevent unsafe attempts to get match_results from a temporary string.
-            // std::regex_search( string( buf ), m, re );
-            string tmp( buf );
-            std::regex_search( tmp, m, re );
-            // cout << m.prefix() << endl;
-            // cout << m.suffix() << endl;
-
+        for ( string buf; getline( input, buf ); ) {
+            std::regex_search( buf, m, re );
             if ( m.size() == 3 ) {
                 if ( !inProblem ) {
                     problemSet.push_back( problem() );
@@ -65,8 +50,7 @@ class CoinOptimize : public SolutionBase {
                         problemSet.back().b = pair<ll, ll>( stoi( m[1] ), stoi( m[2] ) );
                         inProblem++;
                     } else {
-                        // InProblem == 2
-                        problemSet.back().prize = pair<ll, ll>( stoi( m[1] ) + top_up, stoi( m[2] ) + top_up );
+                        problemSet.back().prize = pair<ll, ll>( stoi( m[1] ), stoi( m[2] ) );
                         inProblem = 0;
                     }
                 }
@@ -74,12 +58,13 @@ class CoinOptimize : public SolutionBase {
         }
     }
 
+    vector<problem> problemSet;
+
    public:
     void Solution1() {
-        vector<problem> problemSet;
-        createProblem( problemSet );
+        createProblem();
         ll tokenCnt = 0;
-        for_each( problemSet.begin(), problemSet.end(), [&]( const problem p ) {
+        for_each( problemSet.begin(), problemSet.end(), [&]( const problem& p ) {
             ll res = solve( p );
             if ( res >= 0 ) {
                 tokenCnt += res;
@@ -89,10 +74,9 @@ class CoinOptimize : public SolutionBase {
     }
 
     void Solution2() {
-        vector<problem> problemSet;
-        createProblem( problemSet, TOP_UP );
         ll tokenCnt = 0;
-        for_each( problemSet.begin(), problemSet.end(), [&]( const problem p ) {
+        for_each( problemSet.begin(), problemSet.end(), [&]( problem& p ) {
+            tie( p.prize.first, p.prize.second ) = make_pair( p.prize.first + TOP_UP, p.prize.second + TOP_UP );
             ll res = solve( p );
             if ( res >= 0 ) {
                 tokenCnt += res;
