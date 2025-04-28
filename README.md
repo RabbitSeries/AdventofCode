@@ -8,8 +8,8 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
  Year | Progress        | Best TimeCost (seconds)
 :----:|:---------------:|:--------------:
-2023  | 19.5/25 ⭐⭐    |Not yet
-2024  | 25/25 ⭐⭐      |1.559362
+2023  | 20/25 ⭐⭐      |     Not yet
+2024  | 25/25 ⭐⭐      |    2.044230
 
 > Runs on github actions
 

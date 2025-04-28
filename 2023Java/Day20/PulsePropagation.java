@@ -1,7 +1,6 @@
 package Day20;
 
 import java.io.*;
-import java.lang.classfile.instruction.BranchInstruction;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,42 +50,31 @@ public class PulsePropagation {
         input.close();
     }
 
-    // TODO Add chaos index for System reset flag.
     Pair<Long, Long> PulseSimulate(String From, boolean stat, String To) {
         Queue<Pair<String, Boolean>> q = new LinkedList<>();
         q.add(new Pair<>(From, stat));
         long lowCnt = 1, highCnt = 0;
         while (!q.isEmpty()) {
             var curPulse = q.poll();
-            if (To != null && curPulse.first.equals(To)) {
-                continue;
-            }
             for (String outWire : OutputLists.get(curPulse.first)) {
                 if (!curPulse.second) {
                     lowCnt++;
-                    if (outWire.equals("rx")) {
-                        rxLowCnt++;
-                    }
                 } else {
                     highCnt++;
-                    if (outWire.equals("rx")) {
-                        rxHightCnt++;
-                    }
                 }
                 if (Modules.containsKey(outWire)) {
                     Optional<Boolean> nextPulse = Optional.empty();
                     if (Modules.get(outWire).first.equals(ModuleType.Conjunction)) {
+                        if (To != null && curPulse.first.equals(To)) {
+                            continue;
+                        }
                         CjctModuleInputStatus.get(outWire).put(curPulse.first, curPulse.second);
                         nextPulse = Optional.of(!CjctModuleInputStatus.get(outWire).values().stream().reduce(true, (init, e) -> init && e));
                     } else {// if (Modules.get(outWire).first.equals(ModuleType.FlipFlop)) {
                         if (curPulse.second == false) {// low pulse
-                            if (Modules.get(outWire).second.get().equals(false)) { // off
-                                Modules.get(outWire).second = Optional.of(true);
-                                nextPulse = Optional.of(true);
-                            } else { // on
-                                Modules.get(outWire).second = Optional.of(false);
-                                nextPulse = Optional.of(false);
-                            }
+                            // Filp
+                            Modules.get(outWire).second = Optional.of(!Modules.get(outWire).second.get());
+                            nextPulse = Modules.get(outWire).second;
                         }
                     }
                     if (nextPulse.isPresent()) {
@@ -110,53 +98,68 @@ public class PulsePropagation {
         System.out.println("Solution 1: " + lowRes * highRes);
     }
 
-    int SystemChaos(String InModule, String OutModule) {
-        int chaos = 0;
-        return chaos;
-    }
-
-    long rxLowCnt = 0, rxHightCnt = 0;
-
-    void clear() {
-        rxLowCnt = 0;
-        rxHightCnt = 0;
-    }
-
-    public void Solution2() {
-        List<String> branchNameList = OutputLists.get("broadcaster");
-        HashMap<String, String> branchOutputName = new HashMap<>();
-        for (String branchName : branchNameList) {
-            Queue<String> q = new LinkedList<>();
-            q.add(branchName);
-            HashSet<String> visited = new HashSet<>();
-            visited.add(branchName);
-            while (!q.isEmpty()) {
-                String curModule = q.poll();
-                if (Modules.get(curModule).first.equals(ModuleType.Conjunction)) {
-                    branchOutputName.put(branchName, curModule);
-                    break;
+    boolean SystemReseted(String InModule, String OutModule) {
+        Queue<String> q = new LinkedList<>();
+        HashSet<String> visitedModule = new HashSet<>();
+        q.add(InModule);
+        visitedModule.add(InModule);
+        while (!q.isEmpty()) {
+            String curModuleName = q.poll();
+            var curModule = Modules.get(curModuleName);
+            if (curModule.first.equals(ModuleType.FlipFlop)) {
+                if (curModule.second.get().compareTo(true) == 0) {
+                    return false;
                 }
-                for (String output : OutputLists.get(branchName)) {
-                    if (!visited.contains(output)) {
-                        q.add(output);
+            } else {
+                for (var InputStatus : CjctModuleInputStatus.get(curModuleName).entrySet()) {
+                    if (InputStatus.getValue().compareTo(true) == 0) {
+                        return false;
+                    }
+                }
+            }
+            if (!curModuleName.equals(OutModule)) {
+                for (String outModuleName : OutputLists.get(curModuleName)) {
+                    if (!visitedModule.contains(outModuleName)) {
+                        q.add(outModuleName);
+                        visitedModule.add(outModuleName);
                     }
                 }
             }
         }
-        HashMap<String, Integer> ChaosIndexList = new HashMap<>();
-        for (int i = 0; i < branchNameList.size(); i++) {
-            String branchName = branchNameList.get(i);
-            Modules.get(branchName).second = Optional.of(!Modules.get(branchName).second.get());
-            for (int push = 0;; push++) {
-                String To = branchOutputName.get(branchName);
-                PulseSimulate(branchName, Modules.get(branchName).second.get(), To);
-                if (SystemChaos(branchName, To) == 0) {
-                    ChaosIndexList.put(branchName, push);
+        return true;
+    }
+
+    public void Solution2() {
+        List<String> BranchNameList = OutputLists.get("broadcaster");
+        HashMap<String, String> BranchOutputName = new HashMap<>();
+        for (String branchName : BranchNameList) {
+            for (String output : OutputLists.get(branchName)) {
+                if (Modules.get(output).first.equals(ModuleType.Conjunction)) {
+                    BranchOutputName.put(branchName, output);
                     break;
                 }
             }
         }
-        System.out.println("Solution 2: ");
+        HashMap<String, Integer> ChaosIndexList = new HashMap<>();
+        for (String branchName : BranchNameList) {
+            String To = BranchOutputName.get(branchName);
+            int push = 0;
+            do {
+                Modules.get(branchName).second = Optional.of(!Modules.get(branchName).second.get());
+                PulseSimulate(branchName, Modules.get(branchName).second.get(), To);
+                push++;
+            } while (!SystemReseted(branchName, To));
+            ChaosIndexList.put(branchName, 1000 + push);
+        }
+        System.out.println("Solution 2: " + ChaosIndexList.values().stream().mapToLong(l -> (long) l).reduce(1L, (init, l) -> lcm(init, l)));
+    }
+
+    long gcd(long a, long b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+
+    long lcm(long a, long b) {
+        return a / gcd(a, b) * b;
     }
 
     public static void main(String[] args) throws IOException {
