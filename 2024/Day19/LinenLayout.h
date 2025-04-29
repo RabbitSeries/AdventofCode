@@ -31,11 +31,19 @@ class LinenLayout : public SolutionBase {
     }
     vector<ull> dp;
     ull ALLMatch( vector<string> const& keys, string const& design ) {
-        dp.resize( design.size() + 1, 0 );
+        //     resize(size_type __new_size)
+        //     {
+        //   if (__new_size > size())
+        //     _M_default_append(__new_size - size());
+        //   else if (__new_size < size())
+        //     _M_erase_at_end(this->_M_impl._M_start + __new_size);
+        //     }
+        dp.resize( design.size() + 1 );
+        fill( dp.begin(), dp.end(), 0 );  // Must refill
         dp[0] = 1;
         for ( size_t i = 1; i <= design.size(); i++ ) {
             for ( auto& key : keys ) {
-                if ( key.size() <= i && equal( design.begin() + i - key.size(), design.begin() + i, key.begin() ) ) {
+                if ( key.size() <= i && equal( i - key.size() + design.begin(), i + design.begin(), key.begin() ) ) {
                     dp[i] += dp[i - key.size()];
                 }
             }
