@@ -214,7 +214,7 @@ class PushBox : public SolutionBase {
                     nextLevelID[nextIDR]++;
             }
         }
-        for ( auto m : nextLevelID ) {
+        for ( auto& m : nextLevelID ) {
             nextLevel.push_back( id2BoxPos[m.first] );
         }
         return nextLevel;

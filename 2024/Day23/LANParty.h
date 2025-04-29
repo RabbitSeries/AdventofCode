@@ -53,7 +53,7 @@ class LANParty : public SolutionBase {
             return connections.size();
         }
         auto const& subNetwork = LANNetWork.at( Host );
-        for ( auto nextPC : subNetwork ) {
+        for ( auto const& nextPC : subNetwork ) {
             if ( curConnection.find( nextPC.first ) == string::npos ) {
                 // curConnection += nextPC.first;
                 if ( isConnected( nextPC.first, curConnection, LANNetWork ) )

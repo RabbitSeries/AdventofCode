@@ -45,7 +45,7 @@ class CascadingRemote : public SolutionBase {
         for ( size_t i = 0; i < curComm.size(); i++ ) {
             vector<vector<char>> nextRobotCommList = getKeyPadAllPath( i == 0 ? 'A' : curComm[i - 1], curComm[i], DIRECTIONAL_KEYPAD );
             ull curLen = ULONG_LONG_MAX;
-            for ( auto nextRobotComm : nextRobotCommList ) {
+            for ( auto const& nextRobotComm : nextRobotCommList ) {
                 curLen = min( directionalCascadingCommand( nextRobotComm, robotCnt - 1 ), curLen );
             }
             res += curLen;
@@ -54,12 +54,12 @@ class CascadingRemote : public SolutionBase {
         return res;
     }
 
-    ull numericCommand( vector<char> const password, int robotCnt ) {
+    ull numericCommand( vector<char> const& password, int robotCnt ) {
         ull res = 0;
         for ( size_t i = 0; i < password.size(); i++ ) {
             vector<vector<char>> nextRobotCommList = getKeyPadAllPath( i == 0 ? 'A' : password[i - 1], password[i], NUMERIC_KEYPAD );
             ull curLen = ULONG_LONG_MAX;
-            for ( auto nextRobotComm : nextRobotCommList ) {
+            for ( auto const& nextRobotComm : nextRobotCommList ) {
                 curLen = min( directionalCascadingCommand( nextRobotComm, robotCnt - 1 ), curLen );
             }
             res += curLen;
@@ -71,7 +71,7 @@ class CascadingRemote : public SolutionBase {
     int getOnePath( char const s, char const t, unordered_map<char, vector<pair<char, char>>> const& keyPad ) {
         map<char, int> cost;
         // map<char, bool> visited;
-        for ( auto [key, nextKeyList] : keyPad ) {
+        for ( auto& [key, nextKeyList] : keyPad ) {
             cost[key] = INT_MAX;
             // visited[key] = false;
         }
@@ -116,7 +116,7 @@ class CascadingRemote : public SolutionBase {
                 return curPoint.linkRoad.size();
             }
             // Proceed process
-            for ( auto [nextKey, nextDirection] : keyPad.at( curKey ) ) {
+            for ( auto& [nextKey, nextDirection] : keyPad.at( curKey ) ) {
                 // If there is not ==, then there is no need to add visited array, because same cost path is excluded due to this judgement.
                 if ( curCost + 1 < cost.at( nextKey ) ) {
                     point nextPoint( nextKey, nextDirection );
@@ -131,7 +131,7 @@ class CascadingRemote : public SolutionBase {
 
     vector<vector<char>> getKeyPadAllPath( char const s, char const t, unordered_map<char, vector<pair<char, char>>> const& keyPad ) {
         map<char, int> cost;
-        for ( auto [key, nextKeyList] : keyPad ) {
+        for ( auto& [key, nextKeyList] : keyPad ) {
             cost[key] = INT_MAX;
         }
         struct point {
@@ -176,12 +176,12 @@ class CascadingRemote : public SolutionBase {
             }
             // Output process
             if ( curKey == t ) {
-                for ( auto road : curPoint.linkRoad ) {
+                for ( auto& road : curPoint.linkRoad ) {
                     endPoint.linkRoad.push_back( road );
                 }
             }
             // Proceed process
-            for ( auto [nextKey, nextDirection] : keyPad.at( curKey ) ) {
+            for ( auto& [nextKey, nextDirection] : keyPad.at( curKey ) ) {
                 point nextPoint( nextKey, nextDirection );
                 if ( curCost + 1 < cost.at( nextKey ) ) {
                     nextPoint.linkRoad = curPoint.linkRoad;
@@ -230,7 +230,7 @@ class CascadingRemote : public SolutionBase {
     void Solution1() {
         int res = 0;
         vector<vector<char>> passwordList = readPassword();
-        for ( auto password : passwordList ) {
+        for ( auto& password : passwordList ) {
             int manCommand = numericCommand( password, 3 );
             // cout << "Password: " << string( password.begin(), password.end() )
             //  << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
@@ -242,8 +242,7 @@ class CascadingRemote : public SolutionBase {
     void Solution2() {
         ull res = 0;
         vector<vector<char>> passwordList = readPassword();
-
-        for ( auto password : passwordList ) {
+        for ( auto& password : passwordList ) {
             ull manCommand = numericCommand( password, 26 );
             // cout << "Password: " << string( password.begin(), password.end() )
             //  << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;

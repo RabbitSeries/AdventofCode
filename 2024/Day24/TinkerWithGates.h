@@ -79,7 +79,7 @@ class TinkerWithGates : public SolutionBase {
                     return curProcessList;
                 }
             }
-            for ( auto gateInfo : curWire.outWireList ) {
+            for ( auto& gateInfo : curWire.outWireList ) {
                 string outWireName = gateInfo.second;
                 string nextWireName = gateInfo.first.second;
                 wire& outWire = wireList[outWireName];
@@ -103,7 +103,7 @@ class TinkerWithGates : public SolutionBase {
         map<string, tuple<string, string, string>> outWireList;
         readFile( wireList, outWireList );
         map<string, string> binaryDigits;
-        for ( auto wireInfo : wireList ) {
+        for ( auto& wireInfo : wireList ) {
             if ( wireInfo.first[0] == 'x' )
                 binaryDigits[wireInfo.first] = 'y' + wireInfo.first.substr( 1 );
         }
@@ -131,14 +131,14 @@ class TinkerWithGates : public SolutionBase {
         readFile( wireList, outWireList );
         // This queue
         queue<string> wireQueue;
-        for ( auto wire : wireList ) {
+        for ( auto& wire : wireList ) {
             if ( wire.first[0] == 'x' || wire.first[0] == 'y' ) {
                 wireQueue.push( wire.first );
             }
         }
         runGates( wireQueue, wireList );
         string res = "";
-        for ( auto wireInfo : wireList ) {
+        for ( auto& wireInfo : wireList ) {
             if ( wireInfo.first[0] == 'z' )
                 res = to_string( wireInfo.second.data ) + res;
         }
@@ -157,8 +157,8 @@ class TinkerWithGates : public SolutionBase {
                 binaryDigits[wireInfo.first] = 'y' + wireInfo.first.substr( 1 );
         }
         auto findGate = [&]( string input1, string input2, string gateType ) -> string {
-            for ( auto wireInfo : outWireList ) {
-                auto outWireInfo = wireInfo.second;
+            for ( auto& wireInfo : outWireList ) {
+                auto& outWireInfo = wireInfo.second;
                 if ( get<0>( outWireInfo ) == gateType ) {
                     if ( ( get<1>( outWireInfo ) == input1 && get<2>( outWireInfo ) == input2 ) || ( get<1>( outWireInfo ) == input2 && get<2>( outWireInfo ) == input1 ) ) {
                         return wireInfo.first;

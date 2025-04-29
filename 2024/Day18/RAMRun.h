@@ -68,8 +68,8 @@ class RAMRun : public SolutionBase {
 
     int countCorrupted( vector<vector<cellStatus>> const &stamp ) {
         int cnt = 0;
-        for ( auto row : stamp ) {
-            for ( auto col : row ) {
+        for ( auto const &row : stamp ) {
+            for ( auto &col : row ) {
                 if ( col == bad ) {
                     cnt++;
                 }

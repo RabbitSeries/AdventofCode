@@ -4,8 +4,8 @@ using namespace std;
 class KeyPair : public SolutionBase {
     typedef vector<int> schematics;
     // TODO Change this algorithm to schema hash code and mapping.
-    bool isUnique( schematics schema, vector<schematics> schemaList ) {
-        for ( auto s : schemaList ) {
+    bool isUnique( schematics const& schema, vector<schematics> const& schemaList ) {
+        for ( auto const& s : schemaList ) {
             bool isEuqal = true;
             for ( int pin = 0; pin < 5; pin++ ) {
                 if ( schema[pin] != s[pin] ) {
@@ -23,11 +23,10 @@ class KeyPair : public SolutionBase {
     void Solution1() {
         vector<schematics> lockList, keyList;
         ifstream input( "Day25/input.txt" );
-        string linebuf;
         int rowTimes = 0;
         bool isLock = true;
         schematics row( 5, 0 );
-        while ( getline( input, linebuf ) ) {
+        for ( string linebuf; getline( input, linebuf ); ) {
             if ( linebuf.size() < 5 ) {
                 continue;
             } else {
@@ -64,8 +63,8 @@ class KeyPair : public SolutionBase {
             }
         }
         int res = 0;
-        for ( schematics lock : lockList ) {
-            for ( schematics key : keyList ) {
+        for ( schematics& lock : lockList ) {
+            for ( schematics& key : keyList ) {
                 bool fit = true;
                 for ( int pin = 0; pin < 5; pin++ ) {
                     if ( lock[pin] + key[pin] > 5 ) {

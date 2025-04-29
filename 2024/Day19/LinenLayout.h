@@ -22,7 +22,7 @@ class LinenLayout : public SolutionBase {
             // cout << design << endl;
             return true;
         }
-        for ( auto key : keys ) {
+        for ( auto const& key : keys ) {
             if ( key == design.substr( curpos, key.size() ) ) {
                 curpos += key.size();
                 if ( match( keys, design, curpos ) ) {

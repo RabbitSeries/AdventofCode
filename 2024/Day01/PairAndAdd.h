@@ -22,7 +22,7 @@ class PairAndAdd : public SolutionBase {
     void Solution1() {
         readFile( "Day01/input.txt" );
         priority_queue<int, vector<int>, greater<>> pq1, pq2;
-        for ( auto [num1, num2] : numList ) {
+        for ( auto& [num1, num2] : numList ) {
             pq1.push( num1 );
             pq2.push( num2 );
         }
@@ -38,7 +38,7 @@ class PairAndAdd : public SolutionBase {
 
     void Solution2() {
         unordered_map<int, int> elemCount;
-        for ( auto [num1, num2] : numList ) {
+        for ( auto& [num1, num2] : numList ) {
             elemCount[num2]++;
         }
         int addUp = accumulate( numList.begin(), numList.end(), 0, [&]( int init, pair<int, int> elem ) {

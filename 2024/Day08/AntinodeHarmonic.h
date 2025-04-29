@@ -83,7 +83,7 @@ class AntinodeHarmonic : public SolutionBase {
             // cout << endl;
         }
         // int debugLineCnt = 0;
-        for ( auto name : antennaNames ) {
+        for ( auto& name : antennaNames ) {
             // cout << "Processing antenna name: " << name << ". At " << ++debugLineCnt << "/" << antennaNames.size() << endl;
             antennaEffectZone( antennaLists[name], antinodeMap, isHarmony );
             // showAntinode( antinodeMap );

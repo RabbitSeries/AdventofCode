@@ -52,9 +52,9 @@ class MazeDijkstra : public SolutionBase {
         // system( "clear" );
         // m[e.first][e.second] = 'E';
         for_each( curPath.begin(), curPath.end(), [&]( pair<int, int> road ) { m[road.first][road.second] = 0; } );
-        for ( auto line : m ) {
+        for ( auto& line : m ) {
             string row = "";
-            for ( auto cell : line ) {
+            for ( auto& cell : line ) {
                 if ( cell == CELLWALL ) {
                     row += '#';
                 } else if ( cell == CELLEMPTY ) {
