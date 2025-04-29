@@ -37,7 +37,7 @@ class RaceCondition : public SolutionBase {
     int Dijkstra( pos const& start, pos const& end, vector<vector<cellStatus>> const& roadMap ) {
         int rows = roadMap.size(), cols = roadMap[0].size();
         vector<vector<int>> cost( rows, vector<int>( cols, INT_MAX ) );
-        vector<vector<int>> optimized( rows, vector<int>( cols, false ) );
+        // vector<vector<int>> optimized( rows, vector<int>( cols, false ) );
         using pqElem = pair<int, pos>;
         priority_queue<pqElem, vector<pqElem>, greater<>> pq;
         pq.push( { 0, start } );
@@ -47,10 +47,10 @@ class RaceCondition : public SolutionBase {
             auto [curCost, curPos] = move( const_cast<pqElem&>( pq.top() ) );
             pq.pop();
             // // TODO how to filter curCost == cost[start.first][start.second]
-            if ( optimized[curPos.first][curPos.second] || curCost > cost[curPos.first][curPos.second] ) {
+            if ( /* optimized[curPos.first][curPos.second] || */ curCost > cost[curPos.first][curPos.second] ) {
                 continue;
             }
-            optimized[curPos.first][curPos.second] = true;
+            // optimized[curPos.first][curPos.second] = true;
             if ( curPos == end ) {
                 return curCost;
             }
@@ -113,8 +113,8 @@ class RaceCondition : public SolutionBase {
                     pos wallPos = getNextPos( curPos, k );
                     pos throughPos = getNextPos( wallPos, k );
                     if ( isWall( rows, cols, wallPos, roadMap ) && isValid( rows, cols, throughPos, roadMap ) ) {
-                        int cheatCost = 2 + path.at( end ) - path.at( throughPos );
-                        int savedTime = path.at( end ) - curCost - cheatCost;
+                        int cheatCost = 2 + path.size() - path.at( throughPos );
+                        int savedTime = path.size() - curCost - cheatCost;
                         if ( savedTime > 0 ) {
                             // cheatPos.push_back( { {curPos,throughPos},savedTime } );
                             // if( savedTime == target ) {
@@ -147,8 +147,8 @@ class RaceCondition : public SolutionBase {
                 pos checkPos{ curPos.first + i, curPos.second + j };
                 int cheatCost = abs( i ) + abs( j );
                 if ( isValid( rows, cols, checkPos, roadMap ) ) {
-                    int proceedCost = cheatCost + path.at( end ) - path.at( checkPos );
-                    int savedTime = path.at( end ) - path.at( curPos ) - proceedCost;
+                    int proceedCost = cheatCost + path.size() - path.at( checkPos );
+                    int savedTime = path.size() - path.at( curPos ) - proceedCost;
                     if ( savedTime >= 100 )
                         cnt++;
                 }
