@@ -31,10 +31,11 @@ class LANParty : public SolutionBase {
     void Solution1() {
         readFile();
         unordered_set<string> partySet;
+        partySet.reserve( LANNetwork.size() );
         for ( auto& [netA, _] : LANNetwork ) {
             for ( auto& netB : LANNetwork.at( netA ) ) {
                 for ( auto& netC : LANNetwork.at( netB ) ) {
-                    if ( LANNetwork.at( netA ).contains( netC ) && ( netA.substr( 0, 1 ) + netB.substr( 0, 1 ) + netC.substr( 0, 1 ) ).find( 't' ) != string::npos ) {
+                    if ( LANNetwork.at( netA ).contains( netC ) && ( netA.starts_with( 't' ) || netB.starts_with( 't' ) || netC.starts_with( 't' ) ) ) {
                         set party( { netA, netB, netC } );
                         partySet.insert( accumulate( party.begin(), party.end(), string() ) );
                     }
@@ -43,7 +44,6 @@ class LANParty : public SolutionBase {
         }
         printRes( 1, partySet.size() );
     }
-
     void Solution2() {
         vector<set<string>> connections;
         for ( auto& [atom, _] : LANNetwork ) {
