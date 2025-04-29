@@ -44,18 +44,14 @@ jobs:
       run: |
         cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }}
 
-    - name: Run tests (Linux)
+    - name: Run tests (Linux) Generate results log files
       working-directory: ${{ env.BUILD_DIR }}/2024
       shell: bash
       run: |
-        pwd && ls && ./solution
+        pwd && ls && ./solution 1>actionRes.log 2>runtime.log 
+        cat actionRes.log
+        cat runtime.log
         
-    - name: Generate results log files
-      working-directory: ${{ env.BUILD_DIR }}/2024
-      shell: bash
-      run: |
-        ./solution 1>actionRes.log 2>runtime.log
-
     - name: Diff files and fail if different
       run: |
         if ! diff -u ${{ env.BUILD_DIR }}/2024/actionRes.log ./2024/res.log > diff.log; then
