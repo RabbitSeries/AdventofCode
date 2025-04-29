@@ -1,4 +1,3 @@
-#include "../utils/SolutionBase.h"
 #include "Day01/PairAndAdd.h"
 #include "Day02/CheckLevelInOrder.h"
 #include "Day03/PreciseMul.h"

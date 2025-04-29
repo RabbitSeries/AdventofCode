@@ -10,146 +10,64 @@ class LANParty : public SolutionBase {
             regex_search( buf, m, re );
             if ( m.size() == 3 ) {
                 string pc1 = m[1], pc2 = m[2];
-                LANNetwork[pc1][pc2] = true;
-                LANNetwork[pc2][pc1] = true;
+                LANNetwork[pc1].insert( pc2 );
+                LANNetwork[pc2].insert( pc1 );
             }
         }
         return;
     }
-    static inline bool isConnected( string const& Host, string const& ConnectionNextwork, map<string, map<string, bool>> const& LANNetWork ) {
-        bool connected = true;
-        for ( size_t i = 0; i < ConnectionNextwork.size(); i += 2 ) {
-            if ( LANNetWork.at( Host ).count( ConnectionNextwork.substr( i, 2 ) ) == 0 ) {
-                connected = false;
+
+    bool isConnected( string const& Host, set<string> const& ConnectionNetwork ) {
+        for ( auto const& conn : ConnectionNetwork ) {
+            if ( !LANNetwork.at( Host ).contains( conn ) ) {
                 return false;
             }
         }
-        return connected;
+        return true;
     }
-
-    static inline bool checkUnique( string const& ConnectionNextwork, map<string, string> const& connections ) {
-        vector<string> enumeration = { ConnectionNextwork.substr( 0, 2 ), ConnectionNextwork.substr( 2, 2 ), ConnectionNextwork.substr( 4, 2 ) };
-        sort( enumeration.begin(), enumeration.end() );
-        bool isUnique = true;
-        do {
-            if ( connections.count( enumeration[0] + enumeration[1] + enumeration[2] ) != 0 ) {
-                isUnique = false;
-                return isUnique;
-            }
-        } while ( next_permutation( enumeration.begin(), enumeration.end() ) );
-        return isUnique;
-    }
-
-    static int findConnection( map<string, string>& connections, mutex& connectionsMutex, map<string, map<string, bool>> const& LANNetWork, string Host, string curConnection = "", int depth = 3 ) {
-        // void findConnection( map<string, map<string, bool>> const& LANNetWork, string Host, string & curConnection = "", int depth = 3 ) {
-        curConnection += Host;
-        if ( depth == 1 ) {
-            if ( connections.count( curConnection ) == 0 && checkUnique( curConnection, connections ) ) {
-                lock_guard<mutex> writeConnections( connectionsMutex );
-                connections[curConnection] = curConnection.substr( 0, 1 ) + curConnection.substr( 2, 1 ) + curConnection.substr( 4, 1 );
-            }
-            // curConnection.pop_back();
-            // curConnection.pop_back();
-            return connections.size();
-        }
-        auto const& subNetwork = LANNetWork.at( Host );
-        for ( auto const& nextPC : subNetwork ) {
-            if ( curConnection.find( nextPC.first ) == string::npos ) {
-                // curConnection += nextPC.first;
-                if ( isConnected( nextPC.first, curConnection, LANNetWork ) )
-                    findConnection( connections, connectionsMutex, LANNetWork, nextPC.first, curConnection, depth - 1 );
-                // curConnection.pop_back();
-                // curConnection.pop_back();
-            }
-        }
-        return connections.size();
-    }
-
-    static void threadTask( int startRow, int endRow, map<string, string>& connections, mutex& connectionsMutex, map<string, map<string, bool>> const& LANNetWork ) {
-        auto it = LANNetWork.cbegin(), end = LANNetWork.cend();
-        // auto it = LANNetWork.begin();
-        while ( distance( it, LANNetWork.end() ) != endRow - startRow ) {
-            it++;
-        }
-        // int left = 0, right = LANNetWork.size() - 1;
-
-        while ( it != end ) {
-            // findConnection( LANNetWork, ( *it ).first, ( *it ).first );
-            findConnection( connections, connectionsMutex, LANNetWork, ( *it ).first );
-            it++;
-        }
-    }
-    map<string, map<string, bool>> LANNetwork;
+    map<string, set<string>> LANNetwork;
 
    public:
     void Solution1() {
-        map<string, string> connections;
-        mutex connectionsMutex;
         readFile();
-        bool enableMultiThreading = false;
-        int maxThread = thread::hardware_concurrency();
-        int processPerThread = LANNetwork.size() / maxThread;
-        vector<thread> threadList;
-        if ( enableMultiThreading ) {
-            for ( int i = 0; i < maxThread; i++ ) {
-                int startRow = i * processPerThread;
-                int endRow = ( i == maxThread - 1 ) ? LANNetwork.size() : ( i + 1 ) * processPerThread;
-                threadList.push_back( thread( threadTask, startRow, endRow, ref( connections ), ref( connectionsMutex ), cref( LANNetwork ) ) );
-            }
-        } else {
-            threadList.push_back( thread( threadTask, 0, LANNetwork.size(), ref( connections ), ref( connectionsMutex ), cref( LANNetwork ) ) );
-        }
-        for ( auto& t : threadList ) {
-            t.join();
-        }
-        int res = 0;
-        for ( auto const& [connection, Prefix] : connections ) {
-            if ( Prefix.find( 't' ) != string::npos ) {
-                res++;
+        unordered_set<string> partySet;
+        for ( auto& [netA, _] : LANNetwork ) {
+            for ( auto& netB : LANNetwork.at( netA ) ) {
+                for ( auto& netC : LANNetwork.at( netB ) ) {
+                    if ( LANNetwork.at( netA ).contains( netC ) && ( netA.substr( 0, 1 ) + netB.substr( 0, 1 ) + netC.substr( 0, 1 ) ).find( 't' ) != string::npos ) {
+                        set party( { netA, netB, netC } );
+                        partySet.insert( accumulate( party.begin(), party.end(), string() ) );
+                    }
+                }
             }
         }
-        printRes( 1, res );
+        printRes( 1, partySet.size() );
     }
 
     void Solution2() {
-        map<string, string> connections;
-        std::map<std::string, std::map<std::string, bool>>::const_iterator it = LANNetwork.begin(), end = LANNetwork.end();
-        size_t res = 0;
-        while ( it != end ) {
-            // cout << "Checking: " << distance( std::map<std::string, std::map<std::string, bool>>::const_iterator( LANNetwork.begin() ), it ) << endl;
-            string atom = ( *it ).first;
+        vector<set<string>> connections;
+        for ( auto& [atom, _] : LANNetwork ) {
             if ( connections.empty() ) {
-                connections.emplace( atom, atom );
+                connections.emplace_back( set( { atom } ) );
             } else {
                 bool added = false;
-                for ( auto& [Host, connection] : connections ) {
-                    if ( isConnected( atom, connection, LANNetwork ) ) {
-                        connection += atom;
+                for ( auto& connection : connections ) {
+                    if ( isConnected( atom, connection ) ) {
+                        connection.insert( atom );
                         // Don't break here.
                         added = true;
                     }
                 }
                 if ( !added )
-                    connections.emplace( atom, atom );
+                    connections.emplace_back( set( { atom } ) );
             }
-            it++;
         }
-        string maxConnection = "";
-        for ( auto const& [Host, connection] : connections ) {
-            if ( connection.size() / 2 > res ) {
-                maxConnection = connection;
-            }
-            res = max( connection.size() / 2, res );
-        }
-        vector<string> passWord;
-        for ( size_t i = 0; i < maxConnection.size(); i += 2 ) {
-            passWord.push_back( maxConnection.substr( i, 2 ) );
-        }
-        sort( passWord.begin(), passWord.end() );
-        printRes( 2, accumulate( passWord.begin() + 1, passWord.end(), passWord.front(),
-                                 []( string const& init, string const& host ) {
-                                     return init + "," + host;
-                                 } ) );
+        set<string> passWord = *ranges::max_element( connections.begin(), connections.end(), {}, []( decltype( connections )::value_type const& conn ) {
+            return conn.size();
+        } );
+        printRes( 2, accumulate( ++passWord.begin(), passWord.end(), *passWord.begin(), []( string const& init, string const& host ) {
+                      return init + "," + host;
+                  } ) );
         return;
     }
 };
