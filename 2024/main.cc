@@ -50,18 +50,18 @@ void printProcess() {
         //      << endl;
         // this_thread::sleep_for( chrono::seconds( 1 ) );
     } else {
-        cout << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
-        cout << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
-        cout << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
+        cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
+        cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
+        cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
         while ( !pq.empty() ) {
             auto [cost, solutionId, info] = pq.top();
             pq.pop();
-            cout
+            cerr
                 << "Day " << solutionId << " problem time cost:" << endl
                 << fixed << setprecision( 6 ) << right << setw( 15 ) << setfill( ' ' ) << cost / 1000000.0
                 << " seconds." << endl;
         }
-        cout << "Total cost: " << cost / 1000000.0 << " seconds." << endl;
+        cerr << "Total cost: " << cost / 1000000.0 << " seconds." << endl;
     }
     SolutionStart++;
     nowTime = chrono::high_resolution_clock::now();

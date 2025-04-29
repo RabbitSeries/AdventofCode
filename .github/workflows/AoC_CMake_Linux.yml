@@ -1,8 +1,8 @@
 name: AoC CMake Linux
 
 on:
-  # push:
-  #   branches: [main]
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -13,7 +13,7 @@ env:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
+ 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -49,10 +49,28 @@ jobs:
       shell: bash
       run: |
         pwd && ls && ./solution
+        
+    - name: Generate results log files
+      working-directory: ${{ env.BUILD_DIR }}/2024
+      shell: bash
+      run: |
+        ./solution 1>actionRes.log 2>runtime.log
 
+    - name: Diff files and fail if different
+      run: |
+        if ! diff -u ${{ env.BUILD_DIR }}/2024/actionRes.log ./2024/res.log > diff.log; then
+          echo "::error::Files differ. See diff.log for details."
+          cat diff.log
+          exit 1
+        else
+          echo "All pass"
+        fi
+        
     - name: Upload artifacts on failure
       if: failure()
       uses: actions/upload-artifact@v4
       with:
         name: build-output-${{ runner.os }}
-        path: ${{ env.BUILD_DIR }}
+        path: |
+          ${{ env.BUILD_DIR }} 
+          diff.log

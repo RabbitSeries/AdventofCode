@@ -29,7 +29,7 @@ class Calibration : public SolutionBase {
                 string curStr = to_string( curRes );
                 string formerStr = to_string( nums[curPos - 1] );
                 if ( curStr.ends_with( formerStr ) ) {
-                    size_t pos = curStr.find_last_of( formerStr ), nextRes = 0;
+                    size_t pos = curStr.size() - formerStr.size(), nextRes = 0;
                     if ( pos != 0 ) {
                         nextRes = stoull( curStr.substr( 0, pos ) );
                     }

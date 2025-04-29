@@ -40,7 +40,7 @@ class AsciiGraph : public SolutionBase {
         int x = s.first, y = s.second;
         for ( int i = 0; i < 4; i++ ) {
             int nextX = x + dx[i], nextY = y + dy[i];
-            if ( !isValid( nextX, nextY, map ) || map[nextX][nextY] == map[x][y] ) {
+            if ( !isValid( nextX, nextY, map ) || map[nextX][nextY] != map[x][y] ) {
                 return true;
             }
         }
@@ -204,13 +204,10 @@ class AsciiGraph : public SolutionBase {
         ifstream input( "Day12/input.txt" );
         for ( string buf; getline( input, buf ) && !buf.empty(); ) {
             vector<char> row;
-            // row.reserve( buf.size() );  // Reserve memory so push_back doesn't reallocate weirdly
             for ( char c : buf ) {
                 row.push_back( c );
             }
-            // if ( !row.empty() ) {  // Only move non-empty rows
             garden.emplace_back( std::move( row ) );
-            // }
         }
     }
 
