@@ -76,9 +76,12 @@ class RobotPatrol : public SolutionBase {
     }
     int reverseMod( int a, int b ) {
         int x = 0, y;
-        [[maybe_unused]] int res = extendGCD( a, b, x, y );
+        int res = extendGCD( a, b, x, y );
+        if ( res != 1 ) {
+            cerr << "Error reverserMod operands\n";
+            return -1;
+        }
         // assert( extendGCD( a, b, x, y ) == 1 );// release mode will skip assert
-        assert( res == 1 );
         return x;
     }
     int positiveMod( int a, int b ) {

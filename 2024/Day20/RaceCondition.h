@@ -1,9 +1,21 @@
 #include <bits/stdc++.h>
 using namespace std;
 #include "../../utils/SolutionBase.h"
-class RaceCondition : public SolutionBase {
-    typedef pair<int, int> pos;
 
+namespace RaceConditionData {
+using pos = pair<int, int>;
+}
+
+template <>
+struct std::hash<RaceConditionData::pos> {
+    size_t operator()( RaceConditionData::pos const& p ) const {
+        return p.first * 200 + p.second;
+    }
+};
+
+class RaceCondition : public SolutionBase {
+    using pos = RaceConditionData::pos;
+    friend struct std::hash<pos>;
     enum cellStatus {
         WALL,
         EMPTY
@@ -22,17 +34,17 @@ class RaceCondition : public SolutionBase {
         return { curPos.first + dx[id], curPos.second + dy[id] };
     }
 
-    int Dijkstra( pos const& start, pos const& end, vector<vector<cellStatus>> const& roadMap, map<pos, int>& path ) {
+    int Dijkstra( pos const& start, pos const& end, vector<vector<cellStatus>> const& roadMap ) {
         int rows = roadMap.size(), cols = roadMap[0].size();
         vector<vector<int>> cost( rows, vector<int>( cols, INT_MAX ) );
         vector<vector<int>> optimized( rows, vector<int>( cols, false ) );
-        priority_queue<pair<int, pos>, vector<pair<int, pos>>, greater<>> pq;
-
+        using pqElem = pair<int, pos>;
+        priority_queue<pqElem, vector<pqElem>, greater<>> pq;
         pq.push( { 0, start } );
         cost[start.first][start.second] = 0;
         path.emplace( start, 0 );
         while ( !pq.empty() ) {
-            auto [curCost, curPos] = move( const_cast<pair<int, pos>&>( pq.top() ) );
+            auto [curCost, curPos] = move( const_cast<pqElem&>( pq.top() ) );
             pq.pop();
             // // TODO how to filter curCost == cost[start.first][start.second]
             if ( optimized[curPos.first][curPos.second] || curCost > cost[curPos.first][curPos.second] ) {
@@ -82,7 +94,7 @@ class RaceCondition : public SolutionBase {
                         break;
                 }
             }
-            roadMap.push_back( row );
+            roadMap.emplace_back( move( row ) );
         }
         input.close();
         return;
@@ -95,7 +107,7 @@ class RaceCondition : public SolutionBase {
         // for( int target : targets ) {
         int res = 0;
         int rows = roadMap.size(), cols = roadMap[0].size();
-        for ( auto [curPos, curCost] : path ) {
+        for ( auto const& [curPos, curCost] : path ) {
             if ( isValid( rows, cols, curPos, roadMap ) ) {
                 for ( int k = 0; k < 4; k++ ) {
                     pos wallPos = getNextPos( curPos, k );
@@ -146,12 +158,12 @@ class RaceCondition : public SolutionBase {
     }
     vector<vector<cellStatus>> roadMap;
     pos start, end;
-    map<pos, int> path;
+    unordered_map<pos, int> path;
 
    public:
     void Solution1() {
         readMap();
-        Dijkstra( start, end, roadMap, path );
+        Dijkstra( start, end, roadMap );
         printRes( 1, cheat() );
         return;
     }

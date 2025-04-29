@@ -44,6 +44,10 @@ Prove:
 2. Any equivalent cost path is enqued once.
 3. Once a vertex is relaxed, the path is already in **current** optimal status, this status will be settled when poped from the priority queue.
 
+### Day 22 Monkey Market
+
+Through trial, I have given up the multithreading apporach due to time insufficient. I think the reason might be the cache missing in the competitive occupation among threads.
+
 ### Day 24 Crossed Wires
 
 [Cascading Full adder](./Day24/GatesVisualize.md)

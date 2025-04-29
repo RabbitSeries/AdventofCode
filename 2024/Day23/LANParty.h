@@ -96,10 +96,10 @@ class LANParty : public SolutionBase {
             for ( int i = 0; i < maxThread; i++ ) {
                 int startRow = i * processPerThread;
                 int endRow = ( i == maxThread - 1 ) ? LANNetwork.size() : ( i + 1 ) * processPerThread;
-                threadList.push_back( thread( threadTask, startRow, endRow, ref( connections ), ref( connectionsMutex ), ref( LANNetwork ) ) );
+                threadList.push_back( thread( threadTask, startRow, endRow, ref( connections ), ref( connectionsMutex ), cref( LANNetwork ) ) );
             }
         } else {
-            threadList.push_back( thread( threadTask, 0, LANNetwork.size(), ref( connections ), ref( connectionsMutex ), ref( LANNetwork ) ) );
+            threadList.push_back( thread( threadTask, 0, LANNetwork.size(), ref( connections ), ref( connectionsMutex ), cref( LANNetwork ) ) );
         }
         for ( auto& t : threadList ) {
             t.join();
