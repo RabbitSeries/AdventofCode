@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-
 #include "../../utils/SolutionBase.h"
 class LANParty : public SolutionBase {
     void readFile() {
@@ -17,7 +16,6 @@ class LANParty : public SolutionBase {
         }
         return;
     }
-
     static inline bool isConnected( string const& Host, string const& ConnectionNextwork, map<string, map<string, bool>> const& LANNetWork ) {
         bool connected = true;
         for ( size_t i = 0; i < ConnectionNextwork.size(); i += 2 ) {
@@ -31,7 +29,7 @@ class LANParty : public SolutionBase {
 
     static inline bool checkUnique( string const& ConnectionNextwork, map<string, string> const& connections ) {
         vector<string> enumeration = { ConnectionNextwork.substr( 0, 2 ), ConnectionNextwork.substr( 2, 2 ), ConnectionNextwork.substr( 4, 2 ) };
-        sort( enumeration.begin(), enumeration.end(), less<string>() );
+        sort( enumeration.begin(), enumeration.end() );
         bool isUnique = true;
         do {
             if ( connections.count( enumeration[0] + enumeration[1] + enumeration[2] ) != 0 ) {
@@ -68,7 +66,7 @@ class LANParty : public SolutionBase {
     }
 
     static void threadTask( int startRow, int endRow, map<string, string>& connections, mutex& connectionsMutex, map<string, map<string, bool>> const& LANNetWork ) {
-        std::map<std::string, std::map<std::string, bool>>::const_iterator it = LANNetWork.begin(), end = LANNetWork.end();
+        auto it = LANNetWork.cbegin(), end = LANNetWork.cend();
         // auto it = LANNetWork.begin();
         while ( distance( it, LANNetWork.end() ) != endRow - startRow ) {
             it++;
@@ -147,13 +145,11 @@ class LANParty : public SolutionBase {
         for ( size_t i = 0; i < maxConnection.size(); i += 2 ) {
             passWord.push_back( maxConnection.substr( i, 2 ) );
         }
-        ostringstream ss;
-        sort( passWord.begin(), passWord.end(), less<>{} );
-        ss << passWord[0];
-        for_each( passWord.begin() + 1, passWord.end(), [&]( string host ) {
-            ss << "," << host;
-        } );
-        printRes( 2, ss.str() );
+        sort( passWord.begin(), passWord.end() );
+        printRes( 2, accumulate( passWord.begin() + 1, passWord.end(), passWord.front(),
+                                 []( string const& init, string const& host ) {
+                                     return init + "," + host;
+                                 } ) );
         return;
     }
 };

@@ -1,19 +1,20 @@
-#include <bits/stdc++.h>
+#include <string>
+#include <vector>
+#include <queue>
+
 using namespace std;
-
-namespace data {
-typedef unsigned long long ull;
-};
-
-#include "../../utils/SolutionBase.h"
+// #include "../../utils/SolutionBase.h"
 class TenaryMachine : public SolutionBase {
     typedef unsigned long long ull;
-    static size_t pc;
-    static ull ra, rb, rc;
+    size_t pc = 0;
+    ull ra = 0, rb = 0, rc = 0;
+    string outBuf = "";
+
+    void ( TenaryMachine::* fun[8] )( int operand ) = { &TenaryMachine::adv, &TenaryMachine::bxl, &TenaryMachine::bst, &TenaryMachine::jnz, &TenaryMachine::bxc, &TenaryMachine::out, &TenaryMachine::bdv, &TenaryMachine::cdv };
 
     // It turns out that only opcode 0 will change the value of ra, and the example of this problem always use literal num to change its value. Within one round ra is only changed once, and was all the way devided to zero.
     // out = out + "," + to_string( ( ( ( ( modulo ) ^ 7 ) ^ ( tmp / ( unsigned long long )( powf128( 2, ( modulo ) ^ 7 ) ) ) ) ^ 7 ) % 8 );
-    static void adv( int operand ) {
+    void adv( int operand ) {
 #ifdef UNIX
         ull denominator = (ull)powf128( 2, combo( operand ) );
 #else
@@ -23,17 +24,17 @@ class TenaryMachine : public SolutionBase {
         return;
     }
 
-    static void bxl( int operand ) {
+    void bxl( int operand ) {
         rb = ( ( rb ) ^ ull( operand ) );
         return;
     }
 
-    static void bst( int operand ) {
+    void bst( int operand ) {
         rb = combo( operand ) % 8;
         return;
     }
 
-    static void jnz( int operand ) {
+    void jnz( int operand ) {
         if ( ra == 0 ) {
             pc += 2;
             return;
@@ -42,29 +43,27 @@ class TenaryMachine : public SolutionBase {
         }
     }
 
-    static void bxc( int operand ) {
+    void bxc( int operand ) {
         rb = ( ( rb ) ^ ( rc ) );
     }
 
-    static void out( int operand ) {
+    void out( int operand ) {
         outBuf += "," + to_string( combo( operand ) % 8 );
     }
 
-    static void bdv( int operand ) {
+    void bdv( int operand ) {
         ull numerator = ra;
         ull denominator = (ull)pow( 2, combo( operand ) );
         rb = numerator / denominator;
     }
 
-    static void cdv( int operand ) {
+    void cdv( int operand ) {
         ull numerator = ra;
         ull denominator = (ull)pow( 2, combo( operand ) );
         rc = numerator / denominator;
     }
 
-    static string outBuf;
-
-    static ull combo( int operand ) {
+    ull combo( int operand ) {
         if ( operand <= 3 ) {
             return (ull)operand;
         }
@@ -90,11 +89,9 @@ class TenaryMachine : public SolutionBase {
         outBuf.clear();
     }
 
-    static void ( *fun[8] )( int operand );
-
-    static void operation( int opcode, int operand ) {
-        fun[opcode]( operand );
-        if ( fun[opcode] != jnz ) {
+    void operation( int opcode, int operand ) {
+        ( this->*( fun[opcode] ) )( operand );
+        if ( fun[opcode] != &TenaryMachine::jnz ) {
             pc += 2;
         }
     }

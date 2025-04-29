@@ -2,13 +2,41 @@
 using namespace std;
 #include "../../utils/SolutionBase.h"
 class CeresSearch : public SolutionBase {
-    static const int dx[8][4];
+    const int dx[8][4]{
+        { 0, 0, 0, 0 },
+        { 0, 0, 0, 0 },
+        { 0, 1, 2, 3 },
+        { 0, 1, 2, 3 },
+        { 0, 1, 2, 3 },
+        { 0, -1, -2, -3 },
+        { 0, -1, -2, -3 },
+        { 0, -1, -2, -3 },
+    };
 
-    static const int dy[8][4];
+    const int dy[8][4]{
+        { 0, 1, 2, 3 },
+        { 0, -1, -2, -3 },
+        { 0, 1, 2, 3 },
+        { 0, 0, 0, 0 },
+        { 0, -1, -2, -3 },
+        { 0, 1, 2, 3 },
+        { 0, 0, 0, 0 },
+        { 0, -1, -2, -3 },
+    };
 
-    static const int xdx[4][4];
+    const int xdx[4][4]{
+        { -1, 0, 1 },
+        { -1, 0, 1 },
+        { 1, 0, -1 },
+        { 1, 0, -1 },
+    };
 
-    static const int xdy[4][4];
+    const int xdy[4][4]{
+        { -1, 0, 1 },
+        { 1, 0, -1 },
+        { -1, 0, 1 },
+        { 1, 0, -1 },
+    };
 
     inline bool isXMAS( int i, int j, int k, vector<vector<char>> const& m ) {
         int rows = m.size(), rols = m[0].size();
