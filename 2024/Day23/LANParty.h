@@ -3,16 +3,11 @@ using namespace std;
 #include "../../utils/SolutionBase.h"
 class LANParty : public SolutionBase {
     void readFile() {
-        ifstream input( "Day23/input.txt" );
+        stringstream input;
+        input << ifstream( "Day23/input.txt" ).rdbuf();
         for ( string buf; getline( input, buf ); ) {
-            regex re( "([a-z]+)-([a-z]+)" );
-            smatch m;
-            regex_search( buf, m, re );
-            if ( m.size() == 3 ) {
-                string pc1 = m[1], pc2 = m[2];
-                LANNetwork[pc1].insert( pc2 );
-                LANNetwork[pc2].insert( pc1 );
-            }
+            LANNetwork[buf.substr( 0, 2 )].emplace( buf.substr( 3 ) );
+            LANNetwork[buf.substr( 3 )].emplace( buf.substr( 0, 2 ) );
         }
         return;
     }
@@ -47,24 +42,17 @@ class LANParty : public SolutionBase {
     void Solution2() {
         vector<set<string>> connections;
         for ( auto& [atom, _] : LANNetwork ) {
-            if ( connections.empty() ) {
-                connections.emplace_back( set( { atom } ) );
-            } else {
-                bool added = false;
-                for ( auto& connection : connections ) {
-                    if ( isConnected( atom, connection ) ) {
-                        connection.insert( atom );
-                        // Don't break here.
-                        added = true;
-                    }
+            for ( auto& connection : connections ) {
+                if ( isConnected( atom, connection ) ) {
+                    connection.insert( atom );  // Don't break here.
+                    continue;
                 }
-                if ( !added )
-                    connections.emplace_back( set( { atom } ) );
             }
+            connections.emplace_back( set( { atom } ) );
         }
-        set<string> passWord = *ranges::max_element( connections.begin(), connections.end(), {}, []( decltype( connections )::value_type const& conn ) {
+        set<string> passWord = move( const_cast<set<string>&>( *ranges::max_element( connections.begin(), connections.end(), {}, []( decltype( connections )::value_type const& conn ) {
             return conn.size();
-        } );
+        } ) ) );
         printRes( 2, accumulate( ++passWord.begin(), passWord.end(), *passWord.begin(), []( string const& init, string const& host ) {
                       return init + "," + host;
                   } ) );
