@@ -9,9 +9,10 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
  Year | Progress        | Best TimeCost (seconds)
 :----:|:---------------:|:--------------:
 2023  | 20/25 ⭐⭐      |     Not yet
-2024  | 25/25 ⭐⭐      |    1.255804
+2024  | 25/25 ⭐⭐      |    0.965016
 
 > Runs on github actions
+> Maybe use ifstream.rdbuf() to stringstream at once will benefit more time efficiency.
 
 ### 2024 Progress: 25/25 ⭐⭐
 
@@ -66,7 +67,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 Language           | files | blank | comment | code
 -------------------|-------|-------|---------|-----
-C/C++ Header       |    31 |   246 |     300 | 3524
-Java               |    32 |   425 |     114 | 3195
-C++                |    13 |    58 |      28 |  867
-SUM:               |    76 |   729 |     442 | 7586
+C/C++ Header       |    32 |   222 |     272 | 3385
+Java               |    32 |   429 |     138 | 3233
+C++                |     9 |    52 |      28 |  810
+SUM:               |    73 |   703 |     438 | 7428
