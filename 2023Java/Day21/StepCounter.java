@@ -144,18 +144,14 @@ public class StepCounter {
 
     public void Solution2() throws Exception {
         final int STEP = 26501365;
-        int Layer = STEP / COL;
+        long Layer = STEP / COL;
         long oddBase = SimpleBFS(start, getOdd(ROW + ROW / 2), ROW + ROW / 2);
         long oddCorner = oddBase - SimpleBFS(start, getOdd(ROW / 2), ROW / 2);
         long evenBase = SimpleBFS(start, getEven(ROW + ROW / 2), ROW + ROW / 2);
         long evenCorner = evenBase - SimpleBFS(start, getEven(ROW / 2), ROW / 2);
-
-        long oddBlock = LongStream.rangeClosed(1, Layer).filter(l -> l % 2 == 0).sum() * 4 + 1;
-        long evenBlock = LongStream.rangeClosed(1, Layer).filter(l -> l % 2 == 1).sum() * 4;
-        System.out.println("Solution 2: " + (oddBlock * oddBase + evenBlock * evenBase + Layer * (evenCorner - oddCorner) - oddCorner));
+        System.out.println("Solution 2: " + ((Layer + 1) * (Layer + 1) * oddBase + Layer * Layer * evenBase - (Layer + 1) * oddCorner + Layer * evenCorner));
     }
 
-    // WTF?
     public void LagrangeSolution() throws Exception {
         FoldTo(2);
         int[] steps = {
@@ -180,5 +176,6 @@ public class StepCounter {
         StepCounter Day21 = new StepCounter();
         Day21.Solution1();
         Day21.Solution2();
+        // Day21.LagrangeSolution();
     }
 }
