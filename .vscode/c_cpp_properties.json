@@ -9,10 +9,16 @@
         },
         {
             "name": "MinGW",
-            "compilerPath": "D:/Build_Tool_Lib/x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev0/mingw64/bin/g++.exe",
+            "compilerPath": "D:/Build_Tool_Lib/x86_64-14.2.0-release-win32-seh-msvcrt-rt_v12-rev2/bin/g++.exe",
             "includePath": [
                 "D:\\Build_Tool_Lib\\boost\\boost_1_87_0_MinGW"
             ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "${workspaceFolder}"
+                ]
+            },
             "cStandard": "gnu23",
             "cppStandard": "gnu++23",
             "intelliSenseMode": "windows-gcc-x64"

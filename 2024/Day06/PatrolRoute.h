@@ -1,10 +1,8 @@
 #include "bits/stdc++.h"
 using namespace std;
-
-typedef pair<int, int> pos;
-
 #include "../../utils/SolutionBase.h"
 class PatrolRoute : public SolutionBase {
+    using pos = pair<int, int>;
     const char face[4]{ '^', '>', 'v', '<' };
     const unordered_map<char, int> faceId{
         { '^', 0 },

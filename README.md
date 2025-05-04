@@ -11,7 +11,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 2023  | 20/25 ⭐⭐      |     Not yet
 2024  | 25/25 ⭐⭐      |    0.965016
 
-> Runs on github actions
+> Runs on github actions.
 > Maybe use ifstream.rdbuf() to stringstream at once will benefit more time efficiency.
 
 ### 2024 Progress: 25/25 ⭐⭐
