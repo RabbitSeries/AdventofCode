@@ -12,6 +12,10 @@ I don't know what circuit [this](./Day20/mermaid.md) is, but it seems that the c
 
 Hard to exlain the langrange solution. See [Visualiza](./Day21/Visualize.ipynb) for BFS solution and math calculation.
 
+## Day22
+
+Amazing! I finished Solution1 in one shot!
+
 ## Regex diff
 
 Lang    | Regex URL
