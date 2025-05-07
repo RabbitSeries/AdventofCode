@@ -14,7 +14,7 @@ Hard to exlain the langrange solution. See [Visualiza](./Day21/Visualize.ipynb) 
 
 ## Day22
 
-Amazing! I finished Solution1 in one shot!
+Amazing! I finished both Solution1 and Solution2 in one shot!
 
 ## Regex diff
 

@@ -7,15 +7,21 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
 import java.util.stream.IntStream;
+
 import JavaDataModel.TenaryTuple;
 
 public class CubeStack {
+    final int EMPTY = -1;
+
     class Point3D extends TenaryTuple<Integer, Integer, Integer> {
         public Point3D(TenaryTuple<Integer, Integer, Integer> rhs) {
             super(rhs.getE1(), rhs.getE2(), rhs.getE3());
@@ -37,7 +43,7 @@ public class CubeStack {
             Delta = End.minus(Start);
         }
 
-        int id = -1;
+        int id = EMPTY;
 
         public int getId() {
             return this.id;
@@ -106,7 +112,7 @@ public class CubeStack {
         BufferedReader input = new BufferedReader(new FileReader("input.txt"));
         for (String buf; (buf = input.readLine()) != null;) {
             CubeList.add(ParseCube(buf));
-            CubeList.getLast().setId(CubeList.size());
+            CubeList.getLast().setId(CubeList.size() - 1);
             Volume.setE1(Math.max(Volume.getE1(), CubeList.getLast().Start.getE1()));
             Volume.setE1(Math.max(Volume.getE1(), CubeList.getLast().End.getE1()));
             Volume.setE2(Math.max(Volume.getE2(), CubeList.getLast().Start.getE2()));
@@ -119,7 +125,7 @@ public class CubeStack {
             IntStream.rangeClosed(0, Volume.getE2()).forEach(y -> {
                 Space.get(x).add(new ArrayList<>());
                 // Space.get(x).set(y, new ArrayList<>(Volume.getE3() + 1)); The initcapacity list is still empty.
-                IntStream.rangeClosed(0, Volume.getE3()).forEach(z -> Space.get(x).get(y).add(0));
+                IntStream.rangeClosed(0, Volume.getE3()).forEach(_ -> Space.get(x).get(y).add(EMPTY));
             });
         });
         CubeList.forEach(cube -> {
@@ -145,7 +151,7 @@ public class CubeStack {
         List<List<Character>> Projection = new ArrayList<>(); // X,Z
         IntStream.rangeClosed(0, Volume.getE1()).forEach(x -> {
             Projection.add(new ArrayList<>());
-            IntStream.rangeClosed(0, Volume.getE3()).forEach(z -> {
+            IntStream.rangeClosed(0, Volume.getE3()).forEach(_ -> {
                 Projection.get(x).add('.');
             });
         });
@@ -153,7 +159,7 @@ public class CubeStack {
             for (int z : IntStream.rangeClosed(0, Volume.getE3()).toArray()) {
                 for (int y : IntStream.rangeClosed(0, Volume.getE2()).toArray()) {
                     if (Space.get(x).get(y).get(z) != 0) {
-                        Projection.get(x).set(z, (char) (Space.get(x).get(y).get(z) - 1 + 'A'));
+                        Projection.get(x).set(z, (char) (Space.get(x).get(y).get(z) + 'A'));
                         break;
                     }
                 }
@@ -173,7 +179,7 @@ public class CubeStack {
         List<List<Character>> Projection = new ArrayList<>(); // Y,Z
         IntStream.rangeClosed(0, Volume.getE2()).forEach(y -> {
             Projection.add(new ArrayList<>());
-            IntStream.rangeClosed(0, Volume.getE3()).forEach(z -> {
+            IntStream.rangeClosed(0, Volume.getE3()).forEach(_ -> {
                 Projection.get(y).add('.');
             });
         });
@@ -181,7 +187,7 @@ public class CubeStack {
             for (int z : IntStream.rangeClosed(0, Volume.getE3()).toArray()) {
                 for (int x : IntStream.rangeClosed(0, Volume.getE1()).boxed().sorted(Comparator.comparing(Integer::intValue).reversed()).toList()) {
                     if (Space.get(x).get(y).get(z) != 0) {
-                        Projection.get(y).set(z, (char) (Space.get(x).get(y).get(z) - 1 + 'A'));
+                        Projection.get(y).set(z, (char) (Space.get(x).get(y).get(z) + 'A'));
                         break;
                     }
                 }
@@ -201,7 +207,7 @@ public class CubeStack {
     }
 
     Cube getCube(int cubeId) {
-        return CubeList.get(cubeId - 1);
+        return CubeList.get(cubeId);
     }
 
     Optional<Cube> FallCube(Cube cube) {
@@ -211,8 +217,8 @@ public class CubeStack {
             int y = cube.Start.getE2();
             for (int x : getRange(cube.Start.getE1(), cube.End.getE1())) {
                 int supportSpace = Space.get(x).get(y).get(h - 1);
-                if (supportSpace != 0) {
-                    support = Optional.of(CubeList.get(supportSpace - 1));
+                if (supportSpace >= 0) {
+                    support = Optional.of(getCube(supportSpace));
                     BuildConnection(cube, support.get());
                 }
             }
@@ -220,15 +226,15 @@ public class CubeStack {
                 return Optional.empty();
             }
             for (int x : getRange(cube.Start.getE1(), cube.End.getE1())) {
-                Space.get(x).get(y).set(h, 0);
+                Space.get(x).get(y).set(h, EMPTY);
                 Space.get(x).get(y).set(h - 1, cube.getId());
             }
         } else if (!cube.Delta.getE2().equals(0)) {
             int x = cube.Start.getE1();
             for (int y : getRange(cube.Start.getE2(), cube.End.getE2())) {
                 int supportSpace = Space.get(x).get(y).get(h - 1);
-                if (supportSpace != 0) {
-                    support = Optional.of(CubeList.get(supportSpace - 1));
+                if (supportSpace >= 0) {
+                    support = Optional.of(getCube(supportSpace));
                     BuildConnection(cube, support.get());
                 }
             }
@@ -236,18 +242,18 @@ public class CubeStack {
                 return Optional.empty();
             }
             for (int y : getRange(cube.Start.getE2(), cube.End.getE2())) {
-                Space.get(x).get(y).set(h, 0);
+                Space.get(x).get(y).set(h, EMPTY);
                 Space.get(x).get(y).set(h - 1, cube.getId());
             }
         } else {
             int x = cube.Start.getE1();
             int y = cube.Start.getE2();
             int supportSpace = Space.get(x).get(y).get(h - 1);
-            if (supportSpace != 0) {
-                BuildConnection(cube, CubeList.get(supportSpace - 1));
+            if (supportSpace >= 0) {
+                BuildConnection(cube, getCube(supportSpace));
                 return Optional.empty();
             }
-            Space.get(x).get(y).set(Math.max(cube.Start.getE3(), cube.End.getE3()), 0);
+            Space.get(x).get(y).set(Math.max(cube.Start.getE3(), cube.End.getE3()), EMPTY);
             Space.get(x).get(y).set(h - 1, cube.getId());
         }
         cube.Fall();
@@ -275,7 +281,7 @@ public class CubeStack {
         }
     }
 
-    void Soltuion1() throws Exception {
+    void Solution1() throws Exception {
         readFile();
         // ProjectY();
         // ProjectX();
@@ -284,17 +290,45 @@ public class CubeStack {
         // ProjectX();
         System.out.println("Solution 1: " + CubeList.stream().filter(cube -> {
             for (int i : cube.getSupportingCubes()) {
-                if (CubeList.get(i - 1).getSupportedByCubes().size() <= 1) {
+                if (CubeList.get(i).getSupportedByCubes().size() <= 1) {
                     return false;
                 }
             }
-            // System.out.println((char) (cube.getId() - 1 + 'A'));
+            // System.out.println((char) (cube.getId() + 'A'));
             return true;
         }).count());
     }
 
+    HashMap<Integer, Integer> NodeCnt = new HashMap<>();
+
+    void Solution2() throws Exception {
+        List<Integer> InDegree = new ArrayList<>();
+        Queue<Cube> q = new LinkedList<>();
+        q.addAll(CubeList.stream().filter(cube -> cube.getSupportingCubes().size() > 0).toList());
+        int res = 0;
+        while (!q.isEmpty()) {
+            Cube disintergrated = q.poll();
+            Queue<Cube> topoQ = new LinkedList<>();
+            topoQ.add(disintergrated);
+            InDegree.clear();
+            InDegree.addAll(CubeList.stream().map(cube -> cube.getSupportedByCubes().size()).toList());
+            while (!topoQ.isEmpty()) {
+                Cube cube = topoQ.poll();
+                for (Integer supportingId : cube.getSupportingCubes().stream().toList()) {
+                    InDegree.set(supportingId, InDegree.get(supportingId) - 1);
+                    if (InDegree.get(supportingId) == 0) {
+                        topoQ.add(getCube(supportingId));
+                        res++;
+                    }
+                }
+            }
+        }
+        System.out.println("Solution 2: " + res);
+    }
+
     public static void main(String[] args) throws Exception {
         CubeStack Day22 = new CubeStack();
-        Day22.Soltuion1();
+        Day22.Solution1();
+        Day22.Solution2();
     }
 }
