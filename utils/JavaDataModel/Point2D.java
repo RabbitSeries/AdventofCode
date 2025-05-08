@@ -1,9 +1,8 @@
 package JavaDataModel;
 
-import java.util.List;
+import java.util.Comparator;
 
-public class Point2D extends Pair<Integer, Integer> {
-    public List<Pair<Integer, Integer>> pathList;
+public class Point2D extends Pair<Integer, Integer> implements Comparator<Point2D>, Comparable<Point2D> {
 
     public Point2D extractPosPoint2D() {
         // Drop pathList
@@ -24,6 +23,24 @@ public class Point2D extends Pair<Integer, Integer> {
     }
 
     // up down left right lu ld ru rd
-    public static int[] dy = new int[] {0, 0, -1, 1, -1, -1, 1, 1};
-    public static int[] dx = new int[] {-1, 1, 0, 0, -1, 1, -1, 1};
+    public static int[] dy = new int[] {
+            0, 0, -1, 1, -1, -1, 1, 1
+    };
+
+    public static int[] dx = new int[] {
+            -1, 1, 0, 0, -1, 1, -1, 1
+    };
+
+    @Override
+    public int compareTo(Point2D rhs) {
+        if (this == rhs)
+            return 0;
+        return this.first.equals(rhs.first) ? Integer.compare(this.second, rhs.second) : Integer.compare(this.first, rhs.first);
+    }
+
+    @Override
+    public int compare(Point2D a, Point2D b) {
+        return a.compareTo(b);
+    }
+
 }

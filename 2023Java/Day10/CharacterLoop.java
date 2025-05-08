@@ -9,7 +9,9 @@ import JavaDataModel.*;
 
 public class CharacterLoop {
     List<List<Character>> PipeMap;
+
     int rows, cols;
+
     Point2D StartPos;
 
     void readFile() throws IOException {
@@ -66,19 +68,24 @@ public class CharacterLoop {
                 && PipeMap.get(curPos.getKey()).get(curPos.getValue()) != '.';
     }
 
+    class Step extends Pair<Point2D, Integer> {
+        Step(Point2D pos, int face) {
+            super(pos, face);
+        }
+
+        List<Point2D> PathList = new ArrayList<>();
+    }
+
     List<Point2D> Solution1() throws IOException, InterruptedException {
         readFile();
-        Queue<Entry<Point2D, Integer>> q = new LinkedList<>();
-        HashMap<Entry<Point2D, Integer>, Boolean> visited = new HashMap<>();
-
+        Queue<Step> q = new LinkedList<>();
+        HashSet<Step> visited = new HashSet<>();
         for (int i = 0; i < 4; i++) {
             Point2D nextPos = Point2D.getNextPosition(StartPos, i);
-
-            if (isValid(nextPos) && PipeModel.NextPipeDirection.get(getPipe(nextPos))
-                    .getOrDefault(i, -1) != -1) {
+            if (isValid(nextPos) && PipeModel.NextPipeDirection.get(getPipe(nextPos)).getOrDefault(i, -1) != -1) {
                 // Start of path, ClockOrder is null;
-                q.add(new SimpleEntry<>(nextPos, i));
-                visited.put(new SimpleEntry<>(nextPos, i), true);
+                q.add(new Step(nextPos, i));
+                visited.add(new Step(nextPos, i));
             }
         }
 
@@ -91,32 +98,25 @@ public class CharacterLoop {
                 // Level info
                 Point2D curPos = front.getKey();
                 int curFace = front.getValue();
-
-                // Path process
-                if (curPos.pathList == null) {
-                    curPos.pathList = new ArrayList<>();
-                }
-                curPos.pathList.add(curPos.extractPosPoint2D());
+                front.PathList.add(curPos.extractPosPoint2D());
 
                 // Destination process
                 if (curPos.equals(StartPos)) {
                     System.out.println("Solution 1: " + loopLen / 2);
-                    return new ArrayList<>(curPos.pathList.stream()
-                            .map(entry -> new Point2D(entry.getKey(), entry.getValue())).toList());
+                    return new ArrayList<>(front.PathList.stream().map(entry -> new Point2D(entry.getKey(), entry.getValue())).toList());
                 }
 
                 // Construct nextPos info
                 int nextFace =
                         PipeModel.NextPipeDirection.get(getPipe(curPos)).getOrDefault(curFace, -1);
                 if (nextFace != -1) {
-                    Point2D nextPos = Point2D.getNextPosition(curPos, nextFace);
+                    Step nextStep = new Step(Point2D.getNextPosition(curPos, nextFace), nextFace);
 
                     // Enqueue
-                    if (isValid(nextPos)
-                            && !visited.getOrDefault(new SimpleEntry<>(nextPos, nextFace), false)) {
-                        nextPos.pathList = new ArrayList<>(curPos.pathList);
-                        q.add(new SimpleEntry<>(nextPos, nextFace));
-                        visited.put(new SimpleEntry<>(nextPos, nextFace), true);
+                    if (isValid(nextStep.getKey()) && !visited.contains(nextStep)) {
+                        nextStep.PathList = new ArrayList<>(front.PathList);
+                        q.add(nextStep);
+                        visited.add(nextStep);
                     }
                 }
             }
@@ -126,6 +126,7 @@ public class CharacterLoop {
     }
 
     static ClockOrder PathClockOrder = null;
+
     static boolean innerBlock = true;
 
     int innerFlood(Point2D s, HashMap<Point2D, Boolean> visited) {
@@ -182,8 +183,8 @@ public class CharacterLoop {
     }
 
     List<Point2D> getInnerAdjacents(Point2D curPos, Point2D prePos,
-            HashMap<Character, HashMap<Integer, List<Integer>>> QueryModel,
-            HashMap<Point2D, Boolean> visited) {
+        HashMap<Character, HashMap<Integer, List<Integer>>> QueryModel,
+        HashMap<Point2D, Boolean> visited) {
         int inDirection = -1;
         int dx = curPos.getKey() - prePos.getKey(), dy = curPos.getValue() - prePos.getValue();
         if (dx == 0) {
