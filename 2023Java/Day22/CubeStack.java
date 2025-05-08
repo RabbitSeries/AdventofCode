@@ -125,7 +125,7 @@ public class CubeStack {
             IntStream.rangeClosed(0, Volume.getE2()).forEach(y -> {
                 Space.get(x).add(new ArrayList<>());
                 // Space.get(x).set(y, new ArrayList<>(Volume.getE3() + 1)); The initcapacity list is still empty.
-                IntStream.rangeClosed(0, Volume.getE3()).forEach(_ -> Space.get(x).get(y).add(EMPTY));
+                IntStream.rangeClosed(0, Volume.getE3()).forEach(l -> Space.get(x).get(y).add(EMPTY));
             });
         });
         CubeList.forEach(cube -> {
@@ -151,7 +151,7 @@ public class CubeStack {
         List<List<Character>> Projection = new ArrayList<>(); // X,Z
         IntStream.rangeClosed(0, Volume.getE1()).forEach(x -> {
             Projection.add(new ArrayList<>());
-            IntStream.rangeClosed(0, Volume.getE3()).forEach(_ -> {
+            IntStream.rangeClosed(0, Volume.getE3()).forEach(l -> {
                 Projection.get(x).add('.');
             });
         });
@@ -179,7 +179,7 @@ public class CubeStack {
         List<List<Character>> Projection = new ArrayList<>(); // Y,Z
         IntStream.rangeClosed(0, Volume.getE2()).forEach(y -> {
             Projection.add(new ArrayList<>());
-            IntStream.rangeClosed(0, Volume.getE3()).forEach(_ -> {
+            IntStream.rangeClosed(0, Volume.getE3()).forEach(l -> {
                 Projection.get(y).add('.');
             });
         });

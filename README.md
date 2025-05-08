@@ -8,8 +8,8 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
  Year | Progress        | Best TimeCost (seconds)
 :----:|:---------------:|:--------------:
-2023  | 20/25 ⭐⭐      |     Not yet
-2024  | 25/25 ⭐⭐      |    0.965016
+2023  | 23.5/25 ⭐⭐   |     Not yet
+2024  | 25/25 ⭐⭐     |    0.965016
 
 > Runs on github actions.
 > Maybe use ifstream.rdbuf() to stringstream at once will benefit more time efficiency.
