@@ -1,4 +1,6 @@
-# 2023 AoC Solution Repo
+# 2023 Summary
+
+This year is full of mathematics.
 
 ## Day19
 
@@ -23,6 +25,10 @@ This problem requires some data pattern examine. Thanks to the well designed DAG
 For part 2, BFS-based brute force solution will enlarge the Queue size to the same scale of DFS traversal times, which requires much time for space reallocation comparing to DFS stack reallocation.
 
 This difference also remind the my [AVL tree implementation](https://github.com/RabbitSeries/Algorithms/blob/main/Datastruct/Tree/AVL_Iterative.hpp), the manually maintained non-DFS stack is slower than simple DFS. This is because the height of a AVL is only $log_{2}n$, so DFS won't cause stack overflow problem. Under this case, stack maintainance can be handled by the OS process controll block for context reservation and restore of which the time cost is rather low comparing to the dynamically rellocated stack.
+
+## Day24
+
+Learning python.
 
 ## Regex diff
 

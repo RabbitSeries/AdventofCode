@@ -157,11 +157,9 @@ public class LongestHike {
         System.out.println("Solution 1: " + Dist.get(Dest));
     }
 
-    // JVM is sooooooooooooooooooo slow for DFS.
-    int DFSCnt = 0;
-
+    // int DFSCnt = 0;
     int DFS(Point2D curPos, Set<Point2D> visited, int curPathLen) {
-        DFSCnt++;
+        // DFSCnt++;
         int res = curPathLen;
         for (Path p : UndidrectedNetwork.get(curPos)) {
             Point2D nextEnd = p.EndPos;
