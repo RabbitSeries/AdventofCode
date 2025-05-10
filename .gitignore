@@ -1,6 +1,7 @@
 exe_*
 *.exe
 /compileRuntime
+/JavaLibs
 /build
 *.class
 /.env
