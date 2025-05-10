@@ -77,7 +77,7 @@ public class HailIntersection {
     void Solution2() throws Exception {
         // Learning Python
         // Ehhhhhhhhhhhhhhhhhhhhh??????????????
-        double scale = 1e13 + 1e14;
+        double scale = 1e12;
         double[][] ri = {
                 {
                         233210433951170.0 / scale, 272655040388795.0 / scale, 179982504986147.0 / scale
@@ -113,19 +113,22 @@ public class HailIntersection {
                 .model(modelFunction(ri, vi))
                 .target(new ArrayRealVector(9)) // Target is zero residuals
                 .lazyEvaluation(false)
-                .maxEvaluations(1000000000)
-                .maxIterations(1000000000)
+                .maxEvaluations(Integer.MAX_VALUE)
+                .maxIterations(Integer.MAX_VALUE)
                 .build();
 
         // Solve the problem
+
         LevenbergMarquardtOptimizer optimizer = new LevenbergMarquardtOptimizer()
-                .withCostRelativeTolerance(1e-15)
-                .withParameterRelativeTolerance(1e-15);
+                .withCostRelativeTolerance(1e-15) // Default: 1e-10
+                .withParameterRelativeTolerance(1e-15) // Default: 1e-10
+                .withOrthoTolerance(1e-15) // Default: 1e-10
+                .withRankingThreshold(1e-15); // Default: 1e-10
         Optimum optimum = optimizer.optimize(problem);
 
         // Extract and process solution
         double[] solution = optimum.getPoint().toArray();
-        System.out.println("Solution 2: " + (long) (solution[0] * scale + solution[1] * scale + solution[2] * scale));
+        System.out.println("Solution 2: " + ((long) (solution[0] * scale) + (long) (solution[1] * scale) + (long) (solution[2] * scale)));
     }
 
     private MultivariateJacobianFunction modelFunction(double[][] ri, double[][] vi) {
