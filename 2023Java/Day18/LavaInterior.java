@@ -91,6 +91,7 @@ public class LavaInterior {
         // Calculate area using shoelace formula
         area = Math.abs(area) / 2;
         // Apply Pick's Theorem adjustment
+        // TODO Add formula deduction.
         long total = area + (perimeter / 2) + 1;
         System.out.println("Solution 2: " + total);
     }
