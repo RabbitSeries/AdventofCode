@@ -8,6 +8,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
  Year                           | Progress          | Best TimeCost (seconds)
 :------------------------------:|:-----------------:|:--------------:
+[2023](./2022Python/README.md)    | 2/25 ⭐⭐      |     Not yet
 [2023](./2023Java/README.md)    | 23.5/25 ⭐⭐      |     Not yet
 [2024](./2024/README.md)        | 25/25 ⭐⭐        |    0.965016
 
@@ -16,10 +17,11 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ## Tools
 
-- IDE : [![VSCode](<2024/Images/code-stable.png>)](https://code.visualstudio.com) [![VsCode](https://img.shields.io/badge/VsCode-blue)](https://code.visualstudio.com)
-- Cpp Compiler: ![G++](https://img.shields.io/badge/(GCC)%2014.2.1%2020240910-grey)
-- C++ standard: ![C++23](https://img.shields.io/badge/C%2B%2B-23-purple?logo=C%2B%2B)
-- JVM Version: ![Solution](https://img.shields.io/badge/OpenJDK-21-white?logo=OpenJDK)
+- Editor: [![VSCode](<2024/Images/code-stable.png>) ![VsCode](https://img.shields.io/badge/VsCode-blue)](https://code.visualstudio.com)
+- Cpp Compiler: ![g++](https://img.shields.io/badge/(GCC)%2015.1.1%2020250425-grey)
+- C++ Standard: ![C++23](https://img.shields.io/badge/C%2B%2B-23-purple?logo=C%2B%2B)
+- JVM Version: ![OpenJDK](https://img.shields.io/badge/OpenJDK-21-white?logo=OpenJDK)
+- Python Version: ![Python3.13](https://img.shields.io/badge/Python-3.13.2/3-white?logo=Python)
 - OS: [![Arch Linux](https://img.shields.io/badge/Arch%20Linux-grey?logo=Archlinux)](https://www.archlinux.org) & Windows
 
 ## Links
@@ -31,13 +33,17 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ## TODOs
 
-- [ ] Building java repo.
+- [x] Building c++ 2024.
+- [ ] Optimizing c++ 2024.
+- [ ] Building java 2023.
+- [ ] Building python 2022.
 
 ## Statistics
 
 Language           | files | blank | comment | code
 -------------------|-------|-------|---------|-----
-Java               |    37 |   555 |     202 | 3980
+Java               |    31 |   484 |     190 | 3394
 C/C++ Header       |    31 |   216 |     262 | 3266
 C++                |     8 |    42 |      21 |  588
-SUM:               |    76 |   813 |     485 | 7834
+Python             |     2 |     9 |       0 |   71
+SUM:               |    72 |   751 |     473 | 7319
