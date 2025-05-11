@@ -7,10 +7,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-import JavaDataModel.Pair;
+import org.hipparchus.util.*;
 
 public class HailIntersection {
-
     class Hail {
         public Hail(List<Long> p, List<Long> d) {
             pos = p;
@@ -54,7 +53,7 @@ public class HailIntersection {
     boolean inBoundary(Optional<Pair<Double, Double>> candidate) {
         if (candidate.isPresent()) {
             var p = candidate.get();
-            return p.first >= L && p.first <= R && p.second >= L && p.second <= R;
+            return p.getFirst() >= L && p.getFirst() <= R && p.getSecond() >= L && p.getSecond() <= R;
         }
         return false;
     }
@@ -69,6 +68,7 @@ public class HailIntersection {
 
     void Solution2() throws Exception {
         // Learning Python
+
     }
 
     public static void main(String[] args) throws Exception {

@@ -6,12 +6,15 @@
     "java.project.sourcePaths": [
         "2023Java",
         "2024Java",
-        "utils"
+        "utils",
+        "Legacy/2023"
     ],
     // Default classpath search place
     // Clean plugin cache on each modification.
     "java.project.outputPath": "compileRuntime/bin",
-    "java.project.referencedLibraries": [],
+    "java.project.referencedLibraries": [
+        "JavaLibs/**/*.jar"
+    ],
     // "java.project.referencedLibraries": [
     //     "2024Java/lib/**/*.jar"
     // ],
