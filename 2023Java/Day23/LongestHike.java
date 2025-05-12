@@ -115,8 +115,7 @@ public class LongestHike {
                     curPath.PathLen++;
                     visited.add(curEndPos);// Mark the generated position as visited
                 }
-                OutPath.putIfAbsent(curPath.StartPos, new HashSet<>());// Add curPath ->StartPos - HashSet();
-                OutPath.get(curPath.StartPos).add(curPath);
+                OutPath.computeIfAbsent(curPath.StartPos, pos -> new HashSet<>()).add(curPath);// Add curPath ->StartPos - HashSet();
                 InDgree.put(curEndPos, InDgree.getOrDefault(curEndPos, 0) + 1);// Increase EndPos's InDgree;
                 OutPath.putIfAbsent(curEndPos, new HashSet<>());
                 if (!curEndPos.equals(Dest)) {// Not readching destination yet, continue to search more Path.
@@ -142,11 +141,9 @@ public class LongestHike {
         while (!topoQ.isEmpty()) {
             Point2D curPos = topoQ.poll();
             for (Path p : OutPath.get(curPos)) {
-                UndidrectedNetwork.putIfAbsent(curPos, new HashSet<>());
-                UndidrectedNetwork.get(curPos).add(p);
-                UndidrectedNetwork.putIfAbsent(p.EndPos, new HashSet<>());
+                UndidrectedNetwork.computeIfAbsent(curPos, pos -> new HashSet<>()).add(p);
+                UndidrectedNetwork.computeIfAbsent(p.EndPos, pos -> new HashSet<>()).add(new Path(p.EndPos, curPos, p.PathLen));
                 // backPath.visited.addAll(p.visited);
-                UndidrectedNetwork.get(p.EndPos).add(new Path(p.EndPos, curPos, p.PathLen));
                 InDgree.put(p.EndPos, InDgree.get(p.EndPos) - 1);
                 Dist.put(p.EndPos, Math.max(Dist.getOrDefault(p.EndPos, 0), Dist.getOrDefault(p.StartPos, 0) + p.PathLen));
                 if (InDgree.get(p.EndPos).equals(0)) {

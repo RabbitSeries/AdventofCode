@@ -8,7 +8,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
  Year                           | Progress          | Best TimeCost (seconds)
 :------------------------------:|:-----------------:|:--------------:
-[2023](./2022Python/README.md)    | 2/25 ⭐⭐      |     Not yet
+[2022](./2022Python/README.md)  | 2/25 ⭐⭐         |     Not yet
 [2023](./2023Java/README.md)    | 23.5/25 ⭐⭐      |     Not yet
 [2024](./2024/README.md)        | 25/25 ⭐⭐        |    0.965016
 

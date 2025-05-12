@@ -2,13 +2,13 @@ from typing import List, Tuple
 import requests
 import os
 import re
-from typing import List, Tuple,  Dict
+from typing import List, Tuple, Dict
 
 
 def find_aoc_directories(root_dir: str = None, overwrite: bool = False) -> Dict[Tuple[int, int], List[str]]:
     HasNoFurtherPathSep = r".*(?![/\\]).*$"
     RepoRootRe = re.compile(
-        r"[/\\](?P<year>\d+)"+HasNoFurtherPathSep, re.IGNORECASE
+        r"[/\\](?P<year>\d+)" + HasNoFurtherPathSep, re.IGNORECASE
     )
     found: Dict[Tuple[int, int], List[str]] = {}
     for entry in os.scandir(root_dir):
@@ -16,7 +16,7 @@ def find_aoc_directories(root_dir: str = None, overwrite: bool = False) -> Dict[
         if YearMatch:
             for subDir in os.scandir(entry.path):
                 DayRootRe = re.compile(
-                    r"Day(?P<day>\d+)"+HasNoFurtherPathSep, re.IGNORECASE
+                    r"Day(?P<day>\d+)" + HasNoFurtherPathSep, re.IGNORECASE
                 )
                 DayMatch = DayRootRe.search(subDir.path)
                 if DayMatch:
@@ -38,7 +38,7 @@ def download_input(year: int, day: int, session_cookie: str) -> str:
     }
     response = requests.get(url, headers=headers)
     response.raise_for_status()
-    return response.text.strip()
+    return response.text
 
 
 def process_all_inputs(
@@ -47,6 +47,7 @@ def process_all_inputs(
     overwrite: bool = False
 ) -> None:
     dirs = find_aoc_directories(root_dir)
+    dirs.update(find_aoc_directories(os.path.join(root_dir, 'Legacy')))
     for (year, day), distribute_path in dirs.items():
         try:
             input_text = download_input(year, day, session_cookie)

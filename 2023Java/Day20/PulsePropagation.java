@@ -42,8 +42,7 @@ public class PulsePropagation {
                 OutputLists.putIfAbsent(InWire, new ArrayList<>());
                 OutputLists.get(InWire).addAll(OutWireList);
                 for (String s : OutWireList) {
-                    CjctModuleInputStatus.putIfAbsent(s, new HashMap<>());
-                    CjctModuleInputStatus.get(s).putIfAbsent(InWire, false);
+                    CjctModuleInputStatus.computeIfAbsent(s, __ -> new HashMap<>()).putIfAbsent(InWire, false);
                 }
             }
         }

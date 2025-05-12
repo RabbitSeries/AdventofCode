@@ -1,11 +1,9 @@
 from sympy import symbols, Eq, solve
 px, py, pz, vx, vy, vz = symbols('px py pz vx vy vz')
 t1, t2, t3 = symbols('t1 t2 t3')
-hailstones = [
-    ([233210433951170, 272655040388795, 179982504986147], [39, -98, 166]),
-    ([385274025881243, 351578921558552, 375160114124378], [-71, -36, -9]),
-    ([298962016918939, 322446494312107, 293073189215975], [36, 8, 96])
-]
+lines = open("input.txt").read().rstrip().splitlines()
+hailstones = [tuple((list(map(int, line.split('@')[0].strip().split(','))),
+                     list(map(int, line.split('@')[1].strip().split(','))))) for line in lines[0:3]]
 equations = []
 for i, (p, d) in enumerate(hailstones):
     t = [t1, t2, t3][i]

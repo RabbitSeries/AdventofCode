@@ -10,7 +10,7 @@ import org.hipparchus.optim.nonlinear.vector.leastsquares.*;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer.*;
 import org.hipparchus.util.*;
 
-public class HailIntersection {
+public class HailIntersection_LinearAlgbra {
     class Hail {
         public Hail(List<Long> p, List<Long> d) {
             pos = p;
@@ -103,7 +103,7 @@ public class HailIntersection {
     }
 
     public static void main(String[] args) throws Exception {
-        HailIntersection Day24 = new HailIntersection();
+        HailIntersection_LinearAlgbra Day24 = new HailIntersection_LinearAlgbra();
         Day24.Solution2();
     }
 }
