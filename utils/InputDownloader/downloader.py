@@ -5,28 +5,29 @@ import re
 from typing import List, Tuple, Dict
 
 
-def find_aoc_directories(root_dir: str = None, overwrite: bool = False) -> Dict[Tuple[int, int], List[str]]:
+def find_aoc_directories(root_dirs: List[str] = None, overwrite: bool = False) -> Dict[Tuple[int, int], List[str]]:
     HasNoFurtherPathSep = r".*(?![/\\]).*$"
     RepoRootRe = re.compile(
         r"[/\\](?P<year>\d+)" + HasNoFurtherPathSep, re.IGNORECASE
     )
     found: Dict[Tuple[int, int], List[str]] = {}
-    for entry in os.scandir(root_dir):
-        YearMatch = RepoRootRe.search(entry.path)
-        if YearMatch:
-            for subDir in os.scandir(entry.path):
-                DayRootRe = re.compile(
-                    r"Day(?P<day>\d+)" + HasNoFurtherPathSep, re.IGNORECASE
-                )
-                DayMatch = DayRootRe.search(subDir.path)
-                if DayMatch:
-                    rel_path = os.path.join(subDir, "input.txt")
-                    if os.path.exists(rel_path) and not overwrite:
-                        print(f"Skipping existing: {rel_path}")
-                        continue
-                    year = int(YearMatch.group("year"))
-                    day = int(DayMatch.group("day"))
-                    found.setdefault((year, day), []).append(rel_path)
+    for root_dir in root_dirs:
+        for entry in os.scandir(root_dir):
+            YearMatch = RepoRootRe.search(entry.path)
+            if YearMatch:
+                for subDir in os.scandir(entry.path):
+                    DayRootRe = re.compile(
+                        r"Day(?P<day>\d+)" + HasNoFurtherPathSep, re.IGNORECASE
+                    )
+                    DayMatch = DayRootRe.search(subDir.path)
+                    if DayMatch:
+                        rel_path = os.path.join(subDir, "input.txt")
+                        if os.path.exists(rel_path) and not overwrite:
+                            print(f"Skipping existing: {rel_path}")
+                            continue
+                        year = int(YearMatch.group("year"))
+                        day = int(DayMatch.group("day"))
+                        found.setdefault((year, day), []).append(rel_path)
     return dict(sorted(found.items(), key=lambda item: (item[0][0], item[0][1])))
 
 
@@ -46,8 +47,7 @@ def process_all_inputs(
     root_dir: str = None,
     overwrite: bool = False
 ) -> None:
-    dirs = find_aoc_directories(root_dir)
-    dirs.update(find_aoc_directories(os.path.join(root_dir, 'Legacy')))
+    dirs = find_aoc_directories([root_dir, os.path.join(root_dir, 'Legacy')])
     for (year, day), distribute_path in dirs.items():
         try:
             input_text = download_input(year, day, session_cookie)
