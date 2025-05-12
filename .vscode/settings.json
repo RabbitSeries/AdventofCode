@@ -10,11 +10,7 @@
         "Legacy/2023"
     ],
     "autopep8.args": [
-        "--line-length",
-        "99",
-        "-a",
-        "--max-line-length",
-        "99"
+        "--global-config=${workspaceFolder}/.pep8"
     ],
     // Default classpath search place
     // Clean plugin cache after each path modification.
@@ -28,6 +24,8 @@
     //     "dumpPath": ""
     // },
     "cmake.options.statusBarVisibility": "visible",
-    // "cmake.useCMakePresets":"auto",//Use CMakePresets.json to configure drive CMake configure, build, and test. When using CMakePresets.json, kits, variants, and some settings in settings.json will be ignored, such as:
-    // "cmake.buildDirectory": "${workspaceFolder}/builds/${buildKit}/${buildType}"
+    // "cmake.useCMakePresets":"auto",
+    // Use CMakePresets.json to configure drive CMake configure, build, and test. 
+    // When using CMakePresets.json, kits, variants, and some settings in settings.json will be ignored,
+    //      such as: "cmake.buildDirectory": "${workspaceFolder}/builds/${buildKit}/${buildType}"
 }
