@@ -1,4 +1,3 @@
-from typing import List, Tuple
 import requests
 import os
 import re
