@@ -1,5 +1,7 @@
-from __future__ import annotations
-from functools import lru_cache
+from __future__ import annotations  # For lazy annotation
+from functools import lru_cache  # for memoization
+
+# TODO this code is in need of compaction
 
 
 class File:
@@ -8,7 +10,7 @@ class File:
         self.isDir = isDir
         self.fileSize = fileSize
         self.parent = parent
-        self.subFile: dict[str, File] = dict([('.', self)])
+        self.subFile: dict[str, File] = {'.': self}
         if parent:
             self.subFile.update([('..', parent)])
             self.absPath: list[str] = parent.absPath + [name]
@@ -23,7 +25,7 @@ class File:
         return f"File(name='{self.name}',parent={self.parent.name if self.parent else 'None'},isDir={self.isDir},fileSize={self.fileSize})"
 
     def __hash__(self) -> int:
-        return self.getAbsPath().__hash__() << 1 & self.isDir
+        return (self.getAbsPath().__hash__() << 1) & self.isDir
 
 
 @lru_cache(maxsize=None)
