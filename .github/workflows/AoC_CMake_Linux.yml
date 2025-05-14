@@ -1,4 +1,4 @@
-name: AoC CMake Linux
+name: AoC CMake C++ Part - Linux
 
 on:
   push:
@@ -11,62 +11,137 @@ env:
   BUILD_DIR: build
 
 jobs:
-  build-and-test:
+  downloadInput:
     runs-on: ubuntu-latest
- 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
 
-    - name: Install Python dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r utils/InputDownloader/requirements.txt
+      - name: Install Python dependencies
+        run: |
+          tree
+          python -m pip install --upgrade pip
+          pip install -r InputDownloader/requirements.txt
 
-    - name: Download AoC inputs
-      env:
-        AOC_SESSION_COOKIE: ${{ secrets.AOC_SESSION_COOKIE }}
-      run: |
-        python utils/InputDownloader/downloader.py
+      - name: Download AoC inputs
+        env:
+          AOC_SESSION_COOKIE: ${{ secrets.AOC_SESSION_COOKIE }}
+        run: |
+          python InputDownloader/downloader.py
 
-    - name: Configure CMake
-      run: |
-        cmake -S . -B ${{ env.BUILD_DIR }} -G "Ninja" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+      - name: Upload AoC inputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: AoC_Input
+          path: |
+            ./**/input.txt
 
-    - name: Build project
-      run: |
-        cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }}
+  build:
+    runs-on: ubuntu-latest
+    needs: downloadInput
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Run tests (Linux) Generate results log files
-      working-directory: ${{ env.BUILD_DIR }}/2024
-      shell: bash
-      run: |
-        pwd && ls && ./solution 1>actionRes.log 2>runtime.log 
-        cat actionRes.log
-        cat runtime.log
-        
-    - name: Diff files and fail if different
-      run: |
-        if ! diff -u ${{ env.BUILD_DIR }}/2024/actionRes.log ./2024/res.log > diff.log; then
-          echo "::error::Files differ. See diff.log for details."
+      - name: Download input
+        uses: actions/download-artifact@v4
+        with:
+          name: AoC_Input
+          path: |
+            ./
+
+      # - name: Cache CMake build files
+      #   id: cache-cmake
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       ${{ env.BUILD_DIR }}
+      #     key: cmake-${{ runner.os }}-${{ env.BUILD_TYPE }}-${{ hashFiles('**/*.h') }}
+
+      - name: Configure CMake
+        if: steps.cache-cmake.outputs.cache-hit != 'true'
+        run: |
+          tree
+          cmake -S . -B ${{ env.BUILD_DIR }} -G "Ninja" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+
+      - name: Build project
+        if: steps.cache-cmake.outputs.cache-hit != 'true'
+        run: |
+          cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }}
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: BINARY
+          path: |
+            **/res.log
+            ${{ env.BUILD_DIR }}
+
+  run:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download binary
+        uses: actions/download-artifact@v4
+        with:
+          name: BINARY
+          path: |
+            .
+
+      - name: Check binary
+        run: |
+          tree
+
+      - name: Run tests (Linux) Generate results log files
+        working-directory: ${{ env.BUILD_DIR }}/2024
+        shell: bash
+        run: |
+          chmod u+x ./solution
+          ./solution 1>actionRes.log 2>runtime.log 
+          cat actionRes.log
+          cat runtime.log
+
+      - name: Diff files and fail if different
+        run: |
+          if ! diff -u ${{ env.BUILD_DIR }}/2024/actionRes.log ./2024/res.log > diff.log; then
+            echo "::error::Files differ. See diff.log for details."
+            cat diff.log
+            exit 1
+          else
+            echo "All pass"
+          fi
+
+      - name: Upload artifacts on failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output-${{ runner.os }}
+          path: |
+            ${{ env.BUILD_DIR }}/
+            diff.log
+
+  report-if-fail:
+    runs-on: ubuntu-latest
+    needs: run
+    if: ${{ failure() }}
+    steps:
+      - name: Download binary
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output-${{ runner.os }}
+          path: |
+            ./
+
+      - name: Upload artifacts on failure
+        run: |
+          tree
           cat diff.log
-          exit 1
-        else
-          echo "All pass"
-        fi
-        
-    - name: Upload artifacts on failure
-      if: failure()
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-output-${{ runner.os }}
-        path: |
-          ${{ env.BUILD_DIR }} 
-          diff.log

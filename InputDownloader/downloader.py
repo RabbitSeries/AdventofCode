@@ -54,8 +54,7 @@ def process_all_inputs(
             try:
                 input_text = download_input(year, day, session_cookie)
             except Exception as e:
-                print(
-                    f"Failed to download https://adventofcode.com/{year}/day/{day}/input")
+                print(f"Failed to download https://adventofcode.com/{year}/day/{day}/input:", e, 'Session Cookie may have expired', sep='\n\t')
                 continue
             for rel_path in distribute_path:
                 if os.path.exists(rel_path) and not overwrite:
@@ -75,5 +74,5 @@ if not session_cookie:
     raise ValueError("Missing AOC_SESSION_COOKIE environment variable")
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.abspath(os.path.join(script_dir, "../../"))
+project_root = os.path.abspath(os.path.join(script_dir, ".."))
 process_all_inputs(session_cookie, project_root)
