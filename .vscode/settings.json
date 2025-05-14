@@ -9,8 +9,11 @@
         "utils",
         "Legacy/2023"
     ],
+    "flake8.args": [
+        "--config=${workspaceFolder}/pyproject.toml"
+    ],
     "autopep8.args": [
-        "--global-config=${workspaceFolder}/.pep8"
+        "--global-config=${workspaceFolder}/pyproject.toml"
     ],
     // Default classpath search place
     // Clean plugin cache after each path modification.

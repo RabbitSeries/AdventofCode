@@ -1,0 +1,12 @@
+[flake8]
+ignore=
+    E701,
+    E501,
+    E704,
+    E741
+
+[pep8]
+max_line_length=255
+agressive=3
+
+[tool.autopep8]
