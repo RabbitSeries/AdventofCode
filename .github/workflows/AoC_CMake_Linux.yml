@@ -129,7 +129,29 @@ jobs:
             ${{ env.BUILD_DIR }}/
             diff.log
 
-  report-if-fail:
+      - name: Upload runtime results
+        uses: actions/upload-artifact@v4
+        with:
+          name: run-output
+          path: |
+            ./${{ env.BUILD_DIR }}/2024/runtime.log
+
+  LogResults:
+    runs-on: ubuntu-latest
+    needs: run
+    steps:
+      - name: Download binary
+        uses: actions/download-artifact@v4
+        with:
+          name: run-output
+          path: |
+            ./
+
+      - name: Print log
+        run: |
+          cat ./${{ env.BUILD_DIR }}/2024/runtime.log
+
+  report-if-diff-fail:
     runs-on: ubuntu-latest
     needs: run
     if: ${{ failure() }}
@@ -143,5 +165,4 @@ jobs:
 
       - name: Upload artifacts on failure
         run: |
-          tree
           cat diff.log
