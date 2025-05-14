@@ -149,7 +149,7 @@ jobs:
 
       - name: Print log
         run: |
-          cat ./${{ env.BUILD_DIR }}/2024/runtime.log
+          cat runtime.log
 
   report-if-diff-fail:
     runs-on: ubuntu-latest
