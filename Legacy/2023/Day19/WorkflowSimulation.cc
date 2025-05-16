@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 
-#include "../../utils/RegexIter.hpp"
+#include "../../../utils/RegexIter.hpp"
 using namespace std;
 class WorkflowSimulation {
     struct Condition {
@@ -83,8 +83,8 @@ class WorkflowSimulation {
             }
         }
         for ( string buf; getline( input, buf ); ) {
-            RegexIter PartMatch( buf, R"(x=(\d+),m=(\d+),a=(\d+),s=(\d+))" );
-            vector<string> contents = PartMatch.groups();
+            RegexIter PartMatch( buf, R"(\d+)" );
+            vector<string> contents = PartMatch.findAll();
             PartList.emplace_back( istringstream( accumulate( contents.begin(), contents.end(), string(), []( string const& init, string const& group ) {
                 return init + " " + group;
             } ) ) );

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import org.hipparchus.linear.*;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.*;
@@ -36,6 +37,7 @@ public class HailIntersection_LinearAlgbra {
     }
 
     void Solution2() throws Exception {
+        readFile();
         Double[][] ri = {
                 HailList.get(0).pos.stream().map(Double::valueOf).toArray(Double[]::new),
                 HailList.get(1).pos.stream().map(Double::valueOf).toArray(Double[]::new),
@@ -57,11 +59,13 @@ public class HailIntersection_LinearAlgbra {
                 .build();
 
         LevenbergMarquardtOptimizer optimizer = new LevenbergMarquardtOptimizer()
-                // This method relies on language precision feature or implementation, which makes this method very fragile.
-                .withCostRelativeTolerance(1e-30);
+                // This method relies on a language's double precision implementation (IEEE 754 cpp, Java, Python), which makes this method very fragile.
+                // But Python seems to be able to use arbitrary Integer eqution solution.
+                .withCostRelativeTolerance(1e-16);
         Optimum optimum = optimizer.optimize(problem);
-        double[] solution = optimum.getPoint().toArray();
-        System.out.println("Solution 2: " + (solution[0] + solution[1] + solution[2]));
+        var r_v_t_vec = optimum.getPoint().toArray();
+        var r_vec = IntStream.range(0, 3).mapToLong(i -> (long) r_v_t_vec[i]).toArray();
+        System.out.println("Solution 2: " + (r_vec[0] + r_vec[1] + r_vec[2]));
     }
 
     private MultivariateJacobianFunction modelFunction(Double[][] ri, Double[][] vi) {
@@ -84,7 +88,8 @@ public class HailIntersection_LinearAlgbra {
                     residuals[i * 3 + j] = r[j] + v[j] * t[i] - ri[i][j] - vi[i][j] * t[i];
                 }
             }
-            double[][] jacobian = new double[9][9];
+            double[][] jacobian = new double[9][9]; // Eh, AI says the jacobian looks like this. The derivation of e^t (T) is still e^t (T),
+                                                    // so jacobian stays the same, but T is always positive
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     jacobian[i * 3 + j][j] = 1;

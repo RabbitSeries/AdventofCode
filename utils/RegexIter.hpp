@@ -60,11 +60,18 @@ class RegexIter {
         }
         return totalGroups;
     }
+    std::vector<std::string> findAll() {
+        std::vector<std::string> res;
+        for ( auto __begin = _begin; __begin != _end; __begin++ ) {
+            res.push_back( __begin->str() );
+        }
+        return res;
+    }
     std::string group( size_t group ) {
         return _begin->operator[]( group ).str();
     }
     bool matched() {
-        return !( *_begin ).empty();
+        return !_begin->empty();
     }
     itr begin() {
         return _begin;

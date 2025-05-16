@@ -3,7 +3,7 @@
         {
             "name": "ArchLinux",
             "compilerPath": "/usr/bin/g++",
-            "cStandard": "c23",
+            "cStandard": "gnu23",
             "cppStandard": "gnu++23",
             "intelliSenseMode": "linux-gcc-x64"
         },
