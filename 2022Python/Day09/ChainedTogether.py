@@ -2,14 +2,17 @@ dx = [0, 0, -1, 1]
 dy = [-1, 1, 0, 0]
 
 
+def sign(x: int):
+    return 1 if x > 0 else -1 if x < 0 else 0
+
+
 def move(python: list[tuple[int, int]], dir: int, n: int):
     for _ in range(n):
         python[0] = (python[0][0] + dx[dir], python[0][1] + dy[dir])
         for j, p in enumerate(python[1:], 1):
             pre = python[j - 1]
             if ChebyshevDis(p, pre) > 1:
-                python[j] = (p[0] + (1 if pre[0] - p[0] > 0 else -1 if pre[0] < p[0] else 0),
-                             p[1] + (1 if pre[1] - p[1] > 0 else -1 if pre[1] < p[1] else 0))
+                python[j] = (p[0] + sign(pre[0] - p[0]), p[1] + sign(pre[1] - p[1]))
             else:
                 break  # No futher move required
             if j + 1 == len(python):

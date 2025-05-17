@@ -30,6 +30,10 @@ This difference also reminds me of my [AVL tree implementation](https://github.c
 
 Learning python.
 
+## Day25
+
+Karger's algorithm runtime cost about 2 minutes.
+
 ## Regex diff
 
 Lang    | Regex URL

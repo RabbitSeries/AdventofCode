@@ -1,15 +1,7 @@
 package Day25;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 public class MinimumCut {
     void readFile() throws Exception {
@@ -17,11 +9,9 @@ public class MinimumCut {
         input.lines().forEach(l -> {
             var split = l.split(":");
             String inWire = split[0].trim();
-            WireGraph.putIfAbsent(inWire, new HashSet<>());
-            Arrays.stream(split[1].trim().split("\\s+")).forEach(w -> {
-                WireGraph.get(inWire).add(w.trim());
-                WireGraph.putIfAbsent(w.trim(), new HashSet<>());
-                WireGraph.get(w.trim()).add(inWire);
+            Arrays.stream(split[1].trim().split(" ")).forEach(w -> {
+                WireGraph.computeIfAbsent(inWire, s -> new HashSet<>()).add(w);
+                WireGraph.computeIfAbsent(w, s -> new HashSet<>()).add(inWire);
             });
         });
         input.close();
@@ -34,10 +24,8 @@ public class MinimumCut {
     int CliqueCount(Map<String, String> cut) {
         Map<String, Set<String>> visited = new HashMap<>();
         cut.forEach((u, v) -> {
-            visited.putIfAbsent(u, new HashSet<>());
-            visited.get(u).add(v);
-            visited.putIfAbsent(v, new HashSet<>());
-            visited.get(v).add(u);
+            visited.computeIfAbsent(u, s -> new HashSet<>()).add(v);
+            visited.computeIfAbsent(v, s -> new HashSet<>()).add(u);
         });
         int cliqueCnt = 0;
         for (String entry : WireGraph.keySet()) {
@@ -50,8 +38,7 @@ public class MinimumCut {
                     for (String nextV : WireGraph.get(curNode)) {
                         if (!visited.get(curNode).contains(nextV)) {
                             visited.get(curNode).add(nextV);
-                            visited.putIfAbsent(nextV, new HashSet<>());
-                            visited.get(nextV).add(curNode);
+                            visited.computeIfAbsent(nextV, s -> new HashSet<>()).add(curNode);
                             q.add(nextV);
                         }
                     }
@@ -61,13 +48,72 @@ public class MinimumCut {
         return cliqueCnt;
     }
 
+    int CutCount(Map<String, Set<String>> Cliques) {
+        if (Cliques.size() != 2)
+            return -1;
+        List<String> CliqueNames = Cliques.keySet().stream().toList();
+        int cutCnt = 0;
+        String from = CliqueNames.get(0), to = CliqueNames.get(1);
+        for (var fromV : Cliques.get(from)) {
+            for (var conn : WireGraph.get(fromV)) {
+                if (Cliques.get(to).contains(conn)) {
+                    cutCnt++;
+                }
+            }
+        }
+        return cutCnt;
+    }
+
+    String FindFather(Map<String, String> Hierachy, String name) {
+        if (Hierachy.get(name).equals(name)) {
+            return name;
+        }
+        return Hierachy.compute(name, (k, e) -> FindFather(Hierachy, Hierachy.get(e)));
+    }
+
     void Solution1() throws Exception {
         readFile();
-        // Ehhhhhhhhhhhhhhhhhhhhh, something like Karger's algorithm, TODO
+        Random rand = new Random(System.nanoTime());
+        // unionset - k,v : parent, clique-member(Include parent)
+        Map<String, Set<String>> Cliques = new HashMap<>();
+        while (CutCount(Cliques) != 3) {
+            Cliques.clear();
+            Map<String, String> Father = new HashMap<>();
+            Set<String> NodesHavingEdge = new HashSet<>(WireGraph.keySet());// Returns a Set view of the keys contained in this map.
+            // The set is backed by the map, so changes to the map are reflected in the set, and vice-versa.
+            HashMap<String, Set<String>> visited = new HashMap<>();
+            WireGraph.keySet().forEach(e -> {
+                visited.put(e, new HashSet<>());
+                Cliques.put(e, new HashSet<>(Set.of(e)));
+                Father.put(e, e);
+            });
+            while (!NodesHavingEdge.isEmpty() && CutCount(Cliques) != 3) {
+                // Get father
+                List<String> NodeList = NodesHavingEdge.stream().toList();
+                String father = NodeList.get(rand.nextInt(NodeList.size()));
+                // Get child
+                List<String> ChildList = WireGraph.get(father).stream().filter(child -> !visited.get(father).contains(child) && !visited.get(child).contains(father)).toList();
+                if (ChildList.isEmpty()) {
+                    NodesHavingEdge.remove(father);
+                    continue;
+                }
+                String child = ChildList.get(rand.nextInt(ChildList.size()));
+                visited.get(father).add(child);
+                visited.get(child).add(father);
+                String FatherCliqueName = FindFather(Father, father);
+                String ChildCliqueName = FindFather(Father, child);
+                Father.put(ChildCliqueName, FatherCliqueName);
+                if (!FatherCliqueName.equals(ChildCliqueName)) {
+                    Cliques.get(FatherCliqueName).addAll(Cliques.get(ChildCliqueName));
+                    Cliques.remove(ChildCliqueName);
+                }
+            }
+        }
+        System.out.println("Solution 1: " + Cliques.values().stream().mapToInt(s -> s.size()).reduce(1, (i, v) -> i * v));
     }
 
     void Solution2() throws Exception {
-
+        System.out.println("\t\t\t------All 50 stars AoC Finished!!!!------");
     }
 
     public static void main(String[] args) throws Exception {

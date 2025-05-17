@@ -1,17 +1,38 @@
 #include <bits/stdc++.h>
 
-#include "../../utils/StringSpliter.h"
 using namespace std;
 typedef unsigned long long ull;
+string trim( string s ) {
+    int i = 0, j = s.size() - 1;
+    while ( i < s.size() && string( " \r\t\n" ).find( s[i] ) != string::npos ) {
+        i++;
+    }
+    while ( j >= 0 && string( " \r\t\n" ).find( s[j] ) != string::npos ) {
+        j--;
+    }
+    if ( j >= i ) {
+        return s.substr( i, j - i + 1 );
+    }
+    return "";
+}
+
+vector<string> split( string s, char delim ) {
+    stringstream ss( s );
+    vector<string> res;
+    for ( string buf; getline( ss, buf, delim ); ) {
+        res.emplace_back( move( buf ) );
+    }
+    return res;
+}
 
 void readFile( vector<ull>& seedId, vector<vector<pair<pair<ull, ull>, ull>>>& mapperList ) {
     ifstream input( "input.txt" );
     string buf;
     while ( getline( input, buf ) ) {
         if ( buf.find( "seeds" ) != string::npos ) {
-            for ( string s : split( trim( split( buf, ":" )[1] ), "\\s" ) ) {
+            for ( string s : split( trim( split( buf, ':' )[1] ), ' ' ) ) {
                 // if( !s.empty() && s != "\n" )
-                seedId.push_back( parseULL( s ) );
+                seedId.push_back( stoull( s ) );
             }
         }
 
@@ -21,10 +42,10 @@ void readFile( vector<ull>& seedId, vector<vector<pair<pair<ull, ull>, ull>>>& m
                 if ( buf.size() <= 1 ) {
                     break;
                 }
-                vector<string> infoStr = split( buf, "\\s" );
+                vector<string> infoStr = split( buf, ' ' );
                 vector<ull> info( infoStr.size() );
                 transform( infoStr.begin(), infoStr.end(), info.begin(), []( string s ) {
-                    return parseULL( s );
+                    return stoull( s );
                 } );
 
                 pair<pair<ull, ull>, ull> mapInfo( { { info[0], info[1] }, info[2] } );

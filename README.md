@@ -7,10 +7,10 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 ### Overall
 
  Year                           | Progress          | Best TimeCost (seconds)
-:------------------------------:|:-----------------:|:--------------:
-[2022](./2022Python/README.md)  | 8/25 ⭐⭐         |     Not yet
-[2023](./2023Java/README.md)    | 23.5/25 ⭐⭐      |     Not yet
-[2024](./2024/README.md)        | 25/25 ⭐⭐        |    0.965016
+:------------------------------:|:-----------------:|:--------------------------:
+[2022](./2022Python/README.md)  | 8/25 ⭐⭐        |     Not yet
+[2023](./2023Java/README.md)    | 25/25 ⭐⭐       |     Over 3 minutes (Day25)
+[2024](./2024/README.md)        | 25/25 ⭐⭐       |     0.965016
 
 > Runs on github actions.\
 > Maybe read ifstream.rdbuf() to stringstream at once will benefit more time efficiency.
