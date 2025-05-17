@@ -66,9 +66,11 @@ public class HailIntersection {
                 .count()).sum());
     }
 
+    /**
+     * Currently using hipparchus MultivariateJacobianFunction as a solution
+     * @see HailIntersection_LinearAlgbra#Solution2() Legacy.Day24.HailIntersection_LinearAlgbra
+     */
     void Solution2() throws Exception {
-        // Learning Python
-
     }
 
     public static void main(String[] args) throws Exception {

@@ -60,7 +60,7 @@ public class HailIntersection_LinearAlgbra {
 
         LevenbergMarquardtOptimizer optimizer = new LevenbergMarquardtOptimizer()
                 // This method relies on a language's double precision implementation (IEEE 754 cpp, Java, Python), which makes this method very fragile.
-                // But Python seems to be able to use arbitrary Integer eqution solution.
+                // But Python seems to be able to use arbitrary Integer precision in lib sympy solution.
                 .withCostRelativeTolerance(1e-16);
         Optimum optimum = optimizer.optimize(problem);
         var r_v_t_vec = optimum.getPoint().toArray();
