@@ -9,7 +9,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
  Year                           | Progress          | Best TimeCost (seconds)
 :------------------------------:|:-----------------:|:--------------------------:
 [2022](./2022Python/README.md)  | 9/25 ⭐⭐        |     Not yet
-[2023](./2023Java/README.md)    | 25/25 ⭐⭐       |     Over 3 minutes (Day25)
+[2023](./2023Java/README.md)    | 25/25 ⭐⭐       |     Integrating
 [2024](./2024/README.md)        | 25/25 ⭐⭐       |     0.965016
 
 > Runs on github actions.\

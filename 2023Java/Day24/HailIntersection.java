@@ -68,7 +68,7 @@ public class HailIntersection {
 
     /**
      * Currently using hipparchus MultivariateJacobianFunction as a solution
-     * @see HailIntersection_LinearAlgbra#Solution2() Legacy.Day24.HailIntersection_LinearAlgbra
+     * @see HailIntersection_LinearAlgebra#Solution2() Legacy.Day24.HailIntersection_LinearAlgbra
      */
     void Solution2() throws Exception {
     }

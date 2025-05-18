@@ -19,35 +19,6 @@ public class MinimumCut {
 
     Map<String, Set<String>> WireGraph = new HashMap<>();
 
-    Map<String, Integer> PassCnt = new HashMap<>();
-
-    int CliqueCount(Map<String, String> cut) {
-        Map<String, Set<String>> visited = new HashMap<>();
-        cut.forEach((u, v) -> {
-            visited.computeIfAbsent(u, s -> new HashSet<>()).add(v);
-            visited.computeIfAbsent(v, s -> new HashSet<>()).add(u);
-        });
-        int cliqueCnt = 0;
-        for (String entry : WireGraph.keySet()) {
-            if (!visited.containsKey(entry)) {
-                cliqueCnt++;
-                visited.put(entry, new HashSet<>());
-                Queue<String> q = new LinkedList<>(List.of(entry));
-                while (!q.isEmpty()) {
-                    String curNode = q.poll();
-                    for (String nextV : WireGraph.get(curNode)) {
-                        if (!visited.get(curNode).contains(nextV)) {
-                            visited.get(curNode).add(nextV);
-                            visited.computeIfAbsent(nextV, s -> new HashSet<>()).add(curNode);
-                            q.add(nextV);
-                        }
-                    }
-                }
-            }
-        }
-        return cliqueCnt;
-    }
-
     int CutCount(Map<String, Set<String>> Cliques) {
         if (Cliques.size() != 2)
             return -1;
@@ -79,20 +50,25 @@ public class MinimumCut {
         while (CutCount(Cliques) != 3) {
             Cliques.clear();
             Map<String, String> Father = new HashMap<>();
-            Set<String> NodesHavingEdge = new HashSet<>(WireGraph.keySet());// Returns a Set view of the keys contained in this map.
-            // The set is backed by the map, so changes to the map are reflected in the set, and vice-versa.
+            Set<String> NodesHavingEdge = new HashSet<>(WireGraph.keySet());// Returns a Set view of the keys contained
+                                                                            // in this map.
+            // The set is backed by the map, so changes to the map are reflected in the set,
+            // and vice-versa.
             HashMap<String, Set<String>> visited = new HashMap<>();
             WireGraph.keySet().forEach(e -> {
                 visited.put(e, new HashSet<>());
                 Cliques.put(e, new HashSet<>(Set.of(e)));
                 Father.put(e, e);
             });
-            while (!NodesHavingEdge.isEmpty() && CutCount(Cliques) != 3) {
+            // while (!NodesHavingEdge.isEmpty() && CutCount(Cliques) != 3) { // This cost over 3 minutes
+            while (Cliques.size() != 2) { // 300 ms
                 // Get father
                 List<String> NodeList = NodesHavingEdge.stream().toList();
                 String father = NodeList.get(rand.nextInt(NodeList.size()));
                 // Get child
-                List<String> ChildList = WireGraph.get(father).stream().filter(child -> !visited.get(father).contains(child) && !visited.get(child).contains(father)).toList();
+                List<String> ChildList = WireGraph.get(father).stream()
+                        .filter(child -> !visited.get(father).contains(child) && !visited.get(child).contains(father))
+                        .toList();
                 if (ChildList.isEmpty()) {
                     NodesHavingEdge.remove(father);
                     continue;
@@ -109,7 +85,8 @@ public class MinimumCut {
                 }
             }
         }
-        System.out.println("Solution 1: " + Cliques.values().stream().mapToInt(s -> s.size()).reduce(1, (i, v) -> i * v));
+        System.out
+                .println("Solution 1: " + Cliques.values().stream().mapToInt(s -> s.size()).reduce(1, (i, v) -> i * v));
     }
 
     void Solution2() throws Exception {
@@ -123,7 +100,9 @@ public class MinimumCut {
     }
 }
 
-// var sorted = crossCnt.entrySet().stream().sorted(Comparator.comparing(Entry<String, Integer>::getValue).reversed());
+// var sorted =
+// crossCnt.entrySet().stream().sorted(Comparator.comparing(Entry<String,
+// Integer>::getValue).reversed());
 // var itr = sorted.iterator();
 // System.out.println(itr.next().getKey() + "," + itr.next().getValue());
 // System.out.println(itr.next().getKey() + "," + itr.next().getValue());
@@ -132,7 +111,9 @@ public class MinimumCut {
 // System.out.println(itr.next().getKey() + "," + itr.next().getValue());
 // System.out.println(itr.next().getKey() + "," + itr.next().getValue());
 // BufferedWriter output = new BufferedWriter(new FileWriter("output.txt"));
-// for (Entry<String, Integer> e : crossCnt.entrySet().stream().sorted(Comparator.comparing(Entry<String, Integer>::getValue).reversed()).toList()) {
+// for (Entry<String, Integer> e :
+// crossCnt.entrySet().stream().sorted(Comparator.comparing(Entry<String,
+// Integer>::getValue).reversed()).toList()) {
 // output.write(e.getKey() + "," + e.getValue());
 // output.newLine();
 // }

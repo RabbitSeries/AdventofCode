@@ -28,11 +28,11 @@ This difference also reminds me of my [AVL tree implementation](https://github.c
 
 ## Day24
 
-Learning python.
+Linear algebra
 
 ## Day25
 
-Karger's algorithm runtime cost about 2 minutes.
+Karger's algorithm.
 
 ## Regex diff
 
