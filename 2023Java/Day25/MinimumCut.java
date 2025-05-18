@@ -61,7 +61,7 @@ public class MinimumCut {
                 Father.put(e, e);
             });
             // while (!NodesHavingEdge.isEmpty() && CutCount(Cliques) != 3) { // This cost over 3 minutes
-            while (Cliques.size() != 2) { // 300 ms
+            while (Cliques.size() != 2) { // 300 ms - 2 minutes
                 // Get father
                 List<String> NodeList = NodesHavingEdge.stream().toList();
                 String father = NodeList.get(rand.nextInt(NodeList.size()));
@@ -85,8 +85,7 @@ public class MinimumCut {
                 }
             }
         }
-        System.out
-                .println("Solution 1: " + Cliques.values().stream().mapToInt(s -> s.size()).reduce(1, (i, v) -> i * v));
+        System.out.println("Solution 1: " + Cliques.values().stream().mapToInt(s -> s.size()).reduce(1, (i, v) -> i * v));
     }
 
     void Solution2() throws Exception {

@@ -1,150 +1,75 @@
 #include "bits/stdc++.h"
 using namespace std;
-
-enum Direction {
-    EAST,
-    SOUTH,
-    WEST,
-    NORTH
-};
-
-struct point2D : public pair<int, int> {
-    point2D( int x, int y ) : pair<int, int>( x, y ) {}
-    point2D( int x, int y, Direction _direction ) : pair<int, int>( x, y ), direction( _direction ) {}
-    Direction direction;
-    inline bool operator==( const point2D& p ) const {
-        return first == p.first && second == p.second && direction == p.direction;
-    }
-    // friend inline bool operator==( const point2D& p1, const point2D& p2 ) {
-    //     return p1.first == p2.first && p1.second == p2.second && p1.direction == p2.direction;
-    // }
-    bool isSameLocation( const point2D& p ) const {
-        return this->first == p.first && this->second == p.second;
-    }
-    int cost = 0;
-    vector<pair<int, int>> LinkRoad;
-};
-
-template <>
-struct std::hash<point2D> {
-    // typedef size_t result_type;
-    // typedef point2D argument_type;
-    size_t operator()( const point2D& obj ) const {
-        return hash<int>{}( obj.first ) ^ ( hash<int>{}( obj.second ) << 1 ) ^ ( hash<int>{}( static_cast<int>( obj.direction ) ) << 2 );
-    }
-};
-
 #include "../../utils/SolutionBase.h"
 class MazeDijkstra : public SolutionBase {
-    // ! If the Penalty is 0, then this is a simple undirected graph problem.
-    // static const int PENALTY = 1
-    // static const int PENALTY = 0
+    struct Step : public pair<int, int> {
+        Step( int x, int y, int _direction, int _cost ) : pair<int, int>( x, y ), direction( _direction ), cost{ _cost } {}
+        bool operator>( const Step& p ) const {
+            return cost > p.cost;
+        }
+        bool isSameLocation( const pair<int, int>& p ) const {
+            return this->first == p.first && this->second == p.second;
+        }
+        int direction;
+        int cost;
+        vector<pair<int, int>> path{};
+    };
+
     enum constants {
-        PENALTY = 1000,
+        PENALTY = 1000,  // If the Penalty is 0, then this is a simple undirected graph problem.
         CELLWALL = -2,
         CELLEMPTY = -1
     };
 
     const int dx[4]{ 0, 1, 0, -1 };
     const int dy[4]{ 1, 0, -1, 0 };
+    int rows = 0;
+    int cols = 0;
 
-    void printPathInMaze( vector<pair<int, int>> const& curPath, vector<vector<int>> m ) {
-        // system( "clear" );
-        // m[e.first][e.second] = 'E';
-        for_each( curPath.begin(), curPath.end(), [&]( pair<int, int> road ) { m[road.first][road.second] = 0; } );
-        for ( auto& line : m ) {
-            string row = "";
-            for ( auto& cell : line ) {
-                if ( cell == CELLWALL ) {
-                    row += '#';
-                } else if ( cell == CELLEMPTY ) {
-                    row += ' ';
-                } else {
-                    row += '0';
-                }
-            }
-            cout << row << endl;
-        }
-    }
+    vector<vector<int>> maze;
+    pair<int, int> s, e;
 
-    void printAllPath( vector<vector<pair<int, int>>> const& pathRecord, vector<vector<int>> const& maze ) {
-        int curPathCnt = 0;
-        for_each( pathRecord.begin(), pathRecord.end(), [&]( vector<pair<int, int>> curPath ) {
-            cout << "Path " << curPathCnt++ << ":" << endl;
-            printPathInMaze( curPath, maze );
-            cout << endl;
-            cout << endl;
-        } );
-    }
+    bool isValid( Step const& p ) {
+        return p.first >= 0 && p.first < rows && p.second >= 0 && p.second < cols && maze[p.first][p.second] == CELLEMPTY;
+    };
 
-    // Dijkstra + state machine transfer, four dimensional dijkstra.
-    void countSeats( vector<vector<int>> const& maze, point2D start, point2D const& end ) {
-        int foo = 0;
-
+    /**
+     * @brief Dijkstra + state machine transfer, four dimensional dijkstra.
+     *
+     */
+    int countSeats( bool isSolution1 = true ) {
         set<pair<int, int>> pathSeats;
-        vector<vector<pair<int, int>>> pathRecord;
-        unordered_map<point2D, int> pathCost;
-        priority_queue<pair<int, point2D>, vector<pair<int, point2D>>, greater<>> pq;
+        vector<vector<array<int, 4>>> Cost = vector( rows, vector( cols, array{ INT_MAX, INT_MAX, INT_MAX, INT_MAX } ) );
+        priority_queue<Step, vector<Step>, greater<>> pq;
 
-        int rows = maze.size();
-        int cols = maze[0].size();
+        pq.emplace( s.first, s.second, 0, 0 );
+        Cost[s.first][s.second] = array{ 0, 0, 0, 0 };
 
-        auto isValid = [&]( point2D const& p ) -> bool {
-            return p.first >= 0 && p.first < rows && p.second >= 0 && p.second < cols && maze[p.first][p.second] == CELLEMPTY;
-        };
-
-        start.cost = 0;
-        pq.push( { 0, start } );
-        pathCost.emplace( start, 0 );
         int endCost = INT_MAX;
-        size_t max_process = 0;
-
-        bool found = false;
         while ( !pq.empty() ) {
-            max_process = max( max_process, pq.size() );
-            // 55 ms
-            // auto defaults to copy instead of reference.
-            // auto [curCost, curPoint] = pq.top();
-            // 39 ms
-            auto [curCost, curPoint] = move( const_cast<pair<int, point2D>&>( pq.top() ) );
-
-            if ( found && curCost > endCost ) {
-                break;
-            }
+            Step curStep = move( const_cast<Step&>( pq.top() ) );
             pq.pop();
-
-            Direction curDir = curPoint.direction;
-            curPoint.LinkRoad.emplace_back( curPoint );
-            // ! To trace the pq, uncomment the code as follows:
-            // printPathInMaze( curPoint.LinkRoad, maze );
-            // this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
-            // ! This happens when turning cost 1 penalty, and the input is inputCutOptimize.txt.
-            if ( pathCost.count( curPoint ) != 0 && curCost > pathCost[curPoint] ) {
-                foo++;
-                // Once the point is visited in this visit, it should be optimized therefore the following visit should be excluded except that this vertex is shared by different shortest path.
-                continue;
-            }
-
-            if ( curPoint.isSameLocation( end ) ) {
-                found = true;
-                if ( curCost < endCost ) {
-                    // Here enters only once.
+            int curCost = curStep.cost, curDir = curStep.direction;
+            curStep.path.emplace_back( curStep.first, curStep.second );
+            if ( curStep.isSameLocation( e ) ) {
+                if ( curCost <= endCost ) {
+                    if ( isSolution1 ) {  // Here enters only once.
+                        return curCost;
+                    }
                     endCost = curCost;
-                    pathSeats.clear();
-                    pathRecord.clear();
-                    pathRecord.emplace_back( curPoint.LinkRoad );
-                    for_each( curPoint.LinkRoad.begin(), curPoint.LinkRoad.end(), [&]( pair<int, int> seat ) { pathSeats.insert( seat ); } );
-                } else if ( curCost == endCost ) {
-                    pathRecord.emplace_back( curPoint.LinkRoad );
-                    for_each( curPoint.LinkRoad.begin(), curPoint.LinkRoad.end(), [&]( pair<int, int> seat ) { pathSeats.insert( seat ); } );
+                    for_each( curStep.path.begin(), curStep.path.end(), [&]( pair<int, int> const& seat ) {
+                        pathSeats.emplace( seat.first, seat.second );
+                    } );
+                } else {
+                    break;
                 }
                 continue;
             }
-
+            if ( curCost > Cost[curStep.first][curStep.second][curDir] ) {
+                continue;
+            }
             for ( int i = 0; i < 4; i++ ) {
-                Direction nDir = Direction( ( curDir + i ) % 4 );
-                point2D nextPoint = point2D( curPoint.first + dx[nDir], curPoint.second + dy[nDir], nDir );
-                int nextCost = curCost + 1;
+                int nDir = ( curDir + i ) % 4, nextCost = curCost + 1;
                 if ( nDir != curDir ) {
                     if ( nDir == ( curDir + 2 ) % 4 ) {
                         continue;
@@ -152,71 +77,50 @@ class MazeDijkstra : public SolutionBase {
                         nextCost += PENALTY;
                     }
                 }
-                if ( isValid( nextPoint ) ) {
-                    // Reachable in Dijkstra.
-                    // if( pathCost.count( nextState ) == 0 ) {
-                    if ( pathCost.count( nextPoint ) == 0 ) {
-                        // Unvisited before.
-                        pathCost.emplace( nextPoint, nextCost );
-                        nextPoint.LinkRoad = curPoint.LinkRoad;
-                        pq.push( { nextCost, nextPoint } );
-                    } else {
-                        if ( nextCost <= pathCost[nextPoint] ) {
-                            // Visited and can be relaxed or same path.
-                            pathCost[nextPoint] = nextCost;  // This line doesn't affect the result.
-                            nextPoint.LinkRoad = curPoint.LinkRoad;
-                            pq.push( { nextCost, nextPoint } );
-                        }
+                Step nextStep( curStep.first + dx[nDir], curStep.second + dy[nDir], nDir, nextCost );
+                if ( isValid( nextStep ) ) {
+                    if ( nextCost <= Cost[nextStep.first][nextStep.second][nDir] ) {
+                        Cost[nextStep.first][nextStep.second][nextStep.direction] = nextCost;
+                        nextStep.path = curStep.path;
+                        pq.emplace( move( nextStep ) );
                     }
                 }
             }
         }
-        // ! To print the path, uncomment the following code.
-        // printAllPath( pathRecord, maze );
-        // cout << "Optmized " << foo << " x 4 times." << endl;
-        // cout << "The mission in queue to process reach maximum " << max_process << " in this maze problem." << endl;
-        // cout << "There are " << pathRecord.size() << " different ways that can reach destination at same cost." << endl;
-        // cout << "Solution 1: The final lowest score is " << endCost << "." << endl;
-        // cout << "Solution 1: " << endCost << endl;
-        printRes( 1, endCost );
-        // cout << "Solution 2: Pile these paths in one maze, there are " << pathSeats.size() << " comfotable spots to enjoy the event." << endl;
-        printRes( 2, pathSeats.size() );
-        // cout << "Solution 2: " << pathSeats.size() << endl;
+        return pathSeats.size();
     }
 
-    void readFile( vector<vector<int>>& m, pair<int, int>& s, pair<int, int>& e ) {
-        // ! To change test example, choose the following code to uncomment:
-        // FILE* input = fopen( "input_example1.txt", "r" );
-        // FILE* input = fopen( "input_example2.txt", "r" );
-        // FILE* input = fopen( "inputCutOptimize.txt", "r" );
+    void readFile() {
         ifstream input( "Day16/input.txt" );
-        for ( string buf; getline( input, buf ); ) {
+        istringstream ss( "Hello" );
+        for ( string buf; getline( input, buf ); ) {  // operator bool()
             vector<int> row;
             for ( char c : buf ) {
-                if ( c != '\n' && c != '\0' ) {
-                    if ( c == '#' ) {
-                        row.push_back( CELLWALL );
-                    } else if ( c == '.' ) {
-                        row.push_back( CELLEMPTY );
-                    } else if ( c == 'S' ) {
-                        s = { m.size(), row.size() };
-                        row.push_back( CELLEMPTY );
-                    } else if ( c == 'E' ) {
-                        e = { m.size(), row.size() };
-                        row.push_back( CELLEMPTY );
-                    }
+                if ( c == '#' ) {
+                    row.push_back( CELLWALL );
+                } else if ( c == '.' ) {
+                    row.push_back( CELLEMPTY );
+                } else if ( c == 'S' ) {
+                    s = { maze.size(), row.size() };
+                    row.push_back( CELLEMPTY );
+                } else if ( c == 'E' ) {
+                    e = { maze.size(), row.size() };
+                    row.push_back( CELLEMPTY );
                 }
             }
-            m.push_back( row );
+            if ( !row.empty() )
+                maze.emplace_back( move( row ) );
         }
+        rows = maze.size();
+        cols = maze[0].size();
     }
 
    public:
-    void Solution() {
-        vector<vector<int>> m;
-        pair<int, int> s, e;
-        readFile( m, s, e );
-        // seekCost( m, { s.first,s.second,EAST }, { e.first,e.second } );
-        countSeats( m, { s.first, s.second, EAST }, { e.first, e.second } );
+    void Solution1() {
+        readFile();
+        printRes( 1, countSeats() );
+    }
+    void Solution2() {
+        printRes( 2, countSeats( false ) );
     }
 };

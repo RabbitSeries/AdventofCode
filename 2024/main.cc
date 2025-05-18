@@ -128,7 +128,8 @@ int main() {
     Day15.Solution2();
     printProcess();
     MazeDijkstra Day16 = MazeDijkstra();
-    Day16.Solution();
+    Day16.Solution1();
+    Day16.Solution2();
     printProcess();
     TenaryMachine Day17 = TenaryMachine();
     Day17.Solution1();
