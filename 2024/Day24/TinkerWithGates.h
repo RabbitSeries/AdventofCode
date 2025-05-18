@@ -22,27 +22,19 @@ class TinkerWithGates : public SolutionBase {
         //! Bool is not one bit, it is one entire byte, always init data member!!!!!!!
         bool isValid = false;
         bool data = false;
-        vector<pair<pair<string, string>, string>> outWireList;
+        vector<tuple<string, string, string>> outWireList;
     };
 
-    void resetGates( map<string, wire>& wireList ) {
-        for ( auto& w : wireList ) {
-            if ( w.first[0] != 'x' && w.first[0] != 'y' ) {
-                wireList[w.first].isValid = false;
-                wireList[w.first].data = false;
-            }
-        }
-    }
+    map<string, wire> wireList;
+    map<string, tuple<string, string, string>> outWireList;
 
-    void readFile( map<string, wire>& wireList, map<string, tuple<string, string, string>>& outWireList ) {
-        // ifstream input( "example.txt" );
-        // ifstream input( "example2.txt" );
-        // ifstream input( "example3.txt" );
-        // ifstream input( "example4.txt" );
+    void readFile() {
         ifstream input( "Day24/input.txt" );
+        stringstream ss;
+        ss << input.rdbuf();
         regex initWire( "([xy].+):\\s+([0-9])" );
         regex initGate( "\\b(.+)\\b\\s+(XOR|AND|OR)\\s+\\b(.+)\\b\\s+->\\s+(.+)" );
-        for ( string buf; getline( input, buf ); ) {
+        for ( string buf; getline( ss, buf ); ) {
             smatch m;
             if ( regex_search( buf, m, initWire ) ) {
                 wireList[m[1]].data = stoi( m[2] );
@@ -52,16 +44,13 @@ class TinkerWithGates : public SolutionBase {
                 vector<string> inputSort{ wire1Name, wire2Name };
                 sort( inputSort.begin(), inputSort.end(), less<string>() );
                 outWireList[outWireName] = { gateType, inputSort[0], inputSort[1] };
-                wireList[wire1Name].outWireList.push_back( { { m[2], wire2Name }, outWireName } );
-                wireList[wire2Name].outWireList.push_back( { { m[2], wire1Name }, outWireName } );
+                wireList[wire1Name].outWireList.emplace_back( m[2], wire2Name, outWireName );
+                wireList[wire2Name].outWireList.emplace_back( m[2], wire1Name, outWireName );
             }
         }
     }
 
     tuple<vector<string>, bool, bool> runGates( queue<string> wireQueue, map<string, wire>& wireList, bool staged = false, int curID = 0 ) {
-        resetGates( wireList );
-        // bool addFound = false;
-        // carrierFound = false;
         tuple<vector<string>, bool, bool> curProcessList;
         while ( !wireQueue.empty() ) {
             string curWireName = wireQueue.front();
@@ -70,7 +59,6 @@ class TinkerWithGates : public SolutionBase {
             if ( staged ) {
                 get<0>( curProcessList ).push_back( curWireName );
                 if ( curWireName[0] == 'z' ) {
-                    // addFound = true;
                     get<1>( curProcessList ) = curWire.data;
                 }
                 if ( curID == 0 && get<0>( curProcessList ).size() == 4 ) {
@@ -80,15 +68,15 @@ class TinkerWithGates : public SolutionBase {
                 }
             }
             for ( auto& gateInfo : curWire.outWireList ) {
-                string outWireName = gateInfo.second;
-                string nextWireName = gateInfo.first.second;
+                string outWireName = get<2>( gateInfo );
+                string nextWireName = get<1>( gateInfo );
                 wire& outWire = wireList[outWireName];
                 wire& nextWire = wireList[nextWireName];
                 if ( nextWire.isValid ) {
                     if ( !outWire.isValid ) {
                         outWire.isValid = true;
                         wireQueue.push( outWireName );
-                        string operaterName = gateInfo.first.first;
+                        string operaterName = get<0>( gateInfo );
                         outWire.data = gateResult( operaterName, curWire.data, nextWire.data );
                     }
                 }
@@ -97,39 +85,9 @@ class TinkerWithGates : public SolutionBase {
         return curProcessList;
     }
 
-    // TODO Someone tells me to permutate by level.
-    void Solution2_Permutate() {
-        map<string, wire> wireList;
-        map<string, tuple<string, string, string>> outWireList;
-        readFile( wireList, outWireList );
-        map<string, string> binaryDigits;
-        for ( auto& wireInfo : wireList ) {
-            if ( wireInfo.first[0] == 'x' )
-                binaryDigits[wireInfo.first] = 'y' + wireInfo.first.substr( 1 );
-        }
-        // This queue
-        queue<string> wireQueue;
-        wireQueue.push( "x00" );
-        resetGates( wireList );
-        string input1 = "x00", input2 = "y00", carrier = "";
-        tuple<vector<string>, bool, bool> curProcessList;
-        vector<string> swapList;
-
-        // while( stoi( input1.substr( 1 ) ) < binaryDigits.size() ) {
-        //     curProcessList = runGates( wireQueue, wireList, true );
-        //     bool res = carrier.empty() ? ( wireList[input1].data ^ wireList[input2].data ) : ( wireList[input1].data ^ wireList[input2].data ^ wireList[carrier].data );
-
-        //     if( res != curWire.data )
-        //         permutateAndSort( curProcessList, swapList, wireList, carrier, stoi( input1.substr( 1 ) ) );
-        // }
-    }
-
    public:
     void Solution1() {
-        map<string, wire> wireList;
-        map<string, tuple<string, string, string>> outWireList;
-        readFile( wireList, outWireList );
-        // This queue
+        readFile();
         queue<string> wireQueue;
         for ( auto& wire : wireList ) {
             if ( wire.first[0] == 'x' || wire.first[0] == 'y' ) {
@@ -142,33 +100,30 @@ class TinkerWithGates : public SolutionBase {
             if ( wireInfo.first[0] == 'z' )
                 res = to_string( wireInfo.second.data ) + res;
         }
-        // cout << "-" << res << "-" << endl;
         printRes( 1, stoll( res, nullptr, 2 ) );
     }
 
-    void Solution2() {
-        map<string, wire> wireList;
-        map<string, tuple<string, string, string>> outWireList;
-        readFile( wireList, outWireList );
-        map<string, string> binaryDigits;
-        vector<string> swapList;
-        for ( auto const& wireInfo : wireList ) {
-            if ( wireInfo.first[0] == 'x' )
-                binaryDigits[wireInfo.first] = 'y' + wireInfo.first.substr( 1 );
-        }
-        auto findGate = [&]( string input1, string input2, string gateType ) -> string {
-            for ( auto& wireInfo : outWireList ) {
-                auto& outWireInfo = wireInfo.second;
-                if ( get<0>( outWireInfo ) == gateType ) {
-                    if ( ( get<1>( outWireInfo ) == input1 && get<2>( outWireInfo ) == input2 ) || ( get<1>( outWireInfo ) == input2 && get<2>( outWireInfo ) == input1 ) ) {
-                        return wireInfo.first;
-                    }
+    string findGate( string input1, string input2, string gateType ) {
+        for ( auto& wireInfo : outWireList ) {
+            auto& outWireInfo = wireInfo.second;
+            if ( get<0>( outWireInfo ) == gateType ) {
+                if ( ( get<1>( outWireInfo ) == input1 && get<2>( outWireInfo ) == input2 ) || ( get<1>( outWireInfo ) == input2 && get<2>( outWireInfo ) == input1 ) ) {
+                    return wireInfo.first;
                 }
             }
-            return "";
-        };
+        }
+        return "";
+    };
+
+    void Solution2() {
+        int CascadingDepth = 0;
+        for ( auto const& wireInfo : wireList ) {
+            if ( wireInfo.first[0] == 'x' )
+                CascadingDepth++;
+        }
+        vector<string> swapList;
         string input1 = "x00", input2 = "y00", nextCarrier = "";
-        for ( size_t i = 0; i < binaryDigits.size(); i++ ) {
+        for ( int i = 0; i < CascadingDepth; i++ ) {
             // Add XOR
             string add1 = findGate( input1, input2, "XOR" );
             // Carrier AND
@@ -222,11 +177,8 @@ class TinkerWithGates : public SolutionBase {
             input2 = "y" + nextIndex.str();
         }
         sort( swapList.begin(), swapList.end(), less<string>() );
-        ostringstream ss;
-        ss << swapList[0];
-        for_each( swapList.begin() + 1, swapList.end(), [&]( string res ) {
-            ss << "," << res;
-        } );
-        printRes( 2, ss.str() );
+        printRes( 2, accumulate( swapList.begin() + 1, swapList.end(), swapList[0], [&]( string const& init, string const& res ) {
+                      return init + "," + res;
+                  } ) );
     }
 };
