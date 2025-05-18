@@ -37,7 +37,7 @@ class MazeDijkstra : public SolutionBase {
      * @brief Dijkstra + state machine transfer, four dimensional dijkstra.
      *
      */
-    int countSeats( bool isSolution1 = true ) {
+    int countSeats() {
         set<pair<int, int>> pathSeats;
         vector<vector<array<int, 4>>> Cost = vector( rows, vector( cols, array{ INT_MAX, INT_MAX, INT_MAX, INT_MAX } ) );
         priority_queue<Step, vector<Step>, greater<>> pq;
@@ -53,8 +53,8 @@ class MazeDijkstra : public SolutionBase {
             curStep.path.emplace_back( curStep.first, curStep.second );
             if ( curStep.isSameLocation( e ) ) {
                 if ( curCost <= endCost ) {
-                    if ( isSolution1 ) {  // Here enters only once.
-                        return curCost;
+                    if ( curCost < endCost ) {  // Here enters only once.
+                        printRes( 1, curCost );
                     }
                     endCost = curCost;
                     for_each( curStep.path.begin(), curStep.path.end(), [&]( pair<int, int> const& seat ) {
@@ -118,9 +118,8 @@ class MazeDijkstra : public SolutionBase {
    public:
     void Solution1() {
         readFile();
-        printRes( 1, countSeats() );
     }
     void Solution2() {
-        printRes( 2, countSeats( false ) );
+        printRes( 2, countSeats() );
     }
 };
