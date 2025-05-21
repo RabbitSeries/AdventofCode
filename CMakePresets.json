@@ -1,119 +1,86 @@
 {
-    "version": 6,
+    "version": 8,
     "cmakeMinimumRequired": {
         "major": 3,
-        "minor": 19,
+        "minor": 28,
         "patch": 0
     },
     "configurePresets": [
         {
-            "name": "MinGW Release Configure",
-            "displayName": "MinGW Release Configure",
-            "hidden": false,
-            "generator": "MinGW Makefiles",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
-            }
-        },
-        {
-            "name": "Ninja Debug Configure",
-            "displayName": "Ninja Debug Configure",
-            "hidden": false,
-            "generator": "Ninja",   
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "Ninja Release Configure",
-            "displayName": "Ninja Release Configure",
-            "hidden": false,
+            "name": "default",
+            "displayName": "Default Config",
             "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "environment": {
+                "ProjectName": "AoC"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install/${presetName}"
+            }
+        },
+        {
+            "name": "ninja-release",
+            "inherits": "default",
+            "displayName": "Ninja Release",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
-            "name": "Ninja RelWithDebInfo Configure",
-            "displayName": "Ninja RelWithDebInfo Configure",
-            "hidden": false,
-            "generator": "Ninja",
+            "name": "unix-release",
+            "inherits": "default",
+            "displayName": "Unix Release",
+            "generator": "Unix Makefiles",
+            "condition": {
+                "type": "matches",
+                "string": "$penv{PATH}",
+                "regex": "usr/bin"
+            },
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+                "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
-            "name": "MinGW Debug Configure",
-            "displayName": "MinGW Debug Configure",
-            "hidden": false,
+            "name": "windows-gcc-debug",
+            "inherits": "default",
+            "displayName": "Windows GCC",
             "generator": "MinGW Makefiles",
+            "condition": {
+                "type": "allOf",
+                "conditions": [
+                    {
+                        "type": "equals",
+                        "lhs": "${hostSystemName}",
+                        "rhs": "Windows"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "windows-gcc-release",
+            "inherits": "windows-gcc-debug",
+            "displayName": "Windows GCC Release",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Release"
             }
         }
     ],
     "buildPresets": [
         {
-            "name": "MinGW Build Debug",
-            "displayName": "MinGW Build Debug",
-            "hidden": false,
-            "configurePreset": "MinGW Debug Configure"
+            "name": "windows-gcc-release",
+            "configurePreset": "windows-gcc-release",
+            "jobs": 8
         },
         {
-            "name": "MinGW Build Release",
-            "displayName": "MinGW Build Release",
-            "hidden": false,
-            "configurePreset": "MinGW Release Configure"
-        }
-    ],
-    "testPresets": [
+            "name": "ninja-release",
+            "configurePreset": "ninja-release",
+            "jobs": 8
+        },
         {
-            "name": "MinGW Test",
-            "configurePreset": "MinGW Release Configure",
-            "output": {
-                "outputOnFailure": true
-            },
-            "execution": {
-                "noTestsAction": "error",
-                "stopOnFailure": true
-            }
+            "name": "unix-release",
+            "configurePreset": "unix-release",
+            "jobs": 8
         }
-    ],
-    "packagePresets": [
-        {
-            "name": "MinGW package",
-            "configurePreset": "MinGW Release Configure",
-            "generators": [
-                "ZIP"
-            ]
-        }
-    ],
-    "workflowPresets": [
-        {
-            "name": "MinGW workflow",
-            "steps": [
-                {
-                    "type": "configure",
-                    "name": "MinGW Release Configure"
-                },
-                {
-                    "type": "build",
-                    "name": "MinGW build"
-                },
-                {
-                    "type": "test",
-                    "name": "MinGW test"
-                },
-                {
-                    "type": "package",
-                    "name": "MinGW package"
-                }
-            ]
-        }
-    ],
-    "vendor": {
-        "example.com/ExampleIDE/1.0": {
-            "autoFormat": false
-        }
-    }
+    ]
 }

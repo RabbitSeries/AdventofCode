@@ -7,3 +7,4 @@ exe_*
 /.env
 input.txt
 /[oO]ut
+/CMakeUserPresets.json

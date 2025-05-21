@@ -1,20 +1,19 @@
 #pragma once
 #include <iostream>
 #include <sstream>
-#include <format>
 class SolutionBase {
     static int id;
 
    protected:
-    template <typename T>
-    void printRes( int id, T const& res ) {
+    template <typename... Args>
+    void printRes( int id, Args&&... args ) {
         using namespace std;
-        cout << format( "\tSolution {}: {}\n", id, res );
+        ( ( cout << "\tSolution " << id << ": " ) << ... << forward<Args>( args ) ) << endl;  // fold expression
     }
 
    public:
     SolutionBase() {
         using namespace std;
-        cout << format( "Day {:d}:\n", ++id );
+        cout << "Day " << ++id << ":\n";
     }
 };
