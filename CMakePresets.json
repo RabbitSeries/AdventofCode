@@ -68,19 +68,19 @@
     ],
     "buildPresets": [
         {
-            "name": "windows-gcc-release",
-            "configurePreset": "windows-gcc-release",
-            "jobs": 8
-        },
-        {
-            "name": "ninja-release",
-            "configurePreset": "ninja-release",
-            "jobs": 8
-        },
-        {
             "name": "unix-release",
             "configurePreset": "unix-release",
             "jobs": 8
+        },
+        {
+            "name": "windows-gcc-release",
+            "inherits": "unix-release",
+            "configurePreset": "windows-gcc-release"
+        },
+        {
+            "name": "ninja-release",
+            "inherits": "unix-release",
+            "configurePreset": "ninja-release"
         }
     ]
 }

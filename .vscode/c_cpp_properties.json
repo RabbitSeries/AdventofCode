@@ -9,7 +9,7 @@
         },
         {
             "name": "MinGW",
-            "compilerPath": "D:/Build_Tool_Lib/x86_64-14.2.0-release-win32-seh-msvcrt-rt_v12-rev2/bin/g++.exe",
+            "compilerPath": "D:\\Build_Tool_Lib\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++",
             "includePath": [
                 "D:\\Build_Tool_Lib\\boost\\boost_1_87_0_MinGW"
             ],
