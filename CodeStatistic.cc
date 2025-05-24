@@ -11,7 +11,7 @@ struct Entry {
 };
 
 int main() {
-    FILE* pipe = popen( "cloc . --include-ext=h,cc,cpp,hpp,c,java,py --exclude-dir=.vscode,.git,compileRuntime,JavaLibs,out,Legacy", "r" );
+    FILE* pipe = popen( "cloc . --include-ext=h,cc,cpp,hpp,c,java,py --exclude-dir=.vscode,.git,compileRuntime,JavaLibs,build", "r" );
     if ( !pipe ) {
         std::cerr << "Failed to run cloc\n";
         return 1;
