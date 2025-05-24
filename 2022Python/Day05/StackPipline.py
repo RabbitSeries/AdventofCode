@@ -1,5 +1,4 @@
 import re
-from collections import deque
 
 
 def solve(pipelines: list[list[str]], data: list[list[int]], reverse: bool = True) -> str:

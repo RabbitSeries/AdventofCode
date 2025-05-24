@@ -55,7 +55,7 @@ with open("input.txt") as f:
             if fileOrDir.startswith('$ cd'):
                 break
             createFile(pwd, fileOrDir)
-        pwd = cd(pwd, [l for l in lines if l.startswith('$ cd')])
+        pwd = cd(pwd, [cmd for cmd in lines if cmd.startswith('$ cd')])
         if not root:
             root = pwd
     if root:

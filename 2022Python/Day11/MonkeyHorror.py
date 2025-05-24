@@ -1,14 +1,10 @@
-import copy
-from functools import reduce
+from functools import reduce, lru_cache
+import math
 
 
 class Monkey:
-    def __init__(self, operation: str,
-                 nanominator: int,
-                 goOnTrue: int,
-                 goOnFalse: int) -> None:
-        (self.operation, self.goOnTrue, self.goOnFalse) = (
-            operation, goOnTrue, goOnFalse)
+    def __init__(self, operation: str, nanominator: int, goOnTrue: int, goOnFalse: int) -> None:
+        self.operation, self.goOnTrue, self.goOnFalse = operation, goOnTrue, goOnFalse
         self.devisible = nanominator
 
     def __repr__(self) -> str:
@@ -18,7 +14,8 @@ class Monkey:
         return eval(self.operation)
 
 
-def Play(item: int, mkId: int, Monkeys: list[Monkey], modulo: int, devider: int = 3):
+@lru_cache(maxsize=None)
+def Play(item: int, mkId: int, Monkeys: tuple[Monkey, ...], modulo: int, devider: int = 3):
     delta = [0] * len(Monkeys)
     while True:
         mk = Monkeys[mkId]
@@ -32,43 +29,32 @@ def Play(item: int, mkId: int, Monkeys: list[Monkey], modulo: int, devider: int 
     return (delta, (item, nextId))
 
 
-def gcd(a, b):
-    return a if b == 0 else gcd(b, a % b)
-
-
-def lcm(a, b):
-    return a * b // gcd(a, b)
-
-
-def Round(round: int, resList: list[int], items: list[tuple[int, int]], modulo: int, Monkeys: list[Monkey], devider: int):
-    for r in range(round):
+def Round(round: int, items: list[tuple[int, int]], modulo: int, Monkeys: tuple[Monkey, ...], devider: int):
+    resList = [0] * len(Monkeys)
+    for _ in range(round):
         nextItems = []
         for item, mkId in items:
             delta, nextItem = Play(item, mkId, Monkeys, modulo, devider)
             nextItems.append(nextItem)
-            for i, dlt in enumerate(delta):
-                resList[i] += dlt
+            resList[:] = [a + b for a, b in zip(resList, delta)]
         items = nextItems
+    return resList
 
 
 def main():
     with open("input.txt") as f:
-        MksRaw = [data.splitlines() for data in f.read().split('\n\n')]
-        Monkeys = [Monkey(operation.split("=")[-1],
-                          int(devider.split()[-1]),
-                          int(goOnTrue.split()[-1]),
-                          int(goOnFalse.split()[-1]))
-                   for _, _, operation, devider, goOnTrue, goOnFalse
-                   in MksRaw]
-        items = [(item, int(mkId.split(':')[0].split()[1]))
-                 for mkId, items, _, _, _, _ in MksRaw for item in map(int, items.split(":")[1].split(","))]
-        modulo = reduce(lambda i, mk: lcm(i, mk.devisible), Monkeys, 1)
-        resList = [0] * len(Monkeys)
-        Round(20, resList, copy.deepcopy(items), modulo, Monkeys, 3)
-        print("Part 1:", reduce(lambda i, n: i * n, sorted(resList, reverse=True)[0:2], 1))
-        resList = [0] * len(Monkeys)
-        Round(10000, resList, items, modulo, Monkeys, 1)
-        print("Part 2:", reduce(lambda i, n: i * n, sorted(resList, reverse=True)[0:2], 1))
+        raw = [data.splitlines() for data in f.read().split('\n\n')]
+    Monkeys = tuple((Monkey(operation.split("=")[-1],
+                            int(devider.split()[-1]),
+                            int(goOnTrue.split()[-1]),
+                            int(goOnFalse.split()[-1]))
+                     for _, _, operation, devider, goOnTrue, goOnFalse
+                     in raw))
+    items = [(item, int(mkId.split(':')[0].split()[1]))
+             for mkId, items, *_ in raw for item in map(int, items.split(":")[1].split(","))]
+    mod = math.lcm(*[mk.devisible for mk in Monkeys])
+    print("Part 1:", reduce(lambda i, n: i * n, sorted(Round(20, items, mod, Monkeys, 3), reverse=True)[0:2], 1))
+    print("Part 2:", reduce(lambda i, n: i * n, sorted(Round(10000, items, mod, Monkeys, 1), reverse=True)[0:2], 1))
 
 
 if __name__ == '__main__':
