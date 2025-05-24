@@ -7,17 +7,16 @@ with open("input.txt") as f:
     lines = f.read().splitlines()
     heights = [[int(e) for e in line] for line in lines]
     row, col = len(heights), len(heights[0])
-    horizonDP = [list(accumulate(l, max)) for l in heights]
+    horizonDP = [list(accumulate(h, max)) for h in heights]
 
-    horizonDPR = [list(accumulate(l[::-1], max))[::-1] for l in heights]
+    horizonDPR = [list(accumulate(h[::-1], max))[::-1] for h in heights]
 
     verticalDP = [list(accumulate([heights[i][j] for i in range(row)], max)) for j in range(col)]
 
     vertialDPR = [list(accumulate([heights[i][j] for i in range(row - 1, -1, -1)], max))[::-1] for j in range(col)]
 
     part1 = [(i, j) for i in range(row)
-             for j in range(col) if i == 0 or j == 0 or (i == row - 1) or (j == col - 1)
-             or heights[i][j] > min(horizonDP[i][j - 1], horizonDPR[i][j + 1], verticalDP[j][i - 1], vertialDPR[j][i + 1])]
+             for j in range(col) if i == 0 or j == 0 or (i == row - 1) or (j == col - 1) or heights[i][j] > min(horizonDP[i][j - 1], horizonDPR[i][j + 1], verticalDP[j][i - 1], vertialDPR[j][i + 1])]
     print("Part 1:", len(part1))
 
     def count(i: int, j: int):
