@@ -11,13 +11,23 @@ Newbie to python, so, for convenience, the python documentation:
 
 How to start a language:
 
-- Types: literals, string<->int apis, mutability, variable scope, list, set, map, container apis, exceptions
+- Types: literals, string<->int apis, mutability, variable scope, array, stack( list ), set, map, queue, deque, heap ( priority_queue ), container apis, exceptions
 - IO: file IO, stdio, format
 - OOP: copy controll, polymorphism, generics
 - Algo Shortcut/Apis: Functions equivalent to C++'s in `algorithm.h`
-- Grammar Suger: C++ initialize & python lazy computations
+- Grammar Suger: C++ initialize, unflod & python unpack
 - Functional programming
+  - Process storage
+  - Lazy computations
+  - Process parameter
+  - bind, placeholders, mem_fn
+  - lambda(arrow function)
+  - Function objects (function interface, struct, objects)
+  - Callable/std::function
+  - TMP( Template Meta Programming)
+  - Optional, expected
 - Multithreading and Coroutine apis
+  - Promise
 - Time apis
 - Random engine apis
 - For experience: get a formatter, editor and smash the hotkeys

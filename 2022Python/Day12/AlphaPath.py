@@ -28,6 +28,10 @@ def isValid(q: Point2D):
     return q[0] >= 0 and q[1] >= 0 and q[0] < ROW and q[1] < COL
 
 
+def isUpHill(p: Point2D, q: Point2D):
+    return ord(AlphaMap[q[0]][q[1]]) <= (ord(AlphaMap[p[0]][p[1]]) + 1)
+
+
 def posEqual(p: Point2D, e: Point2D):
     return p == e
 
@@ -51,9 +55,7 @@ def Dijkstra(s: Point2D, e: Point2D, destChecker: Callable[[Point2D, Point2D], b
         for x, y in zip(dx, dy):
             q = (p[0] + x, p[1] + y)
             nextDis = curDis + 1
-            if isValid(q) and (ord(AlphaMap[q[0]][q[1]]) <= (ord(AlphaMap[p[0]][p[1]]) + 1)
-                               if upHill else
-                               ord(AlphaMap[p[0]][p[1]]) <= (ord(AlphaMap[q[0]][q[1]]) + 1)):
+            if isValid(q) and (isUpHill(p, q) if upHill else isUpHill(*[p, q][::-1])):
                 if dist[q[0]][q[1]] == -1 or nextDis < dist[q[0]][q[1]]:
                     dist[q[0]][q[1]] = nextDis
                     heappush(pq, (nextDis, q))
