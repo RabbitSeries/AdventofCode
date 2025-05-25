@@ -41,21 +41,16 @@ def Round(round: int, items: list[tuple[int, int]], modulo: int, Monkeys: tuple[
     return resList
 
 
-def main():
-    with open("input.txt") as f:
-        raw = [data.splitlines() for data in f.read().split('\n\n')]
-    Monkeys = tuple((Monkey(operation.split("=")[-1],
-                            int(devider.split()[-1]),
-                            int(goOnTrue.split()[-1]),
-                            int(goOnFalse.split()[-1]))
-                     for _, _, operation, devider, goOnTrue, goOnFalse
-                     in raw))
-    items = [(item, int(mkId.split(':')[0].split()[1]))
-             for mkId, items, *_ in raw for item in map(int, items.split(":")[1].split(","))]
-    mod = math.lcm(*[mk.devisible for mk in Monkeys])
-    print("Part 1:", reduce(lambda i, n: i * n, sorted(Round(20, items, mod, Monkeys, 3), reverse=True)[0:2], 1))
-    print("Part 2:", reduce(lambda i, n: i * n, sorted(Round(10000, items, mod, Monkeys, 1), reverse=True)[0:2], 1))
-
-
-if __name__ == '__main__':
-    main()
+with open("input.txt") as f:
+    raw = [data.splitlines() for data in f.read().split('\n\n')]
+Monkeys = tuple((Monkey(operation.split("=")[-1],
+                        int(devider.split()[-1]),
+                        int(goOnTrue.split()[-1]),
+                        int(goOnFalse.split()[-1]))
+                 for _, _, operation, devider, goOnTrue, goOnFalse
+                 in raw))
+items = [(item, int(mkId.split(':')[0].split()[1]))
+         for mkId, items, *_ in raw for item in map(int, items.split(":")[1].split(","))]
+mod = math.lcm(*[mk.devisible for mk in Monkeys])
+print("Part 1:", reduce(lambda i, n: i * n, sorted(Round(20, items, mod, Monkeys, 3), reverse=True)[0:2], 1))
+print("Part 2:", reduce(lambda i, n: i * n, sorted(Round(10000, items, mod, Monkeys, 1), reverse=True)[0:2], 1))

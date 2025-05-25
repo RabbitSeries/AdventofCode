@@ -4,5 +4,5 @@ def find_next_unique_list(data, unique_len):
 
 with open("input.txt") as f:
     data = f.read().rstrip()
-    print("Part 2:", find_next_unique_list(data, 4))
-    print("Part 2:", find_next_unique_list(data, 14))
+print("Part 2:", find_next_unique_list(data, 4))
+print("Part 2:", find_next_unique_list(data, 14))

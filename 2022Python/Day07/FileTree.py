@@ -48,20 +48,20 @@ def dfs(root: File | None) -> list[File]:
 
 
 with open("input.txt") as f:
-    root = pwd = None
     blocks = [block.strip().splitlines() for block in f.read().split('$ ls')]
-    for lines in blocks:
-        for fileOrDir in lines:
-            if fileOrDir.startswith('$ cd'):
-                break
-            createFile(pwd, fileOrDir)
-        pwd = cd(pwd, [cmd for cmd in lines if cmd.startswith('$ cd')])
-        if not root:
-            root = pwd
-    if root:
-        dirs = dfs(root)
-        sizes = sorted([countFolderSize(dir, True) for dir in dirs])
-        print("Part 1:", sum(list(size for size in sizes if size <= 100000)))
-        TOTAL, NEEDED = 70_000_000, 30_000_000
-        requiredFree = NEEDED - min(TOTAL - sizes[-1], NEEDED)
-        print("Part 2:", next(s for s in sizes if s >= requiredFree))
+root = pwd = None
+for lines in blocks:
+    for fileOrDir in lines:
+        if fileOrDir.startswith('$ cd'):
+            break
+        createFile(pwd, fileOrDir)
+    pwd = cd(pwd, [cmd for cmd in lines if cmd.startswith('$ cd')])
+    if not root:
+        root = pwd
+if root:
+    dirs = dfs(root)
+    sizes = sorted([countFolderSize(dir, True) for dir in dirs])
+    print("Part 1:", sum(list(size for size in sizes if size <= 100000)))
+    TOTAL, NEEDED = 70_000_000, 30_000_000
+    requiredFree = NEEDED - min(TOTAL - sizes[-1], NEEDED)
+    print("Part 2:", next(s for s in sizes if s >= requiredFree))

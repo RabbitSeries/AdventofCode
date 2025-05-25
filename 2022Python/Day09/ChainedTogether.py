@@ -31,8 +31,8 @@ def solve(pythonLen: int, commands: list[tuple[int, int]]):
     return len(visited)
 
 
+char2direc = {'L': 0, 'R': 1, 'U': 2, 'D': 3}
 with open("input.txt") as f:
-    char2direc = {'L': 0, 'R': 1, 'U': 2, 'D': 3}
     commands = [(char2direc.get(direc, 0), int(n)) for line in f.read().strip().splitlines() for direc, n in [line.split()]]
-    print("Part 1:", solve(2, commands))
-    print("Part 2:", solve(10, commands))
+print("Part 1:", solve(2, commands))
+print("Part 2:", solve(10, commands))

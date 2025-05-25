@@ -10,15 +10,15 @@ def solve(pipelines: list[list[str]], data: list[list[int]], reverse: bool = Tru
 
 
 with open("input.txt") as f:
-    pattern = re.compile(r'\d+')
     init, data = [block.rstrip().splitlines() for block in f.read().split('\n\n')]
-    pipelines: list[list[str]] = [[] for _ in range(0, 1 + (len(init[0]) + 1) // 4)]
+pattern = re.compile(r'\d+')
+pipelines: list[list[str]] = [[] for _ in range(0, 1 + (len(init[0]) + 1) // 4)]
 
-    for line in init:
-        for id, elem in enumerate([line[i:i + 4].strip(' []') for i in range(0, len(line), 4)], 1):
-            if elem:
-                pipelines[id] = [elem] + pipelines[id]
-    data = [list(map(int, pattern.findall(movement))) for movement in data]
+for line in init:
+    for id, elem in enumerate([line[i:i + 4].strip(' []') for i in range(0, len(line), 4)], 1):
+        if elem:
+            pipelines[id] = [elem] + pipelines[id]
+data = [list(map(int, pattern.findall(movement))) for movement in data]
 
-    print("Part 1:", solve([q.copy() for q in pipelines], data))  # print("Part 1:", partsolve1(copy.deepcopy(pipelines)))
-    print("Part 2:", solve(pipelines, data, False))
+print("Part 1:", solve([q.copy() for q in pipelines], data))  # print("Part 1:", partsolve1(copy.deepcopy(pipelines)))
+print("Part 2:", solve(pipelines, data, False))
