@@ -22,7 +22,7 @@ How to start a language:
   - Process parameter
   - bind, placeholders, mem_fn
   - lambda(arrow function)
-  - Function objects (function interface, struct, objects)
+  - Function objects (function interface, struct, objects, operator())
   - Callable/std::function
   - TMP( Template Meta Programming)
   - Optional, expected
