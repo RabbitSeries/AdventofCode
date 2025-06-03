@@ -8,13 +8,13 @@ import JavaDataModel.*;
 
 import java.io.*;
 
-public class StringHasher {
+public class StringHasher implements SolutionBase2023 {
     List<String> stepList;
 
     void readFile() throws IOException {
         stepList = new ArrayList<>();
         String buf;
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day15/input.txt"));
         while ((buf = input.readLine()) != null) {
             stepList.addAll(Arrays.stream(buf.trim().split(",")).toList());
         }
@@ -29,7 +29,7 @@ public class StringHasher {
         return s.split("[=-]")[0];
     }
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         readFile();
         long res = 0;
         for (var s : stepList)
@@ -52,7 +52,7 @@ public class StringHasher {
         }
     }
 
-    void Solution2() throws IOException {
+    public void Solution2() throws IOException {
         List<ArrayList<Pair<String, Integer>>> BoxList =
                 Collections.nCopies(256, new ArrayList<Pair<String, Integer>>()).stream()
                         .map(list -> new ArrayList<>(list)).toList();

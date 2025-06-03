@@ -3,9 +3,11 @@ package Day01;
 import java.io.*;
 import java.util.*;
 
-public class ValueCalibration {
+import JavaDataModel.SolutionBase2023;
+
+public class ValueCalibration implements SolutionBase2023 {
     ArrayList<String> readFile() throws IOException {
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day01/input.txt"));
         ArrayList<String> maplist = new ArrayList<>();
         String buf;
         while ((buf = input.readLine()) != null) {
@@ -17,6 +19,7 @@ public class ValueCalibration {
     }
 
     Integer res, digitVal;
+
     HashMap<String, Integer> digits;
 
     void InitDataModel() {
@@ -72,7 +75,7 @@ public class ValueCalibration {
         });
     }
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         res = 0;
         digits = new HashMap<>();
         ArrayList<String> maplist = readFile();
@@ -80,18 +83,10 @@ public class ValueCalibration {
         System.out.println("Solution 1: " + res);
     }
 
-    void Solution2() throws IOException {
+    public void Solution2() throws IOException {
         InitDataModel();
         ArrayList<String> maplist = readFile();
         DualSearch(maplist);
         System.out.println("Solution 2: " + res);
-    }
-
-    public static void main(String[] args) throws IOException {
-        // BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        // System.out.println("Hello");
-        ValueCalibration Solution = new ValueCalibration();
-        Solution.Solution1();
-        Solution.Solution2();
     }
 }

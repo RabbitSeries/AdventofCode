@@ -3,12 +3,14 @@ package Day09;
 import java.io.*;
 import java.util.*;
 
-public class HistoryExtrapolate {
+import JavaDataModel.SolutionBase2023;
+
+public class HistoryExtrapolate implements SolutionBase2023 {
     ArrayList<List<Integer>> HistoryList;
 
     void readFile() throws IOException {
         HistoryList = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day09/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null) {
             HistoryList.add(
@@ -32,7 +34,7 @@ public class HistoryExtrapolate {
         return extrapolate;
     }
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         readFile();
         long res = 0;
         for (List<Integer> historyList : HistoryList) {
@@ -43,7 +45,7 @@ public class HistoryExtrapolate {
         System.out.println("Solution 1: " + res);
     }
 
-    void Solution2() throws IOException {
+    public void Solution2() throws IOException {
         readFile();
         long res = 0;
         for (List<Integer> historyList : HistoryList) {

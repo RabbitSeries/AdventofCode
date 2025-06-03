@@ -3,9 +3,11 @@ package Day25;
 import java.io.*;
 import java.util.*;
 
-public class MinimumCut {
+import JavaDataModel.*;
+
+public class MinimumCut implements SolutionBase2023 {
     void readFile() throws Exception {
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day25/input.txt"));
         input.lines().forEach(l -> {
             var split = l.split(":");
             int inWire = Hasher(split[0].trim());
@@ -87,23 +89,23 @@ public class MinimumCut {
         return Cliques;
     }
 
-    void Solution1() throws Exception {
+    public void Solution1() throws Exception {
         readFile();
-        long timeout = 70;
-        while (true) {
-            long seed = System.currentTimeMillis();
-            var res = Karger(seed, timeout);
-            if (CutCount(res) == 3) {
-                System.out.println("Using seed: " + seed);
-                System.out.println("Solution 1: " + res.values().stream().mapToInt(s -> s.size()).reduce(1, (i, v) -> i * v));
-                break;
-            }
-        }
+        // long timeout = 70;
+        // while (true) {
+        //     long seed = System.currentTimeMillis();
+        //     var res = Karger(seed, timeout);
+        //     if (CutCount(res) == 3) {
+        //         System.out.println("Using seed: " + seed);
+        //         System.out.println("Solution 1: " + res.values().stream().mapToInt(s -> s.size()).reduce(1, (i, v) -> i * v));
+        //         break;
+        //     }
+        // }
         // 1747570281531 - 40ms
-        System.out.println("Solution 1: " + Karger(1747570281531L,Long.MAX_VALUE).values().stream().mapToInt(s -> s.size()).reduce(1, (i, v) -> i * v));
+        System.out.println("Solution 1: " + Karger(1747570281531L, Long.MAX_VALUE).values().stream().mapToInt(s -> s.size()).reduce(1, (i, v) -> i * v));
     }
 
-    void Solution2() throws Exception {
+    public void Solution2() throws Exception {
         System.out.println("\t\t\t------All 50 stars AoC Finished!!!!------");
     }
 

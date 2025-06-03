@@ -5,7 +5,7 @@ import java.util.*;
 import Day10.PipeModel.*;
 import JavaDataModel.*;
 
-public class CharacterLoop {
+public class CharacterLoop implements SolutionBase2023 {
     List<List<Character>> PipeMap;
 
     int rows, cols;
@@ -14,7 +14,7 @@ public class CharacterLoop {
 
     void readFile() throws IOException {
         PipeMap = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day10/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null) {
             if (buf.indexOf("S") != -1) {
@@ -74,7 +74,7 @@ public class CharacterLoop {
         List<Point2D> PathList = new ArrayList<>();
     }
 
-    List<Point2D> Solution1() throws IOException, InterruptedException {
+    public void Solution1() throws IOException, InterruptedException {
         readFile();
         Queue<Step> q = new LinkedList<>();
         HashSet<Step> visited = new HashSet<>();
@@ -101,7 +101,8 @@ public class CharacterLoop {
                 // Destination process
                 if (curPos.equals(StartPos)) {
                     System.out.println("Solution 1: " + loopLen / 2);
-                    return new ArrayList<>(front.PathList.stream().map(entry -> new Point2D(entry.getKey(), entry.getValue())).toList());
+                    resPathList = new ArrayList<>(front.PathList.stream().map(entry -> new Point2D(entry.getKey(), entry.getValue())).toList());
+                    return;
                 }
 
                 // Construct nextPos info
@@ -120,7 +121,7 @@ public class CharacterLoop {
             }
             loopLen++;
         }
-        return null;
+        return;
     }
 
     static ClockOrder PathClockOrder = null;
@@ -152,16 +153,16 @@ public class CharacterLoop {
         return 0;
     }
 
-    void Solution2(List<Point2D> pathList) {
+    public void Solution2() {
         for (int i = 0; i < 2; i++) {
             var QueryModel = i == 0 ? PipeModel.ClockwiseQuery : PipeModel.CounterclockwiseQuery;
             HashMap<Point2D, Boolean> visited = new HashMap<>();
-            for (Point2D curPos : pathList) {
+            for (Point2D curPos : resPathList) {
                 visited.putIfAbsent(curPos, true);
             }
             int res = 0;
             Point2D prePos = null;
-            for (Point2D curPos : pathList) {
+            for (Point2D curPos : resPathList) {
                 if (curPos.equals(StartPos)) {
                     System.out.println("Solution 2: " + res);
                     return;
@@ -201,9 +202,11 @@ public class CharacterLoop {
         return PointList;
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    List<Point2D> resPathList = null;
+
+    public static void main(String[] args) throws Exception {
         CharacterLoop Day10 = new CharacterLoop();
-        List<Point2D> pathList = Day10.Solution1();
-        Day10.Solution2(pathList);
+        Day10.Solution1();
+        Day10.Solution2();
     }
 }

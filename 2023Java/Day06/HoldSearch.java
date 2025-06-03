@@ -6,12 +6,14 @@ import java.util.Map.*;
 import java.util.AbstractMap.*;
 import java.util.stream.*;
 
-public class HoldSearch {
+import JavaDataModel.SolutionBase2023;
+
+public class HoldSearch implements SolutionBase2023 {
     ArrayList<Entry<Integer, Integer>> recordList;
 
     void readFile() throws IOException {
         recordList = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day06/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null) {
             if (buf.indexOf("Time:") != -1) {
@@ -51,7 +53,7 @@ public class HoldSearch {
         }
     }
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         readFile();
         long targetCnt = 1;
         // targetCnt = (timeout - t) * t for target > distance: (const - t)*t - distance
@@ -62,7 +64,7 @@ public class HoldSearch {
         System.out.println("Solution 1: " + targetCnt);
     }
 
-    void Solution2() throws IOException {
+    public void Solution2() throws IOException {
         readFile();
         long realTimeout = Long.parseLong(recordList.stream()
                 .map(token -> token.getKey().toString()).collect(Collectors.joining()));
@@ -73,11 +75,5 @@ public class HoldSearch {
         targetCnt *= binarySearch(realTimeout, realDistance);
 
         System.out.println("Solution 2: " + targetCnt);
-    }
-
-    public static void main(String[] args) throws IOException {
-        HoldSearch Solution = new HoldSearch();
-        Solution.Solution1();
-        Solution.Solution2();
     }
 }

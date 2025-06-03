@@ -9,29 +9,9 @@ import java.util.stream.IntStream;
 
 import org.hipparchus.util.*;
 
-public class HailIntersection {
-    class Hail {
-        public Hail(List<Long> p, List<Long> d) {
-            pos = p;
-            delta = d;
-        }
+import JavaDataModel.SolutionBase2023;
 
-        public Optional<Pair<Double, Double>> Intersection(Hail rhs) {
-            long coeff = delta.get(1) * rhs.delta.get(0) - delta.get(0) * rhs.delta.get(1);
-            if (coeff != 0) {
-                double thisGap = (1.0d * (rhs.delta.get(0) * (rhs.pos.get(1) - pos.get(1)) - rhs.delta.get(1) * (rhs.pos.get(0) - pos.get(0))) / coeff);
-                double rhsGap = (pos.get(0) + delta.get(0) * thisGap - rhs.pos.get(0)) / rhs.delta.get(0);
-                if (thisGap >= 0 && rhsGap > 0) {
-                    return Optional.of(new Pair<Double, Double>(
-                            pos.get(0) + delta.get(0) * thisGap,
-                            pos.get(1) + delta.get(1) * thisGap));
-                }
-            }
-            return Optional.empty();
-        }
-
-        List<Long> pos, delta;
-    }
+public class HailIntersection implements SolutionBase2023 {
 
     Hail ParseHail(String s) {
         var InputSplit = s.split("@");
@@ -43,7 +23,7 @@ public class HailIntersection {
     List<Hail> HailList = null;
 
     void readFile() throws Exception {
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day24/input.txt"));
         HailList = input.lines().map(this::ParseHail).toList();
         input.close();
     }
@@ -58,7 +38,7 @@ public class HailIntersection {
         return false;
     }
 
-    void Solution1() throws Exception {
+    public void Solution1() throws Exception {
         readFile();
         System.out.println("Solution 1: " + IntStream.range(0, HailList.size()).mapToLong(i -> IntStream.range(i + 1, HailList.size())
                 .mapToObj(j -> HailList.get(i).Intersection(HailList.get(j)))
@@ -70,7 +50,9 @@ public class HailIntersection {
      * Currently using hipparchus MultivariateJacobianFunction as a solution
      * @see HailIntersection_LinearAlgebra#Solution2() Legacy.Day24.HailIntersection_LinearAlgbra
      */
-    void Solution2() throws Exception {
+    public void Solution2() throws Exception {
+        HailIntersection_LinearAlgebra legacy = new HailIntersection_LinearAlgebra();
+        legacy.Solution2(HailList);
     }
 
     public static void main(String[] args) throws Exception {

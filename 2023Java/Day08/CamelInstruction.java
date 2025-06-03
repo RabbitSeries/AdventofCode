@@ -6,14 +6,19 @@ import java.util.Map.*;
 import java.util.AbstractMap.*;
 import java.util.regex.*;
 
-public class CamelInstruction {
+import JavaDataModel.SolutionBase2023;
+
+public class CamelInstruction implements SolutionBase2023 {
     // Solution 1
     List<Character> Instructions;
+
     HashMap<String, Entry<String, String>> Network;
 
     // Solution 2
     HashMap<String, Entry<String, Integer>> PathList;
+
     List<String> StartList;
+
     List<Integer> StepCnt;
 
     void readFile() throws IOException {
@@ -22,7 +27,7 @@ public class CamelInstruction {
         StepCnt = new ArrayList<>();
         PathList = new HashMap<>();
 
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day08/input.txt"));
         String buf;
         buf = input.readLine();
         Instructions = buf.chars().mapToObj(l -> (char) l).toList();
@@ -45,7 +50,7 @@ public class CamelInstruction {
         input.close();
     }
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         readFile();
         int curInsId = 0;
         int nCnt = 0;
@@ -119,16 +124,16 @@ public class CamelInstruction {
         return a * b / gcd(a, b);
     }
 
-    void Solution2() throws IOException {
+    public void Solution2() throws IOException {
         readFile();
         for (String start : StartList) {
             findAllPath(start);
         }
         long res = 1;
         for (int i = 0; i < PathList.size(); i++) {
-            System.out.println("" + PathList.keySet().toArray()[i] + " "
-                    + PathList.get(PathList.keySet().toArray()[i]).getKey() + " "
-                    + PathList.get(PathList.keySet().toArray()[i]).getValue());
+            // System.out.println("" + PathList.keySet().toArray()[i] + " "
+            //         + PathList.get(PathList.keySet().toArray()[i]).getKey() + " "
+            //         + PathList.get(PathList.keySet().toArray()[i]).getValue());
             res = lcm(res, PathList.get(PathList.keySet().toArray()[i]).getValue());
         }
         System.out.println("Solution 2: " + res);

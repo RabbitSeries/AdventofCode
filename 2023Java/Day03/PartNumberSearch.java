@@ -5,23 +5,30 @@ import java.util.*;
 import java.util.Map.Entry;
 import JavaDataModel.*;
 
-public class PartNumberSearch {
+public class PartNumberSearch implements SolutionBase2023 {
     ArrayList<ArrayList<Character>> schematic;
+
     ArrayList<Map.Entry<Point2D, Integer>> partNumberPos;
+
     ArrayList<Character> row;
+
     ArrayList<Point2D> gearPos;
 
     boolean startOfDigit = false;
+
     int digitSize = 0;
+
     String catString = "";
+
     Integer res = 0;
+
     Integer ratioSum = 0;
 
     void readFile() throws IOException {
         schematic = new ArrayList<>();
         partNumberPos = new ArrayList<>();
         gearPos = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day03/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null && buf.length() > 0) {
             startOfDigit = false;
@@ -53,7 +60,7 @@ public class PartNumberSearch {
         input.close();
     }
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         readFile();
         Integer rows = schematic.size(), cols = schematic.get(0).size();
         for (Entry<Point2D, Integer> posInfo : partNumberPos) {
@@ -116,7 +123,7 @@ public class PartNumberSearch {
         return Integer.parseInt(catString);
     }
 
-    void Solution2() throws IOException {
+    public void Solution2() throws IOException {
         readFile();
         Integer rows = schematic.size(), cols = schematic.get(0).size();
         for (Point2D pos : gearPos) {
@@ -156,11 +163,5 @@ public class PartNumberSearch {
             }
         }
         System.out.println("Solution 2: " + ratioSum);
-    }
-
-    public static void main(String[] args) throws IOException {
-        PartNumberSearch Solution = new PartNumberSearch();
-        Solution.Solution1();
-        Solution.Solution2();
     }
 }

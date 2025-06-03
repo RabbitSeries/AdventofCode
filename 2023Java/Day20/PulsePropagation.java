@@ -5,9 +5,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import JavaDataModel.Pair;
+import JavaDataModel.*;
 
-public class PulsePropagation {
+public class PulsePropagation implements SolutionBase2023 {
     enum ModuleType {
         Conjunction, BroadCaster, FlipFlop
     }
@@ -22,7 +22,7 @@ public class PulsePropagation {
     HashMap<String, HashMap<String, Boolean>> CjctModuleInputStatus = new HashMap<>();
 
     void readFile() throws IOException {
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day20/input.txt"));
         Pattern WirePattern = Pattern.compile("(?<InWire>.+)->(?<OutWireList>.+)");
         for (String buf; (buf = input.readLine()) != null;) {
             Matcher WireMatch = WirePattern.matcher(buf);

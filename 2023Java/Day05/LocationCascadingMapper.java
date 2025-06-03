@@ -6,10 +6,14 @@ import java.util.AbstractMap.*;
 import java.util.*;
 import java.util.Map.*;
 
+import JavaDataModel.SolutionBase2023;
+
 // TODO If each mapperlist is too large， a BST tree were used.
-public class LocationCascadingMapper {
+public class LocationCascadingMapper implements SolutionBase2023 {
     ArrayList<Long> seedID;
+
     ArrayList<ArrayList<Entry<Entry<Long, Long>, Long>>> mapperList;
+
     long res;
 
     Long SearchMap(ArrayList<Entry<Entry<Long, Long>, Long>> mapper, long source) {
@@ -26,7 +30,7 @@ public class LocationCascadingMapper {
     void readFile() throws IOException {
         mapperList = new ArrayList<>();
 
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day05/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null) {
             if (buf.isEmpty()) {
@@ -62,7 +66,7 @@ public class LocationCascadingMapper {
         input.close();
     }
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         long res = Long.MAX_VALUE;
         readFile();
         for (long token : seedID) {
@@ -74,18 +78,19 @@ public class LocationCascadingMapper {
         System.out.println("Solution 1: " + res);
     }
 
-    static class Interval {
+    class Interval {
         Interval(long _s, long _t) {
             s = _s;
             t = _t;
         }
 
         public long s;
+
         public long t;
     }
 
     ArrayList<Interval> SearchInterval(ArrayList<Entry<Entry<Long, Long>, Long>> IntervalMapList,
-            Interval itv) {
+        Interval itv) {
         // If not sort get error, don't know why yet.
         // IntervalMapList.sort(Comparator.comparing(entry ->
         // entry.getKey().getValue()));
@@ -150,7 +155,7 @@ public class LocationCascadingMapper {
         return resList;
     }
 
-    void Solution2() throws IOException {
+    public void Solution2() throws IOException {
         res = Long.MAX_VALUE;
         readFile();
 

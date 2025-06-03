@@ -12,15 +12,6 @@ import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer.
 import org.hipparchus.util.*;
 
 public class HailIntersection_LinearAlgebra {
-    class Hail {
-        public Hail(List<Long> p, List<Long> d) {
-            pos = p;
-            delta = d;
-        }
-
-        List<Long> pos, delta;
-    }
-
     Hail ParseHail(String s) {
         var InputSplit = s.split("@");
         return new Hail(
@@ -28,16 +19,15 @@ public class HailIntersection_LinearAlgebra {
                 Arrays.stream(InputSplit[1].trim().split("\\s*,\\s*")).mapToLong(Long::parseLong).boxed().toList());
     }
 
-    List<Hail> HailList = null;
-
-    void readFile() throws Exception {
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
-        HailList = input.lines().map(this::ParseHail).toList();
+    List<Hail> readFile() throws Exception {
+        BufferedReader input = new BufferedReader(new FileReader("Day24/input.txt"));
+        var res = input.lines().map(this::ParseHail).toList();
         input.close();
+        return res;
     }
 
-    void Solution2() throws Exception {
-        readFile();
+    public void Solution2(List<Hail> HailList) throws Exception {
+        HailList = HailList == null ? readFile() : HailList;
         Double[][] ri = {
                 HailList.get(0).pos.stream().map(Double::valueOf).toArray(Double[]::new),
                 HailList.get(1).pos.stream().map(Double::valueOf).toArray(Double[]::new),
@@ -109,6 +99,6 @@ public class HailIntersection_LinearAlgebra {
 
     public static void main(String[] args) throws Exception {
         HailIntersection_LinearAlgebra Day24 = new HailIntersection_LinearAlgebra();
-        Day24.Solution2();
+        Day24.Solution2(null);
     }
 }

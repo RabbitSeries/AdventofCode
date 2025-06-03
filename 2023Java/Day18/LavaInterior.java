@@ -5,10 +5,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import JavaDataModel.Pair;
-import JavaDataModel.Point2D;
+import JavaDataModel.*;
 
-public class LavaInterior {
+public class LavaInterior implements SolutionBase2023 {
     List<DigPlan> DigPlanList;
 
     HashMap<String, Integer> DirectionTranslate = new HashMap<>(Map.of("U", 3, "D", 1, "L", 2, "R", 0));
@@ -23,7 +22,7 @@ public class LavaInterior {
 
     public List<DigPlan> readFile() throws IOException {
         DigPlanList = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day18/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null) {
             Matcher m = Pattern.compile("(\\w)\\s(\\d+)\\s\\(#([\\d\\w]+)\\)").matcher(buf);
@@ -40,7 +39,7 @@ public class LavaInterior {
 
     Point2D corner1 = new Point2D(0, 0), corner2 = new Point2D(0, 0), startPos = new Point2D(0, 0);
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         readFile();
         Boundary = new HashSet<>(Set.of(startPos));
         for (DigPlan curPlan : DigPlanList) {
@@ -71,7 +70,7 @@ public class LavaInterior {
         System.out.println("Solution 1: " + interiorCnt);
     }
 
-    void Solution2() {
+    public void Solution2() {
         for (var digPlan : DigPlanList) {
             digPlan.update();
         }

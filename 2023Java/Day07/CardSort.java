@@ -4,12 +4,16 @@ import java.io.*;
 import java.util.*;
 import java.util.Map.*;
 import java.util.stream.*;
+
+import JavaDataModel.SolutionBase2023;
+
 import java.util.AbstractMap.*;
 
-public class CardSort {
+public class CardSort implements SolutionBase2023 {
     List<Entry<String, Integer>> cardBits;
 
     static String Rule1Cards = "AKQJT98765432";
+
     static String Rule2Cards = "AKQT98765432J";
 
     enum Priority {
@@ -102,7 +106,7 @@ public class CardSort {
 
     void readFile() throws IOException {
         cardBits = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day07/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null) {
             String[] line = buf.trim().split("\\s+");
@@ -111,7 +115,7 @@ public class CardSort {
         input.close();
     }
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         long res = 0;
         readFile();
         cardBits.sort((e1, e2) -> {
@@ -128,7 +132,7 @@ public class CardSort {
         // System.out.println(cardBits);
     }
 
-    void Solution2() throws IOException {
+    public void Solution2() throws IOException {
         long res = 0;
         readFile();
         cardBits.sort((e1, e2) -> {

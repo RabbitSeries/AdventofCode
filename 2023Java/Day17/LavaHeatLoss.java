@@ -5,14 +5,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-import JavaDataModel.Point2D;
-import JavaDataModel.Pair;
+import JavaDataModel.*;
 
-public class LavaHeatLoss {
+public class LavaHeatLoss implements SolutionBase2023 {
     void readFile() throws IOException {
         LavaMap = new ArrayList<>();
         String buf;
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day17/input.txt"));
         while ((buf = input.readLine()) != null) {
             LavaMap.add(buf.chars().mapToObj(c -> c - '0').toList());
         }
@@ -116,7 +115,7 @@ public class LavaHeatLoss {
 
     List<List<Integer>> LavaMap;
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         readFile();
         int rows = LavaMap.size(), cols = LavaMap.get(0).size();
         Point2D startPos = new Point2D(0, 0), endPos = new Point2D(rows - 1, cols - 1);
@@ -124,7 +123,7 @@ public class LavaHeatLoss {
         return;
     }
 
-    void Solution2() throws IOException {
+    public void Solution2() throws IOException {
         int rows = LavaMap.size(), cols = LavaMap.get(0).size();
         Point2D startPos = new Point2D(0, 0), endPos = new Point2D(rows - 1, cols - 1);
         System.out.println("Solution 2: " + Dijkstra(startPos, endPos, 4, 10));

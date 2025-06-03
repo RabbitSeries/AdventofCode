@@ -29,11 +29,11 @@ public class Visualize {
             1, 0, -1, 0
     };
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         visualizDigplan(DigPlanList, "large_digplan1.jpg", 2000, 1);
     }
 
-    void Solution2() {
+    public void Solution2() {
         for (var digPlan : DigPlanList) {
             digPlan.update();
         }

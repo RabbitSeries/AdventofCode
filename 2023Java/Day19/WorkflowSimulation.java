@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import JavaDataModel.Pair;
+import JavaDataModel.*;
 
-public class WorkflowSimulation {
+public class WorkflowSimulation implements SolutionBase2023 {
 
     class Condition {
 
@@ -63,7 +63,7 @@ public class WorkflowSimulation {
                     '>', Comparator.comparing(Integer::intValue)));
 
     void readFile() throws IOException {
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day19/input.txt"));
         for (String buf; (buf = input.readLine()) != null;) {
             Matcher workflowMatch = Pattern.compile("^.+(?=\\{.*\\}$)").matcher(buf);
             if (workflowMatch.find()) {

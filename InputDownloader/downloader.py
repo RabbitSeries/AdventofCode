@@ -5,9 +5,8 @@ from typing import List, Tuple, Dict
 
 
 def find_aoc_directories(root_dirs: List[str] | None = None, overwrite: bool = False) -> Dict[Tuple[int, int], List[str]]:
-    HasNoFurtherPathSep = r".*(?![/\\]).*$"
     RepoRootRe = re.compile(
-        r"[/\\](?P<year>\d+)" + HasNoFurtherPathSep, re.IGNORECASE
+        r"[/\\](?P<year>\d+)", re.IGNORECASE
     )
     found: Dict[Tuple[int, int], List[str]] = {}
     if root_dirs:
@@ -17,10 +16,10 @@ def find_aoc_directories(root_dirs: List[str] | None = None, overwrite: bool = F
                 if YearMatch:
                     for subDir in os.scandir(entry.path):
                         DayRootRe = re.compile(
-                            r"Day(?P<day>\d+)" + HasNoFurtherPathSep, re.IGNORECASE
+                            r".*Day(?P<day>\d+)", re.IGNORECASE
                         )
                         DayMatch = DayRootRe.search(subDir.path)
-                        if DayMatch:
+                        if DayMatch and subDir.path[len(DayMatch.group()):].find(os.path.sep) == -1:
                             rel_path = os.path.join(subDir, "input.txt")
                             if os.path.exists(rel_path) and not overwrite:
                                 print(f"Skipping existing: {rel_path}")
@@ -54,7 +53,8 @@ def process_all_inputs(
             try:
                 input_text = download_input(year, day, session_cookie)
             except Exception as e:
-                print(f"Failed to download https://adventofcode.com/{year}/day/{day}/input:", e, 'Session Cookie may have expired', sep='\n\t')
+                print(
+                    f"Failed to download https://adventofcode.com/{year}/day/{day}/input:", e, 'Session Cookie may have expired', sep='\n\t')
                 continue
             for rel_path in distribute_path:
                 if os.path.exists(rel_path) and not overwrite:

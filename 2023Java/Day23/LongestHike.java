@@ -12,9 +12,9 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 
-import JavaDataModel.Point2D;
+import JavaDataModel.*;
 
-public class LongestHike {
+public class LongestHike implements SolutionBase2023 {
     final int PATH = -2;
 
     final int FOREST = -1;
@@ -34,7 +34,7 @@ public class LongestHike {
     List<List<Integer>> IceIsland = new ArrayList<>();
 
     void readFile() throws Exception {
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day23/input.txt"));
         IceIsland = input.lines().map(line -> line.trim().chars().mapToObj(c -> {
             switch (c) {
                 case (int) '.':
@@ -133,7 +133,7 @@ public class LongestHike {
         }
     }
 
-    void Solution1() throws Exception {
+    public void Solution1() throws Exception {
         readFile();
         BuildDirectedNetwork();
         HashMap<Point2D, Integer> Dist = new HashMap<>();
@@ -169,7 +169,7 @@ public class LongestHike {
         return res;
     }
 
-    void Solution2() throws Exception {
+    public void Solution2() throws Exception {
         System.out.println("Solution 2: " + DFS(Start, new HashSet<>(Set.of(Start)), 0));
         // System.out.println("DFS CNT: " + DFSCnt); // 30580294
         // Equivalent BFS, but the Queue space will be DFS CNT size, which causes numerous rellocation cost.

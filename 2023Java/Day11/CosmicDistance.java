@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 import JavaDataModel.*;
 
-public class CosmicDistance {
+public class CosmicDistance implements SolutionBase2023 {
 
     List<List<Integer>> CosmicMap;
     List<Pair<Long, Long>> GalaxyList;
@@ -12,7 +12,7 @@ public class CosmicDistance {
     void readFile() throws IOException {
         CosmicMap = new ArrayList<>();
         GalaxyList = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day11/input.txt"));
         String buf;
         // Line Scanning
         while ((buf = input.readLine()) != null) {
@@ -75,13 +75,13 @@ public class CosmicDistance {
         return res;
     }
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         readFile();
         System.out.println("Solution 1: " + expandCosmic(1));
         return;
     }
 
-    void Solution2() throws IOException {
+    public void Solution2() throws IOException {
         readFile();
         System.out.println("Solution 2: " + expandCosmic(1000000 - 1));
         return;

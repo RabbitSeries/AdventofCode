@@ -4,9 +4,12 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class CharacterMatcher {
+import JavaDataModel.SolutionBase2023;
+
+public class CharacterMatcher implements SolutionBase2023 {
 
     List<String> SpringLists;
+
     List<List<Integer>> DamagedGroups;
 
     boolean match(String m, int startPos, int groupSize) {
@@ -33,7 +36,7 @@ public class CharacterMatcher {
     void readFile() throws IOException {
         SpringLists = new ArrayList<>();
         DamagedGroups = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day12/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null) {
             String[] recordings = buf.split("\\s+");
@@ -143,7 +146,7 @@ public class CharacterMatcher {
         System.out.println("Unit test assertation successful");
     }
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         readFile();
         long res = 0, problemSetSize = SpringLists.size();
         for (int i = 0; i < problemSetSize; i++) {
@@ -153,7 +156,7 @@ public class CharacterMatcher {
         System.out.println("Solution 1: " + res);
     }
 
-    void Solution2() throws IOException {
+    public void Solution2() throws IOException {
         readFile();
         memo = new HashMap<>();
         long res = 0, problemSetSize = SpringLists.size();

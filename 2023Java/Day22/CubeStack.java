@@ -17,9 +17,9 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import JavaDataModel.TenaryTuple;
+import JavaDataModel.*;
 
-public class CubeStack {
+public class CubeStack implements SolutionBase2023 {
     final int EMPTY = -1;
 
     class Point3D extends TenaryTuple<Integer, Integer, Integer> {
@@ -109,7 +109,7 @@ public class CubeStack {
     Point3D Volume = new Point3D(0, 0, 0);
 
     void readFile() throws Exception {
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day22/input.txt"));
         for (String buf; (buf = input.readLine()) != null;) {
             CubeList.add(ParseCube(buf));
             CubeList.getLast().setId(CubeList.size() - 1);
@@ -281,7 +281,7 @@ public class CubeStack {
         }
     }
 
-    void Solution1() throws Exception {
+    public void Solution1() throws Exception {
         readFile();
         // ProjectY();
         // ProjectX();
@@ -301,7 +301,7 @@ public class CubeStack {
 
     HashMap<Integer, Integer> NodeCnt = new HashMap<>();
 
-    void Solution2() throws Exception {
+    public void Solution2() throws Exception {
         List<Integer> InDegree = new ArrayList<>();
         Queue<Cube> q = new LinkedList<>();
         q.addAll(CubeList.stream().filter(cube -> cube.getSupportingCubes().size() > 0).toList());

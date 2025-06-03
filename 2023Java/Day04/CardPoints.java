@@ -3,12 +3,14 @@ package Day04;
 import java.io.*;
 import java.util.*;
 
-public class CardPoints {
+import JavaDataModel.SolutionBase2023;
+
+public class CardPoints implements SolutionBase2023 {
     HashSet<Integer> winningNumbers;
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         Integer res = 0;
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day04/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null) {
             winningNumbers = new HashSet<>();
@@ -34,10 +36,10 @@ public class CardPoints {
         input.close();
     }
 
-    void Solution2() throws IOException {
+    public void Solution2() throws IOException {
         Integer res = 0, currentBonus, currentLine = 0;
         ArrayList<Integer> bonusRecord = new ArrayList<>();
-        try (BufferedReader input = new BufferedReader(new FileReader("input.txt"))) {
+        try (BufferedReader input = new BufferedReader(new FileReader("Day04/input.txt"))) {
             String buf;
             while ((buf = input.readLine()) != null) {
                 if (currentLine == bonusRecord.size()) {
@@ -82,11 +84,5 @@ public class CardPoints {
         }
         System.out.println("Solution 2: " + res);
         return;
-    }
-
-    public static void main(String[] args) throws IOException {
-        CardPoints Solution = new CardPoints();
-        Solution.Solution1();
-        Solution.Solution2();
     }
 }

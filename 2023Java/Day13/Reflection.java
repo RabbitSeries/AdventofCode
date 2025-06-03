@@ -4,11 +4,13 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.*;
 
-public class Reflection {
+import JavaDataModel.SolutionBase2023;
+
+public class Reflection implements SolutionBase2023 {
 
     List<List<List<Character>>> readFile() throws IOException {
         List<List<List<Character>>> IslandMaps = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day13/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null) {
             if (IslandMaps.isEmpty()) {
@@ -75,7 +77,7 @@ public class Reflection {
         return -1;
     }
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         List<List<List<Character>>> IslandMaps = readFile();
         long res = 0;
         for (var IslandMap : IslandMaps) {
@@ -90,7 +92,7 @@ public class Reflection {
         System.out.println("Solution 1: " + res);
     }
 
-    void Solution2() throws IOException {
+    public void Solution2() throws IOException {
         List<List<List<Character>>> IslandMaps = readFile();
         long res = 0;
         for (var IslandMap : IslandMaps) {

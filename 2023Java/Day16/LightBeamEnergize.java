@@ -2,15 +2,14 @@ package Day16;
 
 import java.io.*;
 import java.util.*;
-import JavaDataModel.Pair;
-import JavaDataModel.Point2D;
+import JavaDataModel.*;
 
-public class LightBeamEnergize {
+public class LightBeamEnergize implements SolutionBase2023 {
     List<List<Character>> ContraptionLayout;
 
     void readFile() throws IOException {
         ContraptionLayout = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day16/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null) {
             // List<Character> row = IntStream.range(0, buf.length()).mapToObj(i
@@ -71,13 +70,13 @@ public class LightBeamEnergize {
         return resSet.size();
     }
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         readFile();
         System.out
                 .println("Solution 1: " + energizeTiles(new Point2D(0, 0), 3));
     }
 
-    void Solution2() {
+    public void Solution2() {
         int maxEnergizedTiles = 0;
         // Point2D targetEntry = null;
         int rows = ContraptionLayout.size(),

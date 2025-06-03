@@ -3,11 +3,16 @@ package Day02;
 import java.io.*;
 import java.util.*;
 
-public class CubeClassify {
+import JavaDataModel.SolutionBase2023;
+
+public class CubeClassify implements SolutionBase2023 {
 
     Integer res = 0;
+
     Integer power = 0;
+
     HashMap<String, Integer> cubeCnt;
+
     HashMap<String, Integer> cubeTarget;
 
     void InitDataModel() {
@@ -16,7 +21,7 @@ public class CubeClassify {
     }
 
     void readFile(boolean stopOnFail) throws IOException {
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day02/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null && buf.length() != 0) {
             InitDataModel();
@@ -60,24 +65,18 @@ public class CubeClassify {
         input.close();
     }
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         res = 0;
         power = 0;
         readFile(true);
         System.out.println("Solution 1: " + res);
     }
 
-    void Solution2() throws IOException {
+    public void Solution2() throws IOException {
         res = 0;
         power = 0;
         readFile(false);
         System.out.println("Solution 2: " + power);
 
-    }
-
-    public static void main(String[] args) throws IOException {
-        CubeClassify Solution = new CubeClassify();
-        Solution.Solution1();
-        Solution.Solution2();
     }
 }

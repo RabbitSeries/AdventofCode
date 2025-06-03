@@ -1,19 +1,12 @@
 package Day21;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 import java.util.stream.Collectors;
-import JavaDataModel.Point2D;
 
-public class StepCounter {
+import JavaDataModel.*;
+
+public class StepCounter implements SolutionBase2023 {
     List<String> Farm = null, ZeroFarm = null;
 
     int ROW = 0;
@@ -23,7 +16,7 @@ public class StepCounter {
     Point2D start = new Point2D(-1, -1);
 
     void readFile() throws Exception {
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day21/input.txt"));
         Farm = input.lines().map(line -> {
             var sb = new StringBuilder(line);
             if (start.second == -1) {
@@ -114,7 +107,8 @@ public class StepCounter {
         start.second = COL / 2 + COL * times;
         Farm = Collections.nCopies(2 * times + 1,
                 ZeroFarm.stream().map(
-                        l -> Collections.nCopies(2 * times + 1, l).stream().collect(Collectors.joining())).toList())
+                        row -> Collections.nCopies(2 * times + 1, row).stream().collect(Collectors.joining()))
+                        .toList())
                 .stream().flatMap(l -> l.stream()).toList();
     }
 

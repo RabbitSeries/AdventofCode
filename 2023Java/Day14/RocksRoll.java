@@ -6,10 +6,13 @@ import java.io.*;
 
 import JavaDataModel.*;
 
-public class RocksRoll {
+public class RocksRoll implements SolutionBase2023 {
     List<List<Character>> Platform;
+
     HashMap<String, Integer> memo;
+
     List<Integer> resMemoList;
+
     int row = 0, col = 0;
 
     int getRes() {
@@ -24,8 +27,13 @@ public class RocksRoll {
         return res;
     }
 
-    int[] dx = new int[] {-1, 0, 1, 0};
-    int[] dy = new int[] {0, -1, 0, 1};
+    int[] dx = new int[] {
+            -1, 0, 1, 0
+    };
+
+    int[] dy = new int[] {
+            0, -1, 0, 1
+    };
 
     String getHash() {
         return Platform.stream()
@@ -73,7 +81,7 @@ public class RocksRoll {
 
     void readFile() throws IOException {
         Platform = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("input.txt"));
+        BufferedReader input = new BufferedReader(new FileReader("Day14/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null) {
             Platform.add(buf.chars().mapToObj(c -> (char) c)
@@ -86,7 +94,7 @@ public class RocksRoll {
         resMemoList = new ArrayList<>();
     }
 
-    void Solution1() throws IOException {
+    public void Solution1() throws IOException {
         readFile();
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
@@ -106,7 +114,7 @@ public class RocksRoll {
         System.out.println("Solution 1: " + getRes());
     }
 
-    void Solution2() throws IOException {
+    public void Solution2() throws IOException {
         readFile();
         final int target = 1000000000;
         for (int i = 0; i < target; i++) {
@@ -119,8 +127,8 @@ public class RocksRoll {
                 // i++;
                 // tilt(i);
                 // }
-                System.out.println("Memoization found at preprocessed: " + cycleInfo.first);
-                System.out.println("Saved " + leftOver + targetTilt);
+                // System.out.println("Memoization found at preprocessed: " + cycleInfo.first);
+                // System.out.println("Saved " + leftOver + targetTilt);
                 System.out.println("Solution 2: " + resMemoList.get(cycleInfo.first + targetTilt));
                 return;
             }
