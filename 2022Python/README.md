@@ -15,12 +15,12 @@ How to start a language:
 - IO: file IO, stdio, format
 - OOP: copy controll, polymorphism, generics
 - Algo Shortcut/Apis: Functions equivalent to C++'s in `algorithm.h`
-- Grammar Suger: C++ initialize, unflod & python unpack
+- Grammar Suger: C++ initialize, unfold & python unpack & java/typescript varargs
 - Functional programming
   - Process storage
   - Lazy computations
   - Process parameter
-  - bind, placeholders, mem_fn
+  - bind, placeholders, mem_fn, invoke, apply
   - lambda(arrow function)
   - Function objects (function interface, struct, objects, operator())
   - Callable/std::function
