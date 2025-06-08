@@ -10,3 +10,4 @@ input.txt
 /CMakeUserPresets.json
 node_modules
 dist
+*.log

@@ -48,9 +48,9 @@ void replaceFile( const char* filename, const char* linestartWith, std::vector<s
 
 int main() {
 #ifdef __linux__
-    FILE* pipe = popen( "cloc . --include-ext=h,cc,cpp,hpp,c,java,py --exclude-dir=.vscode,.git,compileRuntime,JavaLibs,build 2>exception.log", "r" );
+    FILE* pipe = popen( R"(cloc . --include-ext=h,cc,cpp,hpp,c,java,py,js,ts,mjs --exclude-dir=.vscode,compileRuntime,JavaLibs,build --not-match-d="node_modules|dist" 2>exception.log)", "r" );
 #else
-    FILE* pipe = popen( "wsl -e cloc . --include-ext=h,cc,cpp,hpp,c,java,py --exclude-dir=.vscode,.git,compileRuntime,JavaLibs,build 2>exception.log", "r" );
+    FILE* pipe = popen( R"(wsl -e cloc . --include-ext=h,cc,cpp,hpp,c,java,py,js,ts,mjs --exclude-dir=.vscode,compileRuntime,JavaLibs,build --not-match-d="node_modules|dist" 2>exception.log)", "r" );
 #endif
     if ( !pipe ) {
         std::cerr << "Failed to open popen\n";

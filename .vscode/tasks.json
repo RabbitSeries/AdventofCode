@@ -39,6 +39,9 @@
             "options": {
                 "cwd": "${fileDirname}"
             },
+            "presentation": {
+                "reveal": "silent"
+            },
             "problemMatcher": [
                 "$gcc"
             ],
@@ -59,7 +62,10 @@
                 "${fileDirname}/exe_${fileBasenameNoExtension}"
             ],
             "options": {
-                "cwd": "${fileDirname}"
+                "cwd": "${fileDirname}",
+            },
+            "presentation": {
+                "reveal": "silent"
             },
             "problemMatcher": [
                 "$gcc"

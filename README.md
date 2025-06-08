@@ -42,8 +42,10 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 Language           | files | blank | comment | code
 -------------------|-------|-------|---------|-----
-Java               |    35 |   528 |     215 | 3508
+Java               |    35 |   526 |     215 | 3511
 C/C++ Header       |    29 |   200 |     211 | 3183
 C++                |     5 |    47 |      27 |  823
 Python             |    15 |    96 |       3 |  443
-SUM:               |    84 |   871 |     456 | 7957
+JavaScript         |     2 |     2 |       1 |   25
+TypeScript         |     2 |     0 |       0 |   15
+SUM:               |    88 |   871 |     457 | 8000
