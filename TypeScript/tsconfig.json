@@ -1,0 +1,41 @@
+{
+    "files": [],
+    "compilerOptions": {
+        // Emit options
+        "target": "esnext",
+        "noEmit": true,
+        // Projects options (Incremental... options)
+        "composite": true,
+        // JavaScript Support
+        "allowJs": true,
+        // Modules
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        // Interop Constraints
+        "esModuleInterop": true,
+        "verbatimModuleSyntax": true,
+        "erasableSyntaxOnly": true,
+        // Type Checking
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedSideEffectImports": true,
+        // Editor Support
+        "disableSizeLimit": true,
+        // Completeness
+        "skipLibCheck": true,
+    },
+    "references": [
+        {
+            "path": "./configs/tsconfig.2021.json"
+        },
+        {
+            "path": "./configs/tsconfig.main.json"
+        }
+    ],
+    "exclude": [
+        "./**/*.md",
+        "./**/*.json",
+    ]
+}

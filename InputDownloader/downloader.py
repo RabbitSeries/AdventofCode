@@ -48,7 +48,7 @@ def process_all_inputs(
     overwrite: bool = False
 ) -> None:
     if root_dir:
-        dirs = find_aoc_directories([root_dir, os.path.join(root_dir, 'Legacy')])
+        dirs = find_aoc_directories([root_dir, os.path.join(root_dir, 'Legacy'), os.path.join(root_dir, 'TypeScript')])
         for (year, day), distribute_path in dirs.items():
             try:
                 input_text = download_input(year, day, session_cookie)

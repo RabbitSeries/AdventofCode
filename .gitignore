@@ -8,3 +8,5 @@ exe_*
 input.txt
 /[oO]ut
 /CMakeUserPresets.json
+node_modules
+dist

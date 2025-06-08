@@ -59,6 +59,19 @@
             "MIMode": "gdb",
             "miDebuggerPath": "gdb",
             "preLaunchTask": "[Arch/Windows] [Release Build] [C/C++]: g++ build active file"
+        },
+        {
+            "name": "[TypeScript] Debug",
+            "type": "node",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "cwd": "${fileDirname}",
+            "outFiles": [
+                "${workspaceFolder}/**/*.(m|c|)js",
+                "!**/node_modules/**"
+            ],
+            "preLaunchTask": "[Arch/Windows] [TypeScript]"
         }
     ],
     "version": "2.0.0"

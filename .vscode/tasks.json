@@ -67,6 +67,15 @@
             "group": {
                 "kind": "build"
             }
+        },
+        {
+            "label": "[Arch/Windows] [TypeScript]",
+            "type": "npm",
+            "script": "build",
+            "options": {
+                "cwd": "${workspaceFolder}/TypeScript"
+            },
+            "group": "build"
         }
     ],
     "version": "2.0.0"
