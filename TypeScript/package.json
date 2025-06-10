@@ -5,6 +5,7 @@
         "build": "tsc -b && node ./Main.mjs"
     },
     "devDependencies": {
+        "@types/node": "^22.15.30",
         "@eslint/js": "^9.28.0",
         "esbuild": "latest",
         "eslint": "^9.28.0",

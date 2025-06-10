@@ -75,7 +75,7 @@
             }
         },
         {
-            "label": "[Arch/Windows] [TypeScript]",
+            "label": "[Arch/Windows] [npm rum build]",
             "type": "npm",
             "script": "build",
             "options": {
