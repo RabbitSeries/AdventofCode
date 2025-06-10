@@ -2,16 +2,17 @@
     "name": "@rabbitseries/aoc.typescript",
     "type": "module",
     "scripts": {
-        "build": "tsc -b && node ./Main.mjs"
+        "build": "tsc -b && node esbuild.js"
     },
     "devDependencies": {
-        "@types/node": "^22.15.30",
         "@eslint/js": "^9.28.0",
+        "@types/node": "^22.15.30",
         "esbuild": "latest",
         "eslint": "^9.28.0",
         "fast-glob": "latest",
         "globals": "^16.2.0",
+        "jiti": "^2.4.2",
         "typescript": "latest",
-        "typescript-eslint": "^8.33.1"
+        "typescript-eslint": "^8.34.0"
     }
 }

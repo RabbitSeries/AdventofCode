@@ -1,6 +1,6 @@
 import * as esbuild from "esbuild"
 import fg from "fast-glob"
-import * as fs from "node:fs"
+import fs from "node:fs"
 const src = fg.globSync(["./2021/**/*.ts", "!**/*.md"])
 console.log(`Found files: ${src}`)
 const outDirectory = "dist";
@@ -12,6 +12,7 @@ await esbuild.build({
     platform: "node",
     format: "esm",
     bundle: true,
+    outbase: ".",
     outdir: outDirectory,
     sourcemap: "inline"
 })
