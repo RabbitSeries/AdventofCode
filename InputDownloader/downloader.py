@@ -69,10 +69,14 @@ def process_all_inputs(
                     print(f"Failed to save {year}/Day{day}: {str(e)}")
 
 
-session_cookie = os.environ.get("AOC_SESSION_COOKIE")
-if not session_cookie:
-    raise ValueError("Missing AOC_SESSION_COOKIE environment variable")
-
 script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.abspath(os.path.join(script_dir, ".."))
+session_cookie = os.environ.get("AOC_SESSION_COOKIE")
+if not session_cookie:
+    print(f'Session cookie not found in environment, looking for {project_root}/.env')
+    try:
+        with open(os.path.join(project_root, ".env")) as file:
+            session_cookie = file.read().strip().split("=")[1]
+    except FileNotFoundError as e:
+        raise ValueError("Missing AOC_SESSION_COOKIE environment variable", e)
 process_all_inputs(session_cookie, project_root)

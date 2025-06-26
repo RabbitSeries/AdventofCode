@@ -62,7 +62,7 @@
                 "${fileDirname}/exe_${fileBasenameNoExtension}"
             ],
             "options": {
-                "cwd": "${fileDirname}",
+                "cwd": "${fileDirname}"
             },
             "presentation": {
                 "reveal": "silent"
@@ -75,13 +75,25 @@
             }
         },
         {
-            "label": "[Arch/Windows] [npm rum build]",
-            "type": "npm",
-            "script": "build",
+            "type": "shell",
+            "label": "[Run InputDownloader]",
+            "command": "python downloader.py",
             "options": {
-                "cwd": "${workspaceFolder}/TypeScript"
+                "env": {
+                    "AOC_SESSION_COOKIE": "${input:AOC_SESSION_COOKIE}"
+                },
+                "cwd": "${workspaceFolder}/Inputdownloader"
             },
-            "group": "build"
+            "problemMatcher": [
+                "$python"
+            ]
+        }
+    ],
+    "inputs": [
+        {
+            "id": "AOC_SESSION_COOKIE",
+            "type": "promptString",
+            "description": "Please user provide AOC_SESSION_COOKIE. Press enter for automatically fectching .env under project root"
         }
     ],
     "version": "2.0.0"
