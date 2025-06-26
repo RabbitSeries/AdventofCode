@@ -15,7 +15,7 @@ How to start a language:
 - IO: file IO, stdio, format
 - OOP: copy controll, polymorphism, generics
 - Algo Shortcut/Apis: Functions equivalent to C++'s in `algorithm.h`
-- Grammar Suger: C++ initialize, unfold & python unpack & java/typescript varargs
+- Grammar Suger: C++ initialize, unfold & python unpack & java/typescript varargs，Assignment expression in C++ (limited support in if, for, switch statement), C# out var 
 - Functional programming
   - Process storage
   - Lazy computations
