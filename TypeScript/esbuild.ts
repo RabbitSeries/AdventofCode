@@ -8,6 +8,7 @@ if (fs.existsSync(outDirectory)) {
     fs.rmSync(outDirectory, { force: true, recursive: true })
 }
 await esbuild.build({
+    target: "esnext",
     entryPoints: src,
     platform: "node",
     format: "esm",

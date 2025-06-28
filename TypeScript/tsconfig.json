@@ -34,9 +34,5 @@
         {
             "path": "./configs/tsconfig.main.json"
         }
-    ],
-    "exclude": [
-        "./**/*.md",
-        "./**/*.json",
     ]
 }

@@ -42,7 +42,7 @@ def sandSimulate(entrence: tuple[int, int], stopAtOverflow: bool = True):
         if x + 1 < ROW and y + 1 < COL and sandbox[x + 1][y + 1] == EMPTY:
             x, y = x + 1, y + 1
             continue
-        if x + 1 < ROW and y + 1 < COL and y >= 1:
+        if x + 1 < ROW and y + 1 < COL and y >= 1:  # Can't be settled
             sandbox[x][y] = SAND
             x, y = entrence
             count += 1
@@ -70,7 +70,6 @@ def part2(originXY: tuple[int, int]):
     expandRow(BLOCK)
     count += sandSimulate(originXY, False)
     print(f'Part 2: {count}')
-    printSandbox()
 
 
 def main():
@@ -94,6 +93,7 @@ def main():
     originXY = transform(0, 500, minXY)
     part1(originXY)
     part2(originXY)
+    printSandbox()
 
 
 if __name__ == "__main__":

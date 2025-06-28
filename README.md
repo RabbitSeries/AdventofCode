@@ -6,11 +6,12 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ### Overall
 
- Year                           | Progress          | Best TimeCost (seconds)
-:------------------------------:|:-----------------:|:--------------------------:
-[2022](./2022Python/README.md)  | 13/25 ⭐⭐       |     Not yet
-[2023](./2023Java/README.md)    | 25/25 ⭐⭐       |     9.820279
-[2024](./2024/README.md)        | 25/25 ⭐⭐       |     0.965016
+ | Year                                | Progress | Best TimeCost (seconds) |
+ | :---------------------------------- | :------- | :---------------------- |
+ | [2021](./TypeScript/2021/README.md) | 3/25 ⭐⭐  | Not yet                 |
+ | [2022](./2022Python/README.md)      | 15/25 ⭐⭐ | Not yet                 |
+ | [2023](./2023Java/README.md)        | 25/25 ⭐⭐ | 9.820279                |
+ | [2024](./2024/README.md)            | 25/25 ⭐⭐ | 0.965016                |
 
 > Runs on github actions.\
 > Maybe read ifstream.rdbuf() to stringstream at once will benefit more time efficiency.
@@ -40,12 +41,11 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ## Statistics
 
-Language           | files | blank | comment | code
--------------------|-------|-------|---------|-----
-Java               |    35 |   526 |     215 | 3511
-C/C++ Header       |    29 |   200 |     211 | 3183
-C++                |     5 |    47 |      27 |  823
-Python             |    15 |    96 |       3 |  443
-JavaScript         |     2 |     2 |       1 |   25
-TypeScript         |     2 |     0 |       0 |   15
-SUM:               |    88 |   871 |     457 | 8000
+| Language     | files | blank | comment | code |
+| ------------ | ----- | ----- | ------- | ---- |
+| Java         | 35    | 526   | 215     | 3511 |
+| C/C++ Header | 29    | 200   | 211     | 3183 |
+| C++          | 5     | 47    | 27      | 823  |
+| Python       | 17    | 127   | 3       | 590  |
+| TypeScript   | 6     | 1     | 0       | 86   |
+| SUM:         | 92    | 901   | 456     | 8193 |

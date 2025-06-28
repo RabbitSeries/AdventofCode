@@ -2,17 +2,22 @@
     "name": "@rabbitseries/aoc.typescript",
     "type": "module",
     "scripts": {
-        "build": "tsc -b && node esbuild.js"
+        "build:config": "esbuild ./esbuild.ts --outfile=./dist/esbuild.js --bundle --external:esbuild --external:fast-glob --format=esm --platform=node --target=esnext ",
+        "build:run": "tsc -b && node ./dist/esbuild.js",
+        "build": "run-s build:config build:run",
+        "lint": "eslint .",
+        "update": "npm update --save"
     },
     "devDependencies": {
         "@eslint/js": "^9.28.0",
-        "@types/node": "^22.15.30",
-        "esbuild": "latest",
-        "eslint": "^9.28.0",
-        "fast-glob": "latest",
+        "@types/node": "^22.15.33",
+        "esbuild": "^0.25.5",
+        "eslint": "^9.29.0",
+        "fast-glob": "^3.3.3",
         "globals": "^16.2.0",
         "jiti": "^2.4.2",
-        "typescript": "latest",
-        "typescript-eslint": "^8.34.0"
+        "typescript": "^5.8.3",
+        "typescript-eslint": "^8.35.0",
+        "npm-run-all": "^4.1.5"
     }
 }

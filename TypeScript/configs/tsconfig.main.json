@@ -1,12 +1,12 @@
 {
     "extends": "../tsconfig.json",
     "compilerOptions": {
-        "composite": true,
         "tsBuildInfoFile": "../dist/tsconfig.main.tsbuildinfo",
         "rootDir": "..",
         "outDir": "../dist/",
     },
     "include": [
-        "Main.mjs"
+        "Main.mjs",
+        "../esbuild.ts"
     ]
 }
