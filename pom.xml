@@ -7,7 +7,7 @@
     <groupId>rabbitseries.aoc.java</groupId>
     <artifactId>aocjava</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging><!-- Aggerator -->
+    <packaging>pom</packaging><!-- Aggregator -->
     <modules>
         <module>Java/year2023</module>
         <module>Java/datamodel</module>
@@ -24,17 +24,17 @@
             <dependency>
                 <groupId>rabbitseries.aoc.java.year2023</groupId>
                 <artifactId>year2023</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>rabbitseries.aoc.java.datamodel</groupId>
                 <artifactId>datamodel</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>rabbitseries.aoc.java.launcher</groupId>
                 <artifactId>launcher</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
