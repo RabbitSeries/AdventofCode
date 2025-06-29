@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging><!-- Aggregator -->
     <modules>
-        <module>Java/year2023</module>
+        <module>Java/2023</module>
         <module>Java/datamodel</module>
         <module>Java/launcher</module>
     </modules>
