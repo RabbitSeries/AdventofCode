@@ -16,10 +16,11 @@ How to start a language:
 - OOP: copy controll, polymorphism, generics
 - Algo Shortcut/Apis: Functions equivalent to C++'s in `algorithm.h`
 - Grammar Suger:
-  - C++ initialize
-  - unfold & python unpack & java/typescript vararg
+  - C++style list initialize, generator initialize
+  - C++ unfold & python unpack & java/typescript vararg
   - Assignment expression in Python, C++ (limited support in if, for, switch statement), C# out var
   - Default function parameter initailizer
+  - C++ structure binding, Java consumption, Python  
 - Functional programming
   - Process storage
   - Lazy computations
@@ -32,6 +33,11 @@ How to start a language:
   - Optional, expected
 - Multithreading and Coroutine apis
   - Promise
+- Dependency injection
+  - Java Reflection & Java annotation
+  - Python function level decorator
+  - C# Dependency injection, Assembly reflection
+  - Typesctipt JSON style reflection 
 - Time apis
 - Random engine apis
 - For experience: get a formatter, editor and smash the hotkeys

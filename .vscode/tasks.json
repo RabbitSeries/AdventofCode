@@ -87,6 +87,17 @@
             "problemMatcher": [
                 "$python"
             ]
+        },
+        {
+            "type": "shell",
+            "label": "[maven verify]",
+            "command": "mvn",
+            "args": [
+                "verify",
+                "-f",
+                "${workspaceFolder}/pom.xml"
+            ],
+            "problemMatcher": []
         }
     ],
     "inputs": [

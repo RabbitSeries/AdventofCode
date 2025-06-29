@@ -1,5 +1,4 @@
 package JavaDataModel;
-
 public interface SolutionBase {
     public void Solution1() throws Exception;
 

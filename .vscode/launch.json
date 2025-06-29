@@ -4,12 +4,17 @@
             "name": "[Java] [Debug]",
             "type": "java",
             "request": "launch",
-            // Enable assertation
             "vmArgs": "-ea",
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceFolder}/Java/year2023/main",
             "mainClass": "${file}",
-            // "console": "externalTerminal",
-            "projectName": "aocjava",
+            "classPaths": [
+                "$Auto",
+                "$Runtime",
+                "${workspaceFolder}/Java/year2023/target/classes",
+                "${workspaceFolder}/Java/datamodel/target/classes"
+            ],
+            "preLaunchTask": "[maven verify]",
+            "projectName": "aocjava"
         },
         {
             "name": "[Python] [Debug]",

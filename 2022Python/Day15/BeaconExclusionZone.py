@@ -16,14 +16,14 @@ def merge_intervals(intervals: list[point2D]):
     return merged
 
 
-def exclusions_at_alignment(data: list[tuple[point2D, point2D]], distances: list[int], alignment: int, exludeExsiting: bool = True):
+def exclusions_at_alignment(data: list[tuple[point2D, point2D]], distances: list[int], alignment: int, exludeExsitingBeacon: bool = True):
     intervals: list[point2D] = []
-    for (origin, beacon), m_dis in zip(data, distances):
-        remain = m_dis - abs(alignment - origin[1])
+    for (sensor, beacon), m_dis in zip(data, distances):
+        remain = m_dis - abs(alignment - sensor[1])
         if remain <= 0:
             continue
-        itv = (origin[0] - remain, origin[0] + remain)
-        if exludeExsiting:
+        itv = (sensor[0] - remain, sensor[0] + remain)
+        if exludeExsitingBeacon:
             itv = itv if beacon[1] != alignment else (itv[0] + 1, itv[1]) if beacon[0] == itv[0] else (itv[0], itv[1] - 1)
         if itv[0] <= itv[1]:
             intervals.append(itv)
@@ -64,8 +64,7 @@ def main():
 
     xRange = (0, 4000000)
     for alignment in range(0, xRange[1] + 1):
-        res = intersect_itv(reverse_itv(exclusions_at_alignment(data, distances, alignment, False), xRange))
-        if res is not None:
+        if (res := intersect_itv(reverse_itv(exclusions_at_alignment(data, distances, alignment, False), xRange))) is not None:
             print(f"Part 2: {res[0] * xRange[1] + alignment}")
             break
 

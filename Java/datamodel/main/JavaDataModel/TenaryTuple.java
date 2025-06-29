@@ -1,5 +1,4 @@
 package JavaDataModel;
-
 import java.util.Objects;
 
 public class TenaryTuple<E1, E2, E3> {

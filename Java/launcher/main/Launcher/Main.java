@@ -1,3 +1,5 @@
+package Launcher;
+
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.Queue;
 
 import JavaDataModel.SolutionBase;
 
+//TODO Reflect from classpath (getSystemClassLoader) instead of source code and file system dependent glob 
 public class Main {
     public static void main(String[] args) throws Exception {
         var start_time = System.nanoTime();
@@ -33,8 +36,9 @@ public class Main {
                             System.out.print("\t");
                             method.invoke(instance);
                         } catch (Exception e) {
-                            System.out.println("Error calling " + binaryName);
+                            System.out.println("Error calling " + binaryName + "." + methodName);
                             e.printStackTrace();
+                            break;
                         }
                     }
                 }
@@ -61,7 +65,8 @@ public class Main {
                             .replace(rootPath + File.separator, "")
                             .replace(File.separator, ".")
                             .replaceAll("\\.java$", "");
-                    // var matcher = Pattern.compile("Day[0-9]+\\.(?<ClassName>[^\\.]+)").matcher(path);
+                    // var matcher =
+                    // Pattern.compile("Day[0-9]+\\.(?<ClassName>[^\\.]+)").matcher(path);
                     if (path.matches("Day[0-9]+\\.(?<ClassName>[^\\.]+)")) {
                         classList.add(path);
                     }

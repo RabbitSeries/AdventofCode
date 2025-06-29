@@ -1,5 +1,4 @@
 package JavaDataModel;
-
 import java.util.Objects;
 
 public class Pair<K, V> {

@@ -10,6 +10,7 @@ import java.util.stream.IntStream;
 import org.hipparchus.util.*;
 
 import JavaDataModel.SolutionBase2023;
+import Legacy.Day24.HailIntersection_LinearAlgebra;
 
 public class HailIntersection implements SolutionBase2023 {
 

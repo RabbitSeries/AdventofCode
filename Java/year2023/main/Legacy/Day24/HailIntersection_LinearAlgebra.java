@@ -1,4 +1,4 @@
-package Day24;
+package Legacy.Day24;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,6 +10,8 @@ import org.hipparchus.linear.*;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.*;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer.*;
 import org.hipparchus.util.*;
+
+import Day24.Hail;
 
 public class HailIntersection_LinearAlgebra {
     Hail ParseHail(String s) {

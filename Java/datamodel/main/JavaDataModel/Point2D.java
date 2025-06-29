@@ -1,5 +1,4 @@
 package JavaDataModel;
-
 import java.util.Comparator;
 
 public class Point2D extends Pair<Integer, Integer> implements Comparator<Point2D>, Comparable<Point2D> {

@@ -25,5 +25,5 @@ public class Hail {
         return Optional.empty();
     }
 
-    List<Long> pos, delta;
+    public List<Long> pos, delta;
 }
