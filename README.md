@@ -49,3 +49,11 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 | Python       | 17    | 127   | 3       | 590  |
 | TypeScript   | 6     | 1     | 0       | 86   |
 | SUM:         | 92    | 901   | 456     | 8193 |
+Language           | files | blank | comment | code
+-------------------|-------|-------|---------|-----
+Java               |    35 |   523 |     217 | 3515
+C/C++ Header       |    29 |   200 |     211 | 3183
+C++                |     5 |    47 |      27 |  823
+Python             |    17 |   127 |       3 |  589
+TypeScript         |     6 |     1 |       0 |   86
+SUM:               |    92 |   898 |     458 | 8196
