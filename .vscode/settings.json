@@ -24,8 +24,6 @@
     //     "cwd": "${workspaceFolder}/2024}",
     //     "dumpPath": ""
     // },
-    "git.enableSmartCommit": true,
-    "git.branchProtectionPrompt": "alwaysCommit",
     "java.configuration.updateBuildConfiguration": "automatic",
     "cmake.configureOnOpen": false,
     "cmake.options.statusBarVisibility": "visible",

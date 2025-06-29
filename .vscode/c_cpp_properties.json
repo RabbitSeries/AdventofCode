@@ -21,7 +21,8 @@
             },
             "cStandard": "gnu23",
             "cppStandard": "gnu++23",
-            "intelliSenseMode": "windows-gcc-x64"
+            "intelliSenseMode": "windows-gcc-x64",
+            "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
     "version": 4
