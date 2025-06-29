@@ -46,6 +46,6 @@ Language           | files | blank | comment | code
 Java               |    35 |   523 |     217 | 3515
 C/C++ Header       |    29 |   200 |     211 | 3183
 C++                |     5 |    47 |      27 |  823
-Python             |    17 |   127 |       3 |  589
+Python             |    17 |   127 |       5 |  601
 TypeScript         |     6 |     1 |       0 |   86
-SUM:               |    92 |   898 |     458 | 8196
+SUM:               |    92 |   898 |     460 | 8208

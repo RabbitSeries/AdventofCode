@@ -80,7 +80,8 @@
             "command": "python downloader.py",
             "options": {
                 "env": {
-                    "AOC_SESSION_COOKIE": "${input:AOC_SESSION_COOKIE}"
+                    "AOC_SESSION_COOKIE": "${input:AOC_SESSION_COOKIE}",
+                    "OVERWRITE_DOWNLOAD": "${input:OVERWRITE_DOWNLOAD}"
                 },
                 "cwd": "${workspaceFolder}/Inputdownloader"
             },
@@ -105,6 +106,15 @@
             "id": "AOC_SESSION_COOKIE",
             "type": "promptString",
             "description": "Please user provide AOC_SESSION_COOKIE. Press enter for automatically fectching .env under project root"
+        },
+        {
+            "id": "OVERWRITE_DOWNLOAD",
+            "type": "pickString",
+            "options": [
+                "True",
+                "False"
+            ],
+            "description": ""
         }
     ],
     "version": "2.0.0"

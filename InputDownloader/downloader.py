@@ -1,34 +1,46 @@
 import requests
 import os
 import re
-from typing import List, Tuple, Dict
 
 
-def find_aoc_directories(root_dirs: List[str] | None = None, overwrite: bool = False) -> Dict[Tuple[int, int], List[str]]:
-    RepoRootRe = re.compile(
-        r"[/\\](?P<year>\d+)", re.IGNORECASE
+def find_aoc_directories(root_dirs: list[str] | None = None, overwrite: bool = False) -> dict[tuple[int, int], list[str]]:
+    repo_root_re = re.compile(
+        r"[/\\](?P<year>\d+)$", re.IGNORECASE
     )
-    found: Dict[Tuple[int, int], List[str]] = {}
-    if root_dirs:
-        for root_dir in root_dirs:
-            for entry in os.scandir(root_dir):
-                YearMatch = RepoRootRe.search(entry.path)
-                if YearMatch:
-                    for subDir in os.scandir(entry.path):
-                        DayRootRe = re.compile(
-                            r".*Day(?P<day>\d+)", re.IGNORECASE
-                        )
-                        DayMatch = DayRootRe.search(subDir.path)
-                        if DayMatch and subDir.path[len(DayMatch.group()):].find(os.path.sep) == -1:
-                            rel_path = os.path.join(subDir, "input.txt")
-                            if os.path.exists(rel_path) and not overwrite:
-                                print(f"Skipping existing: {rel_path}")
-                                continue
-                            year = int(YearMatch.group("year"))
-                            day = int(DayMatch.group("day"))
-                            found.setdefault((year, day), []).append(rel_path)
-        return dict(sorted(found.items(), key=lambda item: (item[0][0], item[0][1])))
-    return dict()
+    day_root_re = re.compile(
+        r".*Day(?P<day>\d+)$", re.IGNORECASE
+    )
+    found: dict[tuple[int, int], list[str]] = {}
+    if root_dirs is None:
+        return dict()
+    for root_dir in root_dirs:
+        for entry in os.scandir(root_dir):
+            year_match = repo_root_re.search(entry.path)
+            if year_match is None:
+                continue
+            day_root_parents: list[str] = []
+            if root_dir.endswith("Java"):
+                # Java src root has a main subdir due to pom pool pattern globbing (more hacked configure may be available) for now
+                day_root_parents.append(os.path.join(entry.path, "main"))
+                # For the same reason, Legacy foler is placed at each year's subFolder
+                legacy_folder = os.path.join(day_root_parents[0], "Legacy")
+                if os.path.exists(legacy_folder):
+                    day_root_parents.append(legacy_folder)
+            else:
+                day_root_parents.append(entry.path)
+            for day_root_parent in day_root_parents:
+                for subDir in os.scandir(day_root_parent):
+                    day_match = day_root_re.search(subDir.path)
+                    if day_match is None:
+                        continue
+                    distro_path = os.path.join(subDir.path, "input.txt")
+                    if os.path.exists(distro_path) and not overwrite:
+                        print(f"Skipping existing: {distro_path}")
+                        continue
+                    year = int(year_match.group("year"))
+                    day = int(day_match.group("day"))
+                    found.setdefault((year, day), []).append(distro_path)
+    return dict(sorted(found.items(), key=lambda item: item[0]))
 
 
 def download_input(year: int, day: int, session_cookie: str) -> str:
@@ -47,26 +59,26 @@ def process_all_inputs(
     root_dir: str | None = None,
     overwrite: bool = False
 ) -> None:
-    if root_dir:
-        dirs = find_aoc_directories([root_dir, os.path.join(root_dir, 'Legacy'), os.path.join(root_dir, 'TypeScript')])
-        for (year, day), distribute_path in dirs.items():
+    if root_dir is None:
+        return
+    root_dirs = [root_dir, os.path.join(root_dir, 'Legacy'), os.path.join(
+        root_dir, 'TypeScript'), os.path.join(root_dir, 'Java')]
+    dirs = find_aoc_directories(root_dirs, overwrite)
+    for (year, day), distros in dirs.items():
+        try:
+            input_text = download_input(year, day, session_cookie)
+        except Exception as e:
+            print(f"Failed to download https://adventofcode.com/{year}/day/{day}/input:",
+                  e, 'Session Cookie may have expired', sep='\n\t')
+            continue
+        for distro in distros:
             try:
-                input_text = download_input(year, day, session_cookie)
+                os.makedirs(os.path.dirname(distro), exist_ok=True)
+                with open(distro, "w") as f:
+                    f.write(input_text)
+                print(f"\tSaved to {distro}")
             except Exception as e:
-                print(
-                    f"Failed to download https://adventofcode.com/{year}/day/{day}/input:", e, 'Session Cookie may have expired', sep='\n\t')
-                continue
-            for rel_path in distribute_path:
-                if os.path.exists(rel_path) and not overwrite:
-                    print(f"Skipping existing: {rel_path}")
-                    continue
-                try:
-                    os.makedirs(os.path.dirname(rel_path), exist_ok=True)
-                    with open(rel_path, "w") as f:
-                        f.write(input_text)
-                    print(f"Saved to {rel_path}")
-                except Exception as e:
-                    print(f"Failed to save {year}/Day{day}: {str(e)}")
+                print(f"\tFailed to save {year}/Day{day}:", e)
 
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -79,4 +91,6 @@ if not session_cookie:
             session_cookie = file.read().strip().split("=")[1]
     except FileNotFoundError as e:
         raise ValueError("Missing AOC_SESSION_COOKIE environment variable", e)
-process_all_inputs(session_cookie, project_root)
+overwrite = os.environ.get("OVERWRITE_DOWNLOAD")
+process_all_inputs(session_cookie, project_root, eval(overwrite)
+                   if overwrite and isinstance(eval(overwrite), bool) else False)
