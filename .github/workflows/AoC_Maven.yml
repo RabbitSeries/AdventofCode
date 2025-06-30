@@ -80,7 +80,7 @@ jobs:
         shell: bash
         working-directory: ${{matrix.year-folder}}
         run: |
-          java -ea -jar ..\..\..\launcher\target\launcher-1.0-SNAPSHOT-shaded.jar
+          java -ea -jar ../../../launcher/target/launcher-1.0-SNAPSHOT-shaded.jar
 
       - name: Generate results log files (windows)
         if: ${{ matrix.os == 'windows-latest' }}
