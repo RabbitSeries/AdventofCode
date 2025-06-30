@@ -41,9 +41,9 @@ jobs:
           cache-dependency-path: | # optional
             Java/**/pom.xml
 
-      - name: Maven verify
+      - name: Maven package
         run: |
-          mvn --batch-mode --update-snapshots package
+          mvn --batch-mode --update-snapshots verify package
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
