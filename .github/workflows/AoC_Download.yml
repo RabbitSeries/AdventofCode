@@ -2,6 +2,10 @@ name: AoC Python Donwload Inputs
 
 on:
   workflow_call:
+    secrets:
+      AOC_SESSION_COOKIE:
+        required: true
+        description: Advent of Code session cookie
 
 jobs:
   downloadInput:

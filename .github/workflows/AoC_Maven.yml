@@ -16,6 +16,8 @@ env:
 jobs:
   downloadInput:
     uses: ./.github/workflows/AoC_Download.yml
+    secrets: 
+      AOC_SESSION_COOKIE: ${{secrets.AOC_SESSION_COOKIE}}
 
   build:
     strategy:
