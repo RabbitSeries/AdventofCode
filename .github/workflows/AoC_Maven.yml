@@ -50,7 +50,7 @@ jobs:
         with:
           name: JAR-${{ matrix.os }}
           path: |
-            ./Java/launcher/target/launcher-${{env.PROJECT_VERSION}}.jar
+            ./Java/launcher/target/
 
   run:
     strategy:
@@ -80,14 +80,14 @@ jobs:
         shell: bash
         working-directory: ${{matrix.year-folder}}
         run: |
-          java -ea -jar ../../../launcher/target/launcher-1.0-SNAPSHOT-shaded.jar
+          java -ea -jar ../../../launcher/target/launcher-${{env.PROJECT_VERSION}}.jar
 
       - name: Generate results log files (windows)
         if: ${{ matrix.os == 'windows-latest' }}
         shell: cmd
         working-directory: ${{matrix.year-folder}}
         run: |
-          java -ea -jar ..\..\..\launcher\target\launcher-1.0-SNAPSHOT-shaded.jar
+          java -ea -jar ..\..\..\launcher\target\launcher-${{env.PROJECT_VERSION}}.jar
 
   report-if-diff-fail:
     runs-on: ubuntu-latest
