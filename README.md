@@ -39,6 +39,8 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 - [ ] Building java 2023.
 - [ ] Building python 2022.
 
+- [ ] Use maven tool chain
+
 ## Statistics
 
 Language           | files | blank | comment | code

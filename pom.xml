@@ -13,23 +13,58 @@
         <module>Java/datamodel</module>
         <module>Java/launcher</module>
     </modules>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.14.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-toolchains-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>toolchain</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <toolchains>
+                            <jdk>
+                                <version>1.8</version>
+                                <vendor>openjdk</vendor>
+                            </jdk>
+                        </toolchains>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.hipparchus</groupId>
                 <artifactId>hipparchus</artifactId>
                 <version>4.0.1</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <dependency>
                 <groupId>rabbitseries.aoc.java.year2023</groupId>
                 <artifactId>year2023</artifactId>
                 <version>${project.version}</version>
+                <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>rabbitseries.aoc.java.datamodel</groupId>
                 <artifactId>datamodel</artifactId>
                 <version>${project.version}</version>
+                <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>rabbitseries.aoc.java.launcher</groupId>

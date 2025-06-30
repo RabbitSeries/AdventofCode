@@ -20,12 +20,10 @@
         <dependency>
             <groupId>org.hipparchus</groupId>
             <artifactId>hipparchus-core</artifactId>
-            <version>4.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.hipparchus</groupId>
             <artifactId>hipparchus-optim</artifactId>
-            <version>4.0.1</version>
         </dependency>
         <dependency>
             <groupId>rabbitseries.aoc.java.datamodel</groupId>
