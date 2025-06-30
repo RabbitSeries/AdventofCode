@@ -20,8 +20,8 @@ def find_aoc_directories(root_dirs: list[str] | None = None, overwrite: bool = F
                 continue
             day_root_parents: list[str] = []
             if root_dir.endswith("Java"):
-                # Java src root has a main subdir due to pom pool pattern globbing (more hacked configure may be available) for now
-                day_root_parents.append(os.path.join(entry.path, "main"))
+                # Java src root has a main/year<YYYY> subdir due to pom package management (some more hacked configuration may be available) for now
+                day_root_parents.append(os.path.join(entry.path, "main", f"year{year_match.group("year")}"))
                 # For the same reason, Legacy foler is placed at each year's subFolder
                 legacy_folder = os.path.join(day_root_parents[0], "Legacy")
                 if os.path.exists(legacy_folder):

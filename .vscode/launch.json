@@ -5,12 +5,12 @@
             "type": "java",
             "request": "launch",
             "vmArgs": "-ea",
-            "cwd": "${workspaceFolder}/Java/year2023/main",
+            "cwd": "${workspaceFolder}/Java/2023/main/year2023",
             "mainClass": "${file}",
             "classPaths": [
                 "$Auto",
                 "$Runtime",
-                "${workspaceFolder}/Java/year2023/target/classes",
+                "${workspaceFolder}/Java/2023/target/classes",
                 "${workspaceFolder}/Java/datamodel/target/classes"
             ],
             "preLaunchTask": "[maven verify]",

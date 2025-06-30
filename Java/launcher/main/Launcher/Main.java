@@ -2,6 +2,7 @@ package Launcher;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -15,14 +16,15 @@ import JavaDataModel.SolutionBase;
 public class Main {
     public static void main(String[] args) throws Exception {
         var start_time = System.nanoTime();
-        File baseDir = new File(".");
-        List<String> matchedClasses = findClassFiles(baseDir);
+        List<String> matchedClasses = findClassFiles();
         matchedClasses.sort(Comparator.<String> naturalOrder());
         for (String binaryName : matchedClasses) {
             try {
                 Class<?> clazz = Class.forName(binaryName);
+                if (clazz.getAnnotation(JavaDataModel.AoCSolution.class) == null) {
+                    continue;
+                }
                 boolean hasSolutionBase = Arrays.stream(clazz.getInterfaces())
-                        .flatMap(itf -> Arrays.stream(itf.getInterfaces()))
                         .reduce(false, (init, v) -> init || v.equals(SolutionBase.class), (init, res) -> init || res);
                 if (hasSolutionBase) {
                     System.out.println();
@@ -51,8 +53,9 @@ public class Main {
         System.out.println("Cost: " + (end_time - start_time) / 1000 / 1_000_000.0);
     }
 
-    private static List<String> findClassFiles(File root) {
-        String rootPath = root.getName();
+    private static List<String> findClassFiles() {
+        File root = new File(".");
+        String rootPath = root.getAbsoluteFile().getParentFile().getParent();
         Queue<File> q = new LinkedList<>(List.of(root));
         List<String> classList = new ArrayList<>();
         while (!q.isEmpty()) {
@@ -61,13 +64,13 @@ public class Main {
                 if (file.isDirectory()) {
                     q.add(file);
                 } else if (file.getName().endsWith(".java")) {
-                    String path = file.getPath()
+                    String path = Paths.get(file.getAbsolutePath()).toAbsolutePath().normalize().toString()
                             .replace(rootPath + File.separator, "")
                             .replace(File.separator, ".")
                             .replaceAll("\\.java$", "");
                     // var matcher =
                     // Pattern.compile("Day[0-9]+\\.(?<ClassName>[^\\.]+)").matcher(path);
-                    if (path.matches("Day[0-9]+\\.(?<ClassName>[^\\.]+)")) {
+                    if (path.matches("year[0-9]+\\.Day[0-9]+\\.(?<ClassName>[^\\.]+)$")) {
                         classList.add(path);
                     }
                 }

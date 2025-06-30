@@ -64,6 +64,16 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
+        },
+        {
+            "name": "windows-msvc-release",
+            "inherits": "windows-gcc-release",
+            "displayName": "Windows MSVC Release",
+            "generator": "Visual Studio 17 2022",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": null
+            },
+            "description": "Not available right now, msvc does't support bits/stdc++.h. Ninja-multi and MSVC are multi config generator, build type should be specified at build phase"
         }
     ],
     "buildPresets": [
@@ -81,6 +91,13 @@
             "name": "ninja-release",
             "inherits": "unix-release",
             "configurePreset": "ninja-release"
+        },
+        {
+            "name": "msvc-release",
+            "inherits": "unix-release",
+            "configurePreset": "windows-msvc-release",
+            "configuration": "Release",
+            "description": "Typical entries include Debug, Release, RelWithDebInfo and MinSizeRel, but custom build types can also be defined."
         }
     ]
 }
