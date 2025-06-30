@@ -7,10 +7,7 @@ on:
     branches: [main]
 
 env:
-  CLASS_PATHS: |
-    Java/2023/target/classes
-    Java/2023/target/classes
-    Java/2023/target/classes
+  PACKAGE_ROOT: ./Java/launcher/target
   PROJECT_VERSION: 1.0-SNAPSHOT
 
 jobs:
@@ -50,7 +47,7 @@ jobs:
         with:
           name: JAR-${{ matrix.os }}
           path: |
-            ./Java/launcher/target/
+            ${{env.PACKAGE_ROOT}}/launcher-${{env.PROJECT_VERSION}}.jar
 
   run:
     strategy:
@@ -61,12 +58,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: build
     steps:
+      - uses: actions/checkout@v4
       - name: Download binary
         uses: actions/download-artifact@v4
         with:
           name: JAR-${{ matrix.os }}
           path: |
-            .
+            ${{env.PACKAGE_ROOT}}
 
       - name: Download input
         uses: actions/download-artifact@v4
@@ -75,6 +73,11 @@ jobs:
           path: |
             ./
 
+      - uses: actions/setup-java@v4
+        with:  
+          distribution: 'microsoft'
+          java-version: '21'
+      
       - name: Generate results log files (linux)
         if: ${{ matrix.os == 'ubuntu-latest' }}
         shell: bash
