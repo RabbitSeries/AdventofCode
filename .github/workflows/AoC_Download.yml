@@ -1,0 +1,31 @@
+name: AoC Python Donwload Inputs
+
+on:
+  workflow_call:
+
+jobs:
+  downloadInput:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - run: |
+          python -m pip install --upgrade pip
+          pip install -r InputDownloader/requirements.txt
+
+      - name: Download AoC inputs
+        env:
+          AOC_SESSION_COOKIE: ${{ secrets.AOC_SESSION_COOKIE }}
+        run: |
+          python InputDownloader/downloader.py
+
+      - name: Upload AoC inputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: AoC_Input
+          path: |
+            ./**/input.txt

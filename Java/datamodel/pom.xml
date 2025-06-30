@@ -8,10 +8,6 @@
     <artifactId>datamodel</artifactId>
     <packaging>jar</packaging>
 
-    <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-    </properties>
     <parent>
         <groupId>rabbitseries.aoc.java</groupId>
         <artifactId>aocjava</artifactId>

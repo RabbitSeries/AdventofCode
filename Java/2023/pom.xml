@@ -7,10 +7,6 @@
     <groupId>rabbitseries.aoc.java.year2023</groupId>
     <artifactId>year2023</artifactId>
     <packaging>jar</packaging>
-    <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-    </properties>
     <parent>
         <groupId>rabbitseries.aoc.java</groupId>
         <artifactId>aocjava</artifactId>
@@ -19,8 +15,6 @@
     </parent>
     <build>
         <sourceDirectory>main</sourceDirectory>
-        <outputDirectory>target/classes</outputDirectory>
-        <testOutputDirectory>target/test-classes</testOutputDirectory>
     </build>
     <dependencies>
         <dependency>
@@ -36,7 +30,7 @@
         <dependency>
             <groupId>rabbitseries.aoc.java.datamodel</groupId>
             <artifactId>datamodel</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

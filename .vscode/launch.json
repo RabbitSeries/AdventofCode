@@ -6,12 +6,12 @@
             "request": "launch",
             "vmArgs": "-ea",
             "cwd": "${workspaceFolder}/Java/2023/main/year2023",
-            "mainClass": "${file}",
+            "mainClass": "year2023/2023/year2023",
             "classPaths": [
-                "$Auto",
+                // "$Auto",
                 "$Runtime",
-                "${workspaceFolder}/Java/2023/target/classes",
-                "${workspaceFolder}/Java/datamodel/target/classes"
+                // "${workspaceFolder}/Java/2023/target/classes",//Auto or Runtime seems able to resolve dependencies and mainClass's calsspath
+                // "${workspaceFolder}/Java/datamodel/target/classes"
             ],
             "preLaunchTask": "[maven verify]",
             "projectName": "aocjava"
