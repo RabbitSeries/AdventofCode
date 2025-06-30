@@ -39,7 +39,7 @@ jobs:
           java-version: '21'
           cache: 'maven'
           cache-dependency-path: | # optional
-            Java/**/*.pom
+            Java/**/pom.xml
 
       - name: Maven verify
         run: |

@@ -40,14 +40,15 @@ jobs:
           path: |
             ./
 
-      # - name: Restore CMake build files
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: ${{ env.BUILD_DIR }}
-      #     key: cmake-${{ matrix.os }}-${{ matrix.preset }}-${{ hashFiles('**/*.cpp **/*.h') }}
+      - name: Restore CMake build files
+        id: cache-cmake
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.BUILD_DIR }}
+          key: cmake-${{ matrix.os }}-${{ matrix.preset }}-${{ hashFiles('**/*.cpp **/*.h') }}
 
       - name: Configure CMake
-        # if: steps.cache-cmake.outputs.cache-hit != 'true'
+        if: steps.cache-cmake.outputs.cache-hit != 'true'
         id: cmake-configure
         run: |
           cmake --list-presets
@@ -58,11 +59,12 @@ jobs:
           cmake --preset=default
 
       - name: Build project
-        # if: steps.cache-cmake.outputs.cache-hit != 'true'
+        if: steps.cache-cmake.outputs.cache-hit != 'true'
         run: |
           cmake --build --preset=${{ matrix.preset }}
-
+        
       - name: Install binary
+        if: steps.cache-cmake.outputs.cache-hit != 'true'
         run: |
           cmake --install ${{ env.BUILD_DIR }}/${{ matrix.preset }} --prefix=${{ env.INSTALL_PREFIX }}
 
