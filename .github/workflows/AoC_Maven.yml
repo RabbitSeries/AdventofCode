@@ -21,9 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        include:
-          - os: ubuntu-latest
-          - os: windows-latest
+        year-folder: [Java/2023/main/year2023]
 
     runs-on: ${{ matrix.os }}
     needs: downloadInput
@@ -38,16 +36,26 @@ jobs:
           cache-dependency-path: | # optional
             Java/**/pom.xml
 
+      - name: Download input
+        uses: actions/download-artifact@v4
+        with:
+          name: AoC_Input
+          path: |
+            ./
+
       - name: Maven package
         run: |
-          mvn --batch-mode --update-snapshots verify package
+          mvn --batch-mode --update-snapshots package install
 
-      - name: Upload JAR
-        uses: actions/upload-artifact@v4
+      - name: Maven exec:exec
+        run: |
+          mvn exec:exec
+      
+      - uses: actions/upload-artifact@v4
         with:
-          name: JAR-${{ matrix.os }}
+          name: RESULTS-${{ matrix.os }}
           path: |
-            ${{env.PACKAGE_ROOT}}/launcher-${{env.PROJECT_VERSION}}.jar
+            ${{matrix.year-folder}}/*.log
 
   run:
     strategy:
@@ -58,39 +66,18 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: build
     steps:
-      - uses: actions/checkout@v4
       - name: Download binary
         uses: actions/download-artifact@v4
         with:
-          name: JAR-${{ matrix.os }}
+          name: RESULTS-${{ matrix.os }}
           path: |
-            ${{env.PACKAGE_ROOT}}
-
-      - name: Download input
-        uses: actions/download-artifact@v4
-        with:
-          name: AoC_Input
-          path: |
-            ./
-
-      - uses: actions/setup-java@v4
-        with:  
-          distribution: 'microsoft'
-          java-version: '21'
+            ${{matrix.year-folder}}
       
-      - name: Generate results log files (linux)
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        shell: bash
+      - name: Print results log files
         working-directory: ${{matrix.year-folder}}
         run: |
-          java -ea -jar ../../../launcher/target/launcher-${{env.PROJECT_VERSION}}.jar
-
-      - name: Generate results log files (windows)
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: cmd
-        working-directory: ${{matrix.year-folder}}
-        run: |
-          java -ea -jar ..\..\..\launcher\target\launcher-${{env.PROJECT_VERSION}}.jar
+          cat res.log
+          cat exception.log
 
   report-if-diff-fail:
     runs-on: ubuntu-latest

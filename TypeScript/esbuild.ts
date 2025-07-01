@@ -1,7 +1,7 @@
 import * as esbuild from "esbuild"
 import fg from "fast-glob"
 import fs from "node:fs"
-const src = fg.globSync(["./2021/**/*.ts", "!**/*.md"])
+const src = fg.globSync(["./**/*.ts", "!node_modules"])
 console.log(`Found files: ${src}`)
 const outDirectory = "dist";
 if (fs.existsSync(outDirectory)) {
@@ -16,5 +16,6 @@ await esbuild.build({
     outbase: ".",
     outdir: outDirectory,
     sourcemap: "inline"
+    // treeShaking: true // true if bundle or format is iife
 })
 console.log(`bundle finished`)

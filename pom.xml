@@ -14,6 +14,7 @@
         <module>Java/launcher</module>
     </modules>
     <build>
+        <sourceDirectory>main</sourceDirectory>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -41,9 +42,42 @@
                         </toolchains>
                     </configuration>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.6.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <version>3.5.1</version>
+                </plugin>
             </plugins>
         </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <artifactId>exec-maven-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <configuration>
+                    <skip>true</skip>
+                    <!-- I think this should not be annoated as required in exec:java goal
+                    https://github.com/mojohaus/exec-maven-plugin/blob/205d364fab63e3d9fdb55690112f9e2e33d79866/src/main/java/org/codehaus/mojo/exec/ExecJavaMojo.java#L76-L77 -->
+                    <!-- Like this executor in exec:exec goal -->
+                    <!--
+                    https://github.com/mojohaus/exec-maven-plugin/blob/205d364fab63e3d9fdb55690112f9e2e33d79866/src/main/java/org/codehaus/mojo/exec/ExecMojo.java#L110-L111 -->
+                    <!-- And this executor in exec:exec goal should check skip before check
+                    executable
+                    https://github.com/mojohaus/exec-maven-plugin/blob/205d364fab63e3d9fdb55690112f9e2e33d79866/src/main/java/org/codehaus/mojo/exec/ExecMojo.java#L362-L376-->
+                    <executable>FOOBAR</executable>
+                </configuration>
+            </plugin>
+        </plugins>
+
     </build>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -73,9 +107,13 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <parent.basedir>${basedir}</parent.basedir>
+        <year2023.dayroot>${parent.basedir}/Java/2023/main/year2023</year2023.dayroot>
     </properties>
 </project>

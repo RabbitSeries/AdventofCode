@@ -92,12 +92,13 @@
         {
             "type": "shell",
             "label": "[maven verify]",
-            "command": "mvn",
-            "args": [
-                "verify",
-                "-f",
-                "${workspaceFolder}/pom.xml"
-            ],
+            "command": "mvn verify",
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "[maven package]",
+            "command": "mvn package",
             "problemMatcher": []
         }
     ],
@@ -110,6 +111,7 @@
         {
             "id": "OVERWRITE_DOWNLOAD",
             "type": "pickString",
+            "default": "False",
             "options": [
                 "True",
                 "False"

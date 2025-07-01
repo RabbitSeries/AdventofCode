@@ -1,7 +1,5 @@
 exe_*
 *.exe
-/compileRuntime
-/JavaLibs
 /build
 *.class
 /.env
@@ -10,5 +8,5 @@ input.txt
 /CMakeUserPresets.json
 node_modules
 dist
-*.log
 target
+exception.log

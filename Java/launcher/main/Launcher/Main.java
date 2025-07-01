@@ -1,58 +1,76 @@
 package Launcher;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.lang.reflect.Method;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+// import java.util.Arrays;
+// import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import JavaDataModel.SolutionBase;
+// import JavaDataModel.SolutionBase;
 
-//TODO Reflect from classpath (getSystemClassLoader) instead of source code and file system dependent glob 
 public class Main {
     public static void main(String[] args) throws Exception {
         var start_time = System.nanoTime();
-        List<String> matchedClasses = findClassFiles();
-        matchedClasses.sort(Comparator.<String> naturalOrder());
+        // List<String> matchedClasses = findClassFiles();
+        var Sources = JarLoader.loadCodeSource();
+        if (Sources == null) {
+            throw new RuntimeException("Please launch from a Jar bundle");
+        }
+        List<String> matchedClasses = JarLoader.loadCodeSource().stream().map(source -> source.getName()).toList();
+        // matchedClasses.sort(Comparator.<String> naturalOrder());
         for (String binaryName : matchedClasses) {
             try {
                 Class<?> clazz = Class.forName(binaryName);
-                if (clazz.getAnnotation(JavaDataModel.AoCSolution.class) == null) {
-                    continue;
-                }
-                boolean hasSolutionBase = Arrays.stream(clazz.getInterfaces())
-                        .reduce(false, (init, v) -> init || v.equals(SolutionBase.class), (init, res) -> init || res);
-                if (hasSolutionBase) {
-                    System.out.println();
-                    System.out.println(clazz.getName());
-                    Object instance = clazz.getConstructor().newInstance();
-                    for (String methodName : new String[] {
-                            "Solution1", "Solution2"
-                    }) {
-                        try {
-                            Method method = clazz.getMethod(methodName);
-                            System.out.print("\t");
-                            method.invoke(instance);
-                        } catch (Exception e) {
-                            System.out.println("Error calling " + binaryName + "." + methodName);
-                            e.printStackTrace();
-                            break;
-                        }
+                // if (clazz.getAnnotation(JavaDataModel.AoCSolution.class) == null) {
+                // continue;
+                // }
+                // boolean hasSolutionBase = Arrays.stream(clazz.getInterfaces())
+                // .reduce(false, (init, v) -> init || v.equals(SolutionBase.class), (init, res) -> init || res);
+                // if (hasSolutionBase) {
+                System.out.println();
+                System.out.println(clazz.getName());
+                Object instance = clazz.getConstructor().newInstance();
+                for (String methodName : new String[] {
+                        "Solution1", "Solution2"
+                }) {
+                    try {
+                        Method method = clazz.getMethod(methodName);
+                        System.out.print("\t");
+                        method.invoke(instance);
+                    } catch (Exception e) {
+                        System.out.println("Error calling " + binaryName + "." + methodName);
+                        e.printStackTrace();
+                        break;
                     }
                 }
+                // }
             } catch (Exception e) {
-                System.out.println("Error running " + binaryName);
+                System.err.println("Error running " + binaryName);
                 e.printStackTrace();
             }
         }
         var end_time = System.nanoTime();
-        System.out.println("Cost: " + (end_time - start_time) / 1000 / 1_000_000.0);
+        BufferedWriter cost = null;
+        try {
+            cost = new BufferedWriter(new FileWriter("exception.log"));
+            cost.write("Cost: " + (end_time - start_time) / 1000 / 1_000_000.0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cost != null) {
+                cost.close();
+            }
+        }
     }
 
+    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true)
     private static List<String> findClassFiles() {
         File root = new File(".");
         String rootPath = root.getAbsoluteFile().getParentFile().getParent();
