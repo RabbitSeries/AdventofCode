@@ -75,7 +75,7 @@ jobs:
           name: RESULTS-${{ matrix.os }}
           path: |
             ${{matrix.year-folder}}/ActionResults
-      
+
       - name: Print results log files
         working-directory: ${{matrix.year-folder}}/ActionResults
         run: |
@@ -83,10 +83,10 @@ jobs:
           cat exception.log
       
       - name: Diff results
-        working-directory: ${{matrix.year-folder}}/ActionResults
+        working-directory: 
         shell: bash
         run: |
-          sh ${{github.workspace}}/.github/workflows/diff_file.sh res.log ../res.log
+          sh ./.github/workflows/diff_file.sh ${{matrix.year-folder}}/ActionResults/res.log ${{matrix.year-folder}}/ActionResults/../res.log
 
 
   report-if-diff-fail:

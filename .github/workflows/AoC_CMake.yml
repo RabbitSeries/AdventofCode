@@ -103,20 +103,19 @@ jobs:
         shell: cmd
         run: |
           .\solution 1>actionRes.log 2>runtime.log 
-          type actionRes.log
-          type runtime.log
-
-      - name: Diff files
-        shell: bash
-        run: |
-          sh ${{github.workspace}}/.github/workflows/diff_file.sh ${{ env.INSTALL_PREFIX }}/AoC/${{ matrix.year }}/actionRes.log ${{ matrix.year }}/res.log
-
+          
       - name: LogResults
         shell: bash
         working-directory: ${{ env.INSTALL_PREFIX }}/AoC/${{ matrix.year }}
         run: |
           cat actionRes.log
           cat runtime.log
+
+      - name: Diff files
+        shell: bash
+        run: |
+          sh ./.github/workflows/diff_file.sh ${{ env.INSTALL_PREFIX }}/AoC/${{ matrix.year }}/actionRes.log ${{ matrix.year }}/res.log
+
 
   report-if-diff-fail:
     runs-on: ubuntu-latest
