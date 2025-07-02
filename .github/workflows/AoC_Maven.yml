@@ -84,6 +84,7 @@ jobs:
       
       - name: Diff results
         working-directory: ${{matrix.year-folder}}-ActionResults
+        shell: bash
         run: |
           if ! diff -u res.log ../res.log; then
             echo "[INFO] SUCCESS!";
