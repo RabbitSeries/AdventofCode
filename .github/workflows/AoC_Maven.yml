@@ -74,23 +74,24 @@ jobs:
         with:
           name: RESULTS-${{ matrix.os }}
           path: |
-            ${{matrix.year-folder}}-ActionResults
+            ${{matrix.year-folder}}/ActionResults
       
       - name: Print results log files
-        working-directory: ${{matrix.year-folder}}-ActionResults
+        working-directory: ${{matrix.year-folder}}/ActionResults
         run: |
           cat res.log
           cat exception.log
       
       - name: Diff results
-        working-directory: ${{matrix.year-folder}}-ActionResults
+        working-directory: ${{matrix.year-folder}}/ActionResults
         shell: bash
         run: |
-          if ! diff -u res.log ../res.log; then
+          if [ -e res.log -a -e ../res.log ] && diff -u res.log ../res.log > diff.log; then
             echo "[INFO] SUCCESS!";
             exit 0;
           else
-            echo "[ERROR] RESULTS AREN'T THE SAME! CHECK exception.log";
+            echo "[ERROR] RESULTS AREN'T THE SAME OR RESULTS NOT FOUND! CHECK exception.log";
+            cat diff.log;
             cat exception.log;
             exit -1;
           fi
