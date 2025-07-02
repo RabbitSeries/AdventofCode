@@ -10,7 +10,7 @@ import java.util.jar.JarFile;
 import JavaDataModel.AoCSolution;
 import JavaDataModel.SolutionBase;
 
-public class JarLoader {
+public class AoCSolutionLoader {
     public static List<Class<?>> loadCodeSource(URL jarSource) throws IOException, ClassNotFoundException {
         // Locate current jar file
         List<Class<?>> sources = new ArrayList<>();
@@ -19,13 +19,11 @@ public class JarLoader {
             classLoader = new URLClassLoader(new URL[] {
                     jarSource
             });
-            Enumeration<JarEntry> entries = jarFile.entries();
-            while (entries.hasMoreElements()) {
-                JarEntry entry = entries.nextElement();
+            for (JarEntry entry : jarFile.stream().toList()) {
                 String name = entry.getName();
                 if (name.endsWith(".class")) {
                     String className = name
-                            .replace('/', '.')
+                            .replace("/", ".") // regardless platform, paths inside the plarform are always seperated by /
                             .replace(".class", "");
                     Class<?> source = classLoader.loadClass(className);
                     if (source.isAnnotationPresent(AoCSolution.class) && new HashSet<>(List.of(source.getInterfaces())).contains(SolutionBase.class)) {

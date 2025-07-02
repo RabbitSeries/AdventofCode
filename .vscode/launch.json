@@ -5,13 +5,28 @@
             "type": "java",
             "request": "launch",
             "vmArgs": "-ea",
-            "cwd": "${workspaceFolder}/Java/2023/main/year2023",
+            "cwd": "${input:Working_Directory}",
+            "args": "${command:SpecifyProgramArgs}",
             "mainClass": "${file}",
             "classPaths": [
                 "$Runtime"
             ],
-            "preLaunchTask": "[maven verify]",
-            "projectName": "aocjava"
+            "preLaunchTask": "[maven goals]",
+            "projectName": "${input:Project_Name}"
+        },
+        {
+            "name": "[Java] [Debug] [AoC]: Load solutions under directory specified",
+            "type": "java",
+            "request": "launch",
+            "vmArgs": "-ea",
+            "cwd": "${workspaceFolder}/Java/${input:Year_Name}/main/year${input:Year_Name}",
+            "args": "${workspaceFolder}/Java/${input:Year_Name}/target/year${input:Year_Name}-${input:Solution_Version}.jar",
+            "mainClass": "${file}",
+            "classPaths": [
+                "$Runtime"
+            ],
+            "preLaunchTask": "[maven package]",
+            "projectName": "${input:Launcher_Name}"
         },
         {
             "name": "[Python] [Debug]",
@@ -74,6 +89,55 @@
                 "!**/node_modules/**"
             ],
             "preLaunchTask": "[Arch/Windows] [npm rum build]"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "Project_Name",
+            "type": "pickString",
+            "default": "year2023",
+            "options": [
+                "year2023",
+                "launcher"
+            ],
+            "description": "Project name for resolving the classpaths"
+        },
+        {
+            "id": "Working_Directory",
+            "type": "pickString",
+            "default": "${workspaceFolder}/Java/2023/main/year2023",
+            "options": [
+                "${workspaceFolder}/Java/2023/main/year2023",
+                "${workspaceFolder}"
+            ],
+            "description": "Working directory of the launched program"
+        },
+        {
+            "id": "Year_Name",
+            "type": "pickString",
+            "default": "2023",
+            "options": [
+                "2023"
+            ],
+            "description": "AoC solution year"
+        },
+        {
+            "id": "Solution_Version",
+            "type": "pickString",
+            "default": "1.0-SNAPSHOT",
+            "options": [
+                "1.0-SNAPSHOT"
+            ],
+            "description": "AoC solution version"
+        },
+        {
+            "id": "Launcher_Name",
+            "type": "pickString",
+            "default": "launcher",
+            "options": [
+                "launcher"
+            ],
+            "description": "Select AoC Launcher Project Name"
         }
     ],
     "version": "2.0.0"

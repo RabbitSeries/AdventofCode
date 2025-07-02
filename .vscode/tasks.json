@@ -100,6 +100,15 @@
             "label": "[maven package]",
             "command": "mvn package",
             "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "[maven goals]",
+            "command": "mvn",
+            "args": [
+                "${input:MAVEN_PRELAUNCH_GOAL}"
+            ],
+            "problemMatcher": []
         }
     ],
     "inputs": [
@@ -117,6 +126,12 @@
                 "False"
             ],
             "description": ""
+        },
+        {
+            "id": "MAVEN_PRELAUNCH_GOAL",
+            "type": "promptString",
+            "default": "package",
+            "description": "Maven goals to launch before debug"
         }
     ],
     "version": "2.0.0"

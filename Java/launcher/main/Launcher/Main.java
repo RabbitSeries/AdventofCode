@@ -6,35 +6,24 @@ import java.io.FileWriter;
 import java.lang.reflect.Method;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-// import java.util.Arrays;
-// import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-// import JavaDataModel.SolutionBase;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         var start_time = System.nanoTime();
-        // List<String> matchedClasses = findClassFiles();
         if (args.length == 0) {
             System.err.println("Please specify JAR URL/PATH");
         }
         for (String arg : args) {
-            List<Class<?>> Sources = JarLoader.loadCodeSource(Paths.get(arg).toUri().toURL());
+            List<Class<?>> Sources = AoCSolutionLoader.loadCodeSource(Paths.get(arg).normalize().toUri().toURL());
             if (Sources == null) {
                 throw new RuntimeException("Please launch from a Jar bundle");
             }
-            // matchedClasses.sort(Comparator.<String> naturalOrder());
             for (Class<?> clazz : Sources) {
                 try {
-                    // if (clazz.getAnnotation(JavaDataModel.AoCSolution.class) == null) {
-                    // continue;
-                    // }
-                    // boolean hasSolutionBase = Arrays.stream(clazz.getInterfaces())
-                    // .reduce(false, (init, v) -> init || v.equals(SolutionBase.class), (init, res) -> init || res);
-                    // if (hasSolutionBase) {
                     System.out.println();
                     System.out.println(clazz.getName());
                     Object instance = clazz.getConstructor().newInstance();
@@ -51,7 +40,6 @@ public class Main {
                             break;
                         }
                     }
-                    // }
                 } catch (Exception e) {
                     System.err.println("Error running " + clazz.getName());
                     e.printStackTrace();
