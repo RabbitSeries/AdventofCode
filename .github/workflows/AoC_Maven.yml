@@ -43,15 +43,16 @@ jobs:
           path: |
             ./
 
-      - name: Maven package
+      - name: Maven package install
         run: |
           mvn --batch-mode --update-snapshots package install
 
-      - name: Maven exec:exec
+      - name: Generate results
         run: |
           mvn exec:exec
-      
-      - uses: actions/upload-artifact@v4
+          
+      - name: Updload results
+        uses: actions/upload-artifact@v4
         with:
           name: RESULTS-${{ matrix.os }}
           path: |
@@ -66,18 +67,33 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: build
     steps:
-      - name: Download binary
+      - uses: actions/checkout@v4
+
+      - name: Prepare results
         uses: actions/download-artifact@v4
         with:
           name: RESULTS-${{ matrix.os }}
           path: |
-            ${{matrix.year-folder}}
+            ${{matrix.year-folder}}-ActionResults
       
       - name: Print results log files
-        working-directory: ${{matrix.year-folder}}
+        working-directory: ${{matrix.year-folder}}-ActionResults
         run: |
           cat res.log
           cat exception.log
+      
+      - name: Diff results
+        working-directory: ${{matrix.year-folder}}-ActionResults
+        run: |
+          if ! diff -u res.log ../res.log; then
+            echo "[INFO] SUCCESS!";
+            exit 0;
+          else
+            echo "[ERROR] RESULTS AREN'T THE SAME! CHECK exception.log";
+            cat exception.log;
+            exit -1;
+          fi
+
 
   report-if-diff-fail:
     runs-on: ubuntu-latest

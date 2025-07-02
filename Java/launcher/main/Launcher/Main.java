@@ -18,41 +18,44 @@ public class Main {
     public static void main(String[] args) throws Exception {
         var start_time = System.nanoTime();
         // List<String> matchedClasses = findClassFiles();
-        var Sources = JarLoader.loadCodeSource();
-        if (Sources == null) {
-            throw new RuntimeException("Please launch from a Jar bundle");
+        if (args.length == 0) {
+            System.err.println("Please specify JAR URL/PATH");
         }
-        List<String> matchedClasses = JarLoader.loadCodeSource().stream().map(source -> source.getName()).toList();
-        // matchedClasses.sort(Comparator.<String> naturalOrder());
-        for (String binaryName : matchedClasses) {
-            try {
-                Class<?> clazz = Class.forName(binaryName);
-                // if (clazz.getAnnotation(JavaDataModel.AoCSolution.class) == null) {
-                // continue;
-                // }
-                // boolean hasSolutionBase = Arrays.stream(clazz.getInterfaces())
-                // .reduce(false, (init, v) -> init || v.equals(SolutionBase.class), (init, res) -> init || res);
-                // if (hasSolutionBase) {
-                System.out.println();
-                System.out.println(clazz.getName());
-                Object instance = clazz.getConstructor().newInstance();
-                for (String methodName : new String[] {
-                        "Solution1", "Solution2"
-                }) {
-                    try {
-                        Method method = clazz.getMethod(methodName);
-                        System.out.print("\t");
-                        method.invoke(instance);
-                    } catch (Exception e) {
-                        System.out.println("Error calling " + binaryName + "." + methodName);
-                        e.printStackTrace();
-                        break;
+        for (String arg : args) {
+            List<Class<?>> Sources = JarLoader.loadCodeSource(Paths.get(arg).toUri().toURL());
+            if (Sources == null) {
+                throw new RuntimeException("Please launch from a Jar bundle");
+            }
+            // matchedClasses.sort(Comparator.<String> naturalOrder());
+            for (Class<?> clazz : Sources) {
+                try {
+                    // if (clazz.getAnnotation(JavaDataModel.AoCSolution.class) == null) {
+                    // continue;
+                    // }
+                    // boolean hasSolutionBase = Arrays.stream(clazz.getInterfaces())
+                    // .reduce(false, (init, v) -> init || v.equals(SolutionBase.class), (init, res) -> init || res);
+                    // if (hasSolutionBase) {
+                    System.out.println();
+                    System.out.println(clazz.getName());
+                    Object instance = clazz.getConstructor().newInstance();
+                    for (String methodName : new String[] {
+                            "Solution1", "Solution2"
+                    }) {
+                        try {
+                            Method method = clazz.getMethod(methodName);
+                            System.out.print("\t");
+                            method.invoke(instance);
+                        } catch (Exception e) {
+                            System.out.println("Error calling " + clazz.getName() + "." + methodName);
+                            e.printStackTrace();
+                            break;
+                        }
                     }
+                    // }
+                } catch (Exception e) {
+                    System.err.println("Error running " + clazz.getName());
+                    e.printStackTrace();
                 }
-                // }
-            } catch (Exception e) {
-                System.err.println("Error running " + binaryName);
-                e.printStackTrace();
             }
         }
         var end_time = System.nanoTime();

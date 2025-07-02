@@ -40,12 +40,6 @@
                             <transformers>
                                 <!-- Adds main class to manifest -->
                                 <transformer
-                                    implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer">
-                                </transformer>
-                                <transformer
-                                    implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
-                                </transformer>
-                                <transformer
                                     implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>Launcher.Main</mainClass>
                                 </transformer>
@@ -68,6 +62,9 @@
                         <argument>
                             ${project.build.directory}/${project.artifactId}-${project.version}.jar
                         </argument>
+                        <argument>
+                            ${year2023.directory}/${year2023.artifactId}-${project.version}.jar
+                        </argument>
                     </arguments>
                     <outputFile>${year2023.dayroot}/res.log</outputFile>
                 </configuration>
@@ -77,8 +74,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>rabbitseries.aoc.java.year2023</groupId>
-            <artifactId>year2023</artifactId>
+            <groupId>rabbitseries.aoc.java.datamodel</groupId>
+            <artifactId>datamodel</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
@@ -86,5 +83,7 @@
     <properties>
         <parent.basedir>${basedir}/../../</parent.basedir>
         <year2023.dayroot>${parent.basedir}/Java/2023/main/year2023</year2023.dayroot>
+        <year2023.directory>${parent.basedir}/Java/2023/target</year2023.directory>
+        <year2023.artifactId>year2023</year2023.artifactId>
     </properties>
 </project>

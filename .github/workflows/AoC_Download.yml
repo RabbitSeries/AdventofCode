@@ -1,4 +1,4 @@
-name: AoC Python Donwload Inputs
+name: AoC Python Download Inputs
 
 on:
   workflow_call:
