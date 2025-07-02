@@ -1,4 +1,5 @@
-function diff_file {
+#!/bin/sh
+diff_file() {
     if [ -z $1 ] || [ -z $2 ]; then
         echo "[ERROR] Parameter error"
         exit -1
