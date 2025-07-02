@@ -17,7 +17,6 @@ jobs:
     secrets:
       AOC_SESSION_COOKIE: ${{secrets.AOC_SESSION_COOKIE}}
 
-
   build:
     strategy:
       fail-fast: false
@@ -33,6 +32,7 @@ jobs:
     needs: downloadInput
     steps:
       - uses: actions/checkout@v4
+
       - name: Download input
         uses: actions/download-artifact@v4
         with:
@@ -45,30 +45,26 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.BUILD_DIR }}
-          key: cmake-${{ matrix.os }}-${{ matrix.preset }}-${{ hashFiles('**/*.cpp **/*.h') }}
+          key: cmake-${{ matrix.os }}-${{ matrix.preset }}-${{ hashFiles('**/*.cpp', '**/*.cc', '**/*.h') }}
 
-      - name: Configure CMake
+      - name: Run cmake configure
         if: steps.cache-cmake.outputs.cache-hit != 'true'
         id: cmake-configure
         run: |
           cmake --list-presets
           cmake --preset=${{ matrix.preset }}
 
-      - if: ${{ failure() }}
-        run: |
-          cmake --preset=default
-
-      - name: Build project
+      - name: Run cmake build
         if: steps.cache-cmake.outputs.cache-hit != 'true'
         run: |
           cmake --build --preset=${{ matrix.preset }}
         
-      - name: Install binary
+      - name: Run cmake install
         if: steps.cache-cmake.outputs.cache-hit != 'true'
         run: |
           cmake --install ${{ env.BUILD_DIR }}/${{ matrix.preset }} --prefix=${{ env.INSTALL_PREFIX }}
 
-      - name: Upload binary
+      - name: Upload binary and logs
         uses: actions/upload-artifact@v4
         with:
           name: BINARY-${{ matrix.os }}
@@ -85,13 +81,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: build
     steps:
+      - uses: actions/checkout@v4
+
       - name: Download binary
         uses: actions/download-artifact@v4
         with:
           name: BINARY-${{ matrix.os }}
           path: |
             .
-
       - name: Generate results log files (linux)
         if: ${{ matrix.os == 'ubuntu-latest' }}
         working-directory: ${{ env.INSTALL_PREFIX }}/AoC/${{ matrix.year }}
@@ -112,21 +109,7 @@ jobs:
       - name: Diff files
         shell: bash
         run: |
-          if ! diff -u ${{ env.INSTALL_PREFIX }}/AoC/${{ matrix.year }}/actionRes.log ${{ matrix.year }}/res.log > diff.log; then
-            echo "::error::Files differ. See diff.log for details."
-            cat diff.log
-            exit 1
-          else
-            echo "All pass"
-          fi
-
-      - name: Upload artifacts on failure
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: run-failure-${{ matrix.os }}-${{ matrix.year }}
-          path: |
-            diff.log
+          sh ${{github.workspace}}/.github/workflows/diff_file.sh ${{ env.INSTALL_PREFIX }}/AoC/${{ matrix.year }}/actionRes.log ${{ matrix.year }}/res.log
 
       - name: LogResults
         shell: bash

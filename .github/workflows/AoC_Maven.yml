@@ -86,15 +86,7 @@ jobs:
         working-directory: ${{matrix.year-folder}}/ActionResults
         shell: bash
         run: |
-          if [ -e res.log -a -e ../res.log ] && diff -u res.log ../res.log > diff.log; then
-            echo "[INFO] SUCCESS!";
-            exit 0;
-          else
-            echo "[ERROR] RESULTS AREN'T THE SAME OR RESULTS NOT FOUND! CHECK exception.log";
-            cat diff.log;
-            cat exception.log;
-            exit -1;
-          fi
+          sh ${{github.workspace}}/.github/workflows/diff_file.sh res.log ../res.log
 
 
   report-if-diff-fail:
