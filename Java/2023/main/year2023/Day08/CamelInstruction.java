@@ -22,13 +22,13 @@ public class CamelInstruction implements SolutionBase {
 
     List<Integer> StepCnt;
 
-    void readFile() throws IOException {
+    void readFile(BufferedReader input) throws IOException {
         Network = new HashMap<>();
         StartList = new ArrayList<>();
         StepCnt = new ArrayList<>();
         PathList = new HashMap<>();
 
-        BufferedReader input = new BufferedReader(new FileReader("Day08/input.txt"));
+        
         String buf;
         buf = input.readLine();
         Instructions = buf.chars().mapToObj(l -> (char) l).toList();
@@ -51,8 +51,8 @@ public class CamelInstruction implements SolutionBase {
         input.close();
     }
 
-    public void Solution1() throws IOException {
-        readFile();
+    public void Solution1(BufferedReader input) throws IOException {
+        readFile(input);
         int curInsId = 0;
         int nCnt = 0;
         String start = "AAA";
@@ -125,16 +125,16 @@ public class CamelInstruction implements SolutionBase {
         return a * b / gcd(a, b);
     }
 
-    public void Solution2() throws IOException {
-        readFile();
+    public void Solution2(BufferedReader input) throws IOException {
+        readFile(input);
         for (String start : StartList) {
             findAllPath(start);
         }
         long res = 1;
         for (int i = 0; i < PathList.size(); i++) {
             // System.out.println("" + PathList.keySet().toArray()[i] + " "
-            //         + PathList.get(PathList.keySet().toArray()[i]).getKey() + " "
-            //         + PathList.get(PathList.keySet().toArray()[i]).getValue());
+            // + PathList.get(PathList.keySet().toArray()[i]).getKey() + " "
+            // + PathList.get(PathList.keySet().toArray()[i]).getValue());
             res = lcm(res, PathList.get(PathList.keySet().toArray()[i]).getValue());
         }
         System.out.println("Solution 2: " + res);
@@ -142,7 +142,7 @@ public class CamelInstruction implements SolutionBase {
 
     public static void main(String[] args) throws IOException {
         CamelInstruction Day08 = new CamelInstruction();
-        Day08.Solution1();
-        Day08.Solution2();
+        Day08.Solution1(new BufferedReader(new FileReader("Day08/input.txt")));
+        Day08.Solution2(new BufferedReader(new FileReader("Day08/input.txt")));
     }
 }

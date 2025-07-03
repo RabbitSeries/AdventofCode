@@ -9,10 +9,10 @@ import JavaDataModel.*;
 
 @AoCSolution()
 public class LavaHeatLoss implements SolutionBase {
-    void readFile() throws IOException {
+    void readFile(BufferedReader input) throws IOException {
         LavaMap = new ArrayList<>();
         String buf;
-        BufferedReader input = new BufferedReader(new FileReader("Day17/input.txt"));
+        
         while ((buf = input.readLine()) != null) {
             LavaMap.add(buf.chars().mapToObj(c -> c - '0').toList());
         }
@@ -116,15 +116,15 @@ public class LavaHeatLoss implements SolutionBase {
 
     List<List<Integer>> LavaMap;
 
-    public void Solution1() throws IOException {
-        readFile();
+    public void Solution1(BufferedReader input) throws IOException {
+        readFile(input);
         int rows = LavaMap.size(), cols = LavaMap.get(0).size();
         Point2D startPos = new Point2D(0, 0), endPos = new Point2D(rows - 1, cols - 1);
         System.out.println("Solution 1: " + Dijkstra(startPos, endPos, 1, 3));
         return;
     }
 
-    public void Solution2() throws IOException {
+    public void Solution2(BufferedReader input) throws IOException {
         int rows = LavaMap.size(), cols = LavaMap.get(0).size();
         Point2D startPos = new Point2D(0, 0), endPos = new Point2D(rows - 1, cols - 1);
         System.out.println("Solution 2: " + Dijkstra(startPos, endPos, 4, 10));
@@ -140,8 +140,8 @@ public class LavaHeatLoss implements SolutionBase {
     public static void main(String[] args) throws IOException {
         var now = System.currentTimeMillis();
         LavaHeatLoss Day17 = new LavaHeatLoss();
-        Day17.Solution1();
-        Day17.Solution2();
+        Day17.Solution1(new BufferedReader(new FileReader("Day17/input.txt")));
+        Day17.Solution2(new BufferedReader(new FileReader("Day17/input.txt")));
         System.out.println("Time usage: " + (System.currentTimeMillis() - now) + " ms");
     }
 }

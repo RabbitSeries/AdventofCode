@@ -109,8 +109,8 @@ public class CubeStack implements SolutionBase {
 
     Point3D Volume = new Point3D(0, 0, 0);
 
-    void readFile() throws Exception {
-        BufferedReader input = new BufferedReader(new FileReader("Day22/input.txt"));
+    void readFile(BufferedReader input) throws Exception {
+        
         for (String buf; (buf = input.readLine()) != null;) {
             CubeList.add(ParseCube(buf));
             CubeList.getLast().setId(CubeList.size() - 1);
@@ -282,8 +282,8 @@ public class CubeStack implements SolutionBase {
         }
     }
 
-    public void Solution1() throws Exception {
-        readFile();
+    public void Solution1(BufferedReader input) throws Exception {
+        readFile(input);
         // ProjectY();
         // ProjectX();
         SetGravity();
@@ -302,7 +302,7 @@ public class CubeStack implements SolutionBase {
 
     HashMap<Integer, Integer> NodeCnt = new HashMap<>();
 
-    public void Solution2() throws Exception {
+    public void Solution2(BufferedReader input) throws Exception {
         List<Integer> InDegree = new ArrayList<>();
         Queue<Cube> q = new LinkedList<>();
         q.addAll(CubeList.stream().filter(cube -> cube.getSupportingCubes().size() > 0).toList());
@@ -329,7 +329,7 @@ public class CubeStack implements SolutionBase {
 
     public static void main(String[] args) throws Exception {
         CubeStack Day22 = new CubeStack();
-        Day22.Solution1();
-        Day22.Solution2();
+        Day22.Solution1(new BufferedReader(new FileReader("Day22/input.txt")));
+        Day22.Solution2(new BufferedReader(new FileReader("Day22/input.txt")));
     }
 }

@@ -7,8 +7,7 @@ import JavaDataModel.*;
 
 @AoCSolution()
 public class MinimumCut implements SolutionBase {
-    void readFile() throws Exception {
-        BufferedReader input = new BufferedReader(new FileReader("Day25/input.txt"));
+    void readFile(BufferedReader input) throws Exception {
         input.lines().forEach(l -> {
             var split = l.split(":");
             int inWire = Hasher(split[0].trim());
@@ -90,30 +89,30 @@ public class MinimumCut implements SolutionBase {
         return Cliques;
     }
 
-    public void Solution1() throws Exception {
-        readFile();
+    public void Solution1(BufferedReader input) throws Exception {
+        readFile(input);
         // long timeout = 70;
         // while (true) {
-        //     long seed = System.currentTimeMillis();
-        //     var res = Karger(seed, timeout);
-        //     if (CutCount(res) == 3) {
-        //         System.out.println("Using seed: " + seed);
-        //         System.out.println("Solution 1: " + res.values().stream().mapToInt(s -> s.size()).reduce(1, (i, v) -> i * v));
-        //         break;
-        //     }
+        // long seed = System.currentTimeMillis();
+        // var res = Karger(seed, timeout);
+        // if (CutCount(res) == 3) {
+        // System.out.println("Using seed: " + seed);
+        // System.out.println("Solution 1: " + res.values().stream().mapToInt(s -> s.size()).reduce(1, (i, v) -> i * v));
+        // break;
+        // }
         // }
         // 1747570281531 - 40ms
         System.out.println("Solution 1: " + Karger(1747570281531L, Long.MAX_VALUE).values().stream().mapToInt(s -> s.size()).reduce(1, (i, v) -> i * v));
     }
 
-    public void Solution2() throws Exception {
+    public void Solution2(BufferedReader input) throws Exception {
         System.out.println("\t\t\t------All 50 stars AoC Finished!!!!------");
     }
 
     public static void main(String[] args) throws Exception {
         MinimumCut Day25 = new MinimumCut();
-        Day25.Solution1();
-        Day25.Solution2();
+        Day25.Solution1(new BufferedReader(new FileReader("Day25/input.txt")));
+        Day25.Solution2(new BufferedReader(new FileReader("Day25/input.txt")));
     }
 }
 

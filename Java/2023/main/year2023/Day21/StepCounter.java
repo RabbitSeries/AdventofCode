@@ -16,8 +16,8 @@ public class StepCounter implements SolutionBase {
 
     Point2D start = new Point2D(-1, -1);
 
-    void readFile() throws Exception {
-        BufferedReader input = new BufferedReader(new FileReader("Day21/input.txt"));
+    void readFile(BufferedReader input) throws Exception {
+        
         Farm = input.lines().map(line -> {
             var sb = new StringBuilder(line);
             if (start.second == -1) {
@@ -113,8 +113,8 @@ public class StepCounter implements SolutionBase {
                 .stream().flatMap(l -> l.stream()).toList();
     }
 
-    public void Solution1() throws Exception {
-        readFile();
+    public void Solution1(BufferedReader input) throws Exception {
+        readFile(input);
         // int times = 1;
         // FoldTo(times);
         System.out.println("Solution 1: " + SimpleBFS(start, 64, 64));
@@ -135,7 +135,7 @@ public class StepCounter implements SolutionBase {
 
     }
 
-    public void Solution2() throws Exception {
+    public void Solution2(BufferedReader input) throws Exception {
         final int STEP = 26501365;
         long Layer = STEP / COL;
         long oddBase = SimpleBFS(start, getOdd(ROW + ROW / 2), ROW + ROW / 2);
@@ -167,8 +167,8 @@ public class StepCounter implements SolutionBase {
 
     public static void main(String[] args) throws Exception {
         StepCounter Day21 = new StepCounter();
-        Day21.Solution1();
-        Day21.Solution2();
+        Day21.Solution1(new BufferedReader(new FileReader("Day21/input.txt")));
+        Day21.Solution2(new BufferedReader(new FileReader("Day21/input.txt")));
         // Day21.LagrangeSolution();
     }
 }

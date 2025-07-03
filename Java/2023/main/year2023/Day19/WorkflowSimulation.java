@@ -63,8 +63,8 @@ public class WorkflowSimulation implements SolutionBase {
                     '<', Comparator.comparing(Integer::intValue).reversed(),
                     '>', Comparator.comparing(Integer::intValue)));
 
-    void readFile() throws IOException {
-        BufferedReader input = new BufferedReader(new FileReader("Day19/input.txt"));
+    void readFile(BufferedReader input) throws IOException {
+        
         for (String buf; (buf = input.readLine()) != null;) {
             Matcher workflowMatch = Pattern.compile("^.+(?=\\{.*\\}$)").matcher(buf);
             if (workflowMatch.find()) {
@@ -211,21 +211,21 @@ public class WorkflowSimulation implements SolutionBase {
         return res.stream();
     }
 
-    public void Solution1() throws IOException {
-        readFile();
+    public void Solution1(BufferedReader input) throws IOException {
+        readFile(input);
         PartList.forEach(p -> Simulate(p));
         System.out.println("Solution 1: " + acceptedList.stream().mapToLong(Part::rating).sum());
     }
 
-    public void Solution2() {
+    public void Solution2(BufferedReader input) {
         System.out.println("Solution 2: " + BFSPathList().mapToLong(Constraint::CountProp).sum());
     }
 
     public static void main(String[] args) throws IOException {
         var now = System.nanoTime();
         WorkflowSimulation Day19 = new WorkflowSimulation();
-        Day19.Solution1();
-        Day19.Solution2();
+        Day19.Solution1(new BufferedReader(new FileReader("Day19/input.txt")));
+        Day19.Solution2(new BufferedReader(new FileReader("Day19/input.txt")));
         var end = System.nanoTime();
         System.out.println((end - now) / 1000000);
     }

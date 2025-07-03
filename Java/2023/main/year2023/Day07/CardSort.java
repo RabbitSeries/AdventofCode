@@ -105,9 +105,8 @@ public class CardSort implements SolutionBase {
         throw new ExceptionInInitializerError("Unexpected Total SameChcnt");
     }
 
-    void readFile() throws IOException {
+    void readFile(BufferedReader input) throws IOException {
         cardBits = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("Day07/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null) {
             String[] line = buf.trim().split("\\s+");
@@ -116,9 +115,9 @@ public class CardSort implements SolutionBase {
         input.close();
     }
 
-    public void Solution1() throws IOException {
+    public void Solution1(BufferedReader input) throws IOException {
         long res = 0;
-        readFile();
+        readFile(input);
         cardBits.sort((e1, e2) -> {
             int pr = rule1Priority(e1.getKey()).compareTo(rule1Priority(e2.getKey()));
             return (pr == 0 ? cardHoldCompare(e1.getKey(), e2.getKey(), Rule1Cards) : pr);
@@ -133,9 +132,9 @@ public class CardSort implements SolutionBase {
         // System.out.println(cardBits);
     }
 
-    public void Solution2() throws IOException {
+    public void Solution2(BufferedReader input) throws IOException {
         long res = 0;
-        readFile();
+        readFile(input);
         cardBits.sort((e1, e2) -> {
             int pr = wildCards(e1.getKey()).compareTo(wildCards(e2.getKey()));
             return (pr == 0 ? cardHoldCompare(e1.getKey(), e2.getKey(), Rule2Cards) : pr);
@@ -152,8 +151,8 @@ public class CardSort implements SolutionBase {
     public static void main(String[] args) throws IOException {
         long now = System.nanoTime();
         CardSort Day07 = new CardSort();
-        Day07.Solution1();
-        Day07.Solution2();
+        Day07.Solution1(new BufferedReader(new FileReader("Day07/input.txt")));
+        Day07.Solution2(new BufferedReader(new FileReader("Day07/input.txt")));
         long end = System.nanoTime();
         System.out.printf("%.3f", (end - now) / 1000000.0);
     }

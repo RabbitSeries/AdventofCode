@@ -2,7 +2,9 @@ package year2023.Day18;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
@@ -16,9 +18,9 @@ public class Visualize {
     public static void main(String[] args) throws IOException {
         LavaInterior Input = new LavaInterior();
         Visualize Vis = new Visualize();
-        Vis.DigPlanList = Input.readFile();
-        Vis.Solution1();
-        Vis.Solution2();
+        Vis.DigPlanList = Input.readFile(new BufferedReader(new FileReader("Day18/input.txt")));
+        Vis.Vis_Solution1();
+        Vis.Vis_Solution2();
     }
 
     final static int[] dx = new int[] {
@@ -29,11 +31,11 @@ public class Visualize {
             1, 0, -1, 0
     };
 
-    public void Solution1() throws IOException {
+    public void Vis_Solution1() throws IOException {
         visualizDigplan(DigPlanList, "large_digplan1.jpg", 2000, 1);
     }
 
-    public void Solution2() {
+    public void Vis_Solution2() {
         for (var digPlan : DigPlanList) {
             digPlan.update();
         }

@@ -21,8 +21,7 @@ public class CubeClassify implements SolutionBase {
         cubeTarget = new HashMap<>(Map.of("red", 12, "green", 13, "blue", 14));
     }
 
-    void readFile(boolean stopOnFail) throws IOException {
-        BufferedReader input = new BufferedReader(new FileReader("Day02/input.txt"));
+    void readFile(BufferedReader input, boolean stopOnFail) throws IOException {
         String buf;
         while ((buf = input.readLine()) != null && buf.length() != 0) {
             InitDataModel();
@@ -66,17 +65,17 @@ public class CubeClassify implements SolutionBase {
         input.close();
     }
 
-    public void Solution1() throws IOException {
+    public void Solution1(BufferedReader input) throws IOException {
         res = 0;
         power = 0;
-        readFile(true);
+        readFile(input, true);
         System.out.println("Solution 1: " + res);
     }
 
-    public void Solution2() throws IOException {
+    public void Solution2(BufferedReader input) throws IOException {
         res = 0;
         power = 0;
-        readFile(false);
+        readFile(input, false);
         System.out.println("Solution 2: " + power);
     }
 }

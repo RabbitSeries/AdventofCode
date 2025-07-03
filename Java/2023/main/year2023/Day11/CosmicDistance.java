@@ -10,10 +10,10 @@ public class CosmicDistance implements SolutionBase {
     List<List<Integer>> CosmicMap;
     List<Pair<Long, Long>> GalaxyList;
 
-    void readFile() throws IOException {
+    void readFile(BufferedReader input) throws IOException {
         CosmicMap = new ArrayList<>();
         GalaxyList = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("Day11/input.txt"));
+        
         String buf;
         // Line Scanning
         while ((buf = input.readLine()) != null) {
@@ -76,14 +76,14 @@ public class CosmicDistance implements SolutionBase {
         return res;
     }
 
-    public void Solution1() throws IOException {
-        readFile();
+    public void Solution1(BufferedReader input) throws IOException {
+        readFile(input);
         System.out.println("Solution 1: " + expandCosmic(1));
         return;
     }
 
-    public void Solution2() throws IOException {
-        readFile();
+    public void Solution2(BufferedReader input) throws IOException {
+        readFile(input);
         System.out.println("Solution 2: " + expandCosmic(1000000 - 1));
         return;
     }
@@ -93,8 +93,8 @@ public class CosmicDistance implements SolutionBase {
     }
 
     public static void main(String[] args) throws IOException {
-        CosmicDistance Solution = new CosmicDistance();
-        Solution.Solution1();
-        Solution.Solution2();
+        CosmicDistance Day11 = new CosmicDistance();
+        Day11.Solution1(new BufferedReader(new FileReader("Day11/input.txt")));
+        Day11.Solution2(new BufferedReader(new FileReader("Day11/input.txt")));
     }
 }

@@ -9,9 +9,9 @@ import JavaDataModel.*;
 public class HistoryExtrapolate implements SolutionBase {
     ArrayList<List<Integer>> HistoryList;
 
-    void readFile() throws IOException {
+    void readFile(BufferedReader input) throws IOException {
         HistoryList = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("Day09/input.txt"));
+        
         String buf;
         while ((buf = input.readLine()) != null) {
             HistoryList.add(
@@ -35,8 +35,8 @@ public class HistoryExtrapolate implements SolutionBase {
         return extrapolate;
     }
 
-    public void Solution1() throws IOException {
-        readFile();
+    public void Solution1(BufferedReader input) throws IOException {
+        readFile(input);
         long res = 0;
         for (List<Integer> historyList : HistoryList) {
             IntegerRef addUp = new IntegerRef(0);
@@ -46,8 +46,8 @@ public class HistoryExtrapolate implements SolutionBase {
         System.out.println("Solution 1: " + res);
     }
 
-    public void Solution2() throws IOException {
-        readFile();
+    public void Solution2(BufferedReader input) throws IOException {
+        readFile(input);
         long res = 0;
         for (List<Integer> historyList : HistoryList) {
             IntegerRef addUp = new IntegerRef(0);
@@ -58,8 +58,8 @@ public class HistoryExtrapolate implements SolutionBase {
 
     public static void main(String[] args) throws IOException {
         HistoryExtrapolate Day09 = new HistoryExtrapolate();
-        Day09.Solution1();
-        Day09.Solution2();
+        Day09.Solution1(new BufferedReader(new FileReader("Day09/input.txt")));
+        Day09.Solution2(new BufferedReader(new FileReader("Day09/input.txt")));
     }
 
     static class IntegerRef {

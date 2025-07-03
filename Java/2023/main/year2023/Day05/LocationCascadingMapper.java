@@ -28,10 +28,9 @@ public class LocationCascadingMapper implements SolutionBase {
         return source;
     }
 
-    void readFile() throws IOException {
+    void readFile(BufferedReader input) throws IOException {
         mapperList = new ArrayList<>();
 
-        BufferedReader input = new BufferedReader(new FileReader("Day05/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null) {
             if (buf.isEmpty()) {
@@ -67,9 +66,9 @@ public class LocationCascadingMapper implements SolutionBase {
         input.close();
     }
 
-    public void Solution1() throws IOException {
+    public void Solution1(BufferedReader input) throws IOException {
         long res = Long.MAX_VALUE;
-        readFile();
+        readFile(input);
         for (long token : seedID) {
             for (ArrayList<Entry<Entry<Long, Long>, Long>> searchList : mapperList) {
                 token = SearchMap(searchList, token);
@@ -156,9 +155,9 @@ public class LocationCascadingMapper implements SolutionBase {
         return resList;
     }
 
-    public void Solution2() throws IOException {
+    public void Solution2(BufferedReader input) throws IOException {
         res = Long.MAX_VALUE;
-        readFile();
+        readFile(input);
 
         for (int i = 0; i < seedID.size(); i += 2) {
 
@@ -184,8 +183,8 @@ public class LocationCascadingMapper implements SolutionBase {
     }
 
     public static void main(String[] args) throws IOException {
-        LocationCascadingMapper Solution = new LocationCascadingMapper();
-        Solution.Solution1();
-        Solution.Solution2();
+        LocationCascadingMapper Day05 = new LocationCascadingMapper();
+        Day05.Solution1(new BufferedReader(new FileReader("Day05/input.txt")));
+        Day05.Solution2(new BufferedReader(new FileReader("Day05/input.txt")));
     }
 }

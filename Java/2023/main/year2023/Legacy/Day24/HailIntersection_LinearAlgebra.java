@@ -21,15 +21,14 @@ public class HailIntersection_LinearAlgebra {
                 Arrays.stream(InputSplit[1].trim().split("\\s*,\\s*")).mapToLong(Long::parseLong).boxed().toList());
     }
 
-    List<Hail> readFile() throws Exception {
-        BufferedReader input = new BufferedReader(new FileReader("Day24/input.txt"));
+    List<Hail> readFile(BufferedReader input) throws Exception {
         var res = input.lines().map(this::ParseHail).toList();
         input.close();
         return res;
     }
 
     public void Solution2(List<Hail> HailList) throws Exception {
-        HailList = HailList == null ? readFile() : HailList;
+        HailList = HailList == null ? readFile(new BufferedReader(new FileReader("Legacy/Day24/input.txt"))) : HailList;
         Double[][] ri = {
                 HailList.get(0).pos.stream().map(Double::valueOf).toArray(Double[]::new),
                 HailList.get(1).pos.stream().map(Double::valueOf).toArray(Double[]::new),

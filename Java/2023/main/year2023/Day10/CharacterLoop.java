@@ -13,9 +13,9 @@ public class CharacterLoop implements SolutionBase {
 
     Point2D StartPos;
 
-    void readFile() throws IOException {
+    void readFile(BufferedReader input) throws IOException {
         PipeMap = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("Day10/input.txt"));
+        
         String buf;
         while ((buf = input.readLine()) != null) {
             if (buf.indexOf("S") != -1) {
@@ -75,8 +75,8 @@ public class CharacterLoop implements SolutionBase {
         List<Point2D> PathList = new ArrayList<>();
     }
 
-    public void Solution1() throws IOException, InterruptedException {
-        readFile();
+    public void Solution1(BufferedReader input) throws IOException, InterruptedException {
+        readFile(input);
         Queue<Step> q = new LinkedList<>();
         HashSet<Step> visited = new HashSet<>();
         for (int i = 0; i < 4; i++) {
@@ -154,7 +154,7 @@ public class CharacterLoop implements SolutionBase {
         return 0;
     }
 
-    public void Solution2() {
+    public void Solution2(BufferedReader input) {
         for (int i = 0; i < 2; i++) {
             var QueryModel = i == 0 ? PipeModel.ClockwiseQuery : PipeModel.CounterclockwiseQuery;
             HashMap<Point2D, Boolean> visited = new HashMap<>();
@@ -207,7 +207,7 @@ public class CharacterLoop implements SolutionBase {
 
     public static void main(String[] args) throws Exception {
         CharacterLoop Day10 = new CharacterLoop();
-        Day10.Solution1();
-        Day10.Solution2();
+        Day10.Solution1(new BufferedReader(new FileReader("Day10/input.txt")));
+        Day10.Solution2(new BufferedReader(new FileReader("Day10/input.txt")));
     }
 }

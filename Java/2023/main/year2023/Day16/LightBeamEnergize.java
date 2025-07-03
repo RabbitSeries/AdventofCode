@@ -8,9 +8,9 @@ import JavaDataModel.*;
 public class LightBeamEnergize implements SolutionBase {
     List<List<Character>> ContraptionLayout;
 
-    void readFile() throws IOException {
+    void readFile(BufferedReader input) throws IOException {
         ContraptionLayout = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("Day16/input.txt"));
+        
         String buf;
         while ((buf = input.readLine()) != null) {
             // List<Character> row = IntStream.range(0, buf.length()).mapToObj(i
@@ -71,13 +71,13 @@ public class LightBeamEnergize implements SolutionBase {
         return resSet.size();
     }
 
-    public void Solution1() throws IOException {
-        readFile();
+    public void Solution1(BufferedReader input) throws IOException {
+        readFile(input);
         System.out
                 .println("Solution 1: " + energizeTiles(new Point2D(0, 0), 3));
     }
 
-    public void Solution2() {
+    public void Solution2(BufferedReader input) {
         int maxEnergizedTiles = 0;
         // Point2D targetEntry = null;
         int rows = ContraptionLayout.size(),
@@ -114,8 +114,8 @@ public class LightBeamEnergize implements SolutionBase {
     }
 
     public static void main(String[] args) throws IOException {
-        LightBeamEnergize Solution = new LightBeamEnergize();
-        Solution.Solution1();
-        Solution.Solution2();
+        LightBeamEnergize Day16 = new LightBeamEnergize();
+        Day16.Solution1(new BufferedReader(new FileReader("Day16/input.txt")));
+        Day16.Solution2(new BufferedReader(new FileReader("Day16/input.txt")));
     }
 }

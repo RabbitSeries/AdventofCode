@@ -15,6 +15,14 @@
     </modules>
     <build>
         <sourceDirectory>main</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>resources</directory>
+                <excludes>
+                    <exclude>Legacy/**/input.txt</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <pluginManagement>
             <plugins>
                 <plugin>

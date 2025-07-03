@@ -8,8 +8,7 @@ import JavaDataModel.*;
 
 @AoCSolution()
 public class ValueCalibration implements SolutionBase {
-    ArrayList<String> readFile() throws IOException {
-        BufferedReader input = new BufferedReader(new FileReader("Day01/input.txt"));
+    ArrayList<String> readFile(BufferedReader input) throws IOException {
         ArrayList<String> maplist = new ArrayList<>();
         String buf;
         while ((buf = input.readLine()) != null) {
@@ -77,17 +76,17 @@ public class ValueCalibration implements SolutionBase {
         });
     }
 
-    public void Solution1() throws IOException {
+    public void Solution1(BufferedReader input) throws IOException {
         res = 0;
         digits = new HashMap<>();
-        ArrayList<String> maplist = readFile();
+        ArrayList<String> maplist = readFile(input);
         DualSearch(maplist);
         System.out.println("Solution 1: " + res);
     }
 
-    public void Solution2() throws IOException {
+    public void Solution2(BufferedReader input) throws IOException {
         InitDataModel();
-        ArrayList<String> maplist = readFile();
+        ArrayList<String> maplist = readFile(input);
         DualSearch(maplist);
         System.out.println("Solution 2: " + res);
     }

@@ -34,10 +34,10 @@ public class CharacterMatcher implements SolutionBase {
         return true;
     }
 
-    void readFile() throws IOException {
+    void readFile(BufferedReader input) throws IOException {
         SpringLists = new ArrayList<>();
         DamagedGroups = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("Day12/input.txt"));
+
         String buf;
         while ((buf = input.readLine()) != null) {
             String[] recordings = buf.split("\\s+");
@@ -147,8 +147,8 @@ public class CharacterMatcher implements SolutionBase {
         System.out.println("Unit test assertation successful");
     }
 
-    public void Solution1() throws IOException {
-        readFile();
+    public void Solution1(BufferedReader input) throws IOException {
+        readFile(input);
         long res = 0, problemSetSize = SpringLists.size();
         for (int i = 0; i < problemSetSize; i++) {
             memo = new HashMap<>();
@@ -157,8 +157,8 @@ public class CharacterMatcher implements SolutionBase {
         System.out.println("Solution 1: " + res);
     }
 
-    public void Solution2() throws IOException {
-        readFile();
+    public void Solution2(BufferedReader input) throws IOException {
+        readFile(input);
         memo = new HashMap<>();
         long res = 0, problemSetSize = SpringLists.size();
         for (int i = 0; i < problemSetSize; i++) {
@@ -173,8 +173,8 @@ public class CharacterMatcher implements SolutionBase {
         System.out.println("Solution 2: " + res);
     }
 
-    void Solution2_DP() throws IOException {
-        readFile();
+    void Solution2_DP(BufferedReader input) throws IOException {
+        readFile(input);
         long res = 0, problemSetSize = SpringLists.size();
         for (int i = 0; i < problemSetSize; i++) {
 
@@ -190,11 +190,11 @@ public class CharacterMatcher implements SolutionBase {
 
     public static void main(String[] args) throws IOException {
 
-        CharacterMatcher Solution = new CharacterMatcher();
+        CharacterMatcher Day12 = new CharacterMatcher();
         // Solution.unitTest();
-        Solution.unitTest();
-        Solution.Solution1();
-        Solution.Solution2();
-        Solution.Solution2_DP();
+        Day12.unitTest();
+        Day12.Solution1(new BufferedReader(new FileReader("Day12/input.txt")));
+        Day12.Solution2(new BufferedReader(new FileReader("Day12/input.txt")));
+        Day12.Solution2_DP(new BufferedReader(new FileReader("Day12/input.txt")));
     }
 }

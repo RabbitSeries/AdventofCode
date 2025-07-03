@@ -25,8 +25,8 @@ public class HailIntersection implements SolutionBase {
 
     List<Hail> HailList = null;
 
-    void readFile() throws Exception {
-        BufferedReader input = new BufferedReader(new FileReader("Day24/input.txt"));
+    void readFile(BufferedReader input) throws Exception {
+        
         HailList = input.lines().map(this::ParseHail).toList();
         input.close();
     }
@@ -41,8 +41,8 @@ public class HailIntersection implements SolutionBase {
         return false;
     }
 
-    public void Solution1() throws Exception {
-        readFile();
+    public void Solution1(BufferedReader input) throws Exception {
+        readFile(input);
         System.out.println("Solution 1: " + IntStream.range(0, HailList.size()).mapToLong(i -> IntStream.range(i + 1, HailList.size())
                 .mapToObj(j -> HailList.get(i).Intersection(HailList.get(j)))
                 .filter(this::inBoundary)
@@ -53,14 +53,14 @@ public class HailIntersection implements SolutionBase {
      * Currently using hipparchus MultivariateJacobianFunction as a solution
      * @see HailIntersection_LinearAlgebra#Solution2() Legacy.Day24.HailIntersection_LinearAlgbra
      */
-    public void Solution2() throws Exception {
+    public void Solution2(BufferedReader input) throws Exception {
         HailIntersection_LinearAlgebra legacy = new HailIntersection_LinearAlgebra();
         legacy.Solution2(HailList);
     }
 
     public static void main(String[] args) throws Exception {
         HailIntersection Day24 = new HailIntersection();
-        Day24.Solution1();
-        Day24.Solution2();
+        Day24.Solution1(new BufferedReader(new FileReader("Day24/input.txt")));
+        Day24.Solution2(new BufferedReader(new FileReader("Day24/input.txt")));
     }
 }

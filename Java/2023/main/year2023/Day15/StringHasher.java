@@ -12,10 +12,10 @@ import java.io.*;
 public class StringHasher implements SolutionBase {
     List<String> stepList;
 
-    void readFile() throws IOException {
+    void readFile(BufferedReader input) throws IOException {
         stepList = new ArrayList<>();
         String buf;
-        BufferedReader input = new BufferedReader(new FileReader("Day15/input.txt"));
+        
         while ((buf = input.readLine()) != null) {
             stepList.addAll(Arrays.stream(buf.trim().split(",")).toList());
         }
@@ -30,8 +30,8 @@ public class StringHasher implements SolutionBase {
         return s.split("[=-]")[0];
     }
 
-    public void Solution1() throws IOException {
-        readFile();
+    public void Solution1(BufferedReader input) throws IOException {
+        readFile(input);
         long res = 0;
         for (var s : stepList)
             res += hash(s);
@@ -53,7 +53,7 @@ public class StringHasher implements SolutionBase {
         }
     }
 
-    public void Solution2() throws IOException {
+    public void Solution2(BufferedReader input) throws IOException {
         List<ArrayList<Pair<String, Integer>>> BoxList =
                 Collections.nCopies(256, new ArrayList<Pair<String, Integer>>()).stream()
                         .map(list -> new ArrayList<>(list)).toList();
@@ -96,8 +96,8 @@ public class StringHasher implements SolutionBase {
     }
 
     public static void main(String[] args) throws IOException {
-        StringHasher Solution = new StringHasher();
-        Solution.Solution1();
-        Solution.Solution2();
+        StringHasher Day15 = new StringHasher();
+        Day15.Solution1(new BufferedReader(new FileReader("Day15/input.txt")));
+        Day15.Solution2(new BufferedReader(new FileReader("Day15/input.txt")));
     }
 }

@@ -25,11 +25,10 @@ public class PartNumberSearch implements SolutionBase {
 
     Integer ratioSum = 0;
 
-    void readFile() throws IOException {
+    void readFile(BufferedReader input) throws IOException {
         schematic = new ArrayList<>();
         partNumberPos = new ArrayList<>();
         gearPos = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("Day03/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null && buf.length() > 0) {
             startOfDigit = false;
@@ -61,8 +60,8 @@ public class PartNumberSearch implements SolutionBase {
         input.close();
     }
 
-    public void Solution1() throws IOException {
-        readFile();
+    public void Solution1(BufferedReader input) throws IOException {
+        readFile(input);
         Integer rows = schematic.size(), cols = schematic.get(0).size();
         for (Entry<Point2D, Integer> posInfo : partNumberPos) {
             Point2D pos = posInfo.getKey();
@@ -124,8 +123,8 @@ public class PartNumberSearch implements SolutionBase {
         return Integer.parseInt(catString);
     }
 
-    public void Solution2() throws IOException {
-        readFile();
+    public void Solution2(BufferedReader input) throws IOException {
+        readFile(input);
         Integer rows = schematic.size(), cols = schematic.get(0).size();
         for (Point2D pos : gearPos) {
             int numberCnt = 0;

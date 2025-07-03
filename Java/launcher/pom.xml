@@ -55,7 +55,7 @@
                 <configuration>
                     <skip>false</skip>
                     <executable>java</executable>
-                    <workingDirectory>${year2023.dayroot}</workingDirectory>
+                    <workingDirectory>${basedir}</workingDirectory>
                     <arguments>
                         <argument>-ea</argument>
                         <argument>-jar</argument>

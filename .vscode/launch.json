@@ -19,8 +19,10 @@
             "type": "java",
             "request": "launch",
             "vmArgs": "-ea",
-            "cwd": "${workspaceFolder}/Java/${input:Year_Name}/main/year${input:Year_Name}",
-            "args": "${workspaceFolder}/Java/${input:Year_Name}/target/year${input:Year_Name}-${input:Solution_Version}.jar",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "${workspaceFolder}/Java/${input:Year_Name}/target/year${input:Year_Name}-${input:Solution_Version}.jar"
+            ],
             "mainClass": "${file}",
             "classPaths": [
                 "$Runtime"
@@ -105,9 +107,9 @@
         {
             "id": "Working_Directory",
             "type": "pickString",
-            "default": "${workspaceFolder}/Java/2023/main/year2023",
+            "default": "${workspaceFolder}/Java/2023/resources",
             "options": [
-                "${workspaceFolder}/Java/2023/main/year2023",
+                "${workspaceFolder}/Java/2023/resources",
                 "${workspaceFolder}"
             ],
             "description": "Working directory of the launched program"

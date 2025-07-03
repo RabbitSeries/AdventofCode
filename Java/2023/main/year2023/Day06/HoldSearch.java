@@ -12,9 +12,8 @@ import JavaDataModel.*;
 public class HoldSearch implements SolutionBase {
     ArrayList<Entry<Integer, Integer>> recordList;
 
-    void readFile() throws IOException {
+    void readFile(BufferedReader input) throws IOException {
         recordList = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("Day06/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null) {
             if (buf.indexOf("Time:") != -1) {
@@ -54,8 +53,8 @@ public class HoldSearch implements SolutionBase {
         }
     }
 
-    public void Solution1() throws IOException {
-        readFile();
+    public void Solution1(BufferedReader input) throws IOException {
+        readFile(input);
         long targetCnt = 1;
         // targetCnt = (timeout - t) * t for target > distance: (const - t)*t - distance
         // > 0 for t <= timeout
@@ -65,8 +64,8 @@ public class HoldSearch implements SolutionBase {
         System.out.println("Solution 1: " + targetCnt);
     }
 
-    public void Solution2() throws IOException {
-        readFile();
+    public void Solution2(BufferedReader input) throws IOException {
+        readFile(input);
         long realTimeout = Long.parseLong(recordList.stream()
                 .map(token -> token.getKey().toString()).collect(Collectors.joining()));
         long realDistance = Long.parseLong(recordList.stream()

@@ -1,6 +1,9 @@
 package JavaDataModel;
-public interface SolutionBase {
-    public void Solution1() throws Exception;
 
-    public void Solution2() throws Exception;
+import java.io.BufferedReader;
+
+public interface SolutionBase {
+    public void Solution1(BufferedReader input) throws Exception;
+
+    public void Solution2(BufferedReader input) throws Exception;
 }

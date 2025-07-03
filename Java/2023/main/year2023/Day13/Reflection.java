@@ -9,9 +9,8 @@ import JavaDataModel.*;
 @AoCSolution()
 public class Reflection implements SolutionBase {
 
-    List<List<List<Character>>> readFile() throws IOException {
+    List<List<List<Character>>> readFile(BufferedReader input) throws IOException {
         List<List<List<Character>>> IslandMaps = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("Day13/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null) {
             if (IslandMaps.isEmpty()) {
@@ -78,8 +77,8 @@ public class Reflection implements SolutionBase {
         return -1;
     }
 
-    public void Solution1() throws IOException {
-        List<List<List<Character>>> IslandMaps = readFile();
+    public void Solution1(BufferedReader input) throws IOException {
+        List<List<List<Character>>> IslandMaps = readFile(input);
         long res = 0;
         for (var IslandMap : IslandMaps) {
             int curRes = checkHorizontalMirror(IslandMap, -1);
@@ -93,8 +92,8 @@ public class Reflection implements SolutionBase {
         System.out.println("Solution 1: " + res);
     }
 
-    public void Solution2() throws IOException {
-        List<List<List<Character>>> IslandMaps = readFile();
+    public void Solution2(BufferedReader input) throws IOException {
+        List<List<List<Character>>> IslandMaps = readFile(input);
         long res = 0;
         for (var IslandMap : IslandMaps) {
             int row = IslandMap.size(), col = IslandMap.get(0).size();
@@ -130,8 +129,8 @@ public class Reflection implements SolutionBase {
     }
 
     public static void main(String[] args) throws IOException {
-        Reflection Solution = new Reflection();
-        Solution.Solution1();
-        Solution.Solution2();
+        Reflection Day13 = new Reflection();
+        Day13.Solution1(new BufferedReader(new FileReader("Day13/input.txt")));
+        Day13.Solution2(new BufferedReader(new FileReader("Day13/input.txt")));
     }
 }

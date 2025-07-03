@@ -34,8 +34,8 @@ public class LongestHike implements SolutionBase {
 
     List<List<Integer>> IceIsland = new ArrayList<>();
 
-    void readFile() throws Exception {
-        BufferedReader input = new BufferedReader(new FileReader("Day23/input.txt"));
+    void readFile(BufferedReader input) throws Exception {
+        
         IceIsland = input.lines().map(line -> line.trim().chars().mapToObj(c -> {
             switch (c) {
                 case (int) '.':
@@ -134,8 +134,8 @@ public class LongestHike implements SolutionBase {
         }
     }
 
-    public void Solution1() throws Exception {
-        readFile();
+    public void Solution1(BufferedReader input) throws Exception {
+        readFile(input);
         BuildDirectedNetwork();
         HashMap<Point2D, Integer> Dist = new HashMap<>();
         Queue<Point2D> topoQ = new LinkedList<>(List.of(Start));
@@ -170,7 +170,7 @@ public class LongestHike implements SolutionBase {
         return res;
     }
 
-    public void Solution2() throws Exception {
+    public void Solution2(BufferedReader input) throws Exception {
         System.out.println("Solution 2: " + DFS(Start, new HashSet<>(Set.of(Start)), 0));
         // System.out.println("DFS CNT: " + DFSCnt); // 30580294
         // Equivalent BFS, but the Queue space will be DFS CNT size, which causes numerous rellocation cost.
@@ -200,7 +200,7 @@ public class LongestHike implements SolutionBase {
 
     public static void main(String[] args) throws Exception {
         LongestHike Day23 = new LongestHike();
-        Day23.Solution1();
-        Day23.Solution2();
+        Day23.Solution1(new BufferedReader(new FileReader("Day23/input.txt")));
+        Day23.Solution2(new BufferedReader(new FileReader("Day23/input.txt")));
     }
 }

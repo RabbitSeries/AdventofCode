@@ -80,9 +80,9 @@ public class RocksRoll implements SolutionBase {
         System.out.println();
     }
 
-    void readFile() throws IOException {
+    void readFile(BufferedReader input) throws IOException {
         Platform = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("Day14/input.txt"));
+        
         String buf;
         while ((buf = input.readLine()) != null) {
             Platform.add(buf.chars().mapToObj(c -> (char) c)
@@ -95,8 +95,8 @@ public class RocksRoll implements SolutionBase {
         resMemoList = new ArrayList<>();
     }
 
-    public void Solution1() throws IOException {
-        readFile();
+    public void Solution1(BufferedReader input) throws IOException {
+        readFile(input);
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 if (Platform.get(i).get(j).equals('O')) {
@@ -115,8 +115,8 @@ public class RocksRoll implements SolutionBase {
         System.out.println("Solution 1: " + getRes());
     }
 
-    public void Solution2() throws IOException {
-        readFile();
+    public void Solution2(BufferedReader input) throws IOException {
+        readFile(input);
         final int target = 1000000000;
         for (int i = 0; i < target; i++) {
             var cycleInfo = tilt(i);
@@ -138,8 +138,8 @@ public class RocksRoll implements SolutionBase {
     }
 
     public static void main(String[] args) throws IOException {
-        RocksRoll Solution = new RocksRoll();
-        Solution.Solution1();
-        Solution.Solution2();
+        RocksRoll Day14 = new RocksRoll();
+        Day14.Solution1(new BufferedReader(new FileReader("Day14/input.txt")));
+        Day14.Solution2(new BufferedReader(new FileReader("Day14/input.txt")));
     }
 }

@@ -3,7 +3,10 @@ package Launcher;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.Map.Entry;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -11,9 +14,67 @@ import JavaDataModel.AoCSolution;
 import JavaDataModel.SolutionBase;
 
 public class AoCSolutionLoader {
-    public static List<Class<?>> loadCodeSource(URL jarSource) throws IOException, ClassNotFoundException {
+    private URL jarSource = null;
+
+    private JarFile jarFile = null;
+
+    public AoCSolutionLoader(URL JarSource) throws IOException {
+        jarSource = JarSource;
+        if (jarSource != null) {
+            jarFile = new JarFile(jarSource.getPath());
+        }
+    }
+
+    public JarFile getJarFile() {
+        return jarFile;
+    }
+
+    private class PeekableIterator<T> implements Iterator<T> {
+        private T current = null;
+
+        private Iterator<T> inner_itr;
+
+        public PeekableIterator(Iterator<T> itr) {
+            inner_itr = itr;
+            next();
+        }
+
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        @Override
+        public T next() {
+            current = inner_itr.hasNext() ? inner_itr.next() : null;
+            return current;
+        }
+
+        public T peek() {
+            return current;
+        }
+    }
+
+    public List<Entry<Class<?>, JarEntry>> matchResources(List<Entry<JarEntry, Class<?>>> classSources, List<JarEntry> resourceEntries) {
+        PeekableIterator<Entry<JarEntry, Class<?>>> classItr = new PeekableIterator<>(classSources.iterator());
+        PeekableIterator<JarEntry> resourceItr = new PeekableIterator<>(resourceEntries.iterator());
+        List<Entry<Class<?>, JarEntry>> results = new ArrayList<>();
+        while (classItr.hasNext() && resourceItr.hasNext()) {
+            String classModuleName = Paths.get(classItr.peek().getKey().getName()).getParent().toString();
+            String resourceModuleName = Paths.get(resourceItr.peek().getName()).getParent().toString();
+            if (classModuleName.endsWith(resourceModuleName)) {
+                results.add(new SimpleEntry<>(classItr.peek().getValue(), resourceItr.peek()));
+                classItr.next();
+            }
+            resourceItr.next();
+        }
+        return results;
+    }
+
+    public List<Entry<Class<?>, JarEntry>> loadSolutions() throws IOException, ClassNotFoundException {
         // Locate current jar file
-        List<Class<?>> sources = new ArrayList<>();
+        List<Entry<JarEntry, Class<?>>> classSources = new ArrayList<>();
+        List<JarEntry> resourceEntries = new ArrayList<>();
         URLClassLoader classLoader = null;
         try (JarFile jarFile = new JarFile(jarSource.getPath())) {
             classLoader = new URLClassLoader(new URL[] {
@@ -27,8 +88,10 @@ public class AoCSolutionLoader {
                             .replace(".class", "");
                     Class<?> source = classLoader.loadClass(className);
                     if (source.isAnnotationPresent(AoCSolution.class) && new HashSet<>(List.of(source.getInterfaces())).contains(SolutionBase.class)) {
-                        sources.add(source);
+                        classSources.add(new AbstractMap.SimpleEntry<>(entry, source));
                     }
+                } else if (!entry.isDirectory() && name.endsWith(".txt")) {
+                    resourceEntries.add(entry);
                 }
             }
         } catch (Exception e) {
@@ -38,8 +101,9 @@ public class AoCSolutionLoader {
                 classLoader.close();
             }
         }
-        sources.sort(Comparator.comparing(Class::getName));
-        return sources;
+        List<Entry<Class<?>, JarEntry>> matchedSolutions = matchResources(classSources, resourceEntries);
+        matchedSolutions.sort(Comparator.comparing(entry -> entry.getKey().getName()));
+        return matchedSolutions;
     }
 
 }

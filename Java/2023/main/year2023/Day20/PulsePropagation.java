@@ -22,8 +22,8 @@ public class PulsePropagation implements SolutionBase {
     // Conjunction Module's input module status memory
     HashMap<String, HashMap<String, Boolean>> CjctModuleInputStatus = new HashMap<>();
 
-    void readFile() throws IOException {
-        BufferedReader input = new BufferedReader(new FileReader("Day20/input.txt"));
+    void readFile(BufferedReader input) throws IOException {
+        
         Pattern WirePattern = Pattern.compile("(?<InWire>.+)->(?<OutWireList>.+)");
         for (String buf; (buf = input.readLine()) != null;) {
             Matcher WireMatch = WirePattern.matcher(buf);
@@ -90,8 +90,8 @@ public class PulsePropagation implements SolutionBase {
         return new Pair<Long, Long>(lowCnt, highCnt);
     }
 
-    public void Solution1() throws IOException {
-        readFile();
+    public void Solution1(BufferedReader input) throws IOException {
+        readFile(input);
         long lowRes = 0, highRes = 0;
         for (int i = 0; i < 1000; i++) {
             var res = PulseSimulate("broadcaster", false, null);
@@ -132,7 +132,7 @@ public class PulsePropagation implements SolutionBase {
         return true;
     }
 
-    public void Solution2() {
+    public void Solution2(BufferedReader input) {
         List<String> BranchNameList = OutputLists.get("broadcaster");
         HashMap<String, String> BranchOutputName = new HashMap<>();
         for (String branchName : BranchNameList) {
@@ -189,8 +189,8 @@ public class PulsePropagation implements SolutionBase {
 
     public static void main(String[] args) throws IOException {
         PulsePropagation Day20 = new PulsePropagation();
-        Day20.Solution1();
-        Day20.Solution2();
+        Day20.Solution1(new BufferedReader(new FileReader("Day20/input.txt")));
+        Day20.Solution2(new BufferedReader(new FileReader("Day20/input.txt")));
     }
 
 }

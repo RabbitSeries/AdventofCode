@@ -21,9 +21,8 @@ public class LavaInterior implements SolutionBase {
             1, 0, -1, 0
     };
 
-    public List<DigPlan> readFile() throws IOException {
+    public List<DigPlan> readFile(BufferedReader input) throws IOException {
         DigPlanList = new ArrayList<>();
-        BufferedReader input = new BufferedReader(new FileReader("Day18/input.txt"));
         String buf;
         while ((buf = input.readLine()) != null) {
             Matcher m = Pattern.compile("(\\w)\\s(\\d+)\\s\\(#([\\d\\w]+)\\)").matcher(buf);
@@ -40,8 +39,8 @@ public class LavaInterior implements SolutionBase {
 
     Point2D corner1 = new Point2D(0, 0), corner2 = new Point2D(0, 0), startPos = new Point2D(0, 0);
 
-    public void Solution1() throws IOException {
-        readFile();
+    public void Solution1(BufferedReader input) throws IOException {
+        readFile(input);
         Boundary = new HashSet<>(Set.of(startPos));
         for (DigPlan curPlan : DigPlanList) {
             int curDirection = curPlan.first, curPushLen = curPlan.second.first;
@@ -71,7 +70,7 @@ public class LavaInterior implements SolutionBase {
         System.out.println("Solution 1: " + interiorCnt);
     }
 
-    public void Solution2() {
+    public void Solution2(BufferedReader input) {
         for (var digPlan : DigPlanList) {
             digPlan.update();
         }
@@ -123,8 +122,8 @@ public class LavaInterior implements SolutionBase {
 
     public static void main(String[] args) throws IOException {
         LavaInterior Day18 = new LavaInterior();
-        Day18.Solution1();
-        Day18.Solution2();
+        Day18.Solution1(new BufferedReader(new FileReader("Day18/input.txt")));
+        Day18.Solution2(new BufferedReader(new FileReader("Day18/input.txt")));
     }
 
     class DigPlan extends Pair<Integer, Pair<Integer, String>> {

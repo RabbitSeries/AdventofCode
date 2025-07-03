@@ -11,35 +11,45 @@ def find_aoc_directories(root_dirs: list[str] | None = None, overwrite: bool = F
         r".*Day(?P<day>\d+)$", re.IGNORECASE
     )
     found: dict[tuple[int, int], list[str]] = {}
+
     if root_dirs is None:
         return dict()
+
     for root_dir in root_dirs:
-        for entry in os.scandir(root_dir):
-            year_match = repo_root_re.search(entry.path)
-            if year_match is None:
+        for year_folder in os.scandir(root_dir):
+
+            if (year_match := repo_root_re.search(year_folder.path)) is None:
                 continue
-            day_root_parents: list[str] = []
+            year = int(year_match.group("year"))
+
+            day_roots: list[str] = []
             if root_dir.endswith("Java"):
-                # Java src root has a main/year<YYYY> subdir due to pom package management (some more hacked configuration may be available) for now
-                day_root_parents.append(os.path.join(entry.path, "main", f"year{year_match.group("year")}"))
+                # Java src root has a main/year<YYYY> subdiretory and resource subdirectory due to pom package management (some more hacked configuration may be available) for now
+                day_roots.append(os.path.join(year_folder.path, "main", f"year{year_match.group("year")}"))
+
                 # For the same reason, Legacy foler is placed at each year's subFolder
-                legacy_folder = os.path.join(day_root_parents[0], "Legacy")
-                if os.path.exists(legacy_folder):
-                    day_root_parents.append(legacy_folder)
+                legacy_folder = os.path.join(day_roots[0], "Legacy")
+
+                if os.path.exists(legacy_folder):  # There might not exisit a Legacy folder
+                    day_roots.append(legacy_folder)
             else:
-                day_root_parents.append(entry.path)
-            for day_root_parent in day_root_parents:
-                for subDir in os.scandir(day_root_parent):
-                    day_match = day_root_re.search(subDir.path)
-                    if day_match is None:
+                day_roots.append(year_folder.path)  # Other repo
+            for day_root in day_roots:
+                for day_folder in os.scandir(day_root):
+
+                    if (day_match := day_root_re.search(day_folder.path)) is None:
                         continue
-                    distro_path = os.path.join(subDir.path, "input.txt")
+                    day = int(day_match.group("day"))
+
+                    distro_path = os.path.join(day_folder.path, "input.txt") if not root_dir.endswith(
+                        "Java") else os.path.join(year_folder.path, "resources", "Day{:02d}".format(day), "input.txt")
+
                     if os.path.exists(distro_path) and not overwrite:
                         print(f"Skipping existing: {distro_path}")
                         continue
-                    year = int(year_match.group("year"))
-                    day = int(day_match.group("day"))
+
                     found.setdefault((year, day), []).append(distro_path)
+
     return dict(sorted(found.items(), key=lambda item: item[0]))
 
 
