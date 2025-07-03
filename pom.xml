@@ -21,6 +21,7 @@
                 <excludes>
                     <exclude>Legacy/**/input.txt</exclude>
                 </excludes>
+                <targetPath>resources</targetPath>
             </resource>
         </resources>
         <pluginManagement>

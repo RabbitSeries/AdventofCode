@@ -56,6 +56,8 @@ public class AoCSolutionLoader {
     }
 
     public List<Entry<Class<?>, JarEntry>> matchResources(List<Entry<JarEntry, Class<?>>> classSources, List<JarEntry> resourceEntries) {
+        classSources.sort(Comparator.comparing(entry -> entry.getValue().getName()));
+        resourceEntries.sort(Comparator.comparing(entry -> entry.getName()));
         PeekableIterator<Entry<JarEntry, Class<?>>> classItr = new PeekableIterator<>(classSources.iterator());
         PeekableIterator<JarEntry> resourceItr = new PeekableIterator<>(resourceEntries.iterator());
         List<Entry<Class<?>, JarEntry>> results = new ArrayList<>();
@@ -75,35 +77,26 @@ public class AoCSolutionLoader {
         // Locate current jar file
         List<Entry<JarEntry, Class<?>>> classSources = new ArrayList<>();
         List<JarEntry> resourceEntries = new ArrayList<>();
-        URLClassLoader classLoader = null;
-        try (JarFile jarFile = new JarFile(jarSource.getPath())) {
-            classLoader = new URLClassLoader(new URL[] {
-                    jarSource
-            });
-            for (JarEntry entry : jarFile.stream().toList()) {
-                String name = entry.getName();
-                if (name.endsWith(".class")) {
-                    String className = name
-                            .replace("/", ".") // regardless platform, paths inside the plarform are always seperated by /
-                            .replace(".class", "");
-                    Class<?> source = classLoader.loadClass(className);
-                    if (source.isAnnotationPresent(AoCSolution.class) && new HashSet<>(List.of(source.getInterfaces())).contains(SolutionBase.class)) {
-                        classSources.add(new AbstractMap.SimpleEntry<>(entry, source));
-                    }
-                } else if (!entry.isDirectory() && name.endsWith(".txt")) {
-                    resourceEntries.add(entry);
+        URLClassLoader classLoader = new URLClassLoader(new URL[] {
+                jarSource
+        });
+        for (JarEntry entry : jarFile.stream().toList()) {
+            String name = entry.getName();
+            if (name.endsWith(".class")) {
+                String className = name
+                        .replace("/", ".") // regardless platform, paths inside the plarform are always seperated by /
+                        .replace(".class", "");
+                Class<?> source = classLoader.loadClass(className);
+                if (source.isAnnotationPresent(AoCSolution.class) && new HashSet<>(List.of(source.getInterfaces())).contains(SolutionBase.class)) {
+                    classSources.add(new AbstractMap.SimpleEntry<>(entry, source));
                 }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (classLoader != null) {
-                classLoader.close();
+            } else if (!entry.isDirectory() && name.endsWith(".txt")) {
+                resourceEntries.add(entry);
             }
         }
         List<Entry<Class<?>, JarEntry>> matchedSolutions = matchResources(classSources, resourceEntries);
         matchedSolutions.sort(Comparator.comparing(entry -> entry.getKey().getName()));
+        classLoader.close();
         return matchedSolutions;
     }
-
 }
