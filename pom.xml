@@ -37,13 +37,13 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${project.maven.compiler.plugin.version}</version>
+                    <version>${project.maven-compiler-plugin.version}</version>
                 </plugin>
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-toolchains-plugin</artifactId>
-                    <version>${project.maven.toolchains.plugin.version}</version>
+                    <version>${project.maven-toolchains-plugin.version}</version>
                     <executions>
                         <execution>
                             <goals>
@@ -64,23 +64,23 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>${project.maven.shade.plugin.version}</version>
+                    <version>${project.maven-shade-plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${project.maven.surefire.plugin.version}</version>
+                    <version>${project.maven-surefire-plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>${project.maven.failsafe.plugin.version}</version>
+                    <version>${project.maven-failsafe-plugin.version}</version>
                 </plugin>
 
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
-                    <version>${project.exec.maven.plugin.version}</version>
+                    <version>${project.exec-maven-plugin.version}</version>
                 </plugin>
 
             </plugins>
@@ -166,11 +166,11 @@
         <parent.basedir>${basedir}</parent.basedir>
         <year2023.dayroot>${parent.basedir}/Java/2023/main/year2023</year2023.dayroot>
 
-        <project.maven.compiler.plugin.version>3.14.0</project.maven.compiler.plugin.version>
-        <project.maven.toolchains.plugin.version>3.2.0</project.maven.toolchains.plugin.version>
-        <project.maven.shade.plugin.version>3.6.0</project.maven.shade.plugin.version>
-        <project.maven.surefire.plugin.version>3.5.3</project.maven.surefire.plugin.version>
-        <project.maven.failsafe.plugin.version>3.5.3</project.maven.failsafe.plugin.version>
-        <project.exec.maven.plugin.version>3.5.1</project.exec.maven.plugin.version>
+        <project.maven-compiler-plugin.version>3.14.0</project.maven-compiler-plugin.version>
+        <project.maven-toolchains-plugin.version>3.2.0</project.maven-toolchains-plugin.version>
+        <project.maven-shade-plugin.version>3.6.0</project.maven-shade-plugin.version>
+        <project.maven-surefire-plugin.version>3.5.3</project.maven-surefire-plugin.version>
+        <project.maven-failsafe-plugin.version>3.5.3</project.maven-failsafe-plugin.version>
+        <project.exec-maven-plugin.version>3.5.1</project.exec-maven-plugin.version>
     </properties>
 </project>

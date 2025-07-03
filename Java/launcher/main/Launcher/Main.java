@@ -35,12 +35,9 @@ public class Main {
             Class<?> clazz = solution.getKey();
             JarEntry inputResource = solution.getValue();
             try {
-                System.out.println();
                 System.out.println(clazz.getName());
                 Object instance = clazz.getConstructor().newInstance();
-                for (String methodName : new String[] {
-                        "Solution1", "Solution2"
-                }) {
+                for (String methodName : List.of("Solution1", "Solution2")) {
                     try {
                         BufferedReader input = new BufferedReader(new InputStreamReader(SolutionLoader.getJarFile().getInputStream(inputResource)));
                         Method method = clazz.getMethod(methodName, input.getClass());
@@ -52,6 +49,7 @@ public class Main {
                         break;
                     }
                 }
+                System.out.println();
             } catch (Exception e) {
                 System.err.println("Error running " + clazz.getName());
                 e.printStackTrace();

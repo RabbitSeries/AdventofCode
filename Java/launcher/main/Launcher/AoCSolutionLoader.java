@@ -87,7 +87,7 @@ public class AoCSolutionLoader {
                         .replace("/", ".") // regardless platform, paths inside the plarform are always seperated by /
                         .replace(".class", "");
                 Class<?> source = classLoader.loadClass(className);
-                if (source.isAnnotationPresent(AoCSolution.class) && new HashSet<>(List.of(source.getInterfaces())).contains(SolutionBase.class)) {
+                if (source.isAnnotationPresent(AoCSolution.class) && List.of(source.getInterfaces()).contains(SolutionBase.class)) {
                     classSources.add(new AbstractMap.SimpleEntry<>(entry, source));
                 }
             } else if (!entry.isDirectory() && name.endsWith("input.txt")) {
