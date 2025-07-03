@@ -15,26 +15,35 @@
     </modules>
     <build>
         <sourceDirectory>main</sourceDirectory>
+        <testSourceDirectory>test</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>test/resources</directory>
+                <targetPath>${project.artifactId}</targetPath>
+            </testResource>
+        </testResources>
         <resources>
             <resource>
                 <directory>resources</directory>
                 <excludes>
                     <exclude>Legacy/**/input.txt</exclude>
                 </excludes>
-                <targetPath>resources</targetPath>
+                <targetPath>${project.artifactId}</targetPath>
             </resource>
         </resources>
         <pluginManagement>
+
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.14.0</version>
+                    <version>${project.maven.compiler.plugin.version}</version>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-toolchains-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>${project.maven.toolchains.plugin.version}</version>
                     <executions>
                         <execution>
                             <goals>
@@ -55,14 +64,25 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.6.0</version>
+                    <version>${project.maven.shade.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${project.maven.surefire.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${project.maven.failsafe.plugin.version}</version>
                 </plugin>
 
                 <plugin>
-                    <artifactId>exec-maven-plugin</artifactId>
                     <groupId>org.codehaus.mojo</groupId>
-                    <version>3.5.1</version>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${project.exec.maven.plugin.version}</version>
                 </plugin>
+
             </plugins>
         </pluginManagement>
 
@@ -83,6 +103,12 @@
                     <executable>FOOBAR</executable>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+            </plugin>
         </plugins>
 
     </build>
@@ -93,6 +119,14 @@
                 <groupId>org.hipparchus</groupId>
                 <artifactId>hipparchus</artifactId>
                 <version>4.0.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.13.2</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -117,6 +151,13 @@
         </dependencies>
     </dependencyManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -124,5 +165,12 @@
         <maven.compiler.target>21</maven.compiler.target>
         <parent.basedir>${basedir}</parent.basedir>
         <year2023.dayroot>${parent.basedir}/Java/2023/main/year2023</year2023.dayroot>
+
+        <project.maven.compiler.plugin.version>3.14.0</project.maven.compiler.plugin.version>
+        <project.maven.toolchains.plugin.version>3.2.0</project.maven.toolchains.plugin.version>
+        <project.maven.shade.plugin.version>3.6.0</project.maven.shade.plugin.version>
+        <project.maven.surefire.plugin.version>3.5.3</project.maven.surefire.plugin.version>
+        <project.maven.failsafe.plugin.version>3.5.3</project.maven.failsafe.plugin.version>
+        <project.exec.maven.plugin.version>3.5.1</project.exec.maven.plugin.version>
     </properties>
 </project>

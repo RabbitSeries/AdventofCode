@@ -3,7 +3,7 @@ package Launcher;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.AbstractMap.SimpleEntry;
@@ -62,8 +62,8 @@ public class AoCSolutionLoader {
         PeekableIterator<JarEntry> resourceItr = new PeekableIterator<>(resourceEntries.iterator());
         List<Entry<Class<?>, JarEntry>> results = new ArrayList<>();
         while (classItr.hasNext() && resourceItr.hasNext()) {
-            String classModuleName = Paths.get(classItr.peek().getKey().getName()).getParent().toString();
-            String resourceModuleName = Paths.get(resourceItr.peek().getName()).getParent().toString();
+            String classModuleName = Path.of(classItr.peek().getKey().getName()).getParent().toString();
+            String resourceModuleName = Path.of(resourceItr.peek().getName()).getParent().toString();
             if (classModuleName.endsWith(resourceModuleName)) {
                 results.add(new SimpleEntry<>(classItr.peek().getValue(), resourceItr.peek()));
                 classItr.next();
@@ -90,7 +90,7 @@ public class AoCSolutionLoader {
                 if (source.isAnnotationPresent(AoCSolution.class) && new HashSet<>(List.of(source.getInterfaces())).contains(SolutionBase.class)) {
                     classSources.add(new AbstractMap.SimpleEntry<>(entry, source));
                 }
-            } else if (!entry.isDirectory() && name.endsWith(".txt")) {
+            } else if (!entry.isDirectory() && name.endsWith("input.txt")) {
                 resourceEntries.add(entry);
             }
         }
