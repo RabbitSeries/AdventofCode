@@ -34,7 +34,7 @@ jobs:
           java-version: '21'
           cache: 'maven'
           cache-dependency-path: | # optional
-            Java/**/pom.xml
+            ./**/pom.xml
 
       - name: Download input
         uses: actions/download-artifact@v4
