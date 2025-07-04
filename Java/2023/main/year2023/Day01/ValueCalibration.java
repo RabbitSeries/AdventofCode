@@ -25,8 +25,7 @@ public class ValueCalibration implements SolutionBase {
 
     void InitDataModel() {
         res = 0;
-        digits = new HashMap<>(Map.of("zero", 0, "one", 1, "two", 2, "three", 3, "four", 4, "five",
-                5, "six", 6, "seven", 7, "eight", 8, "nine", 9));
+        digits = new HashMap<>(Map.of("zero", 0, "one", 1, "two", 2, "three", 3, "four", 4, "five", 5, "six", 6, "seven", 7, "eight", 8, "nine", 9));
     }
 
     void isDigit(String line, int index, boolean reverse) {

@@ -125,7 +125,7 @@
                 "True",
                 "False"
             ],
-            "description": ""
+            "description": "Overwrite existing input files"
         },
         {
             "id": "MAVEN_PRELAUNCH_GOAL",

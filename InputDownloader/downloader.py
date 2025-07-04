@@ -16,33 +16,37 @@ def find_aoc_directories(root_dirs: list[str] | None = None, overwrite: bool = F
         return dict()
 
     for root_dir in root_dirs:
-        for year_folder in os.scandir(root_dir):
+        if not os.path.exists(root_dir):
+            continue
+        for potential_year_folder in os.scandir(root_dir):
 
-            if (year_match := repo_root_re.search(year_folder.path)) is None:
+            if (year_match := repo_root_re.search(potential_year_folder.path)) is None:
                 continue
             year = int(year_match.group("year"))
 
-            day_roots: list[str] = []
-            if root_dir.endswith("Java"):
+            calibrated_year = potential_year_folder
+            year_folders: list[str] = []
+            # Alright lets build Cpp source tree similar to Java source tree
+            if root_dir.endswith("Java") or root_dir.endswith("Cpp"):
                 # Java src root has a main/year<YYYY> subdiretory and resource subdirectory due to pom package management (some more hacked configuration may be available) for now
-                day_roots.append(os.path.join(year_folder.path, "main", f"year{year_match.group("year")}"))
-
                 # For the same reason, Legacy foler is placed at each year's subFolder
-                legacy_folder = os.path.join(day_roots[0], "Legacy")
-
-                if os.path.exists(legacy_folder):  # There might not exisit a Legacy folder
-                    day_roots.append(legacy_folder)
+                calibrated_year = os.path.join(potential_year_folder.path, "main", f"year{year_match.group("year")}")
+                year_folders = [calibrated_year, os.path.join(calibrated_year, "Legacy")]
             else:
-                day_roots.append(year_folder.path)  # Other repo
-            for day_root in day_roots:
-                for day_folder in os.scandir(day_root):
+                year_folders.append(potential_year_folder.path)  # Other repo
+            year_folders = [f for f in year_folders if os.path.exists(f)]  # There might not exisit a Legacy folder
+
+            for calibrated_folder in year_folders:
+                for day_folder in os.scandir(calibrated_folder):
 
                     if (day_match := day_root_re.search(day_folder.path)) is None:
                         continue
                     day = int(day_match.group("day"))
 
-                    distro_path = os.path.join(day_folder.path, "input.txt") if not root_dir.endswith(
-                        "Java") else os.path.join(year_folder.path, "resources", "Day{:02d}".format(day), "input.txt")
+                    distro_path = os.path.join(day_folder.path, "input.txt")
+                    if root_dir.endswith("Java") or root_dir.endswith("Cpp"):
+                        rel_resource_foler = os.path.relpath(day_folder, calibrated_year)
+                        distro_path = os.path.join(potential_year_folder, "resources", rel_resource_foler, "input.txt")
 
                     if os.path.exists(distro_path) and not overwrite:
                         print(f"Skipping existing: {distro_path}")
@@ -71,8 +75,7 @@ def process_all_inputs(
 ) -> None:
     if root_dir is None:
         return
-    root_dirs = [root_dir, os.path.join(root_dir, 'Legacy'), os.path.join(
-        root_dir, 'TypeScript'), os.path.join(root_dir, 'Java')]
+    root_dirs = [root_dir, *[os.path.join(root_dir, langs) for langs in ['TypeScript', 'Java', 'Cpp']]]
     dirs = find_aoc_directories(root_dirs, overwrite)
     for (year, day), distros in dirs.items():
         try:

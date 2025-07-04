@@ -2,27 +2,32 @@
     "configurations": [
         {
             "name": "ArchLinux",
-            "compilerPath": "/usr/bin/g++",
+            "includePath": [
+                "${workspaceFolder}/Cpp/2024/main",
+                "${workspaceFolder}/Cpp/include"
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true
+            },
             "cStandard": "gnu23",
             "cppStandard": "gnu++23",
-            "intelliSenseMode": "linux-gcc-x64"
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/usr/bin/g++"
         },
         {
             "name": "MinGW",
-            "compilerPath": "D:\\Build_Tool_Lib\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++",
             "includePath": [
-                "D:\\Build_Tool_Lib\\boost\\boost_1_87_0_MinGW"
+                "D:/Build_Tool_Lib/boost/boost_1_87_0_MinGW",
+                "${workspaceFolder}/Cpp/2024/main",
+                "${workspaceFolder}/Cpp/include"
             ],
             "browse": {
-                "limitSymbolsToIncludedHeaders": true,
-                "path": [
-                    "${workspaceFolder}"
-                ]
+                "limitSymbolsToIncludedHeaders": true
             },
             "cStandard": "gnu23",
             "cppStandard": "gnu++23",
             "intelliSenseMode": "windows-gcc-x64",
-            "configurationProvider": "ms-vscode.cmake-tools"
+            "compilerPath": "D:/Build_Tool_Lib/x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0/mingw64/bin/g++"
         }
     ],
     "version": 4

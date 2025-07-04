@@ -7,10 +7,8 @@ on:
     branches: [main]
 
 env:
-  BUILD_TYPE: Release
   BUILD_DIR: build
   INSTALL_PREFIX: build/install
-
 jobs:
   downloadInput:
     uses: ./.github/workflows/AoC_Download.yml
@@ -45,13 +43,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.BUILD_DIR }}
-          key: cmake-${{ matrix.os }}-${{ matrix.preset }}-${{ hashFiles('**/*.cpp', '**/*.cc', '**/*.h') }}
+          key: cmake-${{ matrix.os }}-${{ matrix.preset }}-${{ hashFiles('**/CMakeLists.txt', '**/*.cc') }}
 
       - name: Run cmake configure
         if: steps.cache-cmake.outputs.cache-hit != 'true'
         id: cmake-configure
         run: |
-          cmake --list-presets
           cmake --preset=${{ matrix.preset }}
 
       - name: Run cmake build
@@ -61,15 +58,15 @@ jobs:
         
       - name: Run cmake install
         if: steps.cache-cmake.outputs.cache-hit != 'true'
+        working-directory: ${{ env.BUILD_DIR }}/${{ matrix.preset }}
         run: |
-          cmake --install ${{ env.BUILD_DIR }}/${{ matrix.preset }} --prefix=${{ env.INSTALL_PREFIX }}
+          cmake --install .
 
-      - name: Upload binary and logs
+      - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
           name: BINARY-${{ matrix.os }}
           path: |
-            **/res.log
             ${{ env.INSTALL_PREFIX }}
 
   run:
@@ -77,7 +74,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        year: [2024]
+        year: [AoC/Cpp/2024]
     runs-on: ${{ matrix.os }}
     needs: build
     steps:
@@ -89,9 +86,10 @@ jobs:
           name: BINARY-${{ matrix.os }}
           path: |
             .
+  
       - name: Generate results log files (linux)
         if: ${{ matrix.os == 'ubuntu-latest' }}
-        working-directory: ${{ env.INSTALL_PREFIX }}/AoC/${{ matrix.year }}
+        working-directory: ${{ matrix.year }}
         shell: bash
         run: |
           chmod u+x ./solution
@@ -99,14 +97,14 @@ jobs:
 
       - name: Generate results log files (windows)
         if: ${{ matrix.os == 'windows-latest' }}
-        working-directory: ${{ env.INSTALL_PREFIX }}/AoC/${{ matrix.year }}
+        working-directory: ${{ matrix.year }}
         shell: cmd
         run: |
           .\solution 1>actionRes.log 2>runtime.log 
           
       - name: LogResults
         shell: bash
-        working-directory: ${{ env.INSTALL_PREFIX }}/AoC/${{ matrix.year }}
+        working-directory: ${{ matrix.year }}
         run: |
           cat actionRes.log
           cat runtime.log
@@ -114,7 +112,7 @@ jobs:
       - name: Diff files
         shell: bash
         run: |
-          sh ./.github/workflows/diff_file.sh ${{ env.INSTALL_PREFIX }}/AoC/${{ matrix.year }}/actionRes.log ${{ matrix.year }}/res.log
+          sh ./.github/workflows/diff_file.sh ${{ env.INSTALL_PREFIX }}/AoC/${{ matrix.year }}/actionRes.log Cpp/2024/main/year2024/res.log
 
 
   report-if-diff-fail:
