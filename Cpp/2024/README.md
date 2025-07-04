@@ -5,11 +5,11 @@
 ### Day 9 Disk Fragmenter
 
 <div align="center">
-  <img src="Images/DiskFragmentOriginal.png" alt="DiskFragmentOriginal" width="488" />
+  <img src="images/DiskFragmentOriginal.png" alt="DiskFragmentOriginal" width="488" />
 </div>
 
 <div align="center">
-  <img src="Images/DiskFragmentOutput.png" alt="DiskFragmentOutput" width="500" />
+  <img src="images/DiskFragmentOutput.png" alt="DiskFragmentOutput" width="500" />
 </div>
 
 ### Day 11 Plutonian Pebbles
@@ -20,20 +20,20 @@ The multithreading approach has crashed my OS many times. The dynamic programmin
 
 This problem guides a way of image edge detection algorithm.
 <div align="center">
-  <img src="Images/EdgeDetection.png" alt="EdgeDetection" width="500" />
+  <img src="images/EdgeDetection.png" alt="EdgeDetection" width="500" />
 </div>
 
 ### Day 14 Restroom Redoubt
 
 <div align="center">
-  <img src="Images/ChristmasTree.png" alt="Merry Christmas!" width="200" />
+  <img src="images/ChristmasTree.png" alt="Merry Christmas!" width="200" />
 </div>
 
 ### Day 15 Warehouse Woes
 
 A simple box pushing game.
 <div align="center">
-  <img src="Images/PushBox.png" alt="Push Box!" width="250" />
+  <img src="images/PushBox.png" alt="Push Box!" width="250" />
 </div>
 
 ### Day 16 Dijkstra + State transfer machine
