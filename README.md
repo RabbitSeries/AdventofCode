@@ -9,16 +9,16 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
  | Year                                | Progress | Best TimeCost (seconds) |
  | :---------------------------------- | :------- | :---------------------- |
  | [2021](./TypeScript/2021/README.md) | 3/25 ⭐⭐  | Not yet                 |
- | [2022](./2022Python/README.md)      | 15/25 ⭐⭐ | Not yet                 |
- | [2023](./2023Java/README.md)        | 25/25 ⭐⭐ | 9.820279                |
- | [2024](./2024/README.md)            | 25/25 ⭐⭐ | 0.965016                |
+ | [2022](./Python/2022/README.md)     | 15/25 ⭐⭐ | Not yet                 |
+ | [2023](./Java/2023/README.md)       | 25/25 ⭐⭐ | 9.820279                |
+ | [2024](./Cpp/2024/README.md)        | 25/25 ⭐⭐ | 0.965016                |
 
 > Runs on github actions.\
 > Maybe read ifstream.rdbuf() to stringstream at once will benefit more time efficiency.
 
 ## Tools
 
-- Editor: [![VSCode](<2024/Images/code-stable.png>) ![VsCode](https://img.shields.io/badge/VsCode-blue)](https://code.visualstudio.com)
+- Editor: [![VSCode](<images/code-stable.png>) ![VsCode](https://img.shields.io/badge/VsCode-blue)](https://code.visualstudio.com)
 - Cpp Compiler: ![g++](https://img.shields.io/badge/(GCC)%2015.1.1%2020250425-grey)
 - C++ Standard: ![C++23](https://img.shields.io/badge/C%2B%2B-23-purple?logo=C%2B%2B)
 - JVM Version: ![OpenJDK](https://img.shields.io/badge/OpenJDK-21-white?logo=OpenJDK)
@@ -45,9 +45,9 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 Language           | files | blank | comment | code
 -------------------|-------|-------|---------|-----
-Java               |    35 |   523 |     217 | 3515
-C/C++ Header       |    29 |   200 |     211 | 3183
+Java               |    37 |   556 |     216 | 3607
+C/C++ Header       |    29 |   199 |     211 | 3186
 C++                |     5 |    47 |      27 |  823
-Python             |    17 |   127 |       5 |  601
-TypeScript         |     6 |     1 |       0 |   86
-SUM:               |    92 |   898 |     460 | 8208
+Python             |    17 |   137 |       6 |  603
+TypeScript         |     6 |     1 |       1 |   86
+SUM:               |    94 |   940 |     461 | 8305

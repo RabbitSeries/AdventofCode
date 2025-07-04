@@ -18,8 +18,8 @@
             "name": "MinGW",
             "includePath": [
                 "D:/Build_Tool_Lib/boost/boost_1_87_0_MinGW",
-                "${workspaceFolder}/Cpp/2024/main",
-                "${workspaceFolder}/Cpp/include"
+                "${workspaceFolder}/Cpp/**/main",
+                "${workspaceFolder}/Cpp/libs"
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true

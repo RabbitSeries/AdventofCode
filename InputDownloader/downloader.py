@@ -3,7 +3,7 @@ import os
 import re
 
 
-def find_aoc_directories(root_dirs: list[str] | None = None, overwrite: bool = False) -> dict[tuple[int, int], list[str]]:
+def find_aoc_directories(root_dirs: list[str] | None = None) -> dict[tuple[int, int], list[str]]:
     repo_root_re = re.compile(
         r"[/\\](?P<year>\d+)$", re.IGNORECASE
     )
@@ -27,13 +27,10 @@ def find_aoc_directories(root_dirs: list[str] | None = None, overwrite: bool = F
             calibrated_year = potential_year_folder
             year_folders: list[str] = []
             # Alright lets build Cpp source tree similar to Java source tree
-            if root_dir.endswith("Java") or root_dir.endswith("Cpp"):
-                # Java src root has a main/year<YYYY> subdiretory and resource subdirectory due to pom package management (some more hacked configuration may be available) for now
-                # For the same reason, Legacy foler is placed at each year's subFolder
-                calibrated_year = os.path.join(potential_year_folder.path, "main", f"year{year_match.group("year")}")
-                year_folders = [calibrated_year, os.path.join(calibrated_year, "Legacy")]
-            else:
-                year_folders.append(potential_year_folder.path)  # Other repo
+            # Java src root has a main/year<YYYY> subdiretory and resource subdirectory due to pom package management (some more hacked configuration may be available) for now
+            # For the same reason, Legacy foler is placed at each year's subFolder
+            calibrated_year = os.path.join(potential_year_folder.path, "main", f"year{year_match.group("year")}")
+            year_folders = [calibrated_year, os.path.join(calibrated_year, "Legacy")]
             year_folders = [f for f in year_folders if os.path.exists(f)]  # There might not exisit a Legacy folder
 
             for calibrated_folder in year_folders:
@@ -44,13 +41,8 @@ def find_aoc_directories(root_dirs: list[str] | None = None, overwrite: bool = F
                     day = int(day_match.group("day"))
 
                     distro_path = os.path.join(day_folder.path, "input.txt")
-                    if root_dir.endswith("Java") or root_dir.endswith("Cpp"):
-                        rel_resource_foler = os.path.relpath(day_folder, calibrated_year)
-                        distro_path = os.path.join(potential_year_folder, "resources", rel_resource_foler, "input.txt")
-
-                    if os.path.exists(distro_path) and not overwrite:
-                        print(f"Skipping existing: {distro_path}")
-                        continue
+                    rel_resource_foler = os.path.relpath(day_folder, calibrated_year)
+                    distro_path = os.path.join(potential_year_folder, "resources", rel_resource_foler, "input.txt")
 
                     found.setdefault((year, day), []).append(distro_path)
 
@@ -76,7 +68,7 @@ def process_all_inputs(
     if root_dir is None:
         return
     root_dirs = [root_dir, *[os.path.join(root_dir, langs) for langs in ['TypeScript', 'Java', 'Cpp']]]
-    dirs = find_aoc_directories(root_dirs, overwrite)
+    dirs = find_aoc_directories(root_dirs)
     for (year, day), distros in dirs.items():
         try:
             input_text = download_input(year, day, session_cookie)
@@ -85,6 +77,9 @@ def process_all_inputs(
                   e, 'Session Cookie may have expired', sep='\n\t')
             continue
         for distro in distros:
+            if os.path.exists(distro) and not overwrite:
+                print(f"Skipping existing: {distro}")
+                continue
             try:
                 os.makedirs(os.path.dirname(distro), exist_ok=True)
                 with open(distro, "w") as f:
