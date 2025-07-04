@@ -96,7 +96,7 @@ int main() {
                << std::right << std::setw( 5 ) << e.files << " | "
                << std::setw( 5 ) << e.blank << " | "
                << std::setw( 7 ) << e.comment << " | "
-               << std::setw( 4 ) << e.code << "";
+               << std::setw( 4 ) << e.code;
             res.emplace_back( ss.str() );
         }
         replaceFile( "README.md", "Language", res );

@@ -3,7 +3,7 @@ file(GLOB_RECURSE SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/**/*.cpp" "${CMAKE_CURREN
 message(STATUS "Copying input resources")
 
 # For debug build
-file(GLOB_RECURSE AOC_INPUTS LIST_DIRECTORIES FALSE input.txt)
+# file(GLOB_RECURSE AOC_INPUTS LIST_DIRECTORIES FALSE input.txt)
 message(STATUS "Copying input resources -- done")
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/resources/" DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
     FILES_MATCHING
