@@ -67,7 +67,7 @@ jobs:
         with:
           name: BINARY-${{ matrix.os }}
           path: |
-            ${{ env.INSTALL_PREFIX }}
+            ${{ env.INSTALL_PREFIX }}/${{ matrix.preset }}
 
   run:
     strategy:
@@ -112,8 +112,7 @@ jobs:
       - name: Diff files
         shell: bash
         run: |
-          sh ./.github/workflows/diff_file.sh ${{ env.INSTALL_PREFIX }}/AoC/${{ matrix.year }}/actionRes.log Cpp/2024/main/year2024/res.log
-
+          sh ./.github/workflows/diff_file.sh ${{ matrix.year }}/actionRes.log Cpp/2024/main/year2024/res.log
 
   report-if-diff-fail:
     runs-on: ubuntu-latest
