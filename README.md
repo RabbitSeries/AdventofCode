@@ -6,15 +6,14 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ### Overall
 
- | Year                                | Progress | Best TimeCost (seconds) |
- | :---------------------------------- | :------- | :---------------------- |
- | [2021](./TypeScript/2021/README.md) | 3/25 ⭐⭐  | Not yet                 |
- | [2022](./Python/2022/README.md)     | 15/25 ⭐⭐ | Not yet                 |
- | [2023](./Java/2023/README.md)       | 25/25 ⭐⭐ | 9.820279                |
- | [2024](./Cpp/2024/README.md)        | 25/25 ⭐⭐ | 0.965016                |
+ | Year                                |    Progress | Best TimeCost (seconds) |
+ | :---------------------------------- |    -------: | ----------------------: |
+ | [2021](./TypeScript/2021/README.md) |  3/25 ⭐⭐ |               Not yet   |
+ | [2022](./Python/2022/README.md)     | 15/25 ⭐⭐ |               Not yet   |
+ | [2023](./Java/2023/README.md)       | 25/25 ⭐⭐ |               9.820279  |
+ | [2024](./Cpp/2024/README.md)        | 25/25 ⭐⭐ |               0.965016  |
 
-> Runs on github actions.\
-> Maybe read ifstream.rdbuf() to stringstream at once will benefit more time efficiency.
+> Runs on github actions.
 
 ## Tools
 
@@ -38,15 +37,17 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 - [ ] Building java 2023.
 - [ ] Building python 2022.
 
-- [ ] Use maven tool chain
+- [ ] Add maven toolchain
+- [ ] Add CMake toolchain
 
 ## Statistics
 
-Language           | files | blank | comment | code
--------------------|-------|-------|---------|-----
-Java               |    37 |   556 |     216 | 3607
-C/C++ Header       |    29 |   199 |     211 | 3186
-C++                |     5 |    47 |      27 |  823
-Python             |    17 |   137 |       6 |  603
-TypeScript         |     6 |     1 |       1 |   86
-SUM:               |    94 |   940 |     461 | 8305
+Language           |         files|         blank|       comment|          code
+:-------           |         ----:|         ----:|       ------:|          ---:
+Java               |            37|           556|           216|          3607
+C/C++ Header       |            29|           199|           211|          3186
+C++                |             5|            48|            27|           815
+Python             |            17|           136|             6|           599
+TypeScript         |             6|             1|             1|            86
+CMake              |             2|            11|             7|            35
+SUM:               |            96|           951|           468|          8328

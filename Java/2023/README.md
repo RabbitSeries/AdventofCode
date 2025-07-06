@@ -8,11 +8,11 @@ This year is full of mathematics.
 
 ## Day20
 
-I don't know what circuit [this](./Day20/mermaid.md) is, but it seems that the circuit can be seperated into four parts then LCM to the final result using sort of system chaos index.
+I don't know what circuit [this](./main/year2023/Day20/mermaid.md) is, but it seems that the circuit can be seperated into four parts then LCM to the final result using sort of system chaos index.
 
 ## Day21
 
-Hard to exlain the langrange solution. See [Visualiza](./Day21/Visualize.ipynb) for BFS solution and math calculation.
+Hard to exlain the langrange solution. See [Visualiza](./main/year2023/Day21/Visualize.ipynb) for BFS solution and math calculation.
 
 ## Day22
 
