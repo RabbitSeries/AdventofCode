@@ -3,16 +3,15 @@
         {
             "name": "ArchLinux",
             "includePath": [
-                "${workspaceFolder}/Cpp/2024/main",
-                "${workspaceFolder}/Cpp/include"
+                "${workspaceFolder}/Cpp/**/main",
+                "${workspaceFolder}/Cpp/libs"
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true
             },
             "cStandard": "gnu23",
             "cppStandard": "gnu++23",
-            "intelliSenseMode": "linux-gcc-x64",
-            "compilerPath": "/usr/bin/g++"
+            "intelliSenseMode": "linux-gcc-x64"
         },
         {
             "name": "MinGW",
@@ -26,8 +25,7 @@
             },
             "cStandard": "gnu23",
             "cppStandard": "gnu++23",
-            "intelliSenseMode": "windows-gcc-x64",
-            "compilerPath": "D:/Build_Tool_Lib/x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0/mingw64/bin/g++"
+            "intelliSenseMode": "windows-gcc-x64"
         }
     ],
     "version": 4

@@ -19,10 +19,9 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 ## Tools
 
 - Editor: [![VSCode](<images/code-stable.png>) ![VsCode](https://img.shields.io/badge/VsCode-blue)](https://code.visualstudio.com)
-- Cpp Compiler: ![g++](https://img.shields.io/badge/(GCC)%2015.1.1%2020250425-grey)
-- C++ Standard: ![C++23](https://img.shields.io/badge/C%2B%2B-23-purple?logo=C%2B%2B)
+- Cpp Compiler: ![g++](https://img.shields.io/badge/(GCC)%2015.1.1%2020250425-grey) ![C++23](https://img.shields.io/badge/C%2B%2B-23-purple?logo=C%2B%2B)
 - JVM Version: ![OpenJDK](https://img.shields.io/badge/OpenJDK-21-white?logo=OpenJDK)
-- Python Version: ![Python3.13](https://img.shields.io/badge/Python-3.13.2/3-white?logo=Python)
+- Python Version: ![Python3.15](https://img.shields.io/badge/Python-3.13.5-white?logo=Python)
 - OS: [![Arch Linux](https://img.shields.io/badge/Arch%20Linux-grey?logo=Archlinux)](https://www.archlinux.org) & Windows
 
 ## Links
