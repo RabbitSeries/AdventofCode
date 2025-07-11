@@ -1,12 +1,12 @@
 #include <cstdio>  // for popen(), pclose()
 #include <fstream>
+#include <generator>
 #include <iomanip>  // for setw
 #include <iostream>
 #include <regex>
 #include <sstream>
 #include <string>
 #include <vector>
-
 // constexpr int lang_w = 19, digit_w = 15;
 constexpr int lang_w = 19, digit_w = 14;
 
@@ -30,43 +30,30 @@ struct Entry {
     }
 };
 
-std::vector<std::string> splitlines( std::ifstream& ifs ) {
-    std::stringstream ss;
-    std::vector<std::string> res;
-    ss << ifs.rdbuf();
-    for ( std::string buf; getline( ss, buf ); ) {
-        res.emplace_back( move( buf ) );
+std::generator<std::string> splitlines( std::ifstream& ifs ) {
+    for ( std::string buf; getline( ifs, buf ); ) {
+        co_yield buf;
     }
-    return res;
-}
-
-void replaceLines( std::vector<std::string>& input, const char* linestartWith, std::vector<std::string> const& replaceWith ) {
-    auto iter = input.begin();
-    for ( ; iter != input.end(); iter++ ) {
-        if ( iter->starts_with( linestartWith ) ) {
-            break;
-        }
-    }
-    auto backwardlines = iter - input.begin();
-    input.resize( backwardlines + replaceWith.size(), "" );
-    iter = input.begin() + backwardlines;
-    for ( auto& line : replaceWith ) {
-        *iter++ = line;
-    }
+    co_return;
 }
 
 void replaceFile( const char* filename, const char* linestartWith, std::vector<std::string> const& replaceWith ) {
     std::ifstream ifs( filename, std::ios::in );
-    std::vector<std::string> input = splitlines( ifs );
-    replaceLines( input, "Language", replaceWith );
-    std::ofstream output( filename, std::ios::out | std::ios::trunc );
-    for ( const std::string& data : input ) {
-        output << data << std::endl;
+    std::stringstream output_buffer;
+    for ( auto&& line : splitlines( ifs ) ) {
+        if ( line.starts_with( linestartWith ) ) {
+            for ( auto& line : replaceWith ) {
+                output_buffer << line << std::endl;
+            }
+            std::ofstream( filename, std::ios::out | std::ios::trunc ) << output_buffer.str();
+            break;
+        }
+        output_buffer << line << std::endl;
     }
 }
 
 int main() {
-    // There is a bug for resolving special extension name for CMakeLists.txt in perl script:
+    // There is a bug for resolving special extension name of CMakeLists.txt in perl script:
     // https://github.com/AlDanial/cloc/blob/dfaa4618ab7057bebb9e9dbe093f5d56d5fc13ab/Unix/cloc#L2664-L2672
 #ifdef __linux__
     FILE* pipe = popen( R"(       cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)", "r" );
