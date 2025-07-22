@@ -24,41 +24,36 @@
 #include "Day24/TinkerWithGates.h"
 #include "Day25/KeyPair.h"
 
-using solutionStat = tuple<int64_t, int, string_view>;
-priority_queue<solutionStat, vector<solutionStat>, less<>> pq;
-
-auto nowTime = chrono::high_resolution_clock::now();
-auto endTime = chrono::high_resolution_clock::now();
-auto cost = chrono::duration_cast<chrono::microseconds>( nowTime - nowTime ).count();
-void printProcess( int current, int target, string_view solutioName ) {
-    endTime = chrono::high_resolution_clock::now();
-    cost += chrono::duration_cast<chrono::microseconds>( endTime - nowTime ).count();
-    pq.emplace( chrono::duration_cast<chrono::microseconds>( endTime - nowTime ).count(), current, solutioName );
-    if ( current == target ) {
-        cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
-        cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
-        cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
-        while ( !pq.empty() ) {
-            auto [cost, solutionId, info] = pq.top();
-            pq.pop();
-            cerr
-                << "Day " << solutionId << " problem time cost:" << endl
-                << fixed << setprecision( 6 ) << right << setw( 15 ) << setfill( ' ' ) << cost / 1000000.0
-                << " seconds." << endl;
-        }
-        cerr << "Total cost: " << ( cost / 1000000.0 ) << " seconds." << endl;
-    }
-    nowTime = chrono::high_resolution_clock::now();
-}
-
 int main() {
+    using solutionStat = tuple<int64_t, int, string_view>;
+    auto nowTime = chrono::high_resolution_clock::now();
+    auto endTime = chrono::high_resolution_clock::now();
+    auto cost = chrono::duration_cast<chrono::microseconds>( nowTime - nowTime ).count();
+    priority_queue<solutionStat, vector<solutionStat>, less<>> pq;
+
     cout << "Registred solutions: " << SolutionRegistry::registry.size() << endl;
     for ( int i = 0; auto& [solutionName, instance] : SolutionRegistry::registry ) {
         cout << "Day " << ++i << ": " << solutionName << endl;
         ImplPtr solution = instance();
         solution->Solution1();
         solution->Solution2();
-        printProcess( i, SolutionRegistry::registry.size(), solutionName );
+        endTime = chrono::high_resolution_clock::now();
+        cost += chrono::duration_cast<chrono::microseconds>( endTime - nowTime ).count();
+        pq.emplace( chrono::duration_cast<chrono::microseconds>( endTime - nowTime ).count(), i, solutionName );
+        nowTime = chrono::high_resolution_clock::now();
     }
+    cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
+    cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
+    cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
+    cerr << "Problem time cost ranking:" << endl
+         << endl;
+    for ( int i = 0; !pq.empty(); ) {
+        auto [cost, solutionId, info] = pq.top();
+        pq.pop();
+        cerr << ++i << ". Day " << solutionId << " " << info << ":" << endl
+             << fixed << setprecision( 6 ) << right << setw( 15 ) << setfill( ' ' ) << cost / 1000000.0
+             << " seconds." << endl;
+    }
+    cerr << "Total cost: " << ( cost / 1000000.0 ) << " seconds." << endl;
     return 0;
 }
