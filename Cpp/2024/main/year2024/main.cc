@@ -26,34 +26,36 @@
 
 int main() {
     using solutionStat = tuple<int64_t, int, string_view>;
-    auto nowTime = chrono::high_resolution_clock::now();
-    auto endTime = chrono::high_resolution_clock::now();
-    auto cost = chrono::duration_cast<chrono::microseconds>( nowTime - nowTime ).count();
+    int64_t t_cost = 0;
+
     priority_queue<solutionStat, vector<solutionStat>, less<>> pq;
 
     cout << "Registred solutions: " << SolutionRegistry::registry.size() << endl;
     for ( int i = 0; auto& [solutionName, instance] : SolutionRegistry::registry ) {
         cout << "Day " << ++i << ": " << solutionName << endl;
+
+        auto nowTime = chrono::high_resolution_clock::now();
         ImplPtr solution = instance();
         solution->Solution1();
         solution->Solution2();
-        endTime = chrono::high_resolution_clock::now();
-        cost += chrono::duration_cast<chrono::microseconds>( endTime - nowTime ).count();
-        pq.emplace( chrono::duration_cast<chrono::microseconds>( endTime - nowTime ).count(), i, solutionName );
-        nowTime = chrono::high_resolution_clock::now();
+        auto endTime = chrono::high_resolution_clock::now();
+
+        auto delta = chrono::duration_cast<chrono::microseconds>( endTime - nowTime ).count();
+        pq.emplace( delta, i, solutionName );
+        t_cost += delta;
     }
     cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
     cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
     cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
-    cerr << "Problem time cost ranking:" << endl
+    cerr << "Problem time t_cost ranking:" << endl
          << endl;
     for ( int i = 0; !pq.empty(); ) {
-        auto [cost, solutionId, info] = pq.top();
+        auto [c_cost, solutionId, info] = pq.top();
         pq.pop();
         cerr << ++i << ". Day " << solutionId << " " << info << ":" << endl
-             << fixed << setprecision( 6 ) << right << setw( 15 ) << setfill( ' ' ) << cost / 1000000.0
+             << fixed << setprecision( 6 ) << right << setw( 15 ) << setfill( ' ' ) << c_cost / 1000000.0
              << " seconds." << endl;
     }
-    cerr << "Total cost: " << ( cost / 1000000.0 ) << " seconds." << endl;
+    cerr << "Total cost: " << ( t_cost / 1000000.0 ) << " seconds." << endl;
     return 0;
 }
