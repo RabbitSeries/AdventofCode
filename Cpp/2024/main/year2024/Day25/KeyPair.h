@@ -2,6 +2,8 @@
 using namespace std;
 #include <utils/SolutionBase.hpp>
 class KeyPair : public SolutionBase {
+    static inline Register<KeyPair> _reg{};
+
     typedef vector<int> schematics;
     // TODO Change this algorithm to schema hash code and mapping.
     bool isUnique( schematics const& schema, vector<schematics> const& schemaList ) {

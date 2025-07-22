@@ -3,6 +3,8 @@ using namespace std;
 
 #include <utils/SolutionBase.hpp>
 class OrderingUpdates : public SolutionBase {
+	static inline Register<OrderingUpdates> _reg{};
+
     bool isCorrectOrder( const vector<int>& update, const unordered_map<int, set<int>>& rules ) {
         for ( size_t i = 0; i < update.size(); i++ ) {
             for ( size_t j = 0; j < i; j++ ) {

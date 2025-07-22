@@ -3,6 +3,8 @@ using namespace std;
 
 #include <utils/SolutionBase.hpp>
 class RobotPatrol : public SolutionBase {
+	static inline Register<RobotPatrol> _reg{};
+
     typedef struct robot {
         robot() {};
         robot( int leftDis, int topDis, int horizenVel, int verticalVel ) : curPos( leftDis, topDis ),

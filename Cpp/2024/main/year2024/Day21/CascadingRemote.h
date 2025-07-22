@@ -22,6 +22,8 @@ struct commandHash {
 };
 #include <utils/SolutionBase.hpp>
 class CascadingRemote : public SolutionBase {
+	static inline Register<CascadingRemote> _reg{};
+
     typedef unsigned long long ull;
 
     unordered_map<pair<vector<char>, int>, ull, commandHash> cacheMap;

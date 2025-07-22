@@ -2,6 +2,8 @@
 using namespace std;
 #include <utils/SolutionBase.hpp>
 class MazeDijkstra : public SolutionBase {
+	static inline Register<MazeDijkstra> _reg{};
+
     struct Step : public pair<int, int> {
         Step( int x, int y, int _direction, int _cost ) : pair<int, int>( x, y ), direction( _direction ), cost{ _cost } {}
         bool operator>( const Step& p ) const {

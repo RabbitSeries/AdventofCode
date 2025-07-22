@@ -4,6 +4,8 @@ using namespace std;
 
 #include <utils/SolutionBase.hpp>
 class AntinodeHarmonic : public SolutionBase {
+	static inline Register<AntinodeHarmonic> _reg{};
+
     typedef struct Antenna {
         size_t x, y;
         Antenna() { x = y = 0; }

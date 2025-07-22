@@ -14,6 +14,8 @@ struct std::hash<RaceConditionData::pos> {
 };
 
 class RaceCondition : public SolutionBase {
+	static inline Register<RaceCondition> _reg{};
+
     using pos = RaceConditionData::pos;
     friend struct std::hash<pos>;
     enum cellStatus {

@@ -1,75 +1,76 @@
-Day 1:
+Registred solutions: 25
+Day 1: PairAndAdd
 	Solution 1: 1197984
 	Solution 2: 23387399
-Day 2:
+Day 2: CheckLevelInOrder
 	Solution 1: 432
 	Solution 2: 488
-Day 3:
+Day 3: PreciseMul
 	Solution 1: 160672468
 	Solution 2: 84893551
-Day 4:
+Day 4: CeresSearch
 	Solution 1: 2454
 	Solution 2: 1858
-Day 5:
+Day 5: OrderingUpdates
 	Solution 1: 4872
 	Solution 2: 5564
-Day 6:
+Day 6: PatrolRoute
 	Solution 1: 5329
 	Solution 2: 2162
-Day 7:
+Day 7: Calibration
 	Solution 1: 2314935962622
 	Solution 2: 401477450831495
-Day 8:
+Day 8: AntinodeHarmonic
 	Solution 1: 381
 	Solution 2: 1184
-Day 9:
+Day 9: DiskCompact
 	Solution 1: 6432869891895
 	Solution 2: 6467290479134
-Day 10:
+Day 10: TrailScore
 	Solution 1: 688
 	Solution 2: 1459
-Day 11:
+Day 11: TwinkleStones
 	Solution 1: 172484
 	Solution 2: 205913561055242
-Day 12:
+Day 12: AsciiGraph
 	Solution 1: 1450816
 	Solution 2: 865662
-Day 13:
+Day 13: CoinOptimize
 	Solution 1: 27105
 	Solution 2: 101726882250942
-Day 14:
+Day 14: RobotPatrol
 	Solution 1: 215476074
 	Solution 2: 6285
-Day 15:
+Day 15: PushBox
 	Solution 1: 1436690
 	Solution 2: 1482350
-Day 16:
+Day 16: MazeDijkstra
 	Solution 1: 78428
 	Solution 2: 463
-Day 17:
+Day 17: TenaryMachine
 	Solution 1: 2,1,4,0,7,4,0,2,3
 	Solution 2: 258394985014171
-Day 18:
+Day 18: RAMRun
 	Solution 1: 276
 	Solution 2: 60,37
-Day 19:
+Day 19: LinenLayout
 	Solution 1: 228
 	Solution 2: 584553405070389
-Day 20:
+Day 20: RaceCondition
 	Solution 1: 1452
 	Solution 2: 999556
-Day 21:
+Day 21: CascadingRemote
 	Solution 1: 174124
 	Solution 2: 216668579770346
-Day 22:
+Day 22: MonkeyMarket
 	Solution 1: 20506453102
 	Solution 2: 2423
-Day 23:
+Day 23: LANParty
 	Solution 1: 1512
 	Solution 2: ac,ed,fh,kd,lf,mb,om,pe,qt,uo,uy,vr,wg
-Day 24:
+Day 24: TinkerWithGates
 	Solution 1: 53190357879014
 	Solution 2: bks,hnd,nrn,tdv,tjp,z09,z16,z23
-Day 25:
+Day 25: KeyPair
 	Solution 1: 3201
 	Solution 2: 			------All 50 stars AoC Finished!!!!------

@@ -2,6 +2,8 @@
 using namespace std;
 #include <utils/SolutionBase.hpp>
 class LinenLayout : public SolutionBase {
+	static inline Register<LinenLayout> _reg{};
+
     typedef unsigned long long ull;
     void readKeys( vector<string>& keys, ifstream& input ) {
         regex pattern( R"(\b(.*?)(?:,|$))" );

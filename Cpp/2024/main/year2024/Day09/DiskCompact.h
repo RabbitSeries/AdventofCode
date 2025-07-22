@@ -3,6 +3,8 @@ using namespace std;
 
 #include <utils/SolutionBase.hpp>
 class DiskCompact : public SolutionBase {
+	static inline Register<DiskCompact> _reg{};
+
     typedef long long ll;
 
     void appendFileBlock( int id, int size, vector<int>& disk ) {

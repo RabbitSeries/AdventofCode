@@ -1,7 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
-#include "../../../utils/SolutionBase.h"
+#include <utils/SolutionBase.hpp>
 class LANParty : public SolutionBase {
+	static inline Register<LANParty> _reg{};
+
     void readFile() {
         ifstream input( "Day23/input.txt" );
         for ( string buf; getline( input, buf ); ) {

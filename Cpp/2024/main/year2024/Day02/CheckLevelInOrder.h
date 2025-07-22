@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 class CheckLevelInOrder : public SolutionBase {
+	static inline Register<CheckLevelInOrder> _reg{};
+
     inline bool checkDecrease( vector<int> const& Levels ) {
         bool res = true;
         for ( size_t i = 0; i < Levels.size() - 1; i++ ) {

@@ -1,7 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 #include <utils/SolutionBase.hpp>
-class PreciseMul : SolutionBase {
+class PreciseMul : public SolutionBase {
+	static inline Register<PreciseMul> _reg{};
+
     typedef long long ll;
     int getNum( string str, int pos ) {
         size_t i = pos, num = 0;

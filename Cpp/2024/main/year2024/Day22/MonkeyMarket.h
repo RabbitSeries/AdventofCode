@@ -3,6 +3,8 @@ using namespace std;
 
 #include <utils/SolutionBase.hpp>
 class MonkeyMarket : public SolutionBase {
+	static inline Register<MonkeyMarket> _reg{};
+
     typedef unsigned long long ull;
 
     ull getNextSecret( ull curSecret ) {

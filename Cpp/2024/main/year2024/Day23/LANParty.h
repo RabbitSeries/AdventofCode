@@ -2,6 +2,8 @@
 using namespace std;
 #include <utils/SolutionBase.hpp>
 class LANParty : public SolutionBase {
+	static inline Register<LANParty> _reg{};
+
     void readFile() {
         stringstream input;
         input << ifstream( "Day23/input.txt" ).rdbuf();

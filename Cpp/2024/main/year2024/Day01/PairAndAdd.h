@@ -3,6 +3,9 @@
 #include <utils/SolutionBase.hpp>
 using namespace std;
 class PairAndAdd : public SolutionBase {
+	static inline Register<PairAndAdd> _reg{};
+
+   public:
     using ull = unsigned long long;
 
     void readFile( string filePath ) {

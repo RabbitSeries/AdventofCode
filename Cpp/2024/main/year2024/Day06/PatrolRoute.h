@@ -2,6 +2,8 @@
 using namespace std;
 #include <utils/SolutionBase.hpp>
 class PatrolRoute : public SolutionBase {
+	static inline Register<PatrolRoute> _reg{};
+
     using pos = pair<int, int>;
     const char face[4]{ '^', '>', 'v', '<' };
     const unordered_map<char, int> faceId{

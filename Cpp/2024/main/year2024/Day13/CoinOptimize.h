@@ -3,6 +3,8 @@
 using namespace std;
 #include <utils/SolutionBase.hpp>
 class CoinOptimize : public SolutionBase {
+	static inline Register<CoinOptimize> _reg{};
+
     typedef long long ll;
     const ll TOP_UP = 10000000000000;
     typedef pair<ll, ll> point2D;
