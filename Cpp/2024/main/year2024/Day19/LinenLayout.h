@@ -2,7 +2,7 @@
 using namespace std;
 #include <utils/SolutionBase.hpp>
 class LinenLayout : public SolutionBase {
-	static inline Register<LinenLayout> _reg{};
+	REGISTER( LinenLayout )
 
     typedef unsigned long long ull;
     void readKeys( vector<string>& keys, ifstream& input ) {

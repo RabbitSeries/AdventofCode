@@ -3,7 +3,7 @@ using namespace std;
 
 #include <utils/SolutionBase.hpp>
 class TrailScore : public SolutionBase {
-	static inline Register<TrailScore> _reg{};
+	REGISTER( TrailScore )
 
     typedef pair<int, int> pos;
     typedef pair<pos, int> posInfo;

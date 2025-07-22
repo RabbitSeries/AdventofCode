@@ -4,7 +4,7 @@ using namespace std;
 
 #include <utils/SolutionBase.hpp>
 class AntinodeHarmonic : public SolutionBase {
-	static inline Register<AntinodeHarmonic> _reg{};
+	REGISTER( AntinodeHarmonic )
 
     typedef struct Antenna {
         size_t x, y;

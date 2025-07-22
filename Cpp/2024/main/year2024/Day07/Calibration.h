@@ -2,7 +2,7 @@
 using namespace std;
 #include <utils/SolutionBase.hpp>
 class Calibration : public SolutionBase {
-	static inline Register<Calibration> _reg{};
+	REGISTER( Calibration )
 
     using ull = unsigned long long;
     void readFile() {

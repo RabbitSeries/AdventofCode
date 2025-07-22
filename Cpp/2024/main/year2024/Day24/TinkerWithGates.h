@@ -3,7 +3,7 @@
 using namespace std;
 #include <utils/SolutionBase.hpp>
 class TinkerWithGates : public SolutionBase {
-	static inline Register<TinkerWithGates> _reg{};
+	REGISTER( TinkerWithGates )
 
     bool gateResult( string op, bool operand1, bool operand2 ) {
         if ( op == "AND" )

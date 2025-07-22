@@ -5,7 +5,7 @@
 using namespace std;
 // #include <utils/SolutionBase.hpp>
 class TenaryMachine : public SolutionBase {
-	static inline Register<TenaryMachine> _reg{};
+	REGISTER( TenaryMachine )
 
     typedef unsigned long long ull;
     size_t pc = 0;

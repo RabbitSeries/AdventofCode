@@ -8,7 +8,7 @@ using namespace std;
 
 #include <utils/SolutionBase.hpp>
 class PushBox : public SolutionBase {
-	static inline Register<PushBox> _reg{};
+	REGISTER( PushBox )
 
     // Simple data member is able to initialize
     const int CELLWALL = -1;

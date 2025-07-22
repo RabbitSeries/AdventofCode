@@ -2,7 +2,7 @@
 using namespace std;
 #include <utils/SolutionBase.hpp>
 class LANParty : public SolutionBase {
-	static inline Register<LANParty> _reg{};
+	REGISTER( LANParty )
 
     void readFile() {
         stringstream input;

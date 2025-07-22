@@ -3,7 +3,7 @@
 #include <utils/SolutionBase.hpp>
 using namespace std;
 class PairAndAdd : public SolutionBase {
-	static inline Register<PairAndAdd> _reg{};
+	REGISTER( PairAndAdd )
 
     using ull = unsigned long long;
 

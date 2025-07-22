@@ -50,3 +50,6 @@ class Register {
         } );
     }
 };
+
+#define REGISTER( CLASSNAME ) \
+    static inline Register<CLASSNAME> _reg{};

@@ -3,7 +3,7 @@ using namespace std;
 
 #include <utils/SolutionBase.hpp>
 class RobotPatrol : public SolutionBase {
-	static inline Register<RobotPatrol> _reg{};
+	REGISTER( RobotPatrol )
 
     typedef struct robot {
         robot() {};

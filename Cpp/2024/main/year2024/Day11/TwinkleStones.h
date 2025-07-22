@@ -3,7 +3,7 @@ using namespace std;
 
 #include <utils/SolutionBase.hpp>
 class TwinkleStones : public SolutionBase {
-	static inline Register<TwinkleStones> _reg{};
+	REGISTER( TwinkleStones )
 
     typedef long long ll;
     map<ll, ll> TwinkleList;

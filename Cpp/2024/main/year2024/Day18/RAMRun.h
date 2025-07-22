@@ -2,7 +2,7 @@
 using namespace std;
 #include <utils/SolutionBase.hpp>
 class RAMRun : public SolutionBase {
-	static inline Register<RAMRun> _reg{};
+	REGISTER( RAMRun )
 
 #define BUF_SIZE 100
 #define SPACE 71

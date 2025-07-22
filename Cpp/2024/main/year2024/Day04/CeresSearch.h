@@ -2,7 +2,7 @@
 using namespace std;
 #include <utils/SolutionBase.hpp>
 class CeresSearch : public SolutionBase {
-	static inline Register<CeresSearch> _reg{};
+	REGISTER( CeresSearch )
 
     const int dx[8][4]{
         { 0, 0, 0, 0 },

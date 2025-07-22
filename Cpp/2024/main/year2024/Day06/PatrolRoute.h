@@ -2,7 +2,7 @@
 using namespace std;
 #include <utils/SolutionBase.hpp>
 class PatrolRoute : public SolutionBase {
-	static inline Register<PatrolRoute> _reg{};
+	REGISTER( PatrolRoute )
 
     using pos = pair<int, int>;
     const char face[4]{ '^', '>', 'v', '<' };

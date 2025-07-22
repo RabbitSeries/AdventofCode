@@ -2,7 +2,7 @@
 using namespace std;
 #include <utils/SolutionBase.hpp>
 class PreciseMul : public SolutionBase {
-	static inline Register<PreciseMul> _reg{};
+	REGISTER( PreciseMul )
 
     typedef long long ll;
     int getNum( string str, int pos ) {

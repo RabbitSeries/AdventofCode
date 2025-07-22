@@ -22,7 +22,7 @@ struct commandHash {
 };
 #include <utils/SolutionBase.hpp>
 class CascadingRemote : public SolutionBase {
-	static inline Register<CascadingRemote> _reg{};
+	REGISTER( CascadingRemote )
 
     typedef unsigned long long ull;
 

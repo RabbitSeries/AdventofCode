@@ -3,7 +3,7 @@ using namespace std;
 
 #include <utils/SolutionBase.hpp>
 class DiskCompact : public SolutionBase {
-	static inline Register<DiskCompact> _reg{};
+	REGISTER( DiskCompact )
 
     typedef long long ll;
 

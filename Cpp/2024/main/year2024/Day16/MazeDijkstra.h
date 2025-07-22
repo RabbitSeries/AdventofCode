@@ -2,7 +2,7 @@
 using namespace std;
 #include <utils/SolutionBase.hpp>
 class MazeDijkstra : public SolutionBase {
-	static inline Register<MazeDijkstra> _reg{};
+	REGISTER( MazeDijkstra )
 
     struct Step : public pair<int, int> {
         Step( int x, int y, int _direction, int _cost ) : pair<int, int>( x, y ), direction( _direction ), cost{ _cost } {}

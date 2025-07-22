@@ -2,7 +2,7 @@
 using namespace std;
 #include <utils/SolutionBase.hpp>
 class KeyPair : public SolutionBase {
-    static inline Register<KeyPair> _reg{};
+    REGISTER( KeyPair )
 
     typedef vector<int> schematics;
     // TODO Change this algorithm to schema hash code and mapping.
