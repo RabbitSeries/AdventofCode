@@ -1,4 +1,4 @@
-with open("input.txt") as f:
+with open("Day10/input.txt") as f:
     instructions = [cmd for instruction in f.read().splitlines() for cmd in instruction.split()]
 x = 1
 part1 = 0

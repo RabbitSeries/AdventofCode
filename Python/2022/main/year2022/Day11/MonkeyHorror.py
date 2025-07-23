@@ -41,7 +41,7 @@ def Round(round: int, items: list[tuple[int, int]], modulo: int, Monkeys: tuple[
     return resList
 
 
-with open("input.txt") as f:
+with open("Day11/input.txt") as f:
     raw = [data.splitlines() for data in f.read().split('\n\n')]
 Monkeys = tuple((Monkey(operation.split("=")[-1],
                         int(devider.split()[-1]),

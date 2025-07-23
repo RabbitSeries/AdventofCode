@@ -2,7 +2,7 @@ from heapq import heappush, heappop
 from typing import Callable
 
 Point2D = tuple[int, int]
-with open('input.txt') as f:
+with open('Day12/input.txt') as f:
     AlphaMap = f.read().splitlines()
     ROW, COL = len(AlphaMap), len(AlphaMap[0])
 

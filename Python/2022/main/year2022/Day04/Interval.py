@@ -1,4 +1,4 @@
-with open("input.txt") as f:
+with open("Day04/input.txt") as f:
     lines = f.read().splitlines()
 intervals = [tuple(map(int, pair.split('-'))) for line in lines for pair in line.split(',')]
 intervalPair = list(zip(intervals[::2], intervals[1::2]))

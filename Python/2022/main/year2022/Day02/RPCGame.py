@@ -1,4 +1,4 @@
-with open("input.txt") as f:
+with open("Day02/input.txt") as f:
     pairs = [list(map(lambda x: ord(x[0]) - ord(x[1]), zip(line.strip().split(), 'AX'))) for line in f.read().splitlines()]
 part1 = part2 = 0
 for a, b in pairs:

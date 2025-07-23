@@ -10,7 +10,7 @@ def transform(x: int, y: int, minXY: tuple[int, int]):
 
 
 def printSandbox():
-    with open("output.txt", "w") as output:
+    with open("Day14/output.log", "w") as output:
         output.writelines(["".join(map(lambda cell: " #O"[cell], line)) + "\n"
                            for line in sandbox])
 
@@ -74,7 +74,7 @@ def part2(originXY: tuple[int, int]):
 
 def main():
     global sandbox, ROW, COL
-    with open("input.txt") as file:
+    with open("Day14/input.txt") as file:
         data = [[(int(x), int(y)) for y, x in [node.strip().split(",") for node in line.split("->")]]
                 for line in file.read().splitlines()]
         data.append([(0, 500)])

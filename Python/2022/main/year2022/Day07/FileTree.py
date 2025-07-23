@@ -47,7 +47,7 @@ def dfs(root: File | None) -> list[File]:
     return [root, *[f for n, f in root.subFile.items() if (n not in ['.', '..'] and f.isDir) for f in dfs(f)]] if root else []
 
 
-with open("input.txt") as f:
+with open("Day07/input.txt") as f:
     blocks = [block.strip().splitlines() for block in f.read().split('$ ls')]
 root = pwd = None
 for lines in blocks:

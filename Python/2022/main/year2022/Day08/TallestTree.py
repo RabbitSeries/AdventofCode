@@ -15,7 +15,7 @@ def count(i: int, j: int):
     return list(accumulate(res, lambda i, e: i * e, initial=1))[-1]
 
 
-with open("input.txt") as f:
+with open("Day08/input.txt") as f:
     lines = f.read().splitlines()
 heights = [[int(e) for e in line] for line in lines]
 row, col = len(heights), len(heights[0])

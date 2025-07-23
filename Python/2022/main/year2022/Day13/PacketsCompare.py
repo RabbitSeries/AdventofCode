@@ -81,7 +81,7 @@ def Parse(s: str) -> Packet | None:
     return Packet(resList)
 
 
-with open("input.txt") as f:
+with open("Day13/input.txt") as f:
     PacketPairs = [tuple([Parse(packet) for packet in Pair.splitlines()]) for Pair in f.read().split("\n\n")]
 
 

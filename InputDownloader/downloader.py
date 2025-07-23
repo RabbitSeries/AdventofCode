@@ -49,9 +49,7 @@ def find_aoc_directories(root_dirs: list[str] | None = None) -> dict[tuple[int, 
     return dict(sorted(found.items(), key=lambda item: item[0]))
 
 
-def download_input(year: int, day: int, session_cookie: str) -> str:
-    url = f"https://adventofcode.com/{year}/day/{day}/input"
-    print(f"\nDownloading {url}...")
+def download_input(url: str, session_cookie: str) -> str:
     headers = {
         "Cookie": f"session={session_cookie}"
     }
@@ -67,26 +65,23 @@ def process_all_inputs(
 ) -> None:
     if root_dir is None:
         return
-    root_dirs = [root_dir, *[os.path.join(root_dir, langs) for langs in ['TypeScript', 'Java', 'Cpp']]]
+    root_dirs = [root_dir, *[os.path.join(root_dir, langs) for langs in ['TypeScript', 'Java', 'Cpp', 'Python']]]
     dirs = find_aoc_directories(root_dirs)
     for (year, day), distros in dirs.items():
-        try:
-            input_text = download_input(year, day, session_cookie)
-        except Exception as e:
-            print(f"Failed to download https://adventofcode.com/{year}/day/{day}/input:",
-                  e, 'Session Cookie may have expired', sep='\n\t')
-            continue
         for distro in distros:
             if os.path.exists(distro) and not overwrite:
                 print(f"Skipping existing: {distro}")
                 continue
             try:
+                url = f"https://adventofcode.com/{year}/day/{day}/input"
+                print(f"\nDownloading {url}...")
+                input_text = download_input(url, session_cookie)
                 os.makedirs(os.path.dirname(distro), exist_ok=True)
                 with open(distro, "w") as f:
                     f.write(input_text)
                 print(f"\tSaved to {distro}")
             except Exception as e:
-                print(f"\tFailed to save {year}/Day{day}:", e)
+                print(f"\tFailed to download/save to {distro}", e)
 
 
 script_dir = os.path.dirname(os.path.abspath(__file__))

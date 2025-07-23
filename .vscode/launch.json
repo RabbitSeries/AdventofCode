@@ -37,7 +37,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
-            "cwd": "${fileDirname}"
+            "cwd": "${input:Working_Directory}",
         },
         {
             "name": "[C/C++] [Launch]",

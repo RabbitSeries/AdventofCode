@@ -55,7 +55,7 @@ def reverse_itv(intervals: list[point2D], xRange: point2D):
 
 def main():
     reg = re.compile(r"x=([-]*\d+), y=([-]*\d+)")
-    with open("input.txt") as file:
+    with open("Day15/input.txt") as file:
         data = ([(line[0], line[1]) for line in map(lambda line: [(int(x), int(y))
                 for x, y in reg.findall(line)], file.read().splitlines())])
     distances = [abs(a[0] - b[0]) + abs(a[1] - b[1]) for a, b in data]

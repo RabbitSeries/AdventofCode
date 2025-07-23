@@ -6,7 +6,7 @@ def intersection(iterable: list[str]) -> set[str]:
     return set(iterable[0]).intersection(*iterable[1:])
 
 
-with open("input.txt") as f:
+with open("Day03/input.txt") as f:
     lines = [line.strip() for line in f.read().split()]
 part1 = sum(
     sum(map(priority, {c for c in line.strip()[:len(line) // 2]} & {c for c in line.strip()[len(line) // 2:]}))

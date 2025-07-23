@@ -9,7 +9,7 @@ def solve(pipelines: list[list[str]], data: list[list[int]], reverse: bool = Tru
     return ''.join(list(pipeline[-1] for pipeline in pipelines if pipeline))
 
 
-with open("input.txt") as f:
+with open("Day05/input.txt") as f:
     init, data = [block.rstrip().splitlines() for block in f.read().split('\n\n')]
 pattern = re.compile(r'\d+')
 pipelines: list[list[str]] = [[] for _ in range(0, 1 + (len(init[0]) + 1) // 4)]
