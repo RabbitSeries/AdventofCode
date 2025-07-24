@@ -36,14 +36,13 @@ class ProboscideaVolcanium:
         return cost
 
     # @lru_cache(maxsize=64)
-
     def dfs(self, curValve: str, opened: int, time: int, stat: int, record: bool = False):
         if record:
             self.Paths.update({opened: stat if opened not in self.Paths else max(stat, self.Paths[opened])})
         maxStat = stat
         for nextValve, travelCost in self.SPath[curValve].items():
             bitmask = 1 << self.NonZeroValves[nextValve]
-            if (not (bitmask & opened)) and (travelCost + 1 < time):  # Equals to zero is meaningless to the stat, prune it
+            if (not (bitmask & opened)) and (travelCost + 1 < time):  # Less or Equals to zero is meaningless to the stat, prune it
                 nextTime = time - travelCost - 1
                 nextStat = stat + self.Valves[nextValve][0] * (nextTime)
                 maxStat = max(maxStat, self.dfs(nextValve, opened | bitmask, nextTime, nextStat, record))
