@@ -14,18 +14,10 @@ struct Entry {
     std::string lang;
     int files, blank, comment, code;
     template <typename T, typename... rest>
-    static std::string constructRest( T&& first, rest&&... args ) {
-        std::ostringstream oss;
-        oss << "|" << std::right << std::setw( digit_w ) << std::forward<T>( first ) << constructRest( std::forward<rest>( args )... );
-        return oss.str();
-    }
-    static std::string constructRest() {
-        return "";
-    }
-    template <typename T, typename... rest>
     static std::string constructLine( T&& lang, rest&&... args ) {
         std::ostringstream oss;
-        oss << std::left << std::setw( lang_w ) << lang << constructRest( std::forward<rest>( args )... );
+        oss << std::left << std::setw( lang_w ) << lang;
+        ( ..., ( oss << "|" << std::right << std::setw( digit_w ) << std::forward<rest>( args ) ) );
         return oss.str();
     }
 };

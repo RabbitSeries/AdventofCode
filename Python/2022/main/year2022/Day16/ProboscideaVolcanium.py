@@ -6,9 +6,9 @@ from queue import Queue
 
 class ProboscideaVolcanium:
     # This can be developed to a drone exploration algorithm if the map is not known ahead of time
-    def __init__(self, limit_time: int):
+    def __init__(self):
         self.SPath: dict[str, dict[str, int]] = {}  # Compress the graph
-        self.limit = limit_time
+        self.Paths: dict[int, int] = {}
 
     def readFile(self):
         with open("Day16/input.txt") as f:
@@ -37,16 +37,16 @@ class ProboscideaVolcanium:
 
     # @lru_cache(maxsize=64)
 
-    def dfs(self, curValve: str, opened: int, time: int, stat: int):
-        if time <= 0:
-            return stat
+    def dfs(self, curValve: str, opened: int, time: int, stat: int, record: bool = False):
+        if record:
+            self.Paths.update({opened: stat if opened not in self.Paths else max(stat, self.Paths[opened])})
         maxStat = stat
         for nextValve, travelCost in self.SPath[curValve].items():
             bitmask = 1 << self.NonZeroValves[nextValve]
-            if bitmask & opened == 0:
+            if (not (bitmask & opened)) and (travelCost + 1 < time):  # Equals to zero is meaningless to the stat, prune it
                 nextTime = time - travelCost - 1
                 nextStat = stat + self.Valves[nextValve][0] * (nextTime)
-                maxStat = max(maxStat, self.dfs(nextValve, opened | bitmask, nextTime, nextStat))
+                maxStat = max(maxStat, self.dfs(nextValve, opened | bitmask, nextTime, nextStat, record))
         return maxStat
 
     def Part1(self):
@@ -54,9 +54,19 @@ class ProboscideaVolcanium:
         for NonZeroValve in self.NonZeroValves.keys():
             self.SPath.setdefault(NonZeroValve, self.BFS(NonZeroValve))
         self.SPath.setdefault("AA", self.BFS("AA"))
-        print(f"Part 1: {self.dfs("AA", 0, self.limit, 0)}")
+        print(f"Part 1: {self.dfs("AA", 0, 30, 0)}")
+
+    def Part2(self):
+        self.dfs("AA", 0, 26, 0, True)
+        maxStat = 0
+        for p, ps in self.Paths.items():
+            for ep, eps in self.Paths.items():
+                if p & ep == 0:
+                    maxStat = max(maxStat, ps + eps)
+        print(f"Part 2: {maxStat}")
 
 
 if __name__ == "__main__":
-    solution = ProboscideaVolcanium(30)
+    solution = ProboscideaVolcanium()
     solution.Part1()
+    solution.Part2()

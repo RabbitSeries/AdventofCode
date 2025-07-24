@@ -45,9 +45,9 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 Language           |         files|         blank|       comment|          code
 :-------           |         ----:|         ----:|       ------:|          ---:
 Java               |            37|           556|           216|          3607
-C/C++ Header       |            29|           199|           211|          3186
-C++                |             5|            46|            30|           802
-Python             |            17|           136|             6|           599
+C/C++ Header       |            29|           229|           214|          3241
+C++                |             5|            47|            20|           695
+Python             |            18|           146|             9|           653
 TypeScript         |             6|             1|             1|            86
 CMake              |             5|            20|            20|            72
-SUM:               |            99|           958|           484|          8352
+SUM:               |           100|           999|           480|          8354
