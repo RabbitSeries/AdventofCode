@@ -1,7 +1,6 @@
 exe_*
 *.exe
 /build
-*.class
 /.env
 input.txt
 /[oO]ut
@@ -10,3 +9,4 @@ node_modules
 dist
 target
 exception.log
+__pycache__

@@ -42,8 +42,8 @@ class ProboscideaVolcanium:
         maxStat = stat
         for nextValve, travelCost in self.SPath[curValve].items():
             bitmask = 1 << self.NonZeroValves[nextValve]
-            if (not (bitmask & opened)) and (travelCost + 1 < time):  # Less or Equals to zero is meaningless to the stat, prune it
-                nextTime = time - travelCost - 1
+            nextTime = time - travelCost - 1
+            if (not (bitmask & opened)) and (nextTime > 0):  # Less or Equals to zero is meaningless to the stat, prune it
                 nextStat = stat + self.Valves[nextValve][0] * (nextTime)
                 maxStat = max(maxStat, self.dfs(nextValve, opened | bitmask, nextTime, nextStat, record))
         return maxStat
