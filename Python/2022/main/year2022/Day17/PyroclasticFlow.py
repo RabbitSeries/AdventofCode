@@ -3,6 +3,11 @@ from functools import lru_cache
 point2D = tuple[int, int]
 
 # TODO This won't solve test case's part2, but solves my input, I think the cache hit part should be more precise
+# Maybe create a snapshot of top xx lines and hash it of FLowMap will
+# ensure the matching, the key is to find a unique index in 2022 (?) cycles.
+# Then continue to find this index in the next 2022 cycle.
+# My case has a full line rock trait, so, logically, this will allow further
+# cube's falling to be circulated.
 
 
 class Rock:
@@ -130,7 +135,7 @@ class PyroclasticFlow:
         for settled in range(f, to):
             self.simulate()
             curHeight = self.getHeight()
-            if self.FlowMap[curHeight - 1] == ['#'] * self.WIDTH:
+            if ' ' not in self.FlowMap[curHeight - 1]:
                 index = (Rock.rockId, self.cmdIdx)
                 if index in self.memo:
                     cycleInfo = self.memo[index]
