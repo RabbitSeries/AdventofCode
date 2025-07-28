@@ -1,5 +1,4 @@
 [flake8]
 ignore=
-    E501,
-    E704,
-    E701
+    E501, # Lines are too long
+    E712  # comparison to True should be if cond is True, but == might be overloaded: np.where(arr == True)

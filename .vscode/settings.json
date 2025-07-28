@@ -1,25 +1,12 @@
 {
-    // Compile sources
-    // "java.project.sourcePaths": [
-    //     "2023Java",
-    //     "2024Java",
-    //     "utils",
-    //     "Legacy/2023"
-    // ],
     "flake8.args": [
         "--config=${workspaceFolder}/formatters/.flake8"
     ],
     "autopep8.args": [
         "--global-config=${workspaceFolder}/pyproject.toml",
     ],
-    // Default classpath search place
-    // Clean plugin cache after each path modification.
-    // "java.project.outputPath": "compileRuntime/bin",
     "C_Cpp.clang_format_style": "file:${workspaceFolder}/formatters/.clang-format",
     "java.format.settings.url": "formatters/java-formatter.xml", //Redhat java is not suppressing abstract path uri error, use relative path here
-    // "java.project.referencedLibraries": [
-    // "JavaLibs/**/*.jar"
-    // ],
     // "cmake.debugConfig": {
     //     "cwd": "${workspaceFolder}/2024}",
     //     "dumpPath": ""
@@ -31,4 +18,8 @@
     // Use CMakePresets.json to configure drive CMake configure, build, and test. 
     // When using CMakePresets.json, kits, variants, and some settings in settings.json will be ignored,
     //      such as: "cmake.buildDirectory": "${workspaceFolder}/builds/${buildKit}/${buildType}"
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/Python/libs",
+        "./Python/2022/main/year2022/Day18"
+    ]
 }

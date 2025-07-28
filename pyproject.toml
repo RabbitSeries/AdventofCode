@@ -1,5 +1,36 @@
+[project]
+name = "AoC_Python"
+version = "0.1.0"
+description = "Python implemented AoC solutions"
+authors = [{ name = "RabbitSeries", email = "xiali123.ch@gmail.com" }]
+# dependencies = ["requests"]
+
+# [project.scripts]
+# launch = "2022:main"
+
+[build-system]
+# build-backend = "mesonpy"
+# requires = ["meson-python"]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+# # WTF, I hate python
+# [tool.setuptools.packages.find]
+# where = ["Python"] # ["."] by default
+# include = ["2022"] # ["*"] by default
+# exclude = []       # empty by default
+# # namespaces = false # true by default
+
 [tool.autopep8]
-ignore = ["E701"]
+# ignore = ["E701"]
 max_line_length = 125
 agressive = 3
 verbose = 5
+
+[tool.setuptools]
+packages = ["libs.aoc_libs"]
+package-dir = { "" = "Python" }
+
+# [tool.setuptools.package-data]
+# # Format: <package_name> = [<file_patterns>]
+# "2022" = ["main/**/*.py"]

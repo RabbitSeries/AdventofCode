@@ -10,7 +10,7 @@ point2D = tuple[int, int]
 # cube's falling to be circulated.
 
 
-class Rock:
+class Rock():
     def __init__(self, location: point2D, points: list[point2D]) -> None:
         self.location = location  # bottom left corner
         self.points = points
@@ -73,7 +73,7 @@ class Rock:
 
 class PyroclasticFlow:
 
-    def __init__(self, WIDTH):
+    def __init__(self, WIDTH=7):
         with open("Day17/input.txt") as f:
             self.input = f.read().strip()
         self.cmdIdx = 0
@@ -86,12 +86,12 @@ class PyroclasticFlow:
         return cmd
 
     def getHeight(self) -> int:
-        topRow = len(self.FlowMap)
+        rawHeight = len(self.FlowMap)
         for row in self.FlowMap[-1::-1]:
             if '#' in row:
                 break
-            topRow = topRow - 1
-        return topRow
+            rawHeight = rawHeight - 1
+        return rawHeight
 
     def getSpawn(self):
         topRow = self.getHeight() - 1
@@ -163,6 +163,6 @@ class PyroclasticFlow:
 
 
 if __name__ == "__main__":
-    solution = PyroclasticFlow(7)
+    solution = PyroclasticFlow()
     solution.Part1()
     solution.Part2()
