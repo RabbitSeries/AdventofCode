@@ -77,19 +77,7 @@ class BoilingBoulders:
         )}')
 
     # TODO enclosing LAVA inhibits the AIR_POCKET, don't know how to visualize it
-    def append(self, ax: Axes3D, crdns: np.ndarray):
-        container = (crdns >= self.LAVA)
-        facecolors = np.zeros((*container.shape, 4))  # add another dimension RGBA (RGB alpha)
-        color_alpha_map = {                        # Color mapping
-            self.LAVA: ((1, 0, 0), 0.1),            # Red for LAVA with alpha=0.1
-            self.AIR: ((1, 1, 1), 0.5),             # White for AIR with alpha=0.5
-            self.AIR_PARCEL: ((0, 0, 1), 0.8),      # Blue for AIR_POCKET with alpha=0.8
-            self.CHECKING: ((0.5, 0.5, 0.5), 0.3)   # Gray for CHECKING with alpha=0.3
-        }
-
-        for value, (color, alpha) in color_alpha_map.items():  # Apply colors and alphas based on memo values
-            mask = (crdns == value)
-            facecolors[mask] = (*color, alpha)
+    def append(self, ax: Axes3D, container: np.ndarray, facecolors: np.ndarray):
         x, y, z = np.indices(np.array(container.shape) + 1)  # type: ignore
         x = x - 0.5
         y = y - 0.5
@@ -100,16 +88,6 @@ class BoilingBoulders:
             facecolors=facecolors,
             linewidth=0
         )
-        # ax.scatter(*np.where(self.container == self.AIR_POCKET), c='black', marker='o', s=5, label='Center')  # type: ignore
-
-    def visualize(self):
-        fig = plt.figure(figsize=(10, 8))
-        ax = fig.add_subplot(1, 1, (1, 1), projection='3d')
-        if not isinstance(ax, Axes3D):
-            return
-        # self.append(ax, self.crdns)
-        # self.append(ax, [(2, 2, 5)], 'red', 1)
-        self.append(ax, self.container)  # type: ignore
         max_dim = max(self.scale)
         ax.set_xlabel('X axis')
         ax.set_ylabel('Y axis')
@@ -117,8 +95,36 @@ class BoilingBoulders:
         ax.set_xlim(0, max_dim)
         ax.set_ylim(0, max_dim)
         ax.set_zlim(0, max_dim)
-        plt.title("3D Cube Visualization (1x1x1 cubes)")
-        plt.tight_layout()
+        ax.scatter(*np.where(container), c='black', marker='o', s=5, label='Center')  # type: ignore
+
+    def visualize(self):
+        fig = plt.figure(figsize=(10, 8))
+        gs = fig.add_gridspec(1, 2)
+        # WTFFFFFFFFFFFFFFFFF?, [:,0] is passing a getelem tuple: (slicing(None), 0)
+        ax1, ax2 = fig.add_subplot(gs[:, 0], projection='3d'), fig.add_subplot(gs[0, 1], projection='3d')
+        if not isinstance(ax1, Axes3D) or not isinstance(ax2, Axes3D):
+            return
+        ax1.set_title("LAVA cubes")
+        ax2.set_title("AIR_PARCEL cubes")
+        # self.append(ax, self.crdns)
+        # self.append(ax, [(2, 2, 5)], 'red', 1)
+        facecolors = np.zeros((*self.container.shape, 4))  # add another dimension RGBA (RGB alpha)
+        color_alpha_map = {                        # Color mapping
+            self.LAVA: ((1, 0, 0), 0.1),            # Red for LAVA with alpha=0.1
+            self.AIR: ((1, 1, 1), 0.5),             # White for AIR with alpha=0.5
+            self.AIR_PARCEL: ((0, 0, 1), 0.8),      # Blue for AIR_POCKET with alpha=0.8
+            self.CHECKING: ((0.5, 0.5, 0.5), 0.3)   # Gray for CHECKING with alpha=0.3
+        }
+
+        for value, (color, alpha) in color_alpha_map.items():  # Apply colors and alphas based on memo values
+            mask = (self.container == value)
+            facecolors[mask] = (*color, alpha)
+
+        self.append(ax1, self.container == self.LAVA, facecolors)
+        self.append(ax2, self.container == self.AIR_PARCEL, facecolors)
+
+        # plt.title("3D Cube Visualization", loc='center') # only sets last subplot
+        fig.suptitle("3D Cube Visualization (1x1x1 cubes)")
         plt.show()
 
 # if __name__ == "__main__":
@@ -134,4 +140,4 @@ if __name__ == "__main__":
     solution = BoilingBoulders()
     solution.Part1()
     solution.Part2()
-    # solution.visualize()
+    solution.visualize()
