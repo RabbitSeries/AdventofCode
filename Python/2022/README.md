@@ -46,3 +46,7 @@ Then:
 
 - Build a project, a game or something
 - Use the strength of Open Source
+
+## TODO
+
+- [ ] Maybe rebuild a \_\_repr__(self) -> str for all solutions
