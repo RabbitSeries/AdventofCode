@@ -3,9 +3,10 @@ import numpy as np
 from queue import Queue
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from aoc_libs.utils.ISolution import ISolution
 
 
-class BoilingBoulders:
+class BoilingBoulders(ISolution):
     dxyz = [[0, 0, 0, 0, 1, -1],
             [0, 0, 1, -1, 0, 0],
             [1, -1, 0, 0, 0, 0]]
