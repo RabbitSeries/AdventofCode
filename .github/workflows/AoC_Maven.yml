@@ -80,7 +80,6 @@ jobs:
           cat exception.log
       
       - name: Diff results
-        working-directory: 
         shell: bash
         run: |
           sh ./.github/workflows/diff_file.sh ${{matrix.year-folder}}/ActionResults/res.log ${{matrix.year-folder}}/ActionResults/../res.log
