@@ -1,185 +1,92 @@
 package year2023.Day05;
 
 import java.io.*;
-import java.lang.Math;
-import java.util.AbstractMap.*;
 import java.util.*;
-import java.util.Map.*;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import JavaDataModel.*;
 
-// TODO If each mapperlist is too large， a BST tree were used.
 @AoCSolution()
 public class LocationCascadingMapper implements SolutionBase {
-    ArrayList<Long> seedID;
+    List<Long> Seeds;
 
-    ArrayList<ArrayList<Entry<Entry<Long, Long>, Long>>> mapperList;
+    List<List<TenaryTuple<Long, Long, Long>>> MapBlocks;
 
-    long res;
-
-    Long SearchMap(ArrayList<Entry<Entry<Long, Long>, Long>> mapper, long source) {
-        for (Entry<Entry<Long, Long>, Long> rangeInfo : mapper) {
-            long range = rangeInfo.getValue(), sourceStarter = rangeInfo.getKey().getValue();
-            if (source >= sourceStarter && source < sourceStarter + range) {
-                return source - sourceStarter + rangeInfo.getKey().getKey();
+    long SearchMap(long source, int mId) {
+        if (mId >= MapBlocks.size()) {
+            return source;
+        }
+        for (var rangeInfo : MapBlocks.get(mId)) {
+            long from = rangeInfo.getE1(), to = rangeInfo.getE2(), range = rangeInfo.getE3();
+            if (source >= from && source < from + range) {
+                return SearchMap(source - from + to, mId + 1);
             }
         }
-
-        return source;
+        return SearchMap(source, mId + 1);
     }
 
     void readFile(BufferedReader input) throws IOException {
-        mapperList = new ArrayList<>();
-
-        String buf;
-        while ((buf = input.readLine()) != null) {
-            if (buf.isEmpty()) {
-                continue;
+        MapBlocks = new ArrayList<>();
+        Stream.of(input.lines().map(l -> l + "\n").reduce("", String::concat).split("\\n\\n")).forEach(block -> {
+            if (block.contains("seeds")) {
+                Seeds = Stream.of(block.split(":")[1].trim().split("\\s+")).map(Long::parseLong).toList();
+            } else {
+                MapBlocks.add(Stream.of(block.split("\\n"))
+                        .filter(line -> !line.contains("map"))
+                        .map(line -> Stream.of(line.split("\\s+")).map(Long::parseLong).toArray(Long[]::new))
+                        .map(arr -> new TenaryTuple<>(arr[1], arr[0], arr[2])).toList());
             }
-
-            if (buf.indexOf("seeds") != -1) {
-                seedID = new ArrayList<>();
-                for (String id : buf.split(":")[1].trim().split("\\s+")) {
-                    seedID.add(Long.parseLong(id));
-                }
-                continue;
-            }
-
-            if (buf.indexOf("map") != -1) {
-                mapperList.add(new ArrayList<>());
-                while ((buf = input.readLine()) != null) {
-                    if (buf.isEmpty()) {
-                        break;
-                    }
-                    String[] mapInfo = buf.split("\\s+");
-                    mapperList.getLast()
-                            .add(new SimpleEntry<>(
-                                    new SimpleEntry<>(Long.parseLong(mapInfo[0]),
-                                            Long.parseLong(mapInfo[1])),
-                                    Long.parseLong(mapInfo[2])));
-                }
-                // mapperList.getLast().sort(Comparator.comparing(entry ->
-                // entry.getKey().getValue()));
-                continue;
-            }
-        }
-        input.close();
+        });
     }
 
     public void Solution1(BufferedReader input) throws IOException {
-        long res = Long.MAX_VALUE;
         readFile(input);
-        for (long token : seedID) {
-            for (ArrayList<Entry<Entry<Long, Long>, Long>> searchList : mapperList) {
-                token = SearchMap(searchList, token);
-            }
-            res = Math.min(token, res);
-        }
-        System.out.println("Solution 1: " + res);
+        System.out.println("Solution 1: " + Seeds.stream()
+                .mapToLong(token -> SearchMap(token, 0)).reduce(Long.MAX_VALUE, Long::min));
     }
 
-    class Interval {
-        Interval(long _s, long _t) {
-            s = _s;
-            t = _t;
+    List<Pair<Long, Long>> SearchInterval(int mId, List<Pair<Long, Long>> itvList) {
+        if (mId >= MapBlocks.size()) {
+            return itvList;
         }
 
-        public long s;
-
-        public long t;
-    }
-
-    ArrayList<Interval> SearchInterval(ArrayList<Entry<Entry<Long, Long>, Long>> IntervalMapList,
-        Interval itv) {
-        // If not sort get error, don't know why yet.
-        // IntervalMapList.sort(Comparator.comparing(entry ->
-        // entry.getKey().getValue()));
-        // IntervalMapList
-        // .forEach(entry -> {
-        // System.out.print(entry);
-        // System.out.print(" ");
-        // System.out.println(entry.getKey().getValue() + entry.getValue() - 1);
-        // });
-
-        ArrayList<Interval> resList = new ArrayList<>();
-        Queue<Interval> q = new LinkedList<>();
-        q.add(itv);
-        while (!q.isEmpty()) {
-            Interval curItv = q.poll();
-            long itvStart = curItv.s, itvEnd = curItv.t;
-            boolean splited = false;
-
-            for (Entry<Entry<Long, Long>, Long> mapRange : IntervalMapList) {
-
-                long mapStart = mapRange.getKey().getValue();
-                long mapEnd = mapStart + mapRange.getValue() - 1;
-                long mapToStart = mapRange.getKey().getKey();
-                long mapToEnd = mapToStart + mapRange.getValue() - 1;
-
-                if (itvStart >= mapStart && itvStart <= mapEnd) {
-                    splited = true;
-                    if (itvEnd <= mapEnd) {
-                        // |-----*-----*---|
-                        resList.add(new Interval(itvStart - mapStart + mapToStart,
-                                itvEnd - mapStart + mapToStart));
-                        return resList;
-                    } else {
-                        // |-----*--------|---*
-                        splited = true;
-                        resList.add(new Interval(itvStart - mapStart + mapToStart, mapToEnd));
-                        q.add(new Interval(mapEnd + 1, itvEnd));
-                        break;
+        List<Pair<Long, Long>> nextItvList = itvList.stream().flatMap(itv -> {
+            List<Pair<Long, Long>> matchedList = new ArrayList<>(), unmatchedList = new ArrayList<>(List.of(itv));
+            MapBlocks.get(mId).stream().takeWhile(__ -> !unmatchedList.isEmpty()).forEach(rangeInfo -> {
+                long from = rangeInfo.getE1(), to = rangeInfo.getE2(), fromEnd = from + rangeInfo.getE3();
+                List<Pair<Long, Long>> processList = new ArrayList<>(unmatchedList);
+                unmatchedList.clear();
+                for (Pair<Long, Long> curItv : processList) {
+                    long itvStart = curItv.getKey(), itvEnd = curItv.getValue();
+                    Pair<Long, Long> mapped = new Pair<>(Long.max(itvStart, from), Long.min(itvEnd, fromEnd));
+                    if (mapped.getKey() >= mapped.getValue()) {
+                        unmatchedList.add(curItv);
+                        continue;
                     }
-                } else if (itvStart < mapStart) {
-                    if (itvEnd >= mapStart && itvEnd <= mapEnd) {
-                        // *----|-----*------|
-                        splited = true;
-                        resList.add(new Interval(mapToStart, itvEnd - itvStart + mapToStart));
-                        q.add(new Interval(itvStart, mapStart - 1));
-                        break;
-                    } else if (itvEnd > mapEnd) {
-                        // *----|------------|----*
-                        splited = true;
-                        resList.add(new Interval(mapToStart, mapToEnd));
-                        q.add(new Interval(itvStart, mapStart - 1));
-                        q.add(new Interval(mapEnd + 1, itvEnd));
-                        break;
+                    matchedList.add(new Pair<>(mapped.getKey() - from + to, mapped.getValue() - from + to));
+                    // *----|------------|----*
+                    // *----|------*-----|----
+                    // -----|------*-----|----*
+                    if (itvStart < from) {
+                        unmatchedList.add(new Pair<>(itvStart, from));
+                    }
+                    if (itvEnd > fromEnd) {
+                        unmatchedList.add(new Pair<>(fromEnd, itvEnd));
                     }
                 }
-            }
-            if (!splited) {
-                resList.add(new Interval(itvStart, itvEnd));
-                return resList;
-            }
-        }
-        return resList;
+            });
+            matchedList.addAll(unmatchedList);
+            return matchedList.stream();
+        }).toList();
+        return SearchInterval(mId + 1, nextItvList);
     }
 
     public void Solution2(BufferedReader input) throws IOException {
-        res = Long.MAX_VALUE;
-        readFile(input);
-
-        for (int i = 0; i < seedID.size(); i += 2) {
-
-            ArrayList<Interval> curLevelList = new ArrayList<>();
-
-            curLevelList.add(new Interval(seedID.get(i), seedID.get(i) + seedID.get(i + 1) - 1));
-
-            for (var searchList : mapperList) {
-
-                ArrayList<Interval> nextLevelList = new ArrayList<>();
-                for (Interval itv : curLevelList) {
-                    nextLevelList.addAll(SearchInterval(searchList, itv));
-                }
-                curLevelList = nextLevelList;
-            }
-
-            curLevelList.forEach(itv -> {
-                res = Math.min(itv.s, res);
-            });
-        }
-
-        System.out.println("Solution 2: " + res);
+        System.out.println("Solution 2: " + IntStream.range(0, Seeds.size()).filter(i -> i % 2 == 0).mapToLong(i -> {
+            return SearchInterval(0, List.of(new Pair<>(Seeds.get(i), Seeds.get(i) + Seeds.get(i + 1))))
+                    .stream().map(Pair::getKey).reduce(Long.MAX_VALUE, Long::min);
+        }).reduce(Long.MAX_VALUE, Long::min));
     }
 
     public static void main(String[] args) throws IOException {

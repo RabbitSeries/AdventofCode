@@ -6,13 +6,10 @@
             "request": "launch",
             "vmArgs": "-ea",
             "cwd": "${input:Working_Directory}",
-            "args": "${command:SpecifyProgramArgs}",
             "mainClass": "${file}",
             "classPaths": [
                 "$Runtime"
-            ],
-            "preLaunchTask": "[maven goals]",
-            "projectName": "${input:Project_Name}"
+            ]
         },
         {
             "name": "[Java] [Debug] [AoC]: Load solutions under directory specified",
@@ -37,7 +34,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
-            "cwd": "${input:Working_Directory}",
+            "cwd": "${input:Working_Directory}"
         },
         {
             "name": "[C/C++] [Launch]",

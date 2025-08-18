@@ -2,80 +2,35 @@ package year2023.Day09;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import JavaDataModel.*;
 
 @AoCSolution()
 public class HistoryExtrapolate implements SolutionBase {
-    ArrayList<List<Integer>> HistoryList;
+    List<List<Integer>> HistoryList;
 
-    void readFile(BufferedReader input) throws IOException {
-        HistoryList = new ArrayList<>();
-        
-        String buf;
-        while ((buf = input.readLine()) != null) {
-            HistoryList.add(
-                    Arrays.stream(buf.trim().split("\\s+")).map(l -> Integer.parseInt(l)).toList());
-        }
-        input.close();
-    }
-
-    int predict(List<Integer> histroyList, IntegerRef addUp, boolean isForward) {
+    int predict(List<Integer> histroyList, boolean isForward) {
         if (histroyList.stream().allMatch(l -> Integer.compare(l, 0) == 0)) {
             return 0;
         }
-        ArrayList<Integer> nextLevelList = new ArrayList<>();
-
-        for (int i = 1; i < histroyList.size(); i++) {
-            nextLevelList.add(histroyList.get(i) - histroyList.get(i - 1));
-        }
-        int extrapolate = (isForward ? histroyList.getLast() : histroyList.getFirst())
-                + (isForward ? 1 : -1) * predict(nextLevelList, addUp, isForward);
-        addUp.setVal(addUp.getVal() + extrapolate);
-        return extrapolate;
+        List<Integer> nextLevelList = IntStream.range(1, histroyList.size()).map(i -> histroyList.get(i) - histroyList.get(i - 1)).boxed().toList();
+        return (isForward ? histroyList.getLast() : histroyList.getFirst()) + (isForward ? 1 : -1) * predict(nextLevelList, isForward);
     }
 
     public void Solution1(BufferedReader input) throws IOException {
-        readFile(input);
-        long res = 0;
-        for (List<Integer> historyList : HistoryList) {
-            IntegerRef addUp = new IntegerRef(0);
-
-            res += predict(historyList, addUp, true);
-        }
-        System.out.println("Solution 1: " + res);
+        HistoryList = input.lines().map(line -> Stream.of(line.split("\\s+")).map(Integer::parseInt).toList()).toList();
+        System.out.println("Solution 1: " + HistoryList.stream().mapToInt(l -> predict(l, true)).sum());
     }
 
     public void Solution2(BufferedReader input) throws IOException {
-        readFile(input);
-        long res = 0;
-        for (List<Integer> historyList : HistoryList) {
-            IntegerRef addUp = new IntegerRef(0);
-            res += predict(historyList, addUp, false);
-        }
-        System.out.println("Solution 2: " + res);
+        System.out.println("Solution 2: " + HistoryList.stream().mapToInt(l -> predict(l, false)).sum());
     }
 
     public static void main(String[] args) throws IOException {
         HistoryExtrapolate Day09 = new HistoryExtrapolate();
         Day09.Solution1(new BufferedReader(new FileReader("Day09/input.txt")));
         Day09.Solution2(new BufferedReader(new FileReader("Day09/input.txt")));
-    }
-
-    static class IntegerRef {
-        Integer val;
-
-        IntegerRef(int v) {
-            val = v;
-        }
-
-        public Integer getVal() {
-            return this.val;
-        }
-
-        public void setVal(Integer val) {
-            this.val = val;
-        }
-
     }
 }

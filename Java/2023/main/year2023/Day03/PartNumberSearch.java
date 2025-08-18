@@ -2,166 +2,105 @@ package year2023.Day03;
 
 import java.io.*;
 import java.util.*;
-import java.util.Map.Entry;
+import java.util.stream.IntStream;
+
 import JavaDataModel.*;
 
 @AoCSolution()
 public class PartNumberSearch implements SolutionBase {
-    ArrayList<ArrayList<Character>> schematic;
+    List<String> schematic;
 
-    ArrayList<Map.Entry<Point2D, Integer>> partNumberPos;
+    List<Point2D> GearPositions = new ArrayList<>();
 
-    ArrayList<Character> row;
+    Map<Point2D, Integer> NumPositions = new HashMap<>();
 
-    ArrayList<Point2D> gearPos;
-
-    boolean startOfDigit = false;
-
-    int digitSize = 0;
-
-    String catString = "";
-
-    Integer res = 0;
-
-    Integer ratioSum = 0;
+    int rows, cols;
 
     void readFile(BufferedReader input) throws IOException {
-        schematic = new ArrayList<>();
-        partNumberPos = new ArrayList<>();
-        gearPos = new ArrayList<>();
-        String buf;
-        while ((buf = input.readLine()) != null && buf.length() > 0) {
-            startOfDigit = false;
-            row = new ArrayList<>();
-            buf.chars().forEach(ascii -> {
-                Character ch = (char) ascii;
+        schematic = input.lines().toList();
+
+        rows = schematic.size();
+        cols = schematic.get(0).length();
+
+        IntStream.range(0, rows).forEach(i -> {
+            Optional<Point2D> num = Optional.empty();
+            for (int j : IntStream.range(0, cols).toArray()) {
+                char ch = schematic.get(i).charAt(j);
                 if (Character.isDigit(ch)) {
-                    if (!startOfDigit) {
-                        startOfDigit = true;
-                        digitSize = 1;
-                        partNumberPos.add(new AbstractMap.SimpleEntry<Point2D, Integer>(
-                                new Point2D(schematic.size(), row.size()), 1));
-                    } else {
-                        digitSize++;
-                        partNumberPos.getLast().setValue(digitSize);
+                    if (!num.isPresent()) {
+                        num = Optional.of(new Point2D(i, j));
                     }
+                    NumPositions.compute(num.get(), (k, v) -> v == null ? Integer.valueOf(String.valueOf(ch)) : Integer.valueOf(v.toString().concat(String.valueOf(ch))));
                 } else {
-                    if (ch == '*') {
-                        gearPos.add(new Point2D(schematic.size(), row.size()));
+                    if (num.isPresent()) {
+                        num = Optional.empty();
                     }
-                    if (startOfDigit) {
-                        startOfDigit = false;
+                    if (ch == '*') {
+                        GearPositions.add(new Point2D(i, j));
                     }
                 }
-                row.add((char) ascii);
-            });
-            schematic.add(row);
-        }
-        input.close();
+            }
+        });
     }
 
     public void Solution1(BufferedReader input) throws IOException {
         readFile(input);
-        Integer rows = schematic.size(), cols = schematic.get(0).size();
-        for (Entry<Point2D, Integer> posInfo : partNumberPos) {
-            Point2D pos = posInfo.getKey();
-            Integer numLen = posInfo.getValue();
-            catString = "";
-            schematic.get(pos.getKey()).subList(pos.getValue(), pos.getValue() + numLen)
-                    .forEach(num -> catString += num);
-            Integer num = Integer.parseInt(catString);
-            boolean added = false;
-            for (int i = 0; i < numLen; i++) {
+        System.out.println("Solution 1: " + NumPositions.keySet().stream().filter(pos -> {
+            for (int i = 0; i < NumPositions.get(pos).toString().length(); i++) {
+                Point2D curPos = new Point2D(pos.getKey(), pos.getValue() + i);
                 for (int direction = 0; direction < 8; direction++) {
-                    Point2D nextPos = new Point2D(pos.getKey() + Point2D.dx[direction],
-                            pos.getValue() + i + Point2D.dy[direction]);
+                    Point2D nextPos = Point2D.getNextPosition(curPos, direction);
                     if (Point2D.isValid(rows, cols, nextPos)) {
-                        char ch = schematic.get(nextPos.getKey()).get(nextPos.getValue());
+                        char ch = schematic.get(nextPos.getKey()).charAt(nextPos.getValue());
                         if (!Character.isDigit(ch) && ch != '.') {
-                            res += num;
-                            added = true;
-                            break;
+                            return true;
                         }
                     }
                 }
-                if (added) {
-                    break;
-                }
             }
-            if (!added) {
-                // System.out.println(num + " is not added");
-            }
-        }
-        System.out.println("Solution 1: " + res);
+            return false;
+        }).mapToInt(k -> NumPositions.get(k)).sum());
     }
 
-    Integer searchNumber(int rows, int cols, Point2D pos, HashMap<Point2D, Boolean> visit) {
+    Integer searchNumber(int rows, int cols, Point2D pos, Set<Point2D> visited) {
         int startIndex = pos.getValue(), endIndex = pos.getValue(), x = pos.getKey();
-        visit.put(pos, true);
         Point2D nextPos = new Point2D(x, startIndex - 1);
-        while (Point2D.isValid(rows, cols, nextPos)
-                && Character.isDigit(schematic.get(x).get(startIndex - 1))) {
-            if (visit.containsKey(nextPos)) {
-                visit.put(nextPos, true);
-            }
+        // Search before
+        while (nextPos.getValue() >= 0 && Character.isDigit(schematic.get(x).charAt(nextPos.getValue()))) {
             startIndex--;
+            visited.add(nextPos);
             nextPos = new Point2D(x, startIndex - 1);
         }
+        // Search forward
         nextPos = new Point2D(x, endIndex + 1);
-        while (Point2D.isValid(rows, cols, nextPos)
-                && Character.isDigit(schematic.get(x).get(endIndex + 1))) {
-            if (visit.containsKey(nextPos)) {
-                visit.put(nextPos, true);
-            }
+        while (nextPos.getValue() < cols && Character.isDigit(schematic.get(x).charAt(nextPos.getValue()))) {
             endIndex++;
+            visited.add(nextPos);
             nextPos = new Point2D(x, endIndex + 1);
         }
-        catString = "";
-        schematic.get(x).subList(startIndex, endIndex + 1).forEach(digit -> {
-            catString += String.valueOf((char) digit);
-        });
-        return Integer.parseInt(catString);
+        return Integer.parseInt(schematic.get(x).substring(startIndex, endIndex + 1));
     }
 
     public void Solution2(BufferedReader input) throws IOException {
-        readFile(input);
-        Integer rows = schematic.size(), cols = schematic.get(0).size();
-        for (Point2D pos : gearPos) {
-            int numberCnt = 0;
-            Integer[] numPoint2D = new Integer[2];
-            HashMap<Point2D, Boolean> visit = new HashMap<>();
-
+        System.out.println("Solution 2: " + GearPositions.stream().map(pos -> {
+            List<Integer> nums = new ArrayList<>();
+            Set<Point2D> visited = new HashSet<>();
             for (int i = 0; i < 8; i++) {
-                Point2D nextPos =
-                        new Point2D(pos.getKey() + Point2D.dx[i], pos.getValue() + Point2D.dy[i]);
-                if (Point2D.isValid(rows, cols, nextPos))
-                    visit.put(nextPos, false);
-            }
-
-            for (int i = 0; i < 8; i++) {
-                Point2D nextPos =
-                        new Point2D(pos.getKey() + Point2D.dx[i], pos.getValue() + Point2D.dy[i]);
-                if (Point2D.isValid(rows, cols, nextPos) && Character
-                        .isDigit(schematic.get(nextPos.getKey()).get(nextPos.getValue()))) {
-                    try {
-                        if (!visit.get(nextPos)) {
-                            if (numberCnt < 2) {
-                                numPoint2D[numberCnt++] = searchNumber(rows, cols, nextPos, visit);
-                            } else {
-                                numberCnt++;
-                                break;
-                            }
-                        }
-                    } catch (Exception e) {
-                        System.out.println(visit.toString());
-                        e.printStackTrace();
+                Point2D nextPos = Point2D.getNextPosition(pos, i);
+                if (Point2D.isValid(rows, cols, nextPos) && Character.isDigit(schematic.get(nextPos.getKey()).charAt(nextPos.getValue()))) {
+                    if (!visited.contains(nextPos)) {
+                        visited.add(nextPos);
+                        nums.add(searchNumber(rows, cols, nextPos, visited));
                     }
                 }
             }
-            if (numberCnt == 2) {
-                ratioSum += numPoint2D[0] * numPoint2D[1];
-            }
-        }
-        System.out.println("Solution 2: " + ratioSum);
+            return nums;
+        }).filter(l -> l.size() == 2).mapToInt(l -> l.get(0) * l.get(1)).sum());
+    }
+
+    public static void main(String[] args) throws Exception {
+        PartNumberSearch solution = new PartNumberSearch();
+        solution.Solution1(new BufferedReader(new FileReader("Day03/input.txt")));
+        solution.Solution2(new BufferedReader(new FileReader("Day03/input.txt")));
     }
 }

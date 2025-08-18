@@ -135,7 +135,7 @@
             "id": "MAVEN_PRELAUNCH_GOAL",
             "type": "promptString",
             "default": "package",
-            "description": "Maven goals to launch before debug"
+            "description": "Maven goal to launch before debug, this will be passed to args of command mvn [args] one goal at once"
         }
     ],
     "version": "2.0.0"

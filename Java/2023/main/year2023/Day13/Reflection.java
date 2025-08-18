@@ -8,36 +8,23 @@ import JavaDataModel.*;
 
 @AoCSolution()
 public class Reflection implements SolutionBase {
+    List<List<String>> IslandMaps;
 
-    List<List<List<Character>>> readFile(BufferedReader input) throws IOException {
-        List<List<List<Character>>> IslandMaps = new ArrayList<>();
-        String buf;
-        while ((buf = input.readLine()) != null) {
-            if (IslandMaps.isEmpty()) {
-                IslandMaps.add(new ArrayList<>());
-            }
-            if (!buf.isEmpty()) {
-                // IslandMaps.getLast().add(buf.trim().chars().mapToObj(c -> (char)
-                // c).toList());
-                // immutable list
-                IslandMaps.getLast().add(buf.trim().chars().mapToObj(c -> (char) c)
-                        .collect(Collectors.toCollection(ArrayList::new)));
-            } else {
-                IslandMaps.add(new ArrayList<>());
-            }
-        }
-        input.close();
-        return IslandMaps;
+    void readFile(BufferedReader input) throws IOException {
+        IslandMaps = Stream.of(input.lines()
+                .map(l -> l.concat("\n"))
+                .collect(Collectors.joining()).split("\\n\\n"))
+                .map(block -> Arrays.asList(block.split("\\n"))).toList();
     }
 
-    int checkHorizontalMirror(List<List<Character>> IslandMap, int originalHorizontalLine) {
-        int row = IslandMap.size(), col = IslandMap.get(0).size();
+    int checkHorizontalMirror(List<String> IslandMap, int originalHorizontalLine) {
+        int row = IslandMap.size(), col = IslandMap.get(0).length();
         for (int i = 0; i < row - 1; i++) {
             boolean isMirror = true;
             int up = i, below = i + 1, gap = 0;
             for (gap = 0; up - gap >= 0 && below + gap < row; gap++) {
                 for (int j = 0; j < col; j++) {
-                    if (!IslandMap.get(up - gap).get(j).equals(IslandMap.get(below + gap).get(j))) {
+                    if (!(IslandMap.get(up - gap).charAt(j) == IslandMap.get(below + gap).charAt(j))) {
                         isMirror = false;
                         break;
                     }
@@ -53,15 +40,14 @@ public class Reflection implements SolutionBase {
         return -1;
     }
 
-    int checkVerticalMirror(List<List<Character>> IslandMap, int originalVerticalLine) {
-        int row = IslandMap.size(), col = IslandMap.get(0).size();
+    int checkVerticalMirror(List<String> IslandMap, int originalVerticalLine) {
+        int row = IslandMap.size(), col = IslandMap.get(0).length();
         for (int i = 0; i < col - 1; i++) {
             boolean isMirror = true;
             int left = i, right = i + 1, gap = 0;
             for (gap = 0; left - gap >= 0 && right + gap < col; gap++) {
                 for (int j = 0; j < row; j++) {
-                    if (!IslandMap.get(j).get(left - gap)
-                            .equals(IslandMap.get(j).get(right + gap))) {
+                    if (!(IslandMap.get(j).charAt(left - gap) == IslandMap.get(j).charAt(right + gap))) {
                         isMirror = false;
                         break;
                     }
@@ -78,34 +64,33 @@ public class Reflection implements SolutionBase {
     }
 
     public void Solution1(BufferedReader input) throws IOException {
-        List<List<List<Character>>> IslandMaps = readFile(input);
-        long res = 0;
-        for (var IslandMap : IslandMaps) {
+        readFile(input);
+        System.out.println("Solution 1: " + IslandMaps.stream().mapToLong(IslandMap -> {
             int curRes = checkHorizontalMirror(IslandMap, -1);
             if (curRes < 0) {
                 curRes = checkVerticalMirror(IslandMap, -1);
-                res += (curRes < 0 ? 0 : curRes);
+                return (curRes < 0 ? 0 : curRes);
             } else {
-                res += curRes * 100l;
+                return curRes * 100l;
             }
-        }
-        System.out.println("Solution 1: " + res);
+        }).sum());
     }
 
     public void Solution2(BufferedReader input) throws IOException {
-        List<List<List<Character>>> IslandMaps = readFile(input);
         long res = 0;
         for (var IslandMap : IslandMaps) {
-            int row = IslandMap.size(), col = IslandMap.get(0).size();
+            int row = IslandMap.size(), col = IslandMap.get(0).length();
             int originalHorizontalLine = checkHorizontalMirror(IslandMap, -1),
                     originalVerticalLine = checkVerticalMirror(IslandMap, -1);
+
             assert (originalHorizontalLine * originalVerticalLine < 0);
 
             for (int i = 0; i < row; i++) {
                 boolean mirrored = false;
                 for (int j = 0; j < col; j++) {
-                    char original = IslandMap.get(i).get(j);
-                    IslandMap.get(i).set(j, (original == '.' ? '#' : '.'));
+                    StringBuilder stringBuilder = new StringBuilder(IslandMap.get(i));
+                    char original = IslandMap.get(i).charAt(j);
+                    IslandMap.set(i, stringBuilder.replace(j, j + 1, String.valueOf(original == '.' ? '#' : '.')).toString());
                     int curRes = checkHorizontalMirror(IslandMap, originalHorizontalLine);
                     if (curRes > 0) {
                         mirrored = true;
@@ -113,7 +98,7 @@ public class Reflection implements SolutionBase {
                         break;
                     }
                     curRes = checkVerticalMirror(IslandMap, originalVerticalLine);
-                    IslandMap.get(i).set(j, original);
+                    IslandMap.set(i, stringBuilder.replace(j, j + 1, String.valueOf(original)).toString());
                     if (curRes > 0) {
                         mirrored = true;
                         res += curRes;

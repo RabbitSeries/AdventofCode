@@ -30,12 +30,11 @@ public class LongestHike implements SolutionBase {
             0, 1, 0, -1
     };
 
-    int ROW, COL;
+    int rows, cols;
 
     List<List<Integer>> IceIsland = new ArrayList<>();
 
     void readFile(BufferedReader input) throws Exception {
-        
         IceIsland = input.lines().map(line -> line.trim().chars().mapToObj(c -> {
             switch (c) {
                 case (int) '.':
@@ -54,17 +53,16 @@ public class LongestHike implements SolutionBase {
                     return PATH;
             }
         }).toList()).toList();
-        input.close();
         Start = new Point2D(0, 1);
         Dest = new Point2D(IceIsland.size() - 1, IceIsland.get(0).size() - 2);
-        ROW = IceIsland.size();
-        COL = IceIsland.get(0).size();
+        rows = IceIsland.size();
+        cols = IceIsland.get(0).size();
     }
 
-    final HashMap<Integer, Character> DIRECTION = new HashMap<>(Map.of(0, '^', 1, '>', 2, 'v', 3, '<'));
+    final Map<Integer, Character> DIRECTION = new HashMap<>(Map.of(0, '^', 1, '>', 2, 'v', 3, '<'));
 
     boolean isValid(Point2D pos) {
-        return pos.first >= 0 && pos.second >= 0 && pos.first < ROW && pos.second < COL;
+        return pos.first >= 0 && pos.second >= 0 && pos.first < rows && pos.second < cols;
     }
 
     Point2D getNext(Point2D pos, int direction) {
@@ -173,27 +171,27 @@ public class LongestHike implements SolutionBase {
     public void Solution2(BufferedReader input) throws Exception {
         System.out.println("Solution 2: " + DFS(Start, new HashSet<>(Set.of(Start)), 0));
         // System.out.println("DFS CNT: " + DFSCnt); // 30580294
-        // Equivalent BFS, but the Queue space will be DFS CNT size, which causes numerous rellocation cost.
+        // // Equivalent BFS, but the Queue space will be DFS CNT size, which causes numerous rellocation cost.
         // Queue<Path> q = new LinkedList<>(List.of(new Path(Start, Start, 0)));
         // // HashMap<Point2D, Integer> Dist = new HashMap<>(Map.of(Start, 0));
         // int res = 0;
         // while (!q.isEmpty()) {
-        // Path curPath = q.poll();
-        // int curPathLen = curPath.GetPathLen();
-        // if (curPath.EndPos.equals(Dest)) {
-        // res = Math.max(curPathLen, res);
-        // // PrintPath(curPath.visited);
-        // continue;
-        // }
-        // for (Path p : UndidrectedNetwork.get(curPath.EndPos)) {
-        // Point2D nextEnd = p.EndPos;
-        // if (!curPath.visited.contains(nextEnd)) {
-        // int nextPathLen = curPathLen + p.PathLen;
-        // Path nextPath = new Path(curPath.StartPos, p.EndPos, nextPathLen);
-        // nextPath.visited.addAll(curPath.visited);
-        // q.add(nextPath);
-        // }
-        // }
+        //     Path curPath = q.poll();
+        //     int curPathLen = curPath.GetPathLen();
+        //     if (curPath.EndPos.equals(Dest)) {
+        //         res = Math.max(curPathLen, res);
+        //         // PrintPath(curPath.visited);
+        //         continue;
+        //     }
+        //     for (Path p : UndidrectedNetwork.get(curPath.EndPos)) {
+        //         Point2D nextEnd = p.EndPos;
+        //         if (!curPath.visited.contains(nextEnd)) {
+        //             int nextPathLen = curPathLen + p.PathLen;
+        //             Path nextPath = new Path(curPath.StartPos, p.EndPos, nextPathLen);
+        //             nextPath.visited.addAll(curPath.visited);
+        //             q.add(nextPath);
+        //         }
+        //     }
         // }
         // System.out.println("BFS res: " + res);
     }

@@ -17,7 +17,6 @@ public class MinimumCut implements SolutionBase {
                 WireGraph.computeIfAbsent(wHash, s -> new HashSet<>()).add(inWire);
             });
         });
-        input.close();
     }
 
     int Hasher(String WireName) {

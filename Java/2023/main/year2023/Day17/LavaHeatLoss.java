@@ -9,15 +9,7 @@ import JavaDataModel.*;
 
 @AoCSolution()
 public class LavaHeatLoss implements SolutionBase {
-    void readFile(BufferedReader input) throws IOException {
-        LavaMap = new ArrayList<>();
-        String buf;
-        
-        while ((buf = input.readLine()) != null) {
-            LavaMap.add(buf.chars().mapToObj(c -> c - '0').toList());
-        }
-        input.close();
-    }
+    List<List<Integer>> LavaMap;
 
     final int[] dx = new int[] {
             0, 1, 0, -1
@@ -27,40 +19,39 @@ public class LavaHeatLoss implements SolutionBase {
             1, 0, -1, 0
     };
 
-    void printLossMap(List<List<List<Integer>>> LossMap) {
-        List<List<Character>> Canvas = LavaMap.stream().map(l -> (List<Character>) new ArrayList<Character>(l.stream().map(a -> (char) (a + '0')).toList())).toList();
-        for (int row = 0; row < LavaMap.size(); row++) {
-            for (int col = 0; col < LavaMap.get(0).size(); col++) {
-                for (int i = 0; i < 4; i++) {
-                    if (LossMap.get(row).get(col).get(i) != Integer.MAX_VALUE) {
-                        Canvas.get(row).set(col, '*');
-                    }
-                }
-            }
-        }
-        Canvas.forEach(line -> {
-            line.forEach(c -> System.out.print(c));
-            System.out.println();
-        });
-    }
+    // void printLossMap(List<List<List<Integer>>> LossMap) {
+    //     List<List<Character>> Canvas = LavaMap.stream().map(l -> (List<Character>) new ArrayList<Character>(l.stream().map(a -> (char) (a + '0')).toList())).toList();
+    //     for (int row = 0; row < LavaMap.size(); row++) {
+    //         for (int col = 0; col < LavaMap.get(0).size(); col++) {
+    //             for (int i = 0; i < 4; i++) {
+    //                 if (LossMap.get(row).get(col).get(i) != Integer.MAX_VALUE) {
+    //                     Canvas.get(row).set(col, '*');
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     Canvas.forEach(line -> {
+    //         line.forEach(c -> System.out.print(c));
+    //         System.out.println();
+    //     });
+    // }
 
-    void printPathList(HashSet<Pair<Integer, Integer>> PathList) {
-        List<List<Character>> Canvas = LavaMap.stream().map(l -> (List<Character>) new ArrayList<Character>(l.stream().map(a -> (char) (a + '0')).toList())).toList();
-        for (var pos : PathList) {
-            Canvas.get(pos.first).set(pos.second, '*');
-        }
-        Canvas.forEach(line -> {
-            line.forEach(c -> System.out.print(c));
-            System.out.println();
-        });
-    }
+    // void printPathList(HashSet<Pair<Integer, Integer>> PathList) {
+    //     List<List<Character>> Canvas = LavaMap.stream().map(l -> (List<Character>) new ArrayList<Character>(l.stream().map(a -> (char) (a + '0')).toList())).toList();
+    //     for (var pos : PathList) {
+    //         Canvas.get(pos.first).set(pos.second, '*');
+    //     }
+    //     Canvas.forEach(line -> {
+    //         line.forEach(c -> System.out.print(c));
+    //         System.out.println();
+    //     });
+    // }
 
     int Dijkstra(Point2D startPos, Point2D endPos, int lowerBound, int upperBound) {
-        int rows = LavaMap.size(), cols = LavaMap.get(0).size();
-        PriorityQueue<PosInfo> pq = new PriorityQueue<>((p1, p2) -> p1.first - p2.first);
+        PriorityQueue<PosInfo> pq = new PriorityQueue<>(Comparator.comparing(PosInfo::getKey));
         List<List<HashMap<String, Integer>>> LossMap = Collections.nCopies(rows, Collections.nCopies(cols, new HashMap<String, Integer>()))
-                .stream().map(row -> row
-                        .stream().map(loss -> new HashMap<>(loss))
+                .stream().map(row -> row.stream()
+                        .map(loss -> new HashMap<>(loss))
                         .toList())
                 .toList();
         for (int i = 0; i < 4; i++) {
@@ -91,8 +82,9 @@ public class LavaHeatLoss implements SolutionBase {
                 break;
             }
             for (int i = 0; i < 4; i++) {
-                if (i == 2)
+                if (i == 2) {
                     continue;
+                }
                 int nextDirection = (curDirection + i) % 4, nextStraightCnt = (i == 0 ? curStraightCnt + 1 : 1);
                 if (nextStraightCnt <= upperBound) {
                     Point2D nextPos = new Point2D(curPos.first + dx[nextDirection], curPos.second + dy[nextDirection]);
@@ -107,28 +99,28 @@ public class LavaHeatLoss implements SolutionBase {
                         }
                     }
                 }
-                if (curStraightCnt < lowerBound)
+                if (curStraightCnt < lowerBound) {
                     break;
+                }
             }
         }
         return minLoss;
     }
 
-    List<List<Integer>> LavaMap;
+    int rows, cols;
+
+    Point2D startPos = new Point2D(0, 0), endPos;
 
     public void Solution1(BufferedReader input) throws IOException {
-        readFile(input);
-        int rows = LavaMap.size(), cols = LavaMap.get(0).size();
-        Point2D startPos = new Point2D(0, 0), endPos = new Point2D(rows - 1, cols - 1);
+        LavaMap = input.lines().map(line -> line.chars().map(c -> c - '0').boxed().toList()).toList();
+        rows = LavaMap.size();
+        cols = LavaMap.get(0).size();
+        endPos = new Point2D(rows - 1, cols - 1);
         System.out.println("Solution 1: " + Dijkstra(startPos, endPos, 1, 3));
-        return;
     }
 
     public void Solution2(BufferedReader input) throws IOException {
-        int rows = LavaMap.size(), cols = LavaMap.get(0).size();
-        Point2D startPos = new Point2D(0, 0), endPos = new Point2D(rows - 1, cols - 1);
         System.out.println("Solution 2: " + Dijkstra(startPos, endPos, 4, 10));
-        return;
     }
 
     class PosInfo extends Pair<Integer, Pair<Integer, Pair<Integer, Point2D>>> {

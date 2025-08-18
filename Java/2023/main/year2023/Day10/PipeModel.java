@@ -2,6 +2,7 @@ package year2023.Day10;
 
 import java.util.*;
 
+// Maybe I should document this thing
 public class PipeModel {
         static public HashMap<Character, HashMap<Integer, Integer>> NextPipeDirection = new HashMap<>(
                         Map.of(
@@ -16,7 +17,7 @@ public class PipeModel {
                 ClockWise, CounterClockWise
         }
 
-        static public HashMap<Character, HashMap<Integer, ClockOrder>> ClockOrderQuery = new HashMap<>(
+        static public Map<Character, Map<Integer, ClockOrder>> ClockOrderQuery = new HashMap<>(
                         Map.of(
                                         'L',
                                         new HashMap<>(Map.of(1, ClockOrder.CounterClockWise, 2, ClockOrder.ClockWise)),
@@ -24,12 +25,12 @@ public class PipeModel {
                                         new HashMap<>(Map.of(1, ClockOrder.ClockWise, 3, ClockOrder.CounterClockWise)),
                                         '7',
                                         new HashMap<>(Map.of(0, ClockOrder.CounterClockWise, 3, ClockOrder.ClockWise)),
-                                        'F', new HashMap<>(Map.of(1, ClockOrder.ClockWise, 2,
-                                                        ClockOrder.CounterClockWise))));
+                                        'F',
+                                        new HashMap<>(Map.of(1, ClockOrder.ClockWise, 2, ClockOrder.CounterClockWise))));
 
         // Green's path
         // CounterClockWise : left hand
-        static public HashMap<Character, HashMap<Integer, List<Integer>>> CounterclockwiseQuery = new HashMap<>(
+        static public Map<Character, Map<Integer, List<Integer>>> CounterclockwiseQuery = new HashMap<>(
                         Map.of(
                                         '|', new HashMap<>(Map.of(0, Arrays.asList(3), 1, Arrays.asList(2))),
                                         '-', new HashMap<>(Map.of(2, Arrays.asList(0), 3, Arrays.asList(1))),
@@ -39,7 +40,7 @@ public class PipeModel {
                                         'F', new HashMap<>(Map.of(3, Arrays.asList(7), 1, Arrays.asList(0, 2)))));
 
         // Right hand
-        static public HashMap<Character, HashMap<Integer, List<Integer>>> ClockwiseQuery = new HashMap<>(
+        static public Map<Character, Map<Integer, List<Integer>>> ClockwiseQuery = new HashMap<>(
                         Map.of(
                                         '|', new HashMap<>(Map.of(1, Arrays.asList(3), 0, Arrays.asList(2))),
                                         '-', new HashMap<>(Map.of(3, Arrays.asList(0), 2, Arrays.asList(1))),

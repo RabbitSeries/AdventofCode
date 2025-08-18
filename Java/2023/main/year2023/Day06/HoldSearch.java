@@ -2,78 +2,54 @@ package year2023.Day06;
 
 import java.io.*;
 import java.util.*;
-import java.util.Map.*;
-import java.util.AbstractMap.*;
 import java.util.stream.*;
 
 import JavaDataModel.*;
 
 @AoCSolution()
 public class HoldSearch implements SolutionBase {
-    ArrayList<Entry<Integer, Integer>> recordList;
+    List<Pair<Integer, Integer>> recordList;
 
     void readFile(BufferedReader input) throws IOException {
-        recordList = new ArrayList<>();
-        String buf;
-        while ((buf = input.readLine()) != null) {
-            if (buf.indexOf("Time:") != -1) {
-                for (Integer timeout : Arrays.stream(buf.split(":")[1].trim().split("\\s+"))
-                        .map(Integer::parseInt).toList()) {
-                    recordList.add(new SimpleEntry<>(timeout, 0));
-                }
-            } else if (buf.indexOf("Distance") != -1) {
-                int id = 0;
-                for (Integer integer : Arrays.stream(buf.split(":")[1].trim().split("\\s+"))
-                        .map(token -> {
-                            return Integer.parseInt(token);
-                        }).toList()) {
-                    recordList.get(id).setValue(integer);
-                    id++;
-                }
+        String[] lines = input.lines().toArray(String[]::new);
+        Iterator<Integer> TimeList = Stream.of(lines[0].split(":")[1].trim().split("\\s+")).map(Integer::parseInt).iterator();
+        Iterator<Integer> DistanceList = Stream.of(lines[1].split(":")[1].trim().split("\\s+")).map(Integer::parseInt).iterator();
+        recordList = Stream.generate(() -> {
+            if (TimeList.hasNext() && DistanceList.hasNext()) {
+                return new Pair<>(TimeList.next(), DistanceList.next());
             }
-        }
-        input.close();
+            return null;
+        }).takeWhile(Objects::nonNull).toList();
     }
 
-    long binarySearch(long timeout, long target) {
-        long s = 1, t = timeout / 2;
+    long binarySearch(long totalTime, long distance) {
+        long s = 1, t = totalTime / 2;
         while (s != t) {
             long mid = (s + t) / 2;
-            long val = (timeout - mid) * mid;
-            if (val > target) {
+            long val = (totalTime - mid) * mid;
+            if (val >= distance) {
                 t = mid;
             } else {
                 s = mid + 1;
             }
         }
-        if (timeout % 2 == 1)
-            return (timeout / 2 - s + 1) * 2;
-        else {
-            return (timeout / 2 - s + 1) * 2 - 1;
-        }
+        return (totalTime / 2 - s + 1) * 2 - (totalTime % 2 == 0 ? 1 : 0);
     }
 
     public void Solution1(BufferedReader input) throws IOException {
         readFile(input);
-        long targetCnt = 1;
-        // targetCnt = (timeout - t) * t for target > distance: (const - t)*t - distance
-        // > 0 for t <= timeout
-        for (Entry<Integer, Integer> timeout : recordList) {
-            targetCnt *= binarySearch(timeout.getKey(), timeout.getValue());
-        }
-        System.out.println("Solution 1: " + targetCnt);
+        System.out.println("Solution 1: " + recordList.stream().map(K_V -> binarySearch(K_V.getKey(), K_V.getValue())).reduce(1L, (a, b) -> a * b));
     }
 
     public void Solution2(BufferedReader input) throws IOException {
-        readFile(input);
-        long realTimeout = Long.parseLong(recordList.stream()
-                .map(token -> token.getKey().toString()).collect(Collectors.joining()));
-        long realDistance = Long.parseLong(recordList.stream()
-                .map(token -> token.getValue().toString()).collect(Collectors.joining()));
-        long targetCnt = 1;
+        long totalTime = Long.parseLong(recordList.stream().map(K_V -> K_V.getKey().toString()).collect(Collectors.joining()));
+        long distance = Long.parseLong(recordList.stream().map(K_V -> K_V.getValue().toString()).collect(Collectors.joining()));
+        System.out.println("Solution 2: " + binarySearch(totalTime, distance));
+    }
 
-        targetCnt *= binarySearch(realTimeout, realDistance);
-
-        System.out.println("Solution 2: " + targetCnt);
+    public static void main(String[] args) throws IOException {
+        HoldSearch solution = new HoldSearch();
+        solution.Solution1(new BufferedReader(new FileReader("Day06/input.txt")));
+        solution.Solution2(new BufferedReader(new FileReader("Day06/input.txt")));
     }
 }

@@ -2,9 +2,13 @@
 
 This year is full of mathematics.
 
-## Day19
+## Day5-6
 
-~~Suprisingly, Java solution is 1/4 faster than cpp solution.~~(on windows)
+Notice this api: Stream.takeWhile(Objects::nonNull)[.forEach() | .toList()];
+
+## Day7
+
+Notice this api: Stream.collect(Collectors.groupingBy(l->l, Collectors.counting()))
 
 ## Day20
 

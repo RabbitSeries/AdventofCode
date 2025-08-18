@@ -7,32 +7,32 @@ import JavaDataModel.*;
 @AoCSolution()
 public class CosmicDistance implements SolutionBase {
 
-    List<List<Integer>> CosmicMap;
+    List<List<Integer>> CosmicMap; // Map char to id of Galaxy, -1 for empty
+
     List<Pair<Long, Long>> GalaxyList;
+
+    int rows, cols;
 
     void readFile(BufferedReader input) throws IOException {
         CosmicMap = new ArrayList<>();
         GalaxyList = new ArrayList<>();
-        
-        String buf;
-        // Line Scanning
-        while ((buf = input.readLine()) != null) {
+        input.lines().forEach(buf -> {
             List<Integer> row = new ArrayList<>();
-            for (char c : buf.chars().mapToObj(c -> (char) c).toList()) {
+            buf.chars().forEach(c -> {
                 if (c == '#') {
                     row.add(GalaxyList.size());
                     GalaxyList.add(new Pair<>((long) (CosmicMap.size()), (long) (row.size())));
                 } else {
                     row.add(-1);
                 }
-            }
+            });
             CosmicMap.add(row);
-        }
-        input.close();
+        });
+        rows = CosmicMap.size();
+        cols = CosmicMap.get(0).size();
     }
 
     long expandCosmic(long expandDistance) {
-        int rows = CosmicMap.size(), cols = CosmicMap.get(0).size();
         for (int i = 0; i < rows; i++) {
             boolean lineEmpty = true;
             for (int cell : CosmicMap.get(i)) {
@@ -79,13 +79,10 @@ public class CosmicDistance implements SolutionBase {
     public void Solution1(BufferedReader input) throws IOException {
         readFile(input);
         System.out.println("Solution 1: " + expandCosmic(1));
-        return;
     }
 
     public void Solution2(BufferedReader input) throws IOException {
-        readFile(input);
-        System.out.println("Solution 2: " + expandCosmic(1000000 - 1));
-        return;
+        System.out.println("Solution 2: " + expandCosmic(1000000 - 2));
     }
 
     long ManhattanDistance(Pair<Long, Long> p1, Pair<Long, Long> p2) {

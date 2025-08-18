@@ -19,16 +19,14 @@ public class HailIntersection implements SolutionBase {
     Hail ParseHail(String s) {
         var InputSplit = s.split("@");
         return new Hail(
-                Arrays.stream(InputSplit[0].trim().split("\\s*,\\s*")).mapToLong(Long::parseLong).boxed().toList(),
-                Arrays.stream(InputSplit[1].trim().split("\\s*,\\s*")).mapToLong(Long::parseLong).boxed().toList());
+                Arrays.stream(InputSplit[0].trim().split("\\s*,\\s*")).map(Long::parseLong).toList(),
+                Arrays.stream(InputSplit[1].trim().split("\\s*,\\s*")).map(Long::parseLong).toList());
     }
 
     List<Hail> HailList = null;
 
     void readFile(BufferedReader input) throws Exception {
-        
         HailList = input.lines().map(this::ParseHail).toList();
-        input.close();
     }
 
     final long L = 200000000000000L, R = 400000000000000L;

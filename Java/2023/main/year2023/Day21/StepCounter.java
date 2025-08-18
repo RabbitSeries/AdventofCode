@@ -3,6 +3,7 @@ package year2023.Day21;
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import JavaDataModel.*;
 
@@ -10,54 +11,44 @@ import JavaDataModel.*;
 public class StepCounter implements SolutionBase {
     List<String> Farm = null, ZeroFarm = null;
 
-    int ROW = 0;
-
-    int COL = 0;
+    int rows = 0, cols = 0;
 
     Point2D start = new Point2D(-1, -1);
 
     void readFile(BufferedReader input) throws Exception {
-        
-        Farm = input.lines().map(line -> {
-            var sb = new StringBuilder(line);
-            if (start.second == -1) {
-                start.first++;
-                start.second = line.indexOf('S');
-                if (start.second != -1) {
-                    sb.setCharAt(start.second, '.');
-                }
-            }
-            return sb.toString();
-        }).toList();
-        ROW = Farm.size();
-        COL = Farm.get(0).length();
+        Farm = input.lines().toList();
+        rows = Farm.size();
+        cols = Farm.get(0).length();
+        start = IntStream.range(0, cols)
+                .filter(i -> Farm.get(i).contains("S"))
+                .mapToObj(i -> new Point2D(i, Farm.get(i).indexOf('S')))
+                .findFirst().get();
         ZeroFarm = Farm;
-        input.close();// Java is not RAII
     }
 
     void printToDisk(Set<Point2D> visited) throws Exception {
-        BufferedWriter output = new BufferedWriter(new FileWriter("output.txt"));
-        for (int i = 0; i < Farm.size(); i++) {
-            for (int j = 0; j < Farm.get(i).length(); j++) {
-                if (visited.contains(new Point2D(i, j))) {
-                    output.append('O');
-                } else {
-                    if (start.first.equals(i) && start.second.equals(j))
-                        output.append('S');
-                    else
-                        output.append(' ');
+        try (BufferedWriter output = new BufferedWriter(new FileWriter("output.txt"))) {
+            for (int i = 0; i < Farm.size(); i++) {
+                for (int j = 0; j < Farm.get(i).length(); j++) {
+                    if (visited.contains(new Point2D(i, j))) {
+                        output.append('O');
+                    } else {
+                        if (start.first.equals(i) && start.second.equals(j))
+                            output.append('S');
+                        else
+                            output.append(' ');
+                    }
                 }
+                output.newLine();
             }
-            output.newLine();
         }
-        output.close();
     }
 
-    int[] dx = new int[] {
+    final int[] dx = new int[] {
             -1, 1, 0, 0
     };
 
-    int[] dy = new int[] {
+    final int[] dy = new int[] {
             0, 0, -1, 1
     };
 
@@ -87,7 +78,7 @@ public class StepCounter implements SolutionBase {
                 Point2D curPoint = q.poll();
                 for (int i = 0; i < 4; i++) {
                     Point2D nextPos = getNextPoint(curPoint, i);
-                    if (isValid(nextPos) && ManhattanDistance(nextPos, zero) <= boundary && Farm.get(nextPos.first).charAt(nextPos.second) == '.' && !visited.contains(nextPos)) {
+                    if (isValid(nextPos) && ManhattanDistance(nextPos, zero) <= boundary && Farm.get(nextPos.first).charAt(nextPos.second) != '#' && !visited.contains(nextPos)) {
                         visited.add(nextPos);
                         nextLevel.add(nextPos);
                     }
@@ -95,8 +86,8 @@ public class StepCounter implements SolutionBase {
             }
             q = nextLevel;
             // if (curStep % 2 == stepCnt % 2) {
-            // printToDisk(visited);
-            // Thread.sleep(100);
+            //     printToDisk(visited);
+            //     Thread.sleep(100);
             // }
         }
         // printToDisk(visited);
@@ -104,8 +95,8 @@ public class StepCounter implements SolutionBase {
     }
 
     void FoldTo(int times) {
-        start.first = ROW / 2 + ROW * times;
-        start.second = COL / 2 + COL * times;
+        start.first = rows / 2 + rows * times;
+        start.second = cols / 2 + cols * times;
         Farm = Collections.nCopies(2 * times + 1,
                 ZeroFarm.stream().map(
                         row -> Collections.nCopies(2 * times + 1, row).stream().collect(Collectors.joining()))
@@ -137,26 +128,26 @@ public class StepCounter implements SolutionBase {
 
     public void Solution2(BufferedReader input) throws Exception {
         final int STEP = 26501365;
-        long Layer = STEP / COL;
-        long oddBase = SimpleBFS(start, getOdd(ROW + ROW / 2), ROW + ROW / 2);
-        long oddCorner = oddBase - SimpleBFS(start, getOdd(ROW / 2), ROW / 2);
-        long evenBase = SimpleBFS(start, getEven(ROW + ROW / 2), ROW + ROW / 2);
-        long evenCorner = evenBase - SimpleBFS(start, getEven(ROW / 2), ROW / 2);
+        long Layer = STEP / cols;
+        long oddBase = SimpleBFS(start, getOdd(rows + rows / 2), rows + rows / 2);
+        long oddCorner = oddBase - SimpleBFS(start, getOdd(rows / 2), rows / 2);
+        long evenBase = SimpleBFS(start, getEven(rows + rows / 2), rows + rows / 2);
+        long evenCorner = evenBase - SimpleBFS(start, getEven(rows / 2), rows / 2);
         System.out.println("Solution 2: " + ((Layer + 1) * (Layer + 1) * oddBase + Layer * Layer * evenBase - (Layer + 1) * oddCorner + Layer * evenCorner));
     }
 
     public void LagrangeSolution() throws Exception {
         FoldTo(2);
-        int[] steps = {
-                ROW / 2, ROW + ROW / 2, ROW * 2 + ROW / 2
+        final int[] steps = {
+                rows / 2, rows + rows / 2, rows * 2 + rows / 2
         };
-        long[] f = new long[3];
+        final long[] f = new long[3];
         for (int i = 0; i < 3; i++) {
             f[i] = SimpleBFS(start, steps[i], steps[i]);
             System.out.println("f(" + i + ") = " + f[i]);
         }
         final long STEP = 26501365;
-        long N = STEP / ROW;
+        long N = STEP / rows;
         long term0 = f[0] * (N - 1) * (N - 2) / ((0 - 1) * (0 - 2));
         long term1 = f[1] * (N - 0) * (N - 2) / ((1 - 0) * (1 - 2));
         long term2 = f[2] * (N - 0) * (N - 1) / ((2 - 0) * (2 - 1));

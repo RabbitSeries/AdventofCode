@@ -21,18 +21,10 @@ public class LavaInterior implements SolutionBase {
             1, 0, -1, 0
     };
 
-    public List<DigPlan> readFile(BufferedReader input) throws IOException {
-        DigPlanList = new ArrayList<>();
-        String buf;
-        while ((buf = input.readLine()) != null) {
-            Matcher m = Pattern.compile("(\\w)\\s(\\d+)\\s\\(#([\\d\\w]+)\\)").matcher(buf);
-            // Perform find first;
-            if (m.find()) {
-                DigPlanList.add(new DigPlan(DirectionTranslate.get(m.group(1)), Integer.parseInt(m.group(2)), m.group(3)));
-            }
-        }
-        input.close();
-        return DigPlanList;
+    public void readFile(BufferedReader input) throws IOException {
+        Pattern re = Pattern.compile("(\\w)\\s(\\d+)\\s\\(#([\\d\\w]+)\\)");
+        DigPlanList = input.lines().map(line -> re.matcher(line)).filter(Matcher::find)
+                .map(m -> new DigPlan(DirectionTranslate.get(m.group(1)), Integer.parseInt(m.group(2)), m.group(3))).toList();
     }
 
     HashSet<Point2D> Boundary, visited;
@@ -120,12 +112,6 @@ public class LavaInterior implements SolutionBase {
         return curPos.first >= corner1.first && curPos.second >= corner1.second && curPos.first <= corner2.first && curPos.second <= corner2.second;
     }
 
-    public static void main(String[] args) throws IOException {
-        LavaInterior Day18 = new LavaInterior();
-        Day18.Solution1(new BufferedReader(new FileReader("Day18/input.txt")));
-        Day18.Solution2(new BufferedReader(new FileReader("Day18/input.txt")));
-    }
-
     class DigPlan extends Pair<Integer, Pair<Integer, String>> {
         public DigPlan(int direction, int length, String hexRGB) {
             super(direction, new Pair<>(length, hexRGB));
@@ -140,5 +126,11 @@ public class LavaInterior implements SolutionBase {
             this.second.first = Integer.parseInt(hexRGB.substring(0, hexRGB.length() - 1), 16);
             this.first = Integer.parseInt(hexRGB.substring(hexRGB.length() - 1), 16);
         }
+    }
+
+    public static void main(String[] args) throws IOException {
+        LavaInterior Day18 = new LavaInterior();
+        Day18.Solution1(new BufferedReader(new FileReader("Day18/input.txt")));
+        Day18.Solution2(new BufferedReader(new FileReader("Day18/input.txt")));
     }
 }

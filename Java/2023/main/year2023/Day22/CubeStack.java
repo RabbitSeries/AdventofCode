@@ -1,9 +1,9 @@
 package year2023.Day22;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
+// import java.io.BufferedWriter;
 import java.io.FileReader;
-import java.io.FileWriter;
+// import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -110,17 +110,17 @@ public class CubeStack implements SolutionBase {
     Point3D Volume = new Point3D(0, 0, 0);
 
     void readFile(BufferedReader input) throws Exception {
-        
-        for (String buf; (buf = input.readLine()) != null;) {
-            CubeList.add(ParseCube(buf));
-            CubeList.getLast().setId(CubeList.size() - 1);
-            Volume.setE1(Math.max(Volume.getE1(), CubeList.getLast().Start.getE1()));
-            Volume.setE1(Math.max(Volume.getE1(), CubeList.getLast().End.getE1()));
-            Volume.setE2(Math.max(Volume.getE2(), CubeList.getLast().Start.getE2()));
-            Volume.setE2(Math.max(Volume.getE2(), CubeList.getLast().End.getE2()));
-            Volume.setE3(Math.max(Volume.getE3(), CubeList.getLast().Start.getE3()));
-            Volume.setE3(Math.max(Volume.getE3(), CubeList.getLast().End.getE3()));
-        }
+        CubeList = input.lines().map(this::ParseCube).toList();
+        IntStream.range(0, CubeList.size()).forEach(i -> {
+            Cube cube = CubeList.get(i);
+            cube.setId(i);
+            Volume.setE1(Math.max(Volume.getE1(), cube.End.getE1()));
+            Volume.setE1(Math.max(Volume.getE1(), cube.Start.getE1()));
+            Volume.setE2(Math.max(Volume.getE2(), cube.Start.getE2()));
+            Volume.setE2(Math.max(Volume.getE2(), cube.End.getE2()));
+            Volume.setE3(Math.max(Volume.getE3(), cube.Start.getE3()));
+            Volume.setE3(Math.max(Volume.getE3(), cube.End.getE3()));
+        });
         IntStream.rangeClosed(0, Volume.getE1()).forEach(x -> {
             Space.add(new ArrayList<>());
             IntStream.rangeClosed(0, Volume.getE2()).forEach(y -> {
@@ -144,64 +144,65 @@ public class CubeStack implements SolutionBase {
                 });
             }
         });
-        input.close();
     }
 
-    void ProjectY() throws Exception {
-        BufferedWriter output = new BufferedWriter(new FileWriter("ProjectY.txt"));
-        List<List<Character>> Projection = new ArrayList<>(); // X,Z
-        IntStream.rangeClosed(0, Volume.getE1()).forEach(x -> {
-            Projection.add(new ArrayList<>());
-            IntStream.rangeClosed(0, Volume.getE3()).forEach(l -> {
-                Projection.get(x).add('.');
-            });
-        });
-        for (int x : IntStream.rangeClosed(0, Volume.getE1()).toArray()) {
-            for (int z : IntStream.rangeClosed(0, Volume.getE3()).toArray()) {
-                for (int y : IntStream.rangeClosed(0, Volume.getE2()).toArray()) {
-                    if (Space.get(x).get(y).get(z) != 0) {
-                        Projection.get(x).set(z, (char) (Space.get(x).get(y).get(z) + 'A'));
-                        break;
-                    }
-                }
-            }
-        }
-        for (int z : IntStream.rangeClosed(0, Volume.getE3()).boxed().sorted(Comparator.reverseOrder()).mapToInt(Integer::intValue).toArray()) {
-            for (int x : IntStream.rangeClosed(0, Volume.getE1()).toArray()) {
-                output.append(Projection.get(x).get(z));
-            }
-            output.newLine();
-        }
-        output.close();
-    }
+    // void ProjectY() throws Exception {
+    //     try (BufferedWriter output = new BufferedWriter(new FileWriter("ProjectY.txt"))) {
+    //         List<List<Character>> Projection = new ArrayList<>(); // X,Z
+    //         IntStream.rangeClosed(0, Volume.getE1()).forEach(x -> {
+    //             Projection.add(new ArrayList<>());
+    //             IntStream.rangeClosed(0, Volume.getE3()).forEach(l -> {
+    //                 Projection.get(x).add('.');
+    //             });
+    //         });
+    //         for (int x : IntStream.rangeClosed(0, Volume.getE1()).toArray()) {
+    //             for (int z : IntStream.rangeClosed(0, Volume.getE3()).toArray()) {
+    //                 for (int y : IntStream.rangeClosed(0, Volume.getE2()).toArray()) {
+    //                     if (Space.get(x).get(y).get(z) != 0) {
+    //                         Projection.get(x).set(z, (char) (Space.get(x).get(y).get(z) + 'A'));
+    //                         break;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         for (int z : IntStream.rangeClosed(0, Volume.getE3()).boxed().sorted(Comparator.reverseOrder()).mapToInt(Integer::intValue).toArray()) {
+    //             for (int x : IntStream.rangeClosed(0, Volume.getE1()).toArray()) {
+    //                 output.append(Projection.get(x).get(z));
+    //             }
+    //             output.newLine();
+    //         }
+    //         output.close();
+    //     }
+    // }
 
-    void ProjectX() throws Exception {
-        BufferedWriter output = new BufferedWriter(new FileWriter("ProjectX.txt"));
-        List<List<Character>> Projection = new ArrayList<>(); // Y,Z
-        IntStream.rangeClosed(0, Volume.getE2()).forEach(y -> {
-            Projection.add(new ArrayList<>());
-            IntStream.rangeClosed(0, Volume.getE3()).forEach(l -> {
-                Projection.get(y).add('.');
-            });
-        });
-        for (int y : IntStream.rangeClosed(0, Volume.getE2()).toArray()) {
-            for (int z : IntStream.rangeClosed(0, Volume.getE3()).toArray()) {
-                for (int x : IntStream.rangeClosed(0, Volume.getE1()).boxed().sorted(Comparator.comparing(Integer::intValue).reversed()).toList()) {
-                    if (Space.get(x).get(y).get(z) != 0) {
-                        Projection.get(y).set(z, (char) (Space.get(x).get(y).get(z) + 'A'));
-                        break;
-                    }
-                }
-            }
-        }
-        for (int z : IntStream.rangeClosed(0, Volume.getE3()).boxed().sorted(Comparator.reverseOrder()).mapToInt(Integer::intValue).toArray()) {
-            for (int y : IntStream.rangeClosed(0, Volume.getE2()).toArray()) {
-                output.append(Projection.get(y).get(z));
-            }
-            output.newLine();
-        }
-        output.close();
-    }
+    // void ProjectX() throws Exception {
+    //     try (BufferedWriter output = new BufferedWriter(new FileWriter("ProjectX.txt"))) {
+    //         List<List<Character>> Projection = new ArrayList<>(); // Y,Z
+    //         IntStream.rangeClosed(0, Volume.getE2()).forEach(y -> {
+    //             Projection.add(new ArrayList<>());
+    //             IntStream.rangeClosed(0, Volume.getE3()).forEach(l -> {
+    //                 Projection.get(y).add('.');
+    //             });
+    //         });
+    //         for (int y : IntStream.rangeClosed(0, Volume.getE2()).toArray()) {
+    //             for (int z : IntStream.rangeClosed(0, Volume.getE3()).toArray()) {
+    //                 for (int x : IntStream.rangeClosed(0, Volume.getE1()).boxed().sorted(Comparator.comparing(Integer::intValue).reversed()).toList()) {
+    //                     if (Space.get(x).get(y).get(z) != 0) {
+    //                         Projection.get(y).set(z, (char) (Space.get(x).get(y).get(z) + 'A'));
+    //                         break;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         for (int z : IntStream.rangeClosed(0, Volume.getE3()).boxed().sorted(Comparator.reverseOrder()).mapToInt(Integer::intValue).toArray()) {
+    //             for (int y : IntStream.rangeClosed(0, Volume.getE2()).toArray()) {
+    //                 output.append(Projection.get(y).get(z));
+    //             }
+    //             output.newLine();
+    //         }
+    //         output.close();
+    //     }
+    // }
 
     List<Integer> getRange(int a, int b) {
         return IntStream.rangeClosed(Math.min(a, b), Math.max(a, b)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
