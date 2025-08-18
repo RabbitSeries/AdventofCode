@@ -81,13 +81,7 @@ public class RocksRoll implements SolutionBase {
     }
 
     void readFile(BufferedReader input) throws IOException {
-        Platform = new ArrayList<>();
-        
-        String buf;
-        while ((buf = input.readLine()) != null) {
-            Platform.add(buf.chars().mapToObj(c -> (char) c)
-                    .collect(Collectors.toCollection(ArrayList::new)));
-        }
+        Platform = input.lines().map(line -> (List<Character>) line.chars().mapToObj(c -> (char) c).collect(Collectors.toCollection(ArrayList::new))).toList();
         input.close();
         row = Platform.size();
         col = Platform.get(0).size();

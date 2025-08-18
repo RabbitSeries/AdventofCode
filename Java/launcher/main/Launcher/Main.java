@@ -38,8 +38,8 @@ public class Main {
                 System.out.println(clazz.getName());
                 Object instance = clazz.getConstructor().newInstance();
                 for (String methodName : List.of("Solution1", "Solution2")) {
-                    try {
-                        BufferedReader input = new BufferedReader(new InputStreamReader(SolutionLoader.getJarFile().getInputStream(inputResource)));
+                    // BufferedReader is AutoCloseable, and "Closing a previously closed stream has no effect." -- Java8
+                    try (BufferedReader input = new BufferedReader(new InputStreamReader(SolutionLoader.getJarFile().getInputStream(inputResource)))) {
                         Method method = clazz.getMethod(methodName, input.getClass());
                         System.out.print("\t");
                         method.invoke(instance, input);

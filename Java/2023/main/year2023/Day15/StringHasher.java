@@ -15,7 +15,7 @@ public class StringHasher implements SolutionBase {
     void readFile(BufferedReader input) throws IOException {
         stepList = new ArrayList<>();
         String buf;
-        
+
         while ((buf = input.readLine()) != null) {
             stepList.addAll(Arrays.stream(buf.trim().split(",")).toList());
         }

@@ -2,91 +2,65 @@ package year2023.Day01;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.IntStream;
 
-import JavaDataModel.AoCSolution;
 import JavaDataModel.*;
 
 @AoCSolution()
 public class ValueCalibration implements SolutionBase {
-    ArrayList<String> readFile(BufferedReader input) throws IOException {
-        ArrayList<String> maplist = new ArrayList<>();
-        String buf;
-        while ((buf = input.readLine()) != null) {
-            if (buf.length() > 1)
-                maplist.add(buf);
-        }
-        input.close();
-        return maplist;
-    }
+    List<String> maplist = null;
 
-    Integer res, digitVal;
-
-    HashMap<String, Integer> digits;
-
-    void InitDataModel() {
-        res = 0;
-        digits = new HashMap<>(Map.of("zero", 0, "one", 1, "two", 2, "three", 3, "four", 4, "five", 5, "six", 6, "seven", 7, "eight", 8, "nine", 9));
-    }
-
-    void isDigit(String line, int index, boolean reverse) {
-        digitVal = -1;
-
-        digits.keySet().stream().forEach((String digit) -> {
-            if (!reverse) {
-                if (index + 1 >= digit.length()
-                        && line.substring(index + 1 - digit.length(), index + 1).equals(digit)) {
-                    digitVal = digits.get(digit);
-                    return;
+    Optional<Integer> isDigit(String line, int index, boolean reverse, Map<String, Integer> additional) {
+        Optional<Integer> res = Optional.empty();
+        if (additional != null) {
+            res = additional.keySet().stream().filter(digit -> {
+                if (!reverse) {
+                    return index + 1 >= digit.length() && line.substring(index + 1 - digit.length(), index + 1).equals(digit);
+                } else {
+                    return index - 1 + digit.length() < line.length() && line.substring(index, index - 1 + digit.length() + 1).equals(digit);
                 }
-            } else {
-                if (index - 1 + digit.length() < line.length()
-                        && line.substring(index, index - 1 + digit.length() + 1).equals(digit)) {
-                    digitVal = digits.get(digit);
-                    return;
-                }
-            }
-        });
-
-        if (digitVal == -1 && Character.isDigit(line.charAt(index))) {
-            digitVal = Integer.valueOf(String.valueOf(line.charAt(index)));
+            }).map(digit -> additional.get(digit)).findFirst();
         }
+        if (!res.isPresent() && Character.isDigit(line.charAt(index))) {
+            res = Optional.of(Integer.valueOf(String.valueOf(line.charAt(index))));
+        }
+        return res;
     }
 
-    void DualSearch(ArrayList<String> maplist) {
-        maplist.forEach((String line) -> {
+    Integer DualSearch(List<String> maplist, Map<String, Integer> additional) {
+        return maplist.stream().map(line -> {
             String val = "";
-            for (int i = 0; i < line.length(); i++) {
-                isDigit(line, i, false);
-                if (digitVal != -1) {
-                    val += digitVal.toString();
+            for (int i : IntStream.range(0, line.length()).toArray()) {
+                Optional<Integer> digitVal = isDigit(line, i, false, additional);
+                if (digitVal.isPresent()) {
+                    val += digitVal.get().toString();
                     for (int j = line.length() - 1; j >= 0; j--) {
-                        isDigit(line, j, true);
-                        if (digitVal != -1) {
-                            val += digitVal.toString();
+                        digitVal = isDigit(line, j, true, additional);
+                        if (digitVal.isPresent()) {
+                            val += digitVal.get();
                             break;
                         }
                     }
                     break;
                 }
             }
-            if (val.length() == 2) {
-                res += Integer.valueOf(val);
-            }
-        });
+            return val;
+        }).filter(val -> val.length() == 2).map(Integer::parseInt).reduce(0, Integer::sum);
     }
 
     public void Solution1(BufferedReader input) throws IOException {
-        res = 0;
-        digits = new HashMap<>();
-        ArrayList<String> maplist = readFile(input);
-        DualSearch(maplist);
-        System.out.println("Solution 1: " + res);
+        maplist = input.lines().filter(line -> line.length() > 1).toList();
+        System.out.println("Solution 1: " + DualSearch(maplist, null));
     }
 
     public void Solution2(BufferedReader input) throws IOException {
-        InitDataModel();
-        ArrayList<String> maplist = readFile(input);
-        DualSearch(maplist);
-        System.out.println("Solution 2: " + res);
+        System.out.println("Solution 2: " + DualSearch(maplist,
+                new HashMap<>(Map.of("zero", 0, "one", 1, "two", 2, "three", 3, "four", 4, "five", 5, "six", 6, "seven", 7, "eight", 8, "nine", 9))));
+    }
+
+    public static void main(String[] args) throws Exception {
+        ValueCalibration solution = new ValueCalibration();
+        solution.Solution1(new BufferedReader(new FileReader("Day01/input.txt")));
+        solution.Solution2(new BufferedReader(new FileReader("Day01/input.txt")));
     }
 }

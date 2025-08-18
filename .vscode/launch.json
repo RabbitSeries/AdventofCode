@@ -1,6 +1,13 @@
 {
     "configurations": [
         {
+            "type": "java",
+            "name": "PartNumberSearch",
+            "request": "launch",
+            "mainClass": "year2023.Day03.PartNumberSearch",
+            "projectName": "year2023"
+        },
+        {
             "name": "[Java] [Debug]",
             "type": "java",
             "request": "launch",
@@ -37,7 +44,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
-            "cwd": "${input:Working_Directory}",
+            "cwd": "${input:Working_Directory}"
         },
         {
             "name": "[C/C++] [Launch]",

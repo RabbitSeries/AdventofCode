@@ -1,7 +1,6 @@
 from __future__ import annotations
 import re
 from aoc_libs.utils.ISolution import ISolution
-from functools import cache
 from sympy import symbols, Eq, solve
 
 
@@ -35,7 +34,7 @@ class MonkeyMath(ISolution):
         return node
 
     def evaluate(self, root: Node) -> int:
-        # actually the input data is a strict binary tree, not a graph (no chache hit), this cache can be omitted
+        # actually the input data is a strict binary tree, not a graph (no cache hit), this cache can be omitted
         # if root.name in self.evaluated:
         # return self.evaluated[root.name]
         val = self.parsed[root.name]
