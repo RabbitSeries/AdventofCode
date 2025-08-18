@@ -1,5 +1,4 @@
 from __future__ import annotations
-from functools import partial
 
 from aoc_libs.utils.ISolution import ISolution
 
