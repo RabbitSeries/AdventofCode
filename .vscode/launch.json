@@ -1,25 +1,15 @@
 {
     "configurations": [
         {
-            "type": "java",
-            "name": "PartNumberSearch",
-            "request": "launch",
-            "mainClass": "year2023.Day03.PartNumberSearch",
-            "projectName": "year2023"
-        },
-        {
             "name": "[Java] [Debug]",
             "type": "java",
             "request": "launch",
             "vmArgs": "-ea",
             "cwd": "${input:Working_Directory}",
-            "args": "${command:SpecifyProgramArgs}",
             "mainClass": "${file}",
             "classPaths": [
                 "$Runtime"
-            ],
-            "preLaunchTask": "[maven goals]",
-            "projectName": "${input:Project_Name}"
+            ]
         },
         {
             "name": "[Java] [Debug] [AoC]: Load solutions under directory specified",

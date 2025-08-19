@@ -3,22 +3,21 @@ package year2023.Day12;
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.hipparchus.util.Pair;
 
 import JavaDataModel.*;
 
 @AoCSolution()
 public class CharacterMatcher implements SolutionBase {
 
-    List<String> SpringLists;
-
-    List<List<Integer>> DamagedGroups;
+    List<Pair<String, List<Integer>>> SpringLists;
 
     boolean match(String m, int startPos, int groupSize) {
         if (groupSize + startPos > m.length()) {
             return false;
         }
-        // StringBuilder groupSequence = new StringBuilder(m.substring(startPos,
-        // startPos + groupSize));
         String groupSequence = m.substring(startPos, startPos + groupSize);
         for (int i = 0; i < groupSize; i++) {
             if (groupSequence.charAt(i) == '.') {
@@ -35,27 +34,18 @@ public class CharacterMatcher implements SolutionBase {
     }
 
     void readFile(BufferedReader input) throws IOException {
-        SpringLists = new ArrayList<>();
-        DamagedGroups = new ArrayList<>();
-
-        String buf;
-        while ((buf = input.readLine()) != null) {
-            String[] recordings = buf.split("\\s+");
-            SpringLists.add(recordings[0]);
-            DamagedGroups.add(List.of(recordings[1].trim().split(",")).stream()
-                    .map(s -> Integer.parseInt(s)).toList());
-        }
-        input.close();
+        SpringLists = input.lines().map(line -> line.split("\\s+"))
+                .map(recordings -> new Pair<>(recordings[0],
+                        Stream.of(recordings[1].trim().split(",")).map(Integer::parseInt).toList()))
+                .toList();
     }
 
-    HashMap<String, Long> memo;
+    Map<String, Long> memo = new HashMap<>();
 
     long iterateMatch(String m, int startPos, List<Integer> groups, int startGroup) {
         if (startGroup == groups.size()) {
-            for (int i = startPos - 1; i < m.length(); i++) {
-                if (m.charAt(i) == '#') {
-                    return 0;
-                }
+            if (m.substring(startPos - 1).contains("#")) {
+                return 0;
             }
             return 1;
         } else if (memo.containsKey(startPos + "," + startGroup)) {
@@ -73,7 +63,7 @@ public class CharacterMatcher implements SolutionBase {
         }
         memo.put(startPos + "," + startGroup, res);
         return res;
-    }// Solution 2: 620189727003627
+    }
 
     class nodeInfo implements Comparable<nodeInfo> {
         public int pos, group;
@@ -149,44 +139,37 @@ public class CharacterMatcher implements SolutionBase {
 
     public void Solution1(BufferedReader input) throws IOException {
         readFile(input);
-        long res = 0, problemSetSize = SpringLists.size();
-        for (int i = 0; i < problemSetSize; i++) {
-            memo = new HashMap<>();
-            res += iterateMatch(SpringLists.get(i), 0, DamagedGroups.get(i), 0);
-        }
-        System.out.println("Solution 1: " + res);
+        System.out.println("Solution 1: " + SpringLists.stream().mapToLong(K_V -> {
+            memo.clear();
+            return iterateMatch(K_V.getKey(), 0, K_V.getValue(), 0);
+        }).sum());
     }
 
     public void Solution2(BufferedReader input) throws IOException {
-        readFile(input);
-        memo = new HashMap<>();
-        long res = 0, problemSetSize = SpringLists.size();
-        for (int i = 0; i < problemSetSize; i++) {
-            // System.out.println("Processing: " + (i + 1) + "/" + problemSetSize);
-            String unfoldMatchString = Collections.nCopies(5, SpringLists.get(i)).stream()
+        System.out.println("Solution 2: " + SpringLists.stream().mapToLong(K_V -> {
+            memo.clear();
+            String unfoldMatchString = Collections.nCopies(5, K_V.getKey()).stream()
                     .collect(Collectors.joining("?"));
-            List<Integer> unfoldGroupts = Collections.nCopies(5, DamagedGroups.get(i)).stream()
+            List<Integer> unfoldGroupts = Collections.nCopies(5, K_V.getValue()).stream()
                     .flatMap(groupList -> groupList.stream()).collect(Collectors.toList());
-            memo = new HashMap<>();
-            res += iterateMatch(unfoldMatchString, 0, unfoldGroupts, 0);
-        }
-        System.out.println("Solution 2: " + res);
+            return iterateMatch(unfoldMatchString, 0, unfoldGroupts, 0);
+        }).sum());
     }
 
-    void Solution2_DP(BufferedReader input) throws IOException {
-        readFile(input);
-        long res = 0, problemSetSize = SpringLists.size();
-        for (int i = 0; i < problemSetSize; i++) {
+    // void Solution2_DP(BufferedReader input) throws IOException {
+    // readFile(input);
+    // long res = 0, problemSetSize = SpringLists.size();
+    // for (int i = 0; i < problemSetSize; i++) {
 
-            // System.out.println("Processing: " + (i + 1) + "/" + problemSetSize);
-            String unfoldMatchString = Collections.nCopies(5, SpringLists.get(i)).stream()
-                    .collect(Collectors.joining("?"));
-            List<Integer> unfoldGroupts = Collections.nCopies(5, DamagedGroups.get(i)).stream()
-                    .flatMap(groupList -> groupList.stream()).collect(Collectors.toList());
-            res += DP(unfoldMatchString, unfoldGroupts);
-        }
-        System.out.println("Solution 2 DP: " + res);
-    }
+    // // System.out.println("Processing: " + (i + 1) + "/" + problemSetSize);
+    // String unfoldMatchString = Collections.nCopies(5, SpringLists.get(i)).stream()
+    // .collect(Collectors.joining("?"));
+    // List<Integer> unfoldGroupts = Collections.nCopies(5, DamagedGroups.get(i)).stream()
+    // .flatMap(groupList -> groupList.stream()).collect(Collectors.toList());
+    // res += DP(unfoldMatchString, unfoldGroupts);
+    // }
+    // System.out.println("Solution 2 DP: " + res);
+    // }
 
     public static void main(String[] args) throws IOException {
 
@@ -195,6 +178,6 @@ public class CharacterMatcher implements SolutionBase {
         Day12.unitTest();
         Day12.Solution1(new BufferedReader(new FileReader("Day12/input.txt")));
         Day12.Solution2(new BufferedReader(new FileReader("Day12/input.txt")));
-        Day12.Solution2_DP(new BufferedReader(new FileReader("Day12/input.txt")));
+        // Day12.Solution2_DP(new BufferedReader(new FileReader("Day12/input.txt")));
     }
 }

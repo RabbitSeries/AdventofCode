@@ -11,27 +11,24 @@ import JavaDataModel.*;
 @AoCSolution()
 public class CardPoints implements SolutionBase {
 
-    List<Set<Integer>> WinNumsList = new ArrayList<>();
-
-    List<List<Integer>> CardsList = new ArrayList<>();
+    List<Pair<Set<Integer>, List<Integer>>> CardsList;
 
     List<Long> WinResultList;
 
     int CardN = 0;
 
     void readFile(BufferedReader input) {
-        input.lines().toList().forEach(line -> {
+        CardsList = input.lines().map(line -> {
             String[] cards = line.split(":")[1].split("\\|");
-            WinNumsList.add(Stream.of(cards[0].trim().split("\\s+")).map(Integer::parseInt).collect(Collectors.toSet()));
-            CardsList.add(Stream.of(cards[1].trim().split("\\s+")).map(Integer::parseInt).toList());
-        });
-        CardN = WinNumsList.size();
+            return new Pair<>(Stream.of(cards[0].trim().split("\\s+")).map(Integer::parseInt).collect(Collectors.toSet()),
+                    Stream.of(cards[1].trim().split("\\s+")).map(Integer::parseInt).toList());
+        }).toList();
+        CardN = CardsList.size();
     }
 
     public void Solution1(BufferedReader input) {
         readFile(input);
-        WinResultList = IntStream.range(0, CardN)
-                .mapToObj(i -> CardsList.get(i).stream().filter(c -> WinNumsList.get(i).contains(c)).count()).toList();
+        WinResultList = CardsList.stream().map(K_V -> K_V.getValue().stream().filter(V -> K_V.getKey().contains(V)).count()).toList();
         System.out.println("Solution 1: " + WinResultList.stream().filter(n -> n > 0).mapToLong(n -> (long) Math.pow(2, n - 1)).sum());
     }
 

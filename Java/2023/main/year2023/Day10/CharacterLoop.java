@@ -2,69 +2,32 @@ package year2023.Day10;
 
 import java.io.*;
 import java.util.*;
-import year2023.Day10.PipeModel.*;
+import java.util.stream.IntStream;
+
 import JavaDataModel.*;
 
 @AoCSolution()
 public class CharacterLoop implements SolutionBase {
-    List<List<Character>> PipeMap;
+    List<String> PipeMap;
 
     int rows, cols;
 
     Point2D StartPos;
 
     void readFile(BufferedReader input) throws IOException {
-        PipeMap = new ArrayList<>();
-        
-        String buf;
-        while ((buf = input.readLine()) != null) {
-            if (buf.indexOf("S") != -1) {
-                StartPos = new Point2D(PipeMap.size(), buf.indexOf("S"));
-            }
-            PipeMap.add(buf.chars().mapToObj(l -> (char) l).toList());
-        }
+        PipeMap = input.lines().toList();
+        StartPos = IntStream.range(0, PipeMap.size()).filter(i -> PipeMap.get(i).contains("S"))
+                .mapToObj(i -> new Point2D(i, PipeMap.get(i).indexOf("S"))).findFirst().orElse(null);
         rows = PipeMap.size();
-        cols = PipeMap.get(0).size();
-        input.close();
-    }
-
-    void PrintMap(List<List<Character>> CharacterMap) {
-        CharacterMap.forEach(line -> {
-            line.forEach(c -> {
-                System.out.printf("%c", !c.equals('*') ? ' ' : c);
-            });
-            System.out.println();
-        });
-    }
-
-    void PrintPath(List<Point2D> pathList, List<List<Character>> CharacterMap) {
-        // new ArrayList<>(CharacterMap) means copy CharacterMap's value (second level
-        // reference) but the underlying value is not copied to a new memory space;
-        // List<List<Character>> printMap = new ArrayList<>(CharacterMap);
-        List<List<Character>> printMap = new ArrayList<>();
-        for (List<Character> row : CharacterMap) {
-            // Deep copy instead of shallow copy.
-            printMap.add(new ArrayList<>(row));
-        }
-        for (Point2D p : pathList) {
-            printMap.get(p.getKey()).set(p.getValue(), '*');
-        }
-        printMap.get(StartPos.getKey()).set(StartPos.getValue(), 'S');
-        printMap.forEach(line -> {
-            line.forEach(c -> {
-                System.out.printf("%c", c.equals('S') ? 'S' : c.equals('*') ? '*' : ' ');
-            });
-            System.out.println();
-        });
+        cols = PipeMap.get(0).length();
     }
 
     Character getPipe(Point2D curPos) {
-        return PipeMap.get(curPos.getKey()).get(curPos.getValue());
+        return PipeMap.get(curPos.getKey()).charAt(curPos.getValue());
     }
 
     boolean isValid(Point2D curPos) {
-        return Point2D.isValid(rows, cols, curPos)
-                && PipeMap.get(curPos.getKey()).get(curPos.getValue()) != '.';
+        return Point2D.isValid(rows, cols, curPos) && PipeMap.get(curPos.getKey()).charAt(curPos.getValue()) != '.';
     }
 
     class Step extends Pair<Point2D, Integer> {
@@ -75,7 +38,9 @@ public class CharacterLoop implements SolutionBase {
         List<Point2D> PathList = new ArrayList<>();
     }
 
-    public void Solution1(BufferedReader input) throws IOException, InterruptedException {
+    List<Point2D> resPathList = null;
+
+    public void Solution1(BufferedReader input) throws IOException {
         readFile(input);
         Queue<Step> q = new LinkedList<>();
         HashSet<Step> visited = new HashSet<>();
@@ -102,18 +67,19 @@ public class CharacterLoop implements SolutionBase {
                 // Destination process
                 if (curPos.equals(StartPos)) {
                     System.out.println("Solution 1: " + loopLen / 2);
-                    resPathList = new ArrayList<>(front.PathList.stream().map(entry -> new Point2D(entry.getKey(), entry.getValue())).toList());
+                    // No need to shadow copy, found positions will no longer be modified by side effects
+                    resPathList = front.PathList;
                     return;
                 }
 
                 // Construct nextPos info
-                int nextFace =
-                        PipeModel.NextPipeDirection.get(getPipe(curPos)).getOrDefault(curFace, -1);
+                int nextFace = PipeModel.NextPipeDirection.get(getPipe(curPos)).getOrDefault(curFace, -1);
                 if (nextFace != -1) {
                     Step nextStep = new Step(Point2D.getNextPosition(curPos, nextFace), nextFace);
 
                     // Enqueue
                     if (isValid(nextStep.getKey()) && !visited.contains(nextStep)) {
+                        // Create a path for each node instead of reference to current one
                         nextStep.PathList = new ArrayList<>(front.PathList);
                         q.add(nextStep);
                         visited.add(nextStep);
@@ -122,16 +88,12 @@ public class CharacterLoop implements SolutionBase {
             }
             loopLen++;
         }
-        return;
     }
 
-    static ClockOrder PathClockOrder = null;
+    boolean innerBlock = true;
 
-    static boolean innerBlock = true;
-
-    int innerFlood(Point2D s, HashMap<Point2D, Boolean> visited) {
-        Queue<Point2D> q = new LinkedList<>();
-        q.add(s);
+    int innerFlood(Point2D s, Map<Point2D, Boolean> visited) {
+        Queue<Point2D> q = new LinkedList<>(List.of(s));
         int cellCnt = 0;
         while (!q.isEmpty()) {
             Point2D curPos = q.poll();
@@ -148,16 +110,13 @@ public class CharacterLoop implements SolutionBase {
                 }
             }
         }
-        if (innerBlock) {
-            return cellCnt;
-        }
-        return 0;
+        return innerBlock ? cellCnt : 0;
     }
 
     public void Solution2(BufferedReader input) {
         for (int i = 0; i < 2; i++) {
             var QueryModel = i == 0 ? PipeModel.ClockwiseQuery : PipeModel.CounterclockwiseQuery;
-            HashMap<Point2D, Boolean> visited = new HashMap<>();
+            Map<Point2D, Boolean> visited = new HashMap<>();
             for (Point2D curPos : resPathList) {
                 visited.putIfAbsent(curPos, true);
             }
@@ -182,9 +141,7 @@ public class CharacterLoop implements SolutionBase {
         }
     }
 
-    List<Point2D> getInnerAdjacents(Point2D curPos, Point2D prePos,
-        HashMap<Character, HashMap<Integer, List<Integer>>> QueryModel,
-        HashMap<Point2D, Boolean> visited) {
+    List<Point2D> getInnerAdjacents(Point2D curPos, Point2D prePos, Map<Character, Map<Integer, List<Integer>>> QueryModel, Map<Point2D, Boolean> visited) {
         int inDirection = -1;
         int dx = curPos.getKey() - prePos.getKey(), dy = curPos.getValue() - prePos.getValue();
         if (dx == 0) {
@@ -202,8 +159,6 @@ public class CharacterLoop implements SolutionBase {
         }
         return PointList;
     }
-
-    List<Point2D> resPathList = null;
 
     public static void main(String[] args) throws Exception {
         CharacterLoop Day10 = new CharacterLoop();

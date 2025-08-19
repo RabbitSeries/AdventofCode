@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
@@ -18,7 +20,12 @@ public class Visualize {
     public static void main(String[] args) throws IOException {
         LavaInterior Input = new LavaInterior();
         Visualize Vis = new Visualize();
-        Vis.DigPlanList = Input.readFile(new BufferedReader(new FileReader("Day18/input.txt")));
+        try (BufferedReader reader = new BufferedReader(new FileReader("Day18/input.txt"))) {
+            Pattern re = Pattern.compile("(\\w)\\s(\\d+)\\s\\(#([\\d\\w]+)\\)");
+            Vis.DigPlanList = reader.lines().map(line -> re.matcher(line)).filter(Matcher::find)
+                    .map(m -> Input.new DigPlan(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), m.group(3))).toList();
+
+        }
         Vis.Vis_Solution1();
         Vis.Vis_Solution2();
     }

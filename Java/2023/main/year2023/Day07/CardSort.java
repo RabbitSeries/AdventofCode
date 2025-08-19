@@ -21,48 +21,31 @@ public class CardSort implements SolutionBase {
         HighCar, OnePair, TwoPair, ThreeOfAKind, FullHouse, FourOfAKind, FiveOfAKind
     }
 
-    int cardHoldCompare(String hold1, String hold2, String rule) {
-        for (int i = 0; i < 5; i++) {
-            int cp1 = rule.indexOf(hold1.charAt(i)), cp2 = rule.indexOf(hold2.charAt(i));
-            if (cp1 != cp2) {
-                return -1 * Integer.compare(cp1, cp2);
-            }
-        }
-        return 0;
+    int cardHoldCompare(String hold, String rule) {
+        return hold.chars().map(c -> rule.indexOf(c)).reduce(0, (a, b) -> a * rule.length() + b);
     }
 
     Priority rule1Priority(String str) {
-        // Be familiar with stream programming, but also learn yourself the way of
-        // manual implementation.
-        long maxSameChCnt =
-                str.chars().boxed().collect(Collectors.groupingBy(l -> l, Collectors.counting()))
-                        .values().stream().max(Long::compareTo).orElse(0l);
+        long maxSameChCnt = str.chars().boxed()
+                .collect(Collectors.groupingBy(l -> l, Collectors.counting()))
+                // .values().stream().max(Long::compare).orElse(0l);
+                .values().stream().reduce(0L, Long::max);
 
-        Priority[] priorityValues = Priority.values();
-
-        if (maxSameChCnt == 1)
-            return Priority.HighCar;
-
-        if (maxSameChCnt == 2) {
-            if (str.chars().boxed().collect(Collectors.groupingBy(l -> l, Collectors.counting()))
-                    .values().stream().filter(l -> (int) (long) l == 2).count() == 2) {
-                return Priority.TwoPair;
-            } else {
-                return Priority.OnePair;
-            }
+        switch ((int) maxSameChCnt) {
+            case 1:
+                return Priority.HighCar;
+            case 2:
+                return str.chars().boxed()
+                        .collect(Collectors.groupingBy(Integer::valueOf, Collectors.counting()))
+                        .values().stream().filter(l -> l.longValue() == 2).count() == 2 ? Priority.TwoPair : Priority.OnePair;
+            case 3:
+                return str.chars().boxed()
+                        .collect(Collectors.groupingBy(Integer::valueOf, Collectors.counting()))
+                        // .values().stream().collect(Collectors.groupingBy(List::size))
+                        .containsValue(2L) ? Priority.FullHouse : Priority.ThreeOfAKind;
+            default:
+                return Priority.values()[(int) maxSameChCnt + 1];
         }
-
-        if (maxSameChCnt == 3) {
-            var list = str.chars().boxed().collect(Collectors.groupingBy(l -> l)).values().stream()
-                    .collect(Collectors.groupingBy(List::size)).getOrDefault(2, null);
-            if (list == null) {
-                return Priority.ThreeOfAKind;
-            } else {
-                return Priority.FullHouse;
-            }
-        }
-
-        return priorityValues[(int) maxSameChCnt + 1];
     }
 
     Priority wildCards(String str) {
@@ -74,7 +57,7 @@ public class CardSort implements SolutionBase {
 
         long maxSameChCnt = str.chars().filter(ascii -> (char) ascii != 'J').boxed()
                 .collect(Collectors.groupingBy(l -> l, Collectors.counting())).values().stream()
-                .max((l1, l2) -> Long.compare(l1, l2)).orElse(0l);
+                .max(Long::compare).orElse(0l);
 
         long totalSameChCnt = wildCardCnt + maxSameChCnt;
 
@@ -106,54 +89,31 @@ public class CardSort implements SolutionBase {
     }
 
     void readFile(BufferedReader input) throws IOException {
-        cardBits = new ArrayList<>();
-        String buf;
-        while ((buf = input.readLine()) != null) {
-            String[] line = buf.trim().split("\\s+");
-            cardBits.add(new SimpleEntry<>(line[0], Integer.parseInt(line[1])));
-        }
-        input.close();
+        cardBits = input.lines()
+                .map(line -> line.trim().split("\\s+"))
+                .map(line -> new SimpleEntry<>(line[0], Integer.parseInt(line[1])))
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     }
 
     public void Solution1(BufferedReader input) throws IOException {
-        long res = 0;
         readFile(input);
-        cardBits.sort((e1, e2) -> {
-            int pr = rule1Priority(e1.getKey()).compareTo(rule1Priority(e2.getKey()));
-            return (pr == 0 ? cardHoldCompare(e1.getKey(), e2.getKey(), Rule1Cards) : pr);
-            // return Integer.compare(e1.getValue(), e2.getValue());
-        });
-        long i = 0;
-        for (Entry<String, Integer> cardBit : cardBits) {
-            i++;
-            res += (long) cardBit.getValue() * i;
-        }
-        System.out.println("Solution 1: " + res);
-        // System.out.println(cardBits);
+        cardBits.sort(Comparator.<Entry<String, Integer>, Priority> comparing(e -> rule1Priority(e.getKey()))
+                .thenComparing(Comparator.<Entry<String, Integer>, Integer> comparing(e -> cardHoldCompare(e.getKey(), Rule1Cards)).reversed()));
+        System.out.println("Solution 1: " + IntStream.range(0, cardBits.size()).mapToLong(i -> cardBits.get(i).getValue() * (i + 1)).sum());
     }
 
     public void Solution2(BufferedReader input) throws IOException {
-        long res = 0;
-        readFile(input);
-        cardBits.sort((e1, e2) -> {
-            int pr = wildCards(e1.getKey()).compareTo(wildCards(e2.getKey()));
-            return (pr == 0 ? cardHoldCompare(e1.getKey(), e2.getKey(), Rule2Cards) : pr);
-            // return Integer.compare(e1.getValue(), e2.getValue());
-        });
-        long i = 0;
-        for (Entry<String, Integer> cardBit : cardBits) {
-            i++;
-            res += (long) cardBit.getValue() * i;
-        }
-        System.out.println("Solution 2: " + res);
+        cardBits.sort(Comparator.<Entry<String, Integer>, Priority> comparing(e -> wildCards(e.getKey()))
+                .thenComparing(Comparator.<Entry<String, Integer>, Integer> comparing(e -> cardHoldCompare(e.getKey(), Rule2Cards)).reversed()));
+        System.out.println("Solution 2: " + IntStream.range(0, cardBits.size()).mapToLong(i -> cardBits.get(i).getValue() * (i + 1)).sum());
     }
 
     public static void main(String[] args) throws IOException {
-        long now = System.nanoTime();
+        // long now = System.nanoTime();
         CardSort Day07 = new CardSort();
         Day07.Solution1(new BufferedReader(new FileReader("Day07/input.txt")));
         Day07.Solution2(new BufferedReader(new FileReader("Day07/input.txt")));
-        long end = System.nanoTime();
-        System.out.printf("%.3f", (end - now) / 1000000.0);
+        // long end = System.nanoTime();
+        // System.out.printf("%.3f", (end - now) / 1000000.0);
     }
 }

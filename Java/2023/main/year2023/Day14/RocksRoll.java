@@ -1,18 +1,26 @@
 package year2023.Day14;
 
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.io.*;
 
-import JavaDataModel.*;
+import JavaDataModel.AoCSolution;
+import JavaDataModel.Pair;
+import JavaDataModel.Point2D;
+import JavaDataModel.SolutionBase;
 
 @AoCSolution()
 public class RocksRoll implements SolutionBase {
-    List<List<Character>> Platform;
+    List<StringBuilder> Platform;
 
-    HashMap<String, Integer> memo;
+    Map<String, Integer> memo = new HashMap<>();
 
-    List<Integer> resMemoList;
+    List<Integer> resMemoList = new ArrayList<>();
 
     int row = 0, col = 0;
 
@@ -20,7 +28,7 @@ public class RocksRoll implements SolutionBase {
         int res = 0;
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
-                if (Platform.get(i).get(j).equals('O')) {
+                if (Platform.get(i).charAt(j) == 'O') {
                     res += row - i;
                 }
             }
@@ -37,31 +45,29 @@ public class RocksRoll implements SolutionBase {
     };
 
     String getHash() {
-        return Platform.stream()
-                .map(list -> list.stream().map(c -> c.toString()).collect(Collectors.joining()))
-                .collect(Collectors.joining());
+        return Platform.stream().collect(Collectors.joining());
     }
 
-    Pair<Integer, Integer> tilt(int times) {
+    Pair<Integer, Integer> tilt(int times, boolean once) {
         for (int step = 0; step < 4; step++) {
             for (int i = (step < 2 ? 0 : row - 1); (step < 2 ? i < row : i >= 0); i +=
                     (step < 2 ? 1 : -1)) {
                 for (int j = (step < 2 ? 0 : col - 1); (step < 2 ? j < col : j >= 0); j +=
                         (step < 2 ? 1 : -1)) {
-                    if (Platform.get(i).get(j).equals('O')) {
+                    if (Platform.get(i).charAt(j) == 'O') {
                         Point2D curPos = new Point2D(i, j);
-                        Platform.get(curPos.first).set(curPos.second, '.');
-                        Point2D nextPos =
-                                new Point2D(curPos.first + dx[step], curPos.second + dy[step]);
-                        while (Point2D.isValid(row, col, nextPos)
-                                && Platform.get(nextPos.first).get(nextPos.second).equals('.')) {
+                        Platform.get(curPos.first).replace(curPos.second, curPos.second + 1, ".");
+                        Point2D nextPos = new Point2D(curPos.first + dx[step], curPos.second + dy[step]);
+                        while (Point2D.isValid(row, col, nextPos) && Platform.get(nextPos.first).charAt(nextPos.second) == '.') {
                             curPos = nextPos;
-                            nextPos =
-                                    new Point2D(curPos.first + dx[step], curPos.second + dy[step]);
+                            nextPos = new Point2D(curPos.first + dx[step], curPos.second + dy[step]);
                         }
-                        Platform.get(curPos.first).set(curPos.second, 'O');
+                        Platform.get(curPos.first).replace(curPos.second, curPos.second + 1, "O");
                     }
                 }
+            }
+            if (once) {
+                return null;
             }
         }
         resMemoList.add(getRes());
@@ -73,57 +79,26 @@ public class RocksRoll implements SolutionBase {
         return new Point2D(-1, times);
     }
 
-    void printMap() {
-        for (var row : Platform) {
-            System.out.println(row.stream().map(c -> c.toString()).collect(Collectors.joining()));
-        }
-        System.out.println();
-    }
-
     void readFile(BufferedReader input) throws IOException {
-        Platform = input.lines().map(line -> (List<Character>) line.chars().mapToObj(c -> (char) c).collect(Collectors.toCollection(ArrayList::new))).toList();
-        input.close();
+        Platform = input.lines().map(StringBuilder::new).toList();
         row = Platform.size();
-        col = Platform.get(0).size();
-        memo = new HashMap<>();
-        resMemoList = new ArrayList<>();
+        col = Platform.get(0).length();
     }
 
     public void Solution1(BufferedReader input) throws IOException {
         readFile(input);
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                if (Platform.get(i).get(j).equals('O')) {
-                    Point2D curPos = new Point2D(i, j);
-                    Platform.get(curPos.first).set(curPos.second, '.');
-                    Point2D nextPos = new Point2D(curPos.first + dx[0], curPos.second + dy[0]);
-                    while (Point2D.isValid(row, col, nextPos)
-                            && Platform.get(nextPos.first).get(nextPos.second).equals('.')) {
-                        curPos = nextPos;
-                        nextPos = new Point2D(curPos.first + dx[0], curPos.second + dy[0]);
-                    }
-                    Platform.get(curPos.first).set(curPos.second, 'O');
-                }
-            }
-        }
+        tilt(0, true);
         System.out.println("Solution 1: " + getRes());
     }
 
     public void Solution2(BufferedReader input) throws IOException {
-        readFile(input);
         final int target = 1000000000;
         for (int i = 0; i < target; i++) {
-            var cycleInfo = tilt(i);
+            var cycleInfo = tilt(i, false);
             if (cycleInfo.first.compareTo(0) >= 0) {
-                int cycle = cycleInfo.second - cycleInfo.first,
-                        leftOver = target - cycleInfo.second - 1;
+                int cycle = cycleInfo.second - cycleInfo.first;
+                int leftOver = target - cycleInfo.second - 1;
                 int targetTilt = leftOver % cycle;
-                // for (int j = 0; j < targetTilt; j++) {
-                // i++;
-                // tilt(i);
-                // }
-                // System.out.println("Memoization found at preprocessed: " + cycleInfo.first);
-                // System.out.println("Saved " + leftOver + targetTilt);
                 System.out.println("Solution 2: " + resMemoList.get(cycleInfo.first + targetTilt));
                 return;
             }

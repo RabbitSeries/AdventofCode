@@ -66,14 +66,14 @@ public class PartNumberSearch implements SolutionBase {
         int startIndex = pos.getValue(), endIndex = pos.getValue(), x = pos.getKey();
         Point2D nextPos = new Point2D(x, startIndex - 1);
         // Search before
-        while (Point2D.isValid(rows, cols, nextPos) && Character.isDigit(schematic.get(x).charAt(startIndex - 1))) {
+        while (nextPos.getValue() >= 0 && Character.isDigit(schematic.get(x).charAt(nextPos.getValue()))) {
             startIndex--;
             visited.add(nextPos);
             nextPos = new Point2D(x, startIndex - 1);
         }
         // Search forward
         nextPos = new Point2D(x, endIndex + 1);
-        while (Point2D.isValid(rows, cols, nextPos) && Character.isDigit(schematic.get(x).charAt(endIndex + 1))) {
+        while (nextPos.getValue() < cols && Character.isDigit(schematic.get(x).charAt(nextPos.getValue()))) {
             endIndex++;
             visited.add(nextPos);
             nextPos = new Point2D(x, endIndex + 1);

@@ -23,7 +23,6 @@ public class PulsePropagation implements SolutionBase {
     HashMap<String, HashMap<String, Boolean>> CjctModuleInputStatus = new HashMap<>();
 
     void readFile(BufferedReader input) throws IOException {
-        
         Pattern WirePattern = Pattern.compile("(?<InWire>.+)->(?<OutWireList>.+)");
         for (String buf; (buf = input.readLine()) != null;) {
             Matcher WireMatch = WirePattern.matcher(buf);
@@ -155,15 +154,15 @@ public class PulsePropagation implements SolutionBase {
                 // signals.add(new Pair<>(pulseList, push));
             } while (!SystemReseted(branchName, To));
             // signals.forEach(p -> {
-            // for (int at = 0; at < p.first.size(); at++) {
-            // if (!p.first.get(at)) {
-            // lowCnt++;
-            // LowPulseAt.first = p.second;
-            // LowPulseAt.second = at;
-            // } else {
-            // hightCnt++;
-            // }
-            // }
+            //     for (int at = 0; at < p.first.size(); at++) {
+            //         if (!p.first.get(at)) {
+            //             lowCnt++;
+            //             LowPulseAt.first = p.second;
+            //             LowPulseAt.second = at;
+            //         } else {
+            //             hightCnt++;
+            //         }
+            //     }
             // });
             // signals.clear();
             // System.out.println("Low " + lowCnt + " High " + hightCnt + " Push loop at " + push);

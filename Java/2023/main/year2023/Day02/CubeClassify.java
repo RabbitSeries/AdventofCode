@@ -14,17 +14,21 @@ public class CubeClassify implements SolutionBase {
     List<List<Map<String, Integer>>> GameList;
 
     void readFile(BufferedReader input) throws IOException {
-        GameList = input.lines().map(line -> Stream.of(line.split(":")[1].split(";"))
-                .map(grab -> Stream.of(grab.split(","))
-                        .map(String::trim)
-                        .collect(Collectors.<String, String, Integer> toMap(cubeInfo -> cubeInfo.split("\\s")[1],
-                                cubeInfo -> Integer.parseInt(cubeInfo.split("\\s")[0]))))
-                .toList()).toList();
+        GameList = input.lines()
+                .map(line -> Stream.of(line.split(":")[1].split(";"))
+                        .map(grab -> Stream.of(grab.split(","))
+                                .map(cubeInfo -> {
+                                    String[] arr = cubeInfo.trim().split("\\s");
+                                    return new Pair<>(arr[1], Integer.parseInt(arr[0]));
+                                })
+                                .collect(Collectors.toMap(Pair::getKey, Pair::getValue)))
+                        .toList())
+                .toList();
     }
 
     public void Solution1(BufferedReader input) throws IOException {
         readFile(input);
-        HashMap<String, Integer> available = new HashMap<>(Map.of("red", 12, "green", 13, "blue", 14));
+        Map<String, Integer> available = new HashMap<>(Map.of("red", 12, "green", 13, "blue", 14));
         System.out.println("Solution 1: " + IntStream.range(0, GameList.size())
                 .filter(gameId -> GameList.get(gameId).stream()
                         .allMatch(m -> m.keySet().stream().allMatch(k -> m.get(k) <= available.get(k))))

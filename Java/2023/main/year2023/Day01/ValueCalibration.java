@@ -29,22 +29,23 @@ public class ValueCalibration implements SolutionBase {
 
     Integer DualSearch(List<String> maplist, Map<String, Integer> additional) {
         return maplist.stream().map(line -> {
-            String val = "";
-            for (int i : IntStream.range(0, line.length()).toArray()) {
+            StringBuilder val = new StringBuilder("");
+            IntStream.range(0, line.length()).takeWhile(i -> {
                 Optional<Integer> digitVal = isDigit(line, i, false, additional);
                 if (digitVal.isPresent()) {
-                    val += digitVal.get().toString();
+                    val.append(digitVal.get());
                     for (int j = line.length() - 1; j >= 0; j--) {
                         digitVal = isDigit(line, j, true, additional);
                         if (digitVal.isPresent()) {
-                            val += digitVal.get();
-                            break;
+                            val.append(digitVal.get());
+                            return false; // Break
                         }
                     }
-                    break;
+                    return false; // Break
                 }
-            }
-            return val;
+                return true;
+            }).toArray(); // Triggers the lazy computation
+            return val.toString();
         }).filter(val -> val.length() == 2).map(Integer::parseInt).reduce(0, Integer::sum);
     }
 
