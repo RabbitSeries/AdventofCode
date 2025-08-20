@@ -8,13 +8,15 @@ class File:
         self.subFile: dict[str, File] = {'.': self, **({'..': parent} if parent else {})}
         self.absPath: list[str] = parent.absPath + [name] if parent else []
 
-    def getAbsPath(self) -> str: return '/' + '/'.join(self.absPath)
+    def getAbsPath(self) -> str:
+        return '/' + '/'.join(self.absPath)
 
     def __repr__(self) -> str:
         # return f"File(name='{self.name}',parent={self.parent.name if self.parent else 'None'},isDir={self.isDir},fileSize={self.fileSize})"
         return f"File(name='{self.name}',parent={self.parent},isDir={self.isDir},fileSize={self.fileSize})"
 
-    def __hash__(self) -> int: return (self.getAbsPath().__hash__() << 1) & self.isDir
+    def __hash__(self) -> int:
+        return (self.getAbsPath().__hash__() << 1) & self.isDir
 
 
 @lru_cache(maxsize=None)
@@ -28,7 +30,8 @@ def countFolderSize(dir: File, /, recursive=False) -> int:
 def cd(pwd: File | None, cdList: list[str]) -> File | None:
     for dir in cdList:
         dir = dir[len('$ cd'):].strip()
-        if not pwd: pwd = File(dir, None)
+        if not pwd:
+            pwd = File(dir, None)
         elif dir != '..':
             pwd = pwd.subFile.setdefault(dir, File(dir, pwd))
         elif pwd.parent:
@@ -37,7 +40,8 @@ def cd(pwd: File | None, cdList: list[str]) -> File | None:
 
 
 def createFile(pwd: File | None, fileOrDir: str):
-    if not pwd: return
+    if not pwd:
+        return
     filesize, filename = fileOrDir.split()
     isDir = filesize == 'dir'
     pwd.subFile.setdefault(filename, File(filename, pwd, isDir, None if isDir else int(filesize)))
