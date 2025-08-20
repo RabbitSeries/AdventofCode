@@ -79,7 +79,7 @@ public class CosmicDistance implements SolutionBase {
     }
 
     public void Solution2(BufferedReader input) throws IOException {
-        System.out.println("Solution 2: " + expandCosmic(1000000 - 1));
+        System.out.println("Solution 2: " + expandCosmic(1000000 - 2));
     }
 
     long ManhattanDistance(Pair<Long, Long> p1, Pair<Long, Long> p2) {
