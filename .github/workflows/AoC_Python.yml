@@ -84,7 +84,15 @@ jobs:
       - name: Diff results
         shell: bash
         run: |
-          sh ./.github/workflows/diff_file.sh ${{matrix.year-folder}}/ActionResults/res.log ${{matrix.year-folder}}/ActionResults/../res.log
+          # Check if both files exist before comparing
+          if [ -f "${{matrix.year-folder}}/ActionResults/res.log" ] && [ -f "${{matrix.year-folder}}/res.log" ]; then
+            sh ./.github/workflows/diff_file.sh ${{matrix.year-folder}}/ActionResults/res.log ${{matrix.year-folder}}/res.log
+          else
+            echo "[WARNING] Missing result files for comparison"
+            echo "ActionResults: $(ls -la ${{matrix.year-folder}}/ActionResults/ || echo 'Directory not found')"
+            echo "Expected: $(ls -la ${{matrix.year-folder}}/res.log || echo 'File not found')"
+            exit 1
+          fi
 
   report-if-diff-fail:
     runs-on: ubuntu-latest

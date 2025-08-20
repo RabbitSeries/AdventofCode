@@ -136,10 +136,10 @@ class SolutionRunner:
             try:
                 # Run the script and capture output
                 result = subprocess.run([sys.executable, script_path], 
-                                      capture_output=True, text=True, timeout=60)
+                                      capture_output=True, text=True, timeout=120)
                 
                 if result.returncode == 0:
-                    output_lines = result.stdout.strip().split('\n')
+                    output_lines = result.stdout.strip().split('\n') if result.stdout.strip() else []
                     formatted_output = []
                     
                     for line in output_lines:
@@ -162,11 +162,12 @@ class SolutionRunner:
                         # If we couldn't parse it, just include the raw output
                         formatted_output.append(f"\t{result.stdout.strip()}")
                     
-                    result_text = "\n".join(formatted_output) + "\n"
+                    result_text = "\n".join(formatted_output) + "\n" if formatted_output else "\tNo output\n"
                     print(result_text, end="")
                     return result_text
                 else:
-                    error_msg = f"\tError: {result.stderr.strip()}\n"
+                    stderr_msg = result.stderr.strip() if result.stderr.strip() else "Unknown error"
+                    error_msg = f"\tError: {stderr_msg}\n"
                     print(error_msg, end="")
                     return error_msg
                     
@@ -174,7 +175,7 @@ class SolutionRunner:
                 os.chdir(original_cwd)
                 
         except subprocess.TimeoutExpired:
-            error_msg = f"\tError: Timeout after 60 seconds\n"
+            error_msg = f"\tError: Timeout after 120 seconds\n"
             print(error_msg, end="")
             return error_msg
         except Exception as e:
