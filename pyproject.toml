@@ -3,7 +3,7 @@ name = "AoC_Python"
 version = "0.1.0"
 description = "Python implemented AoC solutions"
 authors = [{ name = "RabbitSeries", email = "xiali123.ch@gmail.com" }]
-# dependencies = ["requests"]
+dependencies = ["requests", "numpy", "matplotlib", "sympy"]
 
 # [project.scripts]
 # launch = "2022:main"
