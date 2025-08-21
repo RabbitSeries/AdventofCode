@@ -1,9 +1,15 @@
-#include <bits/stdc++.h>
+#include <fstream>
+#include <map>
+#include <numeric>
+#include <queue>
+#include <regex>
+#include <unordered_map>
+#include <vector>
 
-#include <utils/SolutionBase.hpp>
+#include "utils/SolutionBase.hpp"
 using namespace std;
 class PairAndAdd : public SolutionBase {
-	REGISTER( PairAndAdd )
+    REGISTER( PairAndAdd )
 
     using ull = unsigned long long;
 
@@ -43,7 +49,7 @@ class PairAndAdd : public SolutionBase {
         for ( auto& [num1, num2] : numList ) {
             elemCount[num2]++;
         }
-        int addUp = accumulate( numList.begin(), numList.end(), 0, [&]( int init, pair<int, int> elem ) {
+        int addUp = accumulate( numList.begin(), numList.end(), 0, [&]( int init, const pair<const int, int>& elem ) {
             return init + elem.first * elemCount[elem.first];
         } );
         printRes( 2, addUp );

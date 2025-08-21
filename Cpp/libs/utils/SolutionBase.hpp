@@ -1,10 +1,12 @@
 #pragma once
+
 #include <functional>
 #include <iostream>
 #include <map>
 #include <memory>
 #include <sstream>
 #include <string_view>
+
 // template <typename T>
 class SolutionBase {
     // static inline Register<KeyPair> _reg{}; // template static member's code won't be generated if it is never accessed outside definition

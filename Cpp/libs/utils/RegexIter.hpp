@@ -1,6 +1,8 @@
 #pragma once
-#include<string>
-#include<regex>
+
+#include <regex>
+#include <string>
+
 class RegexIter {
     std::string matchStr, pattern;
     class itr {

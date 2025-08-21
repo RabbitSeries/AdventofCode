@@ -23,9 +23,10 @@
             "browse": {
                 "limitSymbolsToIncludedHeaders": true
             },
-            "cStandard": "gnu23",
-            "cppStandard": "gnu++23",
-            "intelliSenseMode": "windows-gcc-x64"
+            "cStandard": "c23",
+            "cppStandard": "gnu++26",
+            "intelliSenseMode": "windows-gcc-x64",
+            "compilerPath": "D:/Build_Tool_Lib/x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0/mingw64/bin/g++.exe"
         }
     ],
     "version": 4

@@ -1,143 +1,49 @@
-#include <bits/stdc++.h>
-using namespace std;
-#include <utils/SolutionBase.hpp>
+#include <algorithm>
+#include <fstream>
+#include <map>
+#include <ranges>
+#include <regex>
+#include <sstream>
+#include <string>
+#include <vector>
+
+#include "utils/SolutionBase.hpp"
+#include "utils/Stream/RegexStream.hpp"
+
 class PreciseMul : public SolutionBase {
-	REGISTER( PreciseMul )
+    REGISTER( PreciseMul )
 
-    typedef long long ll;
-    int getNum( string str, int pos ) {
-        size_t i = pos, num = 0;
-        while ( i < str.length() && isdigit( str[i] ) ) {
-            num = num * 10 + stoi( string( 1, str[i] ) );
-            i++;
-        }
-        return num;
+    std::string memory;
+
+    int parseMul( const std::string& range ) {
+        return std::ranges::fold_left(
+            RegexStream( R"(mul\((\d+),(\d+)\))", range ).yield() | std::views::transform( []( const std::smatch& p ) { return stoi( p[1] ) * stoi( p[2] ); } ),
+            0, std::plus<>{} );
     }
 
-    // Reference
-    ll getLineResult( string& str ) {
-        size_t nextPos = 0;
-        ll res = 0;
-        while ( nextPos != string::npos && nextPos < str.length() ) {
-            nextPos = str.find( "mul(", nextPos );
-            if ( nextPos != string::npos ) {
-                nextPos = nextPos + 4;
-            } else {
-                break;
-            }
-
-            int a = 0, b = 0;
-            if ( nextPos < str.length() && isdigit( str[nextPos] ) ) {
-                a = getNum( str, nextPos );
-                nextPos += to_string( a ).size();
-            } else {
-                nextPos++;
-                continue;
-            }
-
-            if ( nextPos < str.length() && str[nextPos] == ',' ) {
-                nextPos++;
-            } else {
-                nextPos++;
-                continue;
-            }
-
-            if ( nextPos < str.length() && isdigit( str[nextPos] ) ) {
-                b = getNum( str, nextPos );
-                nextPos += to_string( b ).size();
-            } else {
-                nextPos++;
-                continue;
-            }
-
-            if ( nextPos < str.length() && str[nextPos] == ')' ) {
-                res += a * b;
-                nextPos++;
-                if ( nextPos < str.length() ) {
-                    str = str.substr( nextPos );
-                    nextPos = 0;
-                } else {
-                    str = "";
-                    nextPos = string::npos;
-                }
-            } else {
-                nextPos++;
-                continue;
-            }
-        }
-        return res;
-    }
-
-    ll getLineResult( string& str, bool& enabled ) {
-        ll zoneAdd = 0;
-        if ( enabled ) {
-            size_t dontPos = str.find( "don't()" );
-            if ( dontPos != string::npos ) {
-                string process = str.substr( 0, dontPos );
-                zoneAdd += getLineResult( process );
-                enabled = false;
-                if ( dontPos + string( "don't()" ).size() < str.length() ) {
-                    str = str.substr( dontPos + string( "don't()" ).size() );
-                    zoneAdd += getLineResult( str, enabled );
-                    return zoneAdd;
-                } else {
-                    str = "";
-                    return zoneAdd;
-                }
-            } else {
-                zoneAdd += getLineResult( str );
-                return zoneAdd;
-            }
-        } else {
-            size_t doPos = str.find( "do()" );
-            if ( doPos != string::npos ) {
-                enabled = true;
-                if ( doPos + string( "do()" ).size() < str.length() ) {
-                    // cout << str.substr( 0, doPos + string( "do()" ).size() );
-                    // cout.flush();
-                    str = str.substr( doPos + string( "do()" ).size() );
-                    zoneAdd += getLineResult( str, enabled );
-                    return zoneAdd;
-                } else {
-                    str = "";
-                    return zoneAdd;
-                }
-            } else {
-                return zoneAdd;
-            }
-        }
-        // return zoneAdd;
+    void readFile() {
+        using namespace std;
+        ifstream input( "Day03/input.txt" );
+        memory = ( stringstream() << input.rdbuf() ).str();
     }
 
    public:
     void Solution1() {
-        ifstream input( "Day03/input.txt" );
-        ll addUp = 0;
-        string leftOver = "";
-        for ( string buf; getline( input, buf ); ) {
-            if ( !buf.empty() ) {
-                buf = leftOver + buf;
-                addUp += getLineResult( buf );
-                leftOver = buf;
+        readFile();
+        printRes( 1, parseMul( memory ) );
+    }
+
+    utils::Generator<int> EnabledSolve() {
+        bool enabled = true;
+        for ( std::smatch const& section : RegexStream( R"(((?:.|\s)*?)(don't\(\)|do\(\)|$))", memory ).yield() ) {
+            if ( enabled ) {
+                co_yield parseMul( section.str() );
             }
+            enabled = section.str().ends_with( "do()" );
         }
-        input.close();
-        printRes( 1, addUp );
     }
 
     void Solution2() {
-        ifstream input( "Day03/input.txt" );
-        ll addUp = 0;
-        bool enabled = true;
-        string leftOver = "";
-        for ( string buf; getline( input, buf ); ) {
-            if ( !buf.empty() ) {
-                buf = leftOver + buf;
-                addUp += getLineResult( buf, enabled );
-                leftOver = buf;
-            }
-        }
-        input.close();
-        printRes( 2, addUp );
+        printRes( 2, std::ranges::fold_left( EnabledSolve(), 0, std::plus<>{} ) );
     }
 };

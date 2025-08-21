@@ -1,9 +1,13 @@
-#include <bits/stdc++.h>
-using namespace std;
-class CheckLevelInOrder : public SolutionBase {
-	REGISTER( CheckLevelInOrder )
+#include <algorithm>
+#include <string>
+#include <vector>
 
-    inline bool checkDecrease( vector<int> const& Levels ) {
+#include "utils/BufferedReader.hpp"
+#include "utils/SolutionBase.hpp"
+class CheckLevelInOrder : public SolutionBase {
+    REGISTER( CheckLevelInOrder )
+
+    inline bool checkDecrease( std::vector<int> const& Levels ) {
         bool res = true;
         for ( size_t i = 0; i < Levels.size() - 1; i++ ) {
             if ( !( Levels[i] > Levels[i + 1] && Levels[i] - Levels[i + 1] <= 3 ) ) {
@@ -13,7 +17,7 @@ class CheckLevelInOrder : public SolutionBase {
         return res;
     }
 
-    inline bool checkIncrease( vector<int> const& Levels ) {
+    inline bool checkIncrease( std::vector<int> const& Levels ) {
         bool res = true;
         for ( size_t i = 0; i < Levels.size() - 1; i++ ) {
             if ( !( Levels[i] < Levels[i + 1] && Levels[i + 1] - Levels[i] <= 3 ) ) {
@@ -23,7 +27,7 @@ class CheckLevelInOrder : public SolutionBase {
         return res;
     }
 
-    bool canBeSafeByRemovingOneLevel( vector<int> const& Levels ) {
+    bool canBeSafeByRemovingOneLevel( std::vector<int> const& Levels ) {
         // Try removing each level and check if the result is safe
         for ( size_t i = 0; i < Levels.size(); ++i ) {
             vector<int> newLevels = Levels;
@@ -35,47 +39,31 @@ class CheckLevelInOrder : public SolutionBase {
         }
         return false;
     }
-    vector<vector<int>> LevelLists;
+    std::vector<std::vector<int>> LevelLists;
 
     void readFile() {
-        ifstream input( "Day02/input.txt" );
-        vector<int> Levels;
-        for ( string buf; getline( input, buf ); ) {
-            istringstream ss( buf );
-            copy( istream_iterator<int>( ss ), istream_iterator<int>(), back_inserter( Levels ) );
-            LevelLists.emplace_back( move( Levels ) );
-            Levels.clear();
-        }
-        input.close();
+        using namespace std;
+        LevelLists = BufferedReader( "Day02/input.txt" ).lines().yield() | views::transform( []( const string& line ) {
+                         istringstream ss( line );
+                         return views::istream<int>( ss ) | ranges::to<vector<int>>();
+                     } ) |
+                     ranges::to<vector<vector<int>>>();
     }
-    bool AnalyseInOrder( vector<int>& Levels, bool enableRemoval ) {
-        if ( Levels.empty() ) return false;
-        if ( !enableRemoval ) {
-            return checkDecrease( Levels ) || checkIncrease( Levels );
-        } else {
-            return checkDecrease( Levels ) || checkIncrease( Levels ) || canBeSafeByRemovingOneLevel( Levels );
+
+    bool AnalyseInOrder( vector<int> const& Levels, bool enableRemoval = false ) {
+        if ( Levels.empty() ) {
+            return false;
         }
+        return checkDecrease( Levels ) || checkIncrease( Levels ) || ( enableRemoval ? canBeSafeByRemovingOneLevel( Levels ) : true );
     }
 
    public:
     void Solution1() {
         readFile();
-        int cnt = 0;
-        for ( auto& Levels : LevelLists ) {
-            if ( AnalyseInOrder( Levels, false ) ) {
-                cnt++;
-            }
-        }
-        printRes( 1, cnt );
+        printRes( 1, std::ranges::count_if( LevelLists, [this]( auto const& Levels ) { return AnalyseInOrder( Levels ); } ) );
     }
 
     void Solution2() {
-        int cnt = 0;
-        for ( auto& Levels : LevelLists ) {
-            if ( AnalyseInOrder( Levels, true ) ) {
-                cnt++;
-            }
-        }
-        printRes( 2, cnt );
+        printRes( 2, std::ranges::count_if( LevelLists, [this]( auto const& Levels ) { return AnalyseInOrder( Levels, true ); } ) );
     }
 };

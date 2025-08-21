@@ -3,6 +3,6 @@ BasedOnStyle: Google
 NamespaceIndentation: All
 IndentWidth: 4
 TabWidth: 4
-SpaceInAngles: false
+SpacesInAngles: false
 SpacesInParentheses: true
 ColumnLimit: 0

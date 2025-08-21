@@ -43,7 +43,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.BUILD_DIR }}
-          key: cmake-${{ matrix.os }}-${{ matrix.preset }}-${{ hashFiles('**/CMakeLists.txt', '**/*.cc') }}
+          key: cmake-${{ matrix.os }}-${{ matrix.preset }}-${{ hashFiles('**/CMakeLists.txt', '**/*.cc', '**/*.h', '**/*.hpp') }}
 
       - name: Run cmake configure
         if: steps.cache-cmake.outputs.cache-hit != 'true'
