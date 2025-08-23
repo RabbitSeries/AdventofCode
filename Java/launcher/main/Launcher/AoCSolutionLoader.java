@@ -66,7 +66,9 @@ public class AoCSolutionLoader {
             String resourceModuleName = Path.of(resourceItr.peek().getName()).getParent().toString();
             if (classModuleName.endsWith(resourceModuleName)) {
                 results.add(new SimpleEntry<>(classItr.peek().getValue(), resourceItr.peek()));
+            } else {
                 classItr.next();
+                System.err.println("Class " + classModuleName + " is not matching resource " + resourceModuleName);
             }
             resourceItr.next();
         }
