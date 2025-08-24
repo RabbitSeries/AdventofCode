@@ -1,9 +1,14 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <algorithm>
+#include <numeric>
+#include <ranges>
+#include <set>
+#include <string>
+#include <vector>
 
-#include <utils/SolutionBase.hpp>
+#include "utils/BufferedReader.hpp"
+#include "utils/SolutionBase.hpp"
 class MonkeyMarket : public SolutionBase {
-	REGISTER( MonkeyMarket )
+    REGISTER( MonkeyMarket )
 
     typedef unsigned long long ull;
 
@@ -16,11 +21,9 @@ class MonkeyMarket : public SolutionBase {
     }
 
     void readFile() {
-        ifstream input( "Day22/input.txt" );
-        for ( string buf; getline( input, buf ); ) {
+        for ( const std::string& buf : BufferedReader( "Day22/input.txt" ).lines().yield() ) {
             secrets.push_back( stoi( buf ) );
         }
-        input.close();
     }
 
     ull getSecret( ull curSecret ) {
@@ -30,12 +33,12 @@ class MonkeyMarket : public SolutionBase {
         return curSecret;
     }
 
-    int index( vector<int> const& v, ull lend ) {
+    int index( std::vector<int> const& v, ull lend ) {
         return accumulate( lend - 4 + v.begin(), v.begin() + lend, 0, []( int init, int e ) {
             return init * 19 + e;
         } );
     }
-    vector<ull> secrets;
+    std::vector<ull> secrets;
 
    public:
     void Solution1() {
@@ -47,10 +50,11 @@ class MonkeyMarket : public SolutionBase {
     }
 
     void Solution2() {
+        using namespace std;
         vector<ull> OfferAcc( 19 * 19 * 19 * 19 ), optimal( 19 * 19 * 19 * 19 );
         vector<int> window( 2001 );
         for ( ull curSecret : secrets ) {
-            fill( optimal.begin(), optimal.end(), 10 );
+            ranges::fill( optimal, 10 );
             for ( ull i = 1, nextSecret, curOffer; i <= 2000; i++ ) {
                 nextSecret = getNextSecret( curSecret );
                 curOffer = ( to_string( nextSecret ).back() - '0' );

@@ -30,7 +30,7 @@ class CheckLevelInOrder : public SolutionBase {
     bool canBeSafeByRemovingOneLevel( std::vector<int> const& Levels ) {
         // Try removing each level and check if the result is safe
         for ( size_t i = 0; i < Levels.size(); ++i ) {
-            vector<int> newLevels = Levels;
+            std::vector<int> newLevels = Levels;
             newLevels.erase( newLevels.begin() + i );
 
             if ( checkDecrease( newLevels ) || checkIncrease( newLevels ) ) {
@@ -45,16 +45,16 @@ class CheckLevelInOrder : public SolutionBase {
         using namespace std;
         LevelLists = BufferedReader( "Day02/input.txt" ).lines().yield() | views::transform( []( const string& line ) {
                          istringstream ss( line );
-                         return views::istream<int>( ss ) | ranges::to<vector<int>>();
+                         return views::istream<int>( ss ) | ranges::to<std::vector<int>>();
                      } ) |
                      ranges::to<vector<vector<int>>>();
     }
 
-    bool AnalyseInOrder( vector<int> const& Levels, bool enableRemoval = false ) {
+    bool AnalyseInOrder( std::vector<int> const& Levels, bool enableRemoval = false ) {
         if ( Levels.empty() ) {
             return false;
         }
-        return checkDecrease( Levels ) || checkIncrease( Levels ) || ( enableRemoval ? canBeSafeByRemovingOneLevel( Levels ) : true );
+        return checkDecrease( Levels ) || checkIncrease( Levels ) || ( enableRemoval ? canBeSafeByRemovingOneLevel( Levels ) : false );
     }
 
    public:

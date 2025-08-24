@@ -1,16 +1,23 @@
-#include "bits/stdc++.h"
+#include <algorithm>
+#include <fstream>
+#include <functional>
+#include <map>
+#include <ranges>
+#include <regex>
+#include <string>
+#include <tuple>
+#include <vector>
 
-using namespace std;
-#include <utils/SolutionBase.hpp>
+#include "utils/SolutionBase.hpp"
 class CoinOptimize : public SolutionBase {
-	REGISTER( CoinOptimize )
+    REGISTER( CoinOptimize )
 
-    typedef long long ll;
+    using ll = long long;
     const ll TOP_UP = 10000000000000;
-    typedef pair<ll, ll> point2D;
-    typedef struct problem {
+    using point2D = std::pair<ll, ll>;
+    struct problem {
         point2D a, b, prize;
-    } problem;
+    };
 
     ll solve( const problem& p ) {
         // Restriction: ta : button a attempt count, tb : button b
@@ -36,13 +43,13 @@ class CoinOptimize : public SolutionBase {
     }
 
     void createProblem() {
+        using namespace std;
         ifstream input( "Day13/input.txt" );
         regex re( R"([\+=]([0-9]+).*[\+=]([0-9]+))" );
         smatch m;
         ll inProblem = 0;
         for ( string buf; getline( input, buf ); ) {
-            std::regex_search( buf, m, re );
-            if ( m.size() == 3 ) {
+            if ( std::regex_search( buf, m, re ) ) {
                 if ( !inProblem ) {
                     problemSet.push_back( problem() );
                     problemSet.back().a = pair<ll, ll>( stoi( m[1] ), stoi( m[2] ) );
@@ -60,30 +67,27 @@ class CoinOptimize : public SolutionBase {
         }
     }
 
-    vector<problem> problemSet;
+    std::vector<problem> problemSet;
+
+    ll solveAll() {
+        return std::ranges::fold_left( problemSet |
+                                           std::views::transform( [this]( problem& p ) {
+                                               ll res = solve( p );
+                                               return res >= 0 ? res : 0ll;
+                                           } ),
+                                       0ll, std::plus<>{} );
+    }
 
    public:
     void Solution1() {
         createProblem();
-        ll tokenCnt = 0;
-        for_each( problemSet.begin(), problemSet.end(), [&]( const problem& p ) {
-            ll res = solve( p );
-            if ( res >= 0 ) {
-                tokenCnt += res;
-            }
-        } );
-        printRes( 1, tokenCnt );
+        printRes( 1, solveAll() );
     }
 
     void Solution2() {
-        ll tokenCnt = 0;
-        for_each( problemSet.begin(), problemSet.end(), [&]( problem& p ) {
+        for ( auto& p : problemSet ) {
             tie( p.prize.first, p.prize.second ) = make_pair( p.prize.first + TOP_UP, p.prize.second + TOP_UP );
-            ll res = solve( p );
-            if ( res >= 0 ) {
-                tokenCnt += res;
-            }
-        } );
-        printRes( 2, tokenCnt );
+        }
+        printRes( 2, solveAll() );
     }
 };

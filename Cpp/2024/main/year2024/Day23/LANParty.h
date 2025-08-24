@@ -1,20 +1,28 @@
-#include <bits/stdc++.h>
-using namespace std;
-#include <utils/SolutionBase.hpp>
+#include <algorithm>
+#include <fstream>
+#include <map>
+#include <numeric>
+#include <ranges>
+#include <set>
+#include <sstream>
+#include <string>
+#include <unordered_set>
+
+#include "utils/BufferedReader.hpp"
+#include "utils/SolutionBase.hpp"
 class LANParty : public SolutionBase {
-	REGISTER( LANParty )
+    REGISTER( LANParty )
 
     void readFile() {
-        stringstream input;
-        input << ifstream( "Day23/input.txt" ).rdbuf();
-        for ( string buf; getline( input, buf ); ) {
+        using namespace std;
+        for ( const string& buf : BufferedReader( "Day23/input.txt" ).lines().yield() ) {
             LANNetwork[buf.substr( 0, 2 )].emplace( buf.substr( 3 ) );
             LANNetwork[buf.substr( 3 )].emplace( buf.substr( 0, 2 ) );
         }
         return;
     }
 
-    bool isConnected( string const& Host, set<string> const& ConnectionNetwork ) {
+    bool isConnected( std::string const& Host, std::set<std::string> const& ConnectionNetwork ) {
         for ( auto const& conn : ConnectionNetwork ) {
             if ( !LANNetwork.at( Host ).contains( conn ) ) {
                 return false;
@@ -22,10 +30,11 @@ class LANParty : public SolutionBase {
         }
         return true;
     }
-    map<string, set<string>> LANNetwork;
+    std::map<std::string, std::set<std::string>> LANNetwork;
 
    public:
     void Solution1() {
+        using namespace std;
         readFile();
         unordered_set<string> partySet;
         partySet.reserve( LANNetwork.size() );
@@ -34,7 +43,7 @@ class LANParty : public SolutionBase {
                 for ( auto& netC : LANNetwork.at( netB ) ) {
                     if ( LANNetwork.at( netA ).contains( netC ) && ( netA.starts_with( 't' ) || netB.starts_with( 't' ) || netC.starts_with( 't' ) ) ) {
                         set party( { netA, netB, netC } );
-                        partySet.insert( accumulate( party.begin(), party.end(), string() ) );
+                        partySet.insert( ranges::fold_left( party, "", plus<>{} ) );
                     }
                 }
             }
@@ -42,6 +51,7 @@ class LANParty : public SolutionBase {
         printRes( 1, partySet.size() );
     }
     void Solution2() {
+        using namespace std;
         vector<set<string>> connections;
         for ( auto& [atom, _] : LANNetwork ) {
             for ( auto& connection : connections ) {
@@ -52,12 +62,12 @@ class LANParty : public SolutionBase {
             }
             connections.emplace_back( set( { atom } ) );
         }
-        set<string> passWord = move( const_cast<set<string>&>( *ranges::max_element( connections.begin(), connections.end(), {}, []( decltype( connections )::value_type const& conn ) {
+        set<string>& passWord = *ranges::max_element( connections, {}, []( const set<string>& conn ) {
             return conn.size();
-        } ) ) );
-        printRes( 2, accumulate( ++passWord.begin(), passWord.end(), *passWord.begin(), []( string const& init, string const& host ) {
-                      return init + "," + host;
-                  } ) );
+        } );
+        printRes( 2, ranges::fold_left_first( passWord, []( string const& acc, string const& host ) {
+                         return acc + "," + host;
+                     } ).value() );
         return;
     }
 };

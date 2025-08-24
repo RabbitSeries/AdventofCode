@@ -27,12 +27,6 @@ class PreciseMul : public SolutionBase {
         memory = ( stringstream() << input.rdbuf() ).str();
     }
 
-   public:
-    void Solution1() {
-        readFile();
-        printRes( 1, parseMul( memory ) );
-    }
-
     utils::Generator<int> EnabledSolve() {
         bool enabled = true;
         for ( std::smatch const& section : RegexStream( R"(((?:.|\s)*?)(don't\(\)|do\(\)|$))", memory ).yield() ) {
@@ -41,6 +35,12 @@ class PreciseMul : public SolutionBase {
             }
             enabled = section.str().ends_with( "do()" );
         }
+    }
+
+   public:
+    void Solution1() {
+        readFile();
+        printRes( 1, parseMul( memory ) );
     }
 
     void Solution2() {

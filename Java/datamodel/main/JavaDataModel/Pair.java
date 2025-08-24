@@ -1,4 +1,5 @@
 package JavaDataModel;
+
 import java.util.Objects;
 
 public class Pair<K, V> {
@@ -35,4 +36,8 @@ public class Pair<K, V> {
         return Objects.hash(getKey(), getValue());
     }
 
+    @Override
+    public String toString() {
+        return "(" + getKey().toString() + "," + getValue().toString() + ")";
+    }
 }

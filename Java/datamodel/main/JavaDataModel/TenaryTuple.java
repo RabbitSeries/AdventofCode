@@ -1,4 +1,5 @@
 package JavaDataModel;
+
 import java.util.Objects;
 
 public class TenaryTuple<E1, E2, E3> {
@@ -54,5 +55,10 @@ public class TenaryTuple<E1, E2, E3> {
     @Override
     public int hashCode() {
         return Objects.hash(e1, e2, e2);
+    }
+
+    @Override
+    public String toString() {
+        return "(" + getE1().toString() + "," + getE2().toString() + "," + getE3().toString() + ")";
     }
 }

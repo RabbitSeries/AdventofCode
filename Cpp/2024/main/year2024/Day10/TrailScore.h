@@ -1,14 +1,28 @@
-#include "bits/stdc++.h"
-using namespace std;
+#include <algorithm>
+#include <cstddef>
+#include <fstream>
+#include <functional>
+#include <map>
+#include <ranges>
+#include <string>
+#include <utility>
+#include <vector>
 
-#include <utils/SolutionBase.hpp>
+#include "utils/BufferedReader.hpp"
+#include "utils/SolutionBase.hpp"
 class TrailScore : public SolutionBase {
-	REGISTER( TrailScore )
+    REGISTER( TrailScore )
 
-    typedef pair<int, int> pos;
-    typedef pair<pos, int> posInfo;
+    typedef std::pair<int, int> pos;
 
-    int trail( size_t x, size_t y, const vector<vector<int>> topomap, vector<vector<bool>>& visited, bool isSolution2 ) {
+    const int dx[4]{ -1, 1, 0, 0 };
+    const int dy[4]{ 0, 0, -1, 1 };
+    int rows, cols;
+    bool isValid( const pos& p ) {
+        return p.first >= 0 && p.first < rows && p.second >= 0 && p.second < cols;
+    }
+    int trail( const pos& p, std::vector<std::vector<bool>>& visited, bool isSolution2 ) {
+        int x = p.first, y = p.second;
         visited[x][y] = true;
         int score = 0;
         if ( topomap[x][y] == 9 ) {
@@ -17,58 +31,46 @@ class TrailScore : public SolutionBase {
                 visited[x][y] = false;
             return 1;
         }
-        // Up
-        if ( x >= 1 && !visited[x - 1][y] && topomap[x - 1][y] == topomap[x][y] + 1 ) {
-            score += trail( x - 1, y, topomap, visited, isSolution2 );
-        }
-        // Down
-        if ( x + 1 < topomap.size() && !visited[x + 1][y] && topomap[x + 1][y] == topomap[x][y] + 1 ) {
-            score += trail( x + 1, y, topomap, visited, isSolution2 );
-        }
-        // Left
-        if ( y >= 1 && !visited[x][y - 1] && topomap[x][y - 1] == topomap[x][y] + 1 ) {
-            score += trail( x, y - 1, topomap, visited, isSolution2 );
-        }
-        // Right
-        if ( y + 1 < topomap[x].size() && !visited[x][y + 1] && topomap[x][y + 1] == topomap[x][y] + 1 ) {
-            score += trail( x, y + 1, topomap, visited, isSolution2 );
+        for ( int i : views::iota( 0, 4 ) ) {
+            auto nextPos = pair{ x + dx[i], y + dy[i] };
+            if ( isValid( nextPos ) && !visited[nextPos.first][nextPos.second] && topomap[nextPos.first][nextPos.second] == topomap[x][y] + 1 ) {
+                score += trail( nextPos, visited, isSolution2 );
+            }
         }
         visited[x][y] = false;
         return score;
     }
 
-    void interaction( bool isSolution2 ) {
-        ifstream input( "Day10/input.txt" );
-        string linebuf;
-        vector<pair<int, int>> headList;
-        vector<vector<int>> topomap;
-        int lineCnt = 0;
-        while ( getline( input, linebuf ) ) {
-            vector<int> row;
-            for ( size_t i = 0; i < linebuf.size(); i++ ) {
-                char c = linebuf[i];
-                if ( c != '\n' && c != '\0' ) {
-                    row.push_back( c - '0' );
-                    if ( c == '0' ) {
-                        headList.emplace_back( lineCnt, i );
-                    }
+    vector<pos> headList;
+    vector<vector<int>> topomap;
+
+    void readFile() {
+        using namespace std;
+        for ( const string& line : BufferedReader( "Day10/input.txt" ).lines().yield() ) {
+            auto row = line | views::transform( []( char c ) { return c - '0'; } ) | ranges::to<vector<int>>();
+            for ( int i : views::iota( 0, (int)row.size() ) ) {
+                if ( row[i] == 0 ) {
+                    headList.emplace_back( topomap.size(), i );
                 }
-            }
-            if ( !row.empty() ) {
-                topomap.push_back( row );
-                lineCnt++;
-            }
+            };
+            topomap.emplace_back( std::move( row ) );
         }
-        int res = 0;
-        for ( auto& head : headList ) {
-            vector<vector<bool>> visited( topomap.size(), vector<bool>( topomap[0].size(), false ) );
-            res += trail( head.first, head.second, topomap, visited, isSolution2 );
-        }
-        !isSolution2 ? printRes( 1, res ) : printRes( 2, res );
+        rows = (int)topomap.size();
+        cols = (int)topomap[0].size();
+    }
+
+    void interaction( bool isSolution2 ) {
+        using namespace std;
+        printRes( !isSolution2 ? 1 : 2, ranges::fold_left( headList | views::transform( [isSolution2, this]( const pos& head ) {
+                                                               vector visited( topomap.size(), vector( topomap[0].size(), false ) );
+                                                               return trail( head, visited, isSolution2 );
+                                                           } ),
+                                                           0, plus<>{} ) );
     }
 
    public:
     void Solution1() {
+        readFile();
         interaction( false );
     }
     void Solution2() {

@@ -1,51 +1,51 @@
-#include "bits/stdc++.h"
-using namespace std;
+#include <algorithm>
+#include <fstream>
+#include <map>
+#include <ranges>
+#include <sstream>
+#include <string>
 
-#include <utils/SolutionBase.hpp>
+#include "utils/BufferedReader.hpp"
+#include "utils/SolutionBase.hpp"
 class TwinkleStones : public SolutionBase {
-	REGISTER( TwinkleStones )
+    REGISTER( TwinkleStones )
 
     typedef long long ll;
-    map<ll, ll> TwinkleList;
+    std::map<ll, ll> TwinkleList;
     void readFile() {
-        ifstream input( "Day11/input.txt" );
-        for ( string linebuf; getline( input, linebuf ); ) {
-            stringstream line( linebuf );
-            for ( int tmp = 0; line >> tmp; ) {
-                TwinkleList[tmp]++;
+        for ( const std::string& line : BufferedReader( "Day11/input.txt" ).lines().yield() ) {
+            std::stringstream ss( line );
+            for ( int stone : std::views::istream<ll>( ss ) ) {
+                TwinkleList[stone]++;
             }
         }
     }
     auto blink( int times ) {
         for ( int twinkle = 0; twinkle < times; twinkle++ ) {
             // cout << "Twinkle times: " << twinkle << "." << endl;
-            map<ll, ll> nextList;
-            for ( auto const& stone : TwinkleList ) {
-                stringstream ss;
-                ss << stone.first;
-                if ( stone.first == 0 ) {
-                    nextList[1] += stone.second;
-                } else if ( ss.str().size() % 2 == 0 ) {
+            std::map<ll, ll> nextList;
+            for ( auto [stone, cnt] : TwinkleList ) {
+                std::string str = std::to_string( stone );
+                if ( stone == 0 ) {
+                    nextList[1] += cnt;
+                } else if ( str.size() % 2 == 0 ) {
                     // Rule 2
-                    int middle = ss.str().size() / 2;
-                    string left = ss.str().substr( 0, middle ), right = ss.str().substr( middle );
-                    nextList[stoll( left )] += stone.second;
-                    nextList[stoll( right )] += stone.second;
+                    int middle = str.size() / 2;
+                    std::string left = str.substr( 0, middle ), right = str.substr( middle );
+                    nextList[std::stoll( left )] += cnt;
+                    nextList[std::stoll( right )] += cnt;
                 } else {
                     // Rule 3
-                    nextList[stone.first * 2024] += stone.second;
+                    nextList[stone * 2024] += cnt;
                 }
             }
-            TwinkleList = nextList;
+            TwinkleList = std::move( nextList );
         }
     }
     ll countRes() {
-        ll res = 0;
-        for ( auto const& partialRes : TwinkleList ) {
-            res += partialRes.second;
-        }
-        return res;
+        return std::ranges::fold_left( TwinkleList | std::views::transform( []( auto const& res ) { return res.second; } ), 0, std::plus<>{} );
     }
+
    public:
     void Solution1() {
         readFile();

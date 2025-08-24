@@ -14,6 +14,11 @@ class BufferedReader {
 
     class LineStream : public ReadStream<std::string> {
         std::stringstream ss;
+        utils::Generator<std::string> yield( std::stringstream ss ) {
+            for ( std::string buf; std::getline( ss, buf ); ) {
+                co_yield std::move( buf );
+            }
+        };
 
        public:
         explicit LineStream( BufferedReader&& reader );
@@ -29,6 +34,10 @@ class BufferedReader {
         ss << std::ifstream( p ).rdbuf();
     }
 
+    std::string read() {
+        return ss.str();
+    }
+
     LineStream lines() {
         return LineStream( std::move( *this ) );
     }
@@ -37,7 +46,5 @@ class BufferedReader {
 BufferedReader::LineStream::LineStream( BufferedReader&& reader ) : ss( std::move( reader.ss ) ) {}
 
 utils::Generator<std::string> BufferedReader::LineStream::yield() {
-    for ( std::string buf; std::getline( ss, buf ); ) {
-        co_yield buf;
-    }
+    return yield( std::move( ss ) );
 }

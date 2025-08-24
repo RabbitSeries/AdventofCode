@@ -1,4 +1,15 @@
+#include <algorithm>
+#include <map>
+#include <queue>
+#include <ranges>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
 #include "KeyPadStructure.h"
+#include "utils/BufferedReader.hpp"
+#include "utils/SolutionBase.hpp"
+
 /*
  * This is a legacy version of the command list's hasher this my stll results in some hash conflicts.
 template <>
@@ -11,24 +22,23 @@ struct std::hash<pair<vector<char>, int>> {
     }
 };
  */
-struct commandHash {
-    inline size_t operator()( pair<vector<char>, int> const& token ) const {
-        return ( accumulate( token.first.begin(), token.first.end(), 0ull, []( unsigned long long const& init, char const& c ) {
-                     return ( init << 8 ) + c;
-                 } )
-                 << 8 ) +
-               token.second;
-    }
-};
-#include <utils/SolutionBase.hpp>
 class CascadingRemote : public SolutionBase {
-	REGISTER( CascadingRemote )
+    REGISTER( CascadingRemote )
+    struct commandHash {
+        inline size_t operator()( std::pair<std::vector<char>, int> const& token ) const {
+            return ( accumulate( token.first.begin(), token.first.end(), 0ull, []( unsigned long long const& init, char const& c ) {
+                         return ( init << 8 ) + c;
+                     } )
+                     << 8 ) +
+                   token.second;
+        }
+    };
 
     typedef unsigned long long ull;
 
-    unordered_map<pair<vector<char>, int>, ull, commandHash> cacheMap;
+    std::unordered_map<std::pair<std::vector<char>, int>, ull, commandHash> cacheMap;
 
-    ull directionalCascadingCommand( vector<char> const& curComm, int robotCnt ) {
+    ull directionalCascadingCommand( std::vector<char> const& curComm, int robotCnt ) {
         if ( cacheMap.find( { curComm, robotCnt } ) != cacheMap.end() ) {
             return cacheMap[{ curComm, robotCnt }];
         }
@@ -45,7 +55,7 @@ class CascadingRemote : public SolutionBase {
         }
         ull res = 0;
         for ( size_t i = 0; i < curComm.size(); i++ ) {
-            vector<vector<char>> nextRobotCommList = getKeyPadAllPath( i == 0 ? 'A' : curComm[i - 1], curComm[i], DIRECTIONAL_KEYPAD );
+            std::vector<std::vector<char>> nextRobotCommList = getKeyPadAllPath( i == 0 ? 'A' : curComm[i - 1], curComm[i], DIRECTIONAL_KEYPAD );
             ull curLen = ULONG_LONG_MAX;
             for ( auto const& nextRobotComm : nextRobotCommList ) {
                 curLen = min( directionalCascadingCommand( nextRobotComm, robotCnt - 1 ), curLen );
@@ -56,10 +66,10 @@ class CascadingRemote : public SolutionBase {
         return res;
     }
 
-    ull numericCommand( vector<char> const& password, int robotCnt ) {
+    ull numericCommand( std::string const& password, int robotCnt ) {
         ull res = 0;
         for ( size_t i = 0; i < password.size(); i++ ) {
-            vector<vector<char>> nextRobotCommList = getKeyPadAllPath( i == 0 ? 'A' : password[i - 1], password[i], NUMERIC_KEYPAD );
+            std::vector<std::vector<char>> nextRobotCommList = getKeyPadAllPath( i == 0 ? 'A' : password[i - 1], password[i], NUMERIC_KEYPAD );
             ull curLen = ULONG_LONG_MAX;
             for ( auto const& nextRobotComm : nextRobotCommList ) {
                 curLen = min( directionalCascadingCommand( nextRobotComm, robotCnt - 1 ), curLen );
@@ -70,7 +80,8 @@ class CascadingRemote : public SolutionBase {
         return res;
     }
 
-    int getOnePath( char const s, char const t, unordered_map<char, vector<pair<char, char>>> const& keyPad ) {
+    int getOnePath( char const s, char const t, std::unordered_map<char, std::vector<std::pair<char, char>>> const& keyPad ) {
+        using namespace std;
         map<char, int> cost;
         // map<char, bool> visited;
         for ( auto& [key, nextKeyList] : keyPad ) {
@@ -131,7 +142,8 @@ class CascadingRemote : public SolutionBase {
         return 0;
     }
 
-    vector<vector<char>> getKeyPadAllPath( char const s, char const t, unordered_map<char, vector<pair<char, char>>> const& keyPad ) {
+    std::vector<std::vector<char>> getKeyPadAllPath( char const s, char const t, std::unordered_map<char, std::vector<std::pair<char, char>>> const& keyPad ) {
+        using namespace std;
         map<char, int> cost;
         for ( auto& [key, nextKeyList] : keyPad ) {
             cost[key] = INT_MAX;
@@ -210,47 +222,23 @@ class CascadingRemote : public SolutionBase {
         return endPoint.linkRoad;
     }
 
-    vector<vector<char>> readPassword() {
-        vector<vector<char>> commandList;
-        ifstream input( "Day21/input.txt" );
-        // 126384
-        // FILE* input( fopen( "example.txt", "r" ) );
-        for ( string buf; getline( input, buf ); ) {
-            vector<char> row;
-            for ( auto c : buf ) {
-                if ( c != '\n' && c != '\0' ) {
-                    row.push_back( c );
-                }
-            }
-            commandList.push_back( row );
-        }
-        input.close();
-        return commandList;
+    vector<string> passwordList;
+
+    auto transform( int robotcnt ) {
+        return ranges::fold_left( passwordList | views::transform( [robotcnt, this]( const string& password ) {
+                                      return stoll( string( password.begin(), password.end() - 1 ) ) * numericCommand( password, robotcnt );
+                                  } ),
+                                  0ull, plus<>{} );
     }
 
    public:
     void Solution1() {
-        int res = 0;
-        vector<vector<char>> passwordList = readPassword();
-        for ( auto& password : passwordList ) {
-            int manCommand = numericCommand( password, 3 );
-            // cout << "Password: " << string( password.begin(), password.end() )
-            //  << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
-            res += stoi( string( password.begin(), password.end() - 1 ) ) * manCommand;
-        }
-        printRes( 1, res );
-        // cout << "Cache size: " << cacheMap.size() << endl;
+        using namespace std;
+        passwordList = BufferedReader( "Day21/input.txt" ).lines().toList();
+        printRes( 1, transform( 3 ) );
     }
     void Solution2() {
-        ull res = 0;
-        vector<vector<char>> passwordList = readPassword();
-        for ( auto& password : passwordList ) {
-            ull manCommand = numericCommand( password, 26 );
-            // cout << "Password: " << string( password.begin(), password.end() )
-            //  << " Complexity: " << stoi( string( password.begin(), password.end() - 1 ) ) * manCommand << endl;
-            res += stoll( string( password.begin(), password.end() - 1 ) ) * manCommand;
-        }
-        printRes( 2, res );
+        printRes( 2, transform( 26 ) );
         // cout << "Cache size: " << cacheMap.size() << endl;
     }
 };

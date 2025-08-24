@@ -1,8 +1,9 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <unordered_map>
+#include <map>
+#include <vector>
 
 // Head file initialization use static const to avoid CMKAE warnig
-static const unordered_map<char, vector<pair<char, char>>> NUMERIC_KEYPAD{
+static const std::unordered_map<char, std::vector<std::pair<char, char>>> NUMERIC_KEYPAD{
 
     {'A',{
                     {'3','^'},
@@ -82,7 +83,7 @@ static const unordered_map<char, vector<pair<char, char>>> NUMERIC_KEYPAD{
 };
 
 
-static const unordered_map<char, vector<pair<char, char>>> DIRECTIONAL_KEYPAD{
+static const std::unordered_map<char, std::vector<std::pair<char, char>>> DIRECTIONAL_KEYPAD{
         {'A',
             {
                 {'^','<'},
