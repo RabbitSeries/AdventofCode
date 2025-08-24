@@ -4,7 +4,9 @@
 #include <cstddef>
 #include <functional>
 #include <iterator>
+#include <memory>
 #include <ranges>
+#include <utility>
 
 namespace utils {
     template <class T>
@@ -69,6 +71,9 @@ namespace utils {
             }
             const T& operator*() const {
                 return h.promise().current;
+            }
+            const T* operator->() const {
+                return std::addressof( h.promise().current );
             }
             bool operator==( std::default_sentinel_t ) const { return h.done(); }
         };

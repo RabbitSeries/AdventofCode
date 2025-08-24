@@ -11,6 +11,7 @@ class ReadStream {
     virtual std::vector<T> toList() {
         return yield() | std::ranges::to<std::vector<T>>();
     }
+    // virtual utils::Generator<T> yield() = 0;
     virtual utils::Generator<T> yield() = 0;
 
    private:

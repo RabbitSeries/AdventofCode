@@ -37,6 +37,7 @@
                 "string": "$penv{PATH}",
                 "regex": "usr/bin"
             },
+            "toolchainFile": "${sourceDir}/Cpp/cmake/toolchain.cmake",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
@@ -55,6 +56,9 @@
                         "rhs": "Windows"
                     }
                 ]
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
@@ -81,6 +85,11 @@
             "name": "unix-release",
             "configurePreset": "unix-release",
             "jobs": 8
+        },
+        {
+            "name": "windows-gcc-debug",
+            "inherits": "unix-release",
+            "configurePreset": "windows-gcc-debug"
         },
         {
             "name": "windows-gcc-release",

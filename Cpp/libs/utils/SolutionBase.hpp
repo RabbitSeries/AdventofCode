@@ -14,6 +14,7 @@ class SolutionBase {
    public:
     virtual void Solution1() = 0;
     virtual void Solution2() = 0;
+    virtual ~SolutionBase() = default;
 
    protected:
     template <typename... Args>

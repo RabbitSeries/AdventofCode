@@ -67,9 +67,9 @@ public class AoCSolutionLoader {
             if (classModuleName.endsWith(resourceModuleName)) {
                 results.add(new SimpleEntry<>(classItr.peek().getValue(), resourceItr.peek()));
             } else {
-                classItr.next();
                 System.err.println("Class " + classModuleName + " is not matching resource " + resourceModuleName);
             }
+            classItr.next();
             resourceItr.next();
         }
         return results;

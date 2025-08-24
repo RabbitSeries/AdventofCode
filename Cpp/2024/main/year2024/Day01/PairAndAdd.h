@@ -1,57 +1,55 @@
-#include <fstream>
+#include <algorithm>
 #include <map>
 #include <numeric>
 #include <queue>
+#include <ranges>
 #include <regex>
 #include <unordered_map>
 #include <vector>
 
+#include "utils/BufferedReader.hpp"
 #include "utils/SolutionBase.hpp"
-using namespace std;
+#include "utils/Stream/Generator.hpp"
+
 class PairAndAdd : public SolutionBase {
     REGISTER( PairAndAdd )
 
-    using ull = unsigned long long;
-
-    void readFile( string filePath ) {
-        regex re( "[0-9]+" );
-        ifstream in( filePath );
-        string buf;
-        while ( getline( in, buf ) ) {
-            sregex_iterator it( buf.begin(), buf.end(), re ), end;
-            if ( distance( it, end ) == 2 ) {
-                numList.push_back( { stoi( ( *it ).str() ), stoi( ( *( ++it ) ).str() ) } );
-            }
-        }
-    }
-    vector<pair<int, int>> numList;
+    std::vector<std::pair<int, int>> numList;
 
    public:
     void Solution1() {
-        readFile( "Day01/input.txt" );
+        using namespace std;
+        regex re( "[0-9]+" );
+        numList = BufferedReader( "Day01/input.txt" ).lines().yield() | views::transform( [&]( const string& line ) {
+                      sregex_iterator it( line.begin(), line.end(), re ), end;
+                      return pair<int, int>{ stoi( ( *it ).str() ), stoi( ( *( ++it ) ).str() ) };
+                  } ) |
+                  ranges::to<vector<pair<int, int>>>();
         priority_queue<int, vector<int>, greater<>> pq1, pq2;
         for ( auto& [num1, num2] : numList ) {
             pq1.push( num1 );
             pq2.push( num2 );
         }
-        int distanceAddUp = 0;
-        int elemCnt = pq1.size();
-        for ( int i = 0; i < elemCnt; i++ ) {
-            distanceAddUp += abs( pq1.top() - pq2.top() );
-            pq1.pop();
-            pq2.pop();
-        }
-        printRes( 1, distanceAddUp );
+        printRes( 1, ranges::fold_left( [&]() -> utils::Generator<int> {
+                      while ( !pq1.empty() && !pq2.empty() ) {
+                          co_yield abs( pq1.top() - pq2.top() );
+                          pq1.pop();
+                          pq2.pop();
+                      }
+                  }(),
+                                        0, std::plus<>{} ) );
     }
 
     void Solution2() {
+        using namespace std;
         unordered_map<int, int> elemCount;
         for ( auto& [num1, num2] : numList ) {
             elemCount[num2]++;
         }
-        int addUp = accumulate( numList.begin(), numList.end(), 0, [&]( int init, const pair<const int, int>& elem ) {
-            return init + elem.first * elemCount[elem.first];
-        } );
+        int addUp = ranges::fold_left( numList | views::transform( [&]( const pair<int, int>& elem ) {
+                                           return elem.first * elemCount[elem.first];
+                                       } ),
+                                       0, std::plus<>{} );
         printRes( 2, addUp );
     }
 };

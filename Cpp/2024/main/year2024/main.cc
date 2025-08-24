@@ -25,37 +25,60 @@
 #include "Day25/KeyPair.h"
 
 int main() {
-    using solutionStat = tuple<int64_t, int, string_view>;
+    using solutionStat = std::tuple<int64_t, int, std::string>;
     int64_t t_cost = 0;
 
-    priority_queue<solutionStat, vector<solutionStat>, less<>> pq;
+    std::priority_queue<solutionStat, std::vector<solutionStat>, std::less<>> pq;
 
-    cout << "Registred solutions: " << SolutionRegistry::registry.size() << endl;
+    std::cout << "Registred solutions: " << SolutionRegistry::registry.size() << std::endl;
     for ( int i = 0; auto& [solutionName, instance] : SolutionRegistry::registry ) {
-        cout << "Day " << ++i << ": " << solutionName << endl;
+        std::cout << "Day " << ++i << ": " << solutionName << std::endl;
 
-        auto nowTime = chrono::high_resolution_clock::now();
-        ImplPtr solution = instance();
-        solution->Solution1();
-        solution->Solution2();
-        auto endTime = chrono::high_resolution_clock::now();
+        auto startTime = std::chrono::high_resolution_clock::now();
+        ImplPtr solution;
+        std::string info = std::string( solutionName );
+        try {
+            // create and run solution
+            solution = instance();
+            solution->Solution1();
+            solution->Solution2();
+        } catch ( const std::exception& ex ) {
+            std::cerr << "Exception while running Day " << i << " (" << solutionName << "): "
+                      << ex.what() << std::endl;
+            info += " [EX]";
+        } catch ( ... ) {
+            std::cerr << "Unknown exception while running Day " << i << " (" << solutionName << ")." << std::endl;
+            info += " [EX_UNKNOWN]";
+        }
 
-        auto delta = chrono::duration_cast<chrono::microseconds>( endTime - nowTime ).count();
-        pq.emplace( delta, i, solutionName );
+        auto endTime = std::chrono::high_resolution_clock::now();
+        auto delta = std::chrono::duration_cast<std::chrono::microseconds>( endTime - startTime ).count();
+        pq.emplace( delta, i, info );
         t_cost += delta;
+
+        try {
+            solution.reset();
+        } catch ( const std::exception& ex ) {
+            std::cerr << "Exception thrown from destructor of Day " << i << " (" << solutionName << "): "
+                      << ex.what() << std::endl;
+        } catch ( ... ) {
+            std::cerr << "Unknown exception thrown from destructor of Day " << i << " (" << solutionName << ")." << std::endl;
+        }
     }
-    cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
-    cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
-    cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << endl;
-    cerr << "Problem time t_cost ranking:" << endl
-         << endl;
+
+    std::cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << std::endl;
+    std::cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << std::endl;
+    std::cerr << "---\t\t\t\t\t\tFinished\t\t\t\t\t\t---" << std::endl;
+    std::cerr << "Problem time t_cost ranking:" << std::endl
+              << std::endl;
+
     for ( int i = 0; !pq.empty(); ) {
         auto [c_cost, solutionId, info] = pq.top();
         pq.pop();
-        cerr << ++i << ". Day " << solutionId << " " << info << ":" << endl
-             << fixed << setprecision( 6 ) << right << setw( 15 ) << setfill( ' ' ) << c_cost / 1000000.0
-             << " seconds." << endl;
+        std::cerr << ++i << ". Day " << solutionId << " " << info << ":" << std::endl
+                  << std::fixed << std::setprecision( 6 ) << std::right << std::setw( 15 ) << std::setfill( ' ' )
+                  << c_cost / 1000000.0 << " seconds." << std::endl;
     }
-    cerr << "Total cost: " << ( t_cost / 1000000.0 ) << " seconds." << endl;
+    std::cerr << "Total cost: " << ( t_cost / 1000000.0 ) << " seconds." << std::endl;
     return 0;
 }

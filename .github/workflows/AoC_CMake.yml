@@ -15,21 +15,27 @@ jobs:
     secrets:
       AOC_SESSION_COOKIE: ${{secrets.AOC_SESSION_COOKIE}}
 
-  build:
+  build-run:
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
+        year: [AoC/Cpp/2024]
         include:
           - os: ubuntu-latest
             preset: "unix-release"
           - os: windows-latest
             preset: "windows-gcc-release"
+            # preset: "windows-gcc-debug"
 
     runs-on: ${{ matrix.os }}
     needs: downloadInput
     steps:
       - uses: actions/checkout@v4
+
+      - uses: RabbitSeries/setup-gcc@v1
+        with:
+          version: 14
 
       - name: Download input
         uses: actions/download-artifact@v4
@@ -69,27 +75,9 @@ jobs:
           path: |
             ${{ env.INSTALL_PREFIX }}/${{ matrix.preset }}
 
-  run:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        year: [AoC/Cpp/2024]
-    runs-on: ${{ matrix.os }}
-    needs: build
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download binary
-        uses: actions/download-artifact@v4
-        with:
-          name: BINARY-${{ matrix.os }}
-          path: |
-            .
-  
       - name: Generate results log files (linux)
         if: ${{ matrix.os == 'ubuntu-latest' }}
-        working-directory: ${{ matrix.year }}
+        working-directory: ${{ env.INSTALL_PREFIX }}/${{ matrix.preset }}/${{ matrix.year }}
         shell: bash
         run: |
           chmod u+x ./solution
@@ -97,14 +85,14 @@ jobs:
 
       - name: Generate results log files (windows)
         if: ${{ matrix.os == 'windows-latest' }}
-        working-directory: ${{ matrix.year }}
+        working-directory: ${{ env.INSTALL_PREFIX }}/${{ matrix.preset }}/${{ matrix.year }}
         shell: cmd
         run: |
           .\solution 1>actionRes.log 2>runtime.log 
           
       - name: LogResults
         shell: bash
-        working-directory: ${{ matrix.year }}
+        working-directory: ${{ env.INSTALL_PREFIX }}/${{ matrix.preset }}/${{ matrix.year }}
         run: |
           cat actionRes.log
           cat runtime.log
@@ -112,12 +100,12 @@ jobs:
       - name: Diff files
         shell: bash
         run: |
-          sh ./.github/workflows/diff_file.sh ${{ matrix.year }}/actionRes.log Cpp/2024/main/year2024/res.log
+          sh ./.github/workflows/diff_file.sh ${{ env.INSTALL_PREFIX }}/${{ matrix.preset }}/${{ matrix.year }}/actionRes.log Cpp/2024/main/year2024/res.log
 
   report-if-diff-fail:
     runs-on: ubuntu-latest
-    needs: run
-    if: ${{ failure() }}
+    needs: build-run
+    if: failure()
     steps:
       - run: |
           echo "FAILED"

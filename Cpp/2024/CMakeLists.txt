@@ -36,3 +36,5 @@ install(TARGETS solution DESTINATION "AoC/Cpp/2024")
 # file(COPY ${file} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/${rel_path}")
 # endforeach()
 install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/resources/" DESTINATION "AoC/Cpp/2024" FILES_MATCHING PATTERN input.txt)
+
+# TODO add package
