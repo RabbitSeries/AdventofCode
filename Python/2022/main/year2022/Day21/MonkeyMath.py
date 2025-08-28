@@ -43,8 +43,8 @@ class MonkeyMath(ISolution):
             return val
         if not root.children:
             raise ValueError("Expecting children")
-        l, r = self.evaluate(root.children[0]), self.evaluate(root.children[1])
-        val = int(eval(f'{l} {val[1]} {r}'))
+        lft, rgt = self.evaluate(root.children[0]), self.evaluate(root.children[1])
+        val = int(eval(f'{lft} {val[1]} {rgt}'))
         self.evaluated.update({root.name: val})
         return val
 
@@ -74,16 +74,16 @@ class MonkeyMath(ISolution):
             formula = self.parsed[p.name]
             if not p.children or isinstance(formula, int):
                 raise ValueError('Expecting children')
-            l, r = p.children[0].name, p.children[1].name
-            p = p.children[0] if l == node else p.children[1]
+            lft, rgt = p.children[0].name, p.children[1].name
+            p = p.children[0] if lft == node else p.children[1]
             if expectVal is None:  # root node, child's expecting val is its brother's evaluated value
-                expectVal = self.evaluated[r] if l == node else self.evaluated[l]
+                expectVal = self.evaluated[rgt] if lft == node else self.evaluated[lft]
                 continue
             x = symbols('x')
-            if l == node:
-                expectVal = solve(Eq(eval(f'x {formula[1]} {self.evaluated[r]}'), expectVal), x, dict=True)[0][x]
+            if lft == node:
+                expectVal = solve(Eq(eval(f'x {formula[1]} {self.evaluated[rgt]}'), expectVal), x, dict=True)[0][x]
             else:
-                expectVal = solve(Eq(eval(f'{self.evaluated[l]} {formula[1]} x'), expectVal), x, dict=True)[0][x]
+                expectVal = solve(Eq(eval(f'{self.evaluated[lft]} {formula[1]} x'), expectVal), x, dict=True)[0][x]
         print(f'Part 2: {expectVal}')
 
 
