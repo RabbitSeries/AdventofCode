@@ -1,7 +1,7 @@
 from __future__ import annotations
 import re
-from aoc_libs.utils.ISolution import ISolution
 from sympy import symbols, Eq, solve
+from aoc_libs.utils.ISolution import ISolution
 
 
 class Node:
