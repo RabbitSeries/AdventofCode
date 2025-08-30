@@ -19,7 +19,6 @@
     // When using CMakePresets.json, kits, variants, and some settings in settings.json will be ignored,
     //      such as: "cmake.buildDirectory": "${workspaceFolder}/builds/${buildKit}/${buildType}"
     "python.analysis.extraPaths": [
-        "${workspaceFolder}/Python/libs",
-        "./Python/2022/main/year2022/Day18"
+        "${workspaceFolder}/Python/libs"
     ]
 }

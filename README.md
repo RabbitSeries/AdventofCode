@@ -9,7 +9,7 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
  | Year                                |    Progress | Best TimeCost (seconds) |
  | :---------------------------------- |    -------: | ----------------------: |
  | [2021](./TypeScript/2021/README.md) |  3/25 ⭐⭐ |               Not yet   |
- | [2022](./Python/2022/README.md)     | 22/25 ⭐⭐ |               Not yet   |
+ | [2022](./Python/2022/README.md)     | 25/25 ⭐⭐ |               Not yet   |
  | [2023](./Java/2023/README.md)       | 25/25 ⭐⭐ |               9.820279  |
  | [2024](./Cpp/2024/README.md)        | 25/25 ⭐⭐ |               0.965016  |
 
@@ -46,8 +46,8 @@ Language           |         files|         blank|       comment|          code
 :-------           |         ----:|         ----:|       ------:|          ---:
 C/C++ Header       |            33|           276|           182|          3154
 Java               |            37|           495|           257|          3076
-Python             |            26|           286|            97|          1312
+Python             |            29|           334|           156|          1472
 C++                |             6|            55|            21|           774
 TypeScript         |             6|             1|             1|            86
 CMake              |             6|            21|            21|            74
-SUM:               |           114|          1134|           579|          8476
+SUM:               |           117|          1182|           638|          8636

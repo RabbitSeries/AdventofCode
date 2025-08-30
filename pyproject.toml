@@ -28,8 +28,8 @@ agressive = 3
 verbose = 5
 
 [tool.setuptools]
-packages = ["libs.aoc_libs"]
-package-dir = { "" = "Python" }
+packages = ["aoc_libs", "aoc_libs.utils"]
+package-dir = { "" = "Python/libs" }
 
 # [tool.setuptools.package-data]
 # # Format: <package_name> = [<file_patterns>]
