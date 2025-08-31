@@ -31,6 +31,7 @@
             "name": "[Python] [Debug]",
             "type": "debugpy",
             "request": "launch",
+            "justMyCode": false,
             "program": "${file}",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
@@ -88,6 +89,7 @@
             "default": "${fileDirname}",
             "options": [
                 "${fileDirname}",
+                "${fileDirname}/../resources",
                 "${fileDirname}/../../resources",
                 "${fileDirname}/../../../resources",
                 "${fileDirname}/../../../resources/${fileDirnameBasename}",

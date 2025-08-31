@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class CharacterLoop implements SolutionBase {
+public class CharacterLoop implements ISolution {
     List<String> PipeMap;
 
     int rows, cols;

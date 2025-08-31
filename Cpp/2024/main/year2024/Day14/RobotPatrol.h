@@ -1,8 +1,8 @@
 #include "bits/stdc++.h"
 using namespace std;
 
-#include <utils/SolutionBase.hpp>
-class RobotPatrol : public SolutionBase {
+#include <utils/ISolution.hpp>
+class RobotPatrol : public ISolution {
 	REGISTER( RobotPatrol )
 
     typedef struct robot {

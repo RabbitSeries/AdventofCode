@@ -1,8 +1,8 @@
 #include "bits/stdc++.h"
 using namespace std;
 
-#include <utils/SolutionBase.hpp>
-class DiskCompact : public SolutionBase {
+#include <utils/ISolution.hpp>
+class DiskCompact : public ISolution {
 	REGISTER( DiskCompact )
 
     typedef long long ll;

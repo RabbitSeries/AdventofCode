@@ -12,9 +12,9 @@
 #include <vector>
 
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
+#include "utils/ISolution.hpp"
 #include "utils/Stream/RegexStream.hpp"
-class OrderingUpdates : public SolutionBase {
+class OrderingUpdates : public ISolution {
     REGISTER( OrderingUpdates )
 
     bool isCorrectOrder( const std::vector<int>& update ) {

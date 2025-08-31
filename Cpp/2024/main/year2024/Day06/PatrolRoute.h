@@ -8,8 +8,8 @@
 #include <vector>
 
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
-class PatrolRoute : public SolutionBase {
+#include "utils/ISolution.hpp"
+class PatrolRoute : public ISolution {
     REGISTER( PatrolRoute )
 
     using pos = std::pair<size_t, size_t>;

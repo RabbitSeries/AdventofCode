@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-#include <utils/SolutionBase.hpp>
-class TinkerWithGates : public SolutionBase {
+#include <utils/ISolution.hpp>
+class TinkerWithGates : public ISolution {
 	REGISTER( TinkerWithGates )
 
     bool gateResult( string op, bool operand1, bool operand2 ) {

@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class LightBeamEnergize implements SolutionBase {
+public class LightBeamEnergize implements ISolution {
     List<String> ContraptionLayout;
 
     int rows, cols;

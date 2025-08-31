@@ -6,8 +6,8 @@
 #include <vector>
 
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
-class AntinodeHarmonic : public SolutionBase {
+#include "utils/ISolution.hpp"
+class AntinodeHarmonic : public ISolution {
     REGISTER( AntinodeHarmonic )
 
     typedef struct Antenna {

@@ -8,7 +8,7 @@ import java.util.*;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class LavaHeatLoss implements SolutionBase {
+public class LavaHeatLoss implements ISolution {
     List<List<Integer>> LavaMap;
 
     final int[] dx = new int[] {

@@ -3,8 +3,8 @@
 #include <queue>
 
 using namespace std;
-// #include <utils/SolutionBase.hpp>
-class TenaryMachine : public SolutionBase {
+// #include <utils/ISolution.hpp>
+class TenaryMachine : public ISolution {
 	REGISTER( TenaryMachine )
 
     typedef unsigned long long ull;

@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
-#include <utils/SolutionBase.hpp>
-class LinenLayout : public SolutionBase {
+#include <utils/ISolution.hpp>
+class LinenLayout : public ISolution {
 	REGISTER( LinenLayout )
 
     typedef unsigned long long ull;

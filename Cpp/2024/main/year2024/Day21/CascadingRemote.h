@@ -8,7 +8,7 @@
 
 #include "KeyPadStructure.h"
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
+#include "utils/ISolution.hpp"
 
 /*
  * This is a legacy version of the command list's hasher this my stll results in some hash conflicts.
@@ -22,7 +22,7 @@ struct std::hash<pair<vector<char>, int>> {
     }
 };
  */
-class CascadingRemote : public SolutionBase {
+class CascadingRemote : public ISolution {
     REGISTER( CascadingRemote )
     struct commandHash {
         inline size_t operator()( std::pair<std::vector<char>, int> const& token ) const {

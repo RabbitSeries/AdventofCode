@@ -9,8 +9,8 @@
 #include <vector>
 
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
-class TrailScore : public SolutionBase {
+#include "utils/ISolution.hpp"
+class TrailScore : public ISolution {
     REGISTER( TrailScore )
 
     typedef std::pair<int, int> pos;

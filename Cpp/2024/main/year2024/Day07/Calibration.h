@@ -5,9 +5,9 @@
 #include <vector>
 
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
+#include "utils/ISolution.hpp"
 #include "utils/Stream/RegexStream.hpp"
-class Calibration : public SolutionBase {
+class Calibration : public ISolution {
     REGISTER( Calibration )
 
     using ull = unsigned long long;

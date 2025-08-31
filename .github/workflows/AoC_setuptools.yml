@@ -1,0 +1,65 @@
+name: AoC setuptools Python Part
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  downloadInput:
+    uses: ./.github/workflows/AoC_Download.yml
+    secrets: 
+      AOC_SESSION_COOKIE: ${{secrets.AOC_SESSION_COOKIE}}
+
+  build-and-run:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+    needs: downloadInput
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Download input
+        uses: actions/download-artifact@v4
+        with:
+          name: AoC_Input
+          path: |
+            ./
+
+      - name: Build
+        run: |
+          pip install . && pytest
+
+      - run: aocpy_launch 1> aocpy.log 2> runtime.log
+
+      - name: Updload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: RESULTS-AOCPY-${{ matrix.os }}
+          path: |
+            ./*.log
+
+      - name: Print results log files
+        run: |
+          cat aocpy.log
+          cat runtime.log
+      
+      - name: Diff results
+        shell: bash
+        run: |
+          sh ./.github/workflows/diff_file.sh aocpy.log Python/aocpy/aocpy.log
+
+  report-if-diff-fail:
+    runs-on: ubuntu-latest
+    needs: build-and-run
+    if: failure()
+    steps:
+      - run: |
+          echo "FAILED"

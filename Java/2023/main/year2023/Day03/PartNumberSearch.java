@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class PartNumberSearch implements SolutionBase {
+public class PartNumberSearch implements ISolution {
     List<String> schematic;
 
     List<Point2D> GearPositions = new ArrayList<>();

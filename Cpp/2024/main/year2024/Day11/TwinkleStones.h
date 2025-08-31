@@ -6,8 +6,8 @@
 #include <string>
 
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
-class TwinkleStones : public SolutionBase {
+#include "utils/ISolution.hpp"
+class TwinkleStones : public ISolution {
     REGISTER( TwinkleStones )
 
     typedef long long ll;

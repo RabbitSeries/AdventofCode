@@ -1,7 +1,7 @@
 #include "bits/stdc++.h"
 using namespace std;
-#include <utils/SolutionBase.hpp>
-class KeyPair : public SolutionBase {
+#include <utils/ISolution.hpp>
+class KeyPair : public ISolution {
     REGISTER( KeyPair )
 
     typedef vector<int> schematics;

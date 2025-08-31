@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class WorkflowSimulation implements SolutionBase {
+public class WorkflowSimulation implements ISolution {
 
     class Condition {
 

@@ -6,7 +6,7 @@ import java.util.*;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class MinimumCut implements SolutionBase {
+public class MinimumCut implements ISolution {
     void readFile(BufferedReader input) throws Exception {
         input.lines().forEach(l -> {
             var split = l.split(":");

@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class ValueCalibration implements SolutionBase {
+public class ValueCalibration implements ISolution {
     List<String> maplist = null;
 
     Optional<Integer> isDigit(String line, int index, boolean reverse, Map<String, Integer> additional) {

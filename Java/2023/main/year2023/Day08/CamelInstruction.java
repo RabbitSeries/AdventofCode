@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class CamelInstruction implements SolutionBase {
+public class CamelInstruction implements ISolution {
     // Solution 1
     List<Character> Instructions;
 

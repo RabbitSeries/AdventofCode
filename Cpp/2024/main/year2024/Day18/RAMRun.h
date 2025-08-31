@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
-#include <utils/SolutionBase.hpp>
-class RAMRun : public SolutionBase {
+#include <utils/ISolution.hpp>
+class RAMRun : public ISolution {
 	REGISTER( RAMRun )
 
 #define BUF_SIZE 100

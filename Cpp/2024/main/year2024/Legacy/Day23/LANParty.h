@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
-#include <utils/SolutionBase.hpp>
-class LANParty : public SolutionBase {
+#include <utils/ISolution.hpp>
+class LANParty : public ISolution {
 	REGISTER( LANParty )
 
     void readFile() {

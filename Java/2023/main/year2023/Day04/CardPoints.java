@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class CardPoints implements SolutionBase {
+public class CardPoints implements ISolution {
 
     List<Pair<Set<Integer>, List<Integer>>> CardsList;
 

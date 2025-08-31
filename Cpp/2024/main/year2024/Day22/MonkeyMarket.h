@@ -6,8 +6,8 @@
 #include <vector>
 
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
-class MonkeyMarket : public SolutionBase {
+#include "utils/ISolution.hpp"
+class MonkeyMarket : public ISolution {
     REGISTER( MonkeyMarket )
 
     typedef unsigned long long ull;

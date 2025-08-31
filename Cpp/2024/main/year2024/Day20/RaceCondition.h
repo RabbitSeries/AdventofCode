@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-#include <utils/SolutionBase.hpp>
+#include <utils/ISolution.hpp>
 
 namespace RaceConditionData {
 using pos = pair<int, int>;
@@ -13,7 +13,7 @@ struct std::hash<RaceConditionData::pos> {
     }
 };
 
-class RaceCondition : public SolutionBase {
+class RaceCondition : public ISolution {
 	REGISTER( RaceCondition )
 
     using pos = RaceConditionData::pos;
