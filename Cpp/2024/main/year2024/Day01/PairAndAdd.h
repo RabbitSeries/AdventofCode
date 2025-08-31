@@ -8,10 +8,10 @@
 #include <vector>
 
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
+#include "utils/ISolution.hpp"
 #include "utils/Stream/Generator.hpp"
 
-class PairAndAdd : public SolutionBase {
+class PairAndAdd : public ISolution {
     REGISTER( PairAndAdd )
 
     std::vector<std::pair<int, int>> numList;

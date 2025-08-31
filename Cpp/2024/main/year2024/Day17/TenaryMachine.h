@@ -1,13 +1,13 @@
+#include <queue>
 #include <string>
 #include <vector>
-#include <queue>
 
 using namespace std;
-// #include <utils/SolutionBase.hpp>
-class TenaryMachine : public SolutionBase {
-	REGISTER( TenaryMachine )
+// #include <utils/ISolution.hpp>
+class TenaryMachine : public ISolution {
+    REGISTER( TenaryMachine )
 
-    typedef unsigned long long ull;
+    using ull = unsigned long long;
     size_t pc = 0;
     ull ra = 0, rb = 0, rc = 0;
     string outBuf = "";

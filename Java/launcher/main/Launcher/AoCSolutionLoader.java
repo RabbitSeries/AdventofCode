@@ -11,7 +11,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import JavaDataModel.AoCSolution;
-import JavaDataModel.SolutionBase;
+import JavaDataModel.ISolution;
 
 public class AoCSolutionLoader {
     private URL jarSource = null;
@@ -89,7 +89,7 @@ public class AoCSolutionLoader {
                         .replace("/", ".") // regardless platform, paths inside the plarform are always seperated by /
                         .replace(".class", "");
                 Class<?> source = classLoader.loadClass(className);
-                if (source.isAnnotationPresent(AoCSolution.class) && List.of(source.getInterfaces()).contains(SolutionBase.class)) {
+                if (source.isAnnotationPresent(AoCSolution.class) && List.of(source.getInterfaces()).contains(ISolution.class)) {
                     classSources.add(new AbstractMap.SimpleEntry<>(entry, source));
                 }
             } else if (!entry.isDirectory() && name.endsWith("input.txt")) {

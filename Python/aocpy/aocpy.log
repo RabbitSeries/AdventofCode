@@ -1,0 +1,81 @@
+year2022.Day01.CalorieCounting:
+	Part 1: 70613
+	Part 2: 205805
+year2022.Day02.RockPaperScissors:
+	Part 1: 8392
+	Part 2: 10116
+year2022.Day03.RucksackReorganization:
+	Part 1: 7903
+	Part 2: 2548
+year2022.Day04.CampCleanup:
+	Part 1: 532
+	Part 2: 854
+year2022.Day05.SupplyStacks:
+	Part 1: HNSNMTLHQ
+	Part 2: RNLFDJMCT
+year2022.Day06.TuningTrouble:
+	Part 1: 1198
+	Part 2: 3120
+year2022.Day07.NoSpaceLeftOnDevice:
+	Part 1: 1555642
+	Part 2: 5974547
+year2022.Day08.TreetopTreeHouse:
+	Part 1: 1681
+	Part 2: 201684
+year2022.Day09.RopeBridge:
+	Part 1: 6236
+	Part 2: 2449
+year2022.Day10.CathodeRayTube:
+	Part 1: 15260
+	Part 2:
+# # #       # #     #     #   # # # #     # #     #         #     #     # #     
+#     #   #     #   #     #   #         #     #   #         #     #   #     #   
+#     #   #         # # # #   # # #     #         #         #     #   #         
+# # #     #   # #   #     #   #         #   # #   #         #     #   #   # #   
+#         #     #   #     #   #         #     #   #         #     #   #     #   
+#           # # #   #     #   #           # # #   # # # #     # #       # # #   
+year2022.Day11.MonkeyInTheMiddle:
+	Part 1: 99840
+	Part 2: 20683044837
+year2022.Day12.HillClimbingAlgorithm:
+	Part 1: 361
+	Part 2: 354
+year2022.Day13.DistressSignal:
+	Part 1: 6046
+	Part 2: 21423
+year2022.Day14.RegolithReservoir:
+	Part 1: 828
+	Part 2: 25500
+year2022.Day15.BeaconExclusionZone:
+	Part 1: 5525847
+	Part 2: 13340867187704
+year2022.Day16.ProboscideaVolcanium:
+	Part 1: 1638
+	Part 2: 2400
+year2022.Day17.PyroclasticFlow:
+	Part 1: 3117
+	Part 2: 1553314121019
+year2022.Day18.BoilingBoulders:
+	Part 1: 4310
+	Part 2: 2466
+year2022.Day19.NotEnoughMinerals:
+	Part 1: 1264
+	Part 2: 13475
+year2022.Day20.GrovePositioningSystem:
+	Part 1: 3473
+	Part 2: 7496649006261
+year2022.Day21.MonkeyMath:
+	Part 1: 276156919469632
+	Part 2: 3441198826073
+year2022.Day22.MonkeyMap:
+	Part 1: 164014
+	Part 1: 47525
+year2022.Day23.UnstableDiffusion:
+	Part 1: 4236
+	Part 2: 1023
+year2022.Day24.BlizzardBasin:
+	Part 1: 225
+	Part 2: 711
+year2022.Day25.FullofHotAir:
+	Part 1: 2=0--0---11--01=-100
+	Part 2: 			------All 50 stars AoC Finished!!!!------

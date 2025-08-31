@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class PulsePropagation implements SolutionBase {
+public class PulsePropagation implements ISolution {
     enum ModuleType {
         Conjunction, BroadCaster, FlipFlop
     }

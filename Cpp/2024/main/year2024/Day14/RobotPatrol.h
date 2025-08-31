@@ -1,17 +1,17 @@
 #include "bits/stdc++.h"
 using namespace std;
 
-#include <utils/SolutionBase.hpp>
-class RobotPatrol : public SolutionBase {
-	REGISTER( RobotPatrol )
+#include <utils/ISolution.hpp>
+class RobotPatrol : public ISolution {
+    REGISTER( RobotPatrol )
 
-    typedef struct robot {
+    struct robot {
         robot() {};
         robot( int leftDis, int topDis, int horizenVel, int verticalVel ) : curPos( leftDis, topDis ),
                                                                             vel( horizenVel, verticalVel ) {};
         pair<int, int> curPos{};
         pair<int, int> vel{};
-    } robot;
+    };
     const int WIDTH = 101, HEIGHT = 103;
     using ull = unsigned long long;
     ull quadrantCount( vector<robot> const& s ) {

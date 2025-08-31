@@ -7,8 +7,8 @@
 #include <vector>
 
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
-class AsciiGraph : public SolutionBase {
+#include "utils/ISolution.hpp"
+class AsciiGraph : public ISolution {
     REGISTER( AsciiGraph )
 
     const int dx[4]{ -1, 1, 0, 0 };

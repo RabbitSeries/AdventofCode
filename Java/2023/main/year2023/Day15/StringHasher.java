@@ -6,7 +6,7 @@ import JavaDataModel.*;
 import java.io.*;
 
 @AoCSolution()
-public class StringHasher implements SolutionBase {
+public class StringHasher implements ISolution {
     List<String> stepList;
 
     void readFile(BufferedReader input) throws IOException {

@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
 import JavaDataModel.AoCSolution;
 import JavaDataModel.Pair;
 import JavaDataModel.Point2D;
-import JavaDataModel.SolutionBase;
+import JavaDataModel.ISolution;
 
 @AoCSolution()
-public class RocksRoll implements SolutionBase {
+public class RocksRoll implements ISolution {
     List<StringBuilder> Platform;
 
     Map<String, Integer> memo = new HashMap<>();

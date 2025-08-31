@@ -10,11 +10,11 @@ import java.util.stream.IntStream;
 import org.hipparchus.util.*;
 
 import JavaDataModel.AoCSolution;
-import JavaDataModel.SolutionBase;
+import JavaDataModel.ISolution;
 import year2023.Legacy.Day24.HailIntersection_LinearAlgebra;
 
 @AoCSolution()
-public class HailIntersection implements SolutionBase {
+public class HailIntersection implements ISolution {
 
     Hail ParseHail(String s) {
         var InputSplit = s.split("@");

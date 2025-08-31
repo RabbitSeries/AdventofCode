@@ -1,96 +1,103 @@
+from abc import abstractmethod
+from glob import glob
+import random
+import time
+from typing import Callable
 import requests
 import os
 import re
 
 
-def find_aoc_directories(root_dirs: list[str] | None = None) -> dict[tuple[int, int], list[str]]:
-    repo_root_re = re.compile(
-        r"[/\\](?P<year>\d+)$", re.IGNORECASE
-    )
-    day_root_re = re.compile(
-        r".*Day(?P<day>\d+)$", re.IGNORECASE
-    )
-    found: dict[tuple[int, int], list[str]] = {}
+class ProjectStructure:
+    def __init__(self, root: str, ext: str):
+        self.root = root
+        self.solutions = glob(f"**/year*/Day*/*.{ext}", root_dir=root, recursive=True)
+        pattern = re.compile(r"year(\d{4})/Day(\d{2})/.*\."+ext)
+        self.places = {}
+        for p in self.solutions:
+            if m := pattern.search(p.replace(os.sep, "/")):
+                year, day = int(m[1]), int(m[2])
+                self.places.update({(year, day): os.path.join(self.root, self.placer(year, day))})
 
-    if root_dirs is None:
-        return dict()
-
-    for root_dir in root_dirs:
-        if not os.path.exists(root_dir):
-            continue
-        for potential_year_folder in os.scandir(root_dir):
-
-            if (year_match := repo_root_re.search(potential_year_folder.path)) is None:
-                continue
-            year = int(year_match.group("year"))
-
-            calibrated_year = potential_year_folder
-            year_folders: list[str] = []
-            # Alright lets build Cpp source tree similar to Java source tree
-            # Java src root has a main/year<YYYY> subdiretory and resource subdirectory due to pom package management (some more hacked configuration may be available) for now
-            # For the same reason, Legacy foler is placed at each year's subFolder
-            calibrated_year = os.path.join(potential_year_folder.path, "main", f"year{year_match.group("year")}")
-            year_folders = [calibrated_year, os.path.join(calibrated_year, "Legacy")]
-            year_folders = [f for f in year_folders if os.path.exists(f)]  # There might not exisit a Legacy folder
-
-            for calibrated_folder in year_folders:
-                for day_folder in os.scandir(calibrated_folder):
-
-                    if (day_match := day_root_re.search(day_folder.path)) is None:
-                        continue
-                    day = int(day_match.group("day"))
-
-                    distro_path = os.path.join(day_folder.path, "input.txt")
-                    rel_resource_foler = os.path.relpath(day_folder, calibrated_year)
-                    distro_path = os.path.join(potential_year_folder, "resources", rel_resource_foler, "input.txt")
-
-                    found.setdefault((year, day), []).append(distro_path)
-
-    return dict(sorted(found.items(), key=lambda item: item[0]))
+    @abstractmethod
+    def placer(self, year: int, day: int):
+        pass
 
 
-def download_input(url: str, session_cookie: str) -> str:
-    headers = {
-        "Cookie": f"session={session_cookie}"
-    }
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-    return response.text
+class PythonProject(ProjectStructure):
+    def __init__(self, root: str):
+        super().__init__(root,  "py")
+
+    def placer(self, year: int, day: int):
+        return os.path.join("aocpy", "aoc_solutions", f"year{year}", "resources", "Day{:0>2d}".format(day), "input.txt")
 
 
-def process_all_inputs(
-    session_cookie: str,
-    root_dir: str | None = None,
-    overwrite: bool = False
-) -> None:
+class JavaProject(ProjectStructure):
+    def __init__(self, root, ext: str = "java"):
+        super().__init__(root, ext)
+
+    def placer(self, year: int, day: int):
+        return os.path.join(f"{year}", "resources", "Day{:0>2d}".format(day), "input.txt")
+
+
+class CppProject(JavaProject):
+    def __init__(self, root):
+        super().__init__(root, "h")
+
+
+class TypeScriptProject(JavaProject):
+    def __init__(self, root):
+        super().__init__(root, "ts")
+
+
+def download_input(url: str, session_cookie: str, retry: int = 0) -> str | None:
+    if retry >= 5:
+        return None
+    response = requests.get(url, headers={"Cookie": f"session={session_cookie}"})
+    try:
+        response.raise_for_status()
+        return response.text
+    except requests.HTTPError as identifier:
+        print(identifier)
+        print("Retrying")
+        time.sleep(random.randrange(2 ** (retry+1)))
+        return download_input(url, session_cookie, retry+1)
+
+
+def process_all_inputs(session_cookie: str, root_dir: str | None = None, overwrite: bool = False):
     if root_dir is None:
         return
-    root_dirs = [root_dir, *[os.path.join(root_dir, langs) for langs in ['TypeScript', 'Java', 'Cpp', 'Python']]]
-    dirs = find_aoc_directories(root_dirs)
+    dirs: dict[tuple[int, int], list[str]] = {}
+    Projects: list[ProjectStructure] = [PythonProject("Python"), JavaProject("Java"),
+                                        CppProject("Cpp"), TypeScriptProject("TypeScript")]
+    for projects in Projects:
+        for k, v in projects.places.items():
+            dirs.setdefault(k, []).append(v)
     for (year, day), distros in dirs.items():
         for distro in distros:
             if os.path.exists(distro) and not overwrite:
                 print(f"Skipping existing: {distro}")
                 continue
-            try:
-                url = f"https://adventofcode.com/{year}/day/{day}/input"
-                print(f"\nDownloading {url}...")
-                input_text = download_input(url, session_cookie)
-                os.makedirs(os.path.dirname(distro), exist_ok=True)
-                with open(distro, "w") as f:
-                    f.write(input_text)
-                print(f"\tSaved to {distro}")
-            except Exception as e:
-                print(f"\tFailed to download/save to {distro}", e)
+            url = f"https://adventofcode.com/{year}/day/{day}/input"
+            print(f"Downloading {url}...")
+            input_text = download_input(url, session_cookie)
+            if input_text is None:
+                raise ConnectionError("Check network and session cookie")
+            os.makedirs(os.path.dirname(distro), exist_ok=True)
+            with open(distro, "w") as f:
+                f.write(input_text)
+            print(f"\tSaved to {distro}")
+        print(f"Finishied {year}.{day}")
+        print()
 
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.abspath(os.path.join(script_dir, ".."))
+project_root = os.getcwd()
 session_cookie = os.environ.get("AOC_SESSION_COOKIE")
 if not session_cookie:
-    print(f'Session cookie not found in environment, looking for {project_root}/.env')
+    envFilePath = os.path.join(project_root, ".env")
+    print(f'Session cookie not found in environment, looking for {envFilePath}')
     try:
-        with open(os.path.join(project_root, ".env")) as file:
+        with open(envFilePath) as file:
             session_cookie = file.read().strip().split("=")[1]
     except FileNotFoundError as e:
         raise ValueError("Missing AOC_SESSION_COOKIE environment variable", e)

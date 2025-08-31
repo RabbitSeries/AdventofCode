@@ -1,47 +1,57 @@
-#include <bits/stdc++.h>
-using namespace std;
-#include <utils/SolutionBase.hpp>
+#include <fstream>
+#include <functional>
+#include <map>
+#include <queue>
+#include <string>
+#include <vector>
 
-namespace RaceConditionData {
-using pos = pair<int, int>;
-}
+#include "utils/ISolution.hpp"
 
-template <>
-struct std::hash<RaceConditionData::pos> {
-    size_t operator()( RaceConditionData::pos const& p ) const {
-        return p.first * 200 + p.second;
-    }
-};
+// namespace RaceConditionData {
+// using pos = pair<int, int>;
+// }
 
-class RaceCondition : public SolutionBase {
-	REGISTER( RaceCondition )
+// template <>
+// struct std::hash<RaceConditionData::pos> {
+//     size_t operator()( RaceConditionData::pos const& p ) const {
+//         return p.first * 200 + p.second;
+//     }
+// };
 
-    using pos = RaceConditionData::pos;
-    friend struct std::hash<pos>;
+class RaceCondition : public ISolution {
+    REGISTER( RaceCondition )
+    using pos = std::pair<int, int>;
+    // using pos = RaceConditionData::pos;
+    // friend struct std::hash<pos>; // This is not neccessary
+    struct PairHasher {
+        size_t operator()( pos const& p ) const {
+            return p.first * 200 + p.second;
+        }
+    };
+
     enum cellStatus {
         WALL,
         EMPTY
     };
-
+    using RoadMap = std::vector<std::vector<cellStatus>>;
     int dx[4]{ 0, 0, 1, -1 };
     int dy[4]{ 1, -1, 0, 0 };
 
-    bool isValid( int rows, int cols, pos const& curPos, vector<vector<cellStatus>> const& roadMap ) {
+    bool isValid( int rows, int cols, pos const& curPos, RoadMap const& roadMap ) {
         return curPos.first < rows && curPos.second < cols && curPos.first >= 0 && curPos.second >= 0 && roadMap[curPos.first][curPos.second] == EMPTY;
     }
-    bool isWall( int rows, int cols, pos const& curPos, vector<vector<cellStatus>> const& roadMap ) {
+    bool isWall( int rows, int cols, pos const& curPos, RoadMap const& roadMap ) {
         return curPos.first < rows && curPos.second < cols && curPos.first >= 0 && curPos.second >= 0 && roadMap[curPos.first][curPos.second] == WALL;
     }
     pos getNextPos( pos const& curPos, int id ) {
         return { curPos.first + dx[id], curPos.second + dy[id] };
     }
-
-    int Dijkstra( pos const& start, pos const& end, vector<vector<cellStatus>> const& roadMap ) {
+    int Dijkstra( pos const& start, pos const& end, RoadMap const& roadMap ) {
         int rows = roadMap.size(), cols = roadMap[0].size();
-        vector<vector<int>> cost( rows, vector<int>( cols, INT_MAX ) );
+        std::vector<std::vector<int>> cost( rows, vector<int>( cols, INT_MAX ) );
         // vector<vector<int>> optimized( rows, vector<int>( cols, false ) );
-        using pqElem = pair<int, pos>;
-        priority_queue<pqElem, vector<pqElem>, greater<>> pq;
+        using pqElem = std::pair<int, pos>;
+        std::priority_queue<pqElem, std::vector<pqElem>, std::greater<>> pq;
         pq.push( { 0, start } );
         cost[start.first][start.second] = 0;
         path.emplace( start, 0 );
@@ -70,11 +80,11 @@ class RaceCondition : public SolutionBase {
     }
 
     void readMap() {
-        ifstream input( "Day20/input.txt" );
+        std::ifstream input( "Day20/input.txt" );
         // FILE* input( fopen( "example.txt", "r" ) );
-        string strBuf;
+        std::string strBuf;
         while ( getline( input, strBuf ) ) {
-            vector<cellStatus> row;
+            std::vector<cellStatus> row;
             for ( auto c : strBuf ) {
                 switch ( c ) {
                     case '#':
@@ -158,9 +168,9 @@ class RaceCondition : public SolutionBase {
         }
         return cnt;
     }
-    vector<vector<cellStatus>> roadMap;
+    RoadMap roadMap;
     pos start, end;
-    unordered_map<pos, int> path;
+    std::unordered_map<pos, int, PairHasher> path;
 
    public:
     void Solution1() {

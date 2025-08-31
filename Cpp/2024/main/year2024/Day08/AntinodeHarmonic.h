@@ -6,15 +6,15 @@
 #include <vector>
 
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
-class AntinodeHarmonic : public SolutionBase {
+#include "utils/ISolution.hpp"
+class AntinodeHarmonic : public ISolution {
     REGISTER( AntinodeHarmonic )
 
-    typedef struct Antenna {
+    using pos = struct Antenna {
         int x, y;
         Antenna() { x = y = 0; }
         Antenna( int _x, int _y ) : x( _x ), y( _y ) {}
-    } pos;
+    };
 
     bool isValid( pos p, const std::vector<std::string>& map ) {
         return p.x >= 0 && p.x < rows && p.y >= 0 && p.y < cols;

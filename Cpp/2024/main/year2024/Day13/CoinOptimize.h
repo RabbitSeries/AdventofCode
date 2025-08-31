@@ -8,8 +8,8 @@
 #include <tuple>
 #include <vector>
 
-#include "utils/SolutionBase.hpp"
-class CoinOptimize : public SolutionBase {
+#include "utils/ISolution.hpp"
+class CoinOptimize : public ISolution {
     REGISTER( CoinOptimize )
 
     using ll = long long;

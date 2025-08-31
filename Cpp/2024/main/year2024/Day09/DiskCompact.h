@@ -1,11 +1,11 @@
 #include "bits/stdc++.h"
 using namespace std;
 
-#include <utils/SolutionBase.hpp>
-class DiskCompact : public SolutionBase {
-	REGISTER( DiskCompact )
+#include <utils/ISolution.hpp>
+class DiskCompact : public ISolution {
+    REGISTER( DiskCompact )
 
-    typedef long long ll;
+    using ll = long long;
 
     void appendFileBlock( int id, int size, vector<int>& disk ) {
         while ( size-- ) {

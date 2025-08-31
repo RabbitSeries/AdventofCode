@@ -84,14 +84,14 @@
         {
             "type": "shell",
             "label": "[Run InputDownloader]",
-            "command": "python downloader.py",
+            "command": "python InputDownloader/downloader.py",
             "options": {
                 "env": {
                     "AOC_SESSION_COOKIE": "${input:AOC_SESSION_COOKIE}",
                     "OVERWRITE_DOWNLOAD": "${input:OVERWRITE_DOWNLOAD}"
                 },
                 // Windows is case-insensitive to load this cwd, but linux is not
-                "cwd": "${workspaceFolder}/InputDownloader"
+                "cwd": "${workspaceFolder}"
             },
             "problemMatcher": [
                 "$python"

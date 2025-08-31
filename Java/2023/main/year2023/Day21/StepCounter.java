@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class StepCounter implements SolutionBase {
+public class StepCounter implements ISolution {
     List<String> Farm = null, ZeroFarm = null;
 
     int rows = 0, cols = 0;

@@ -1,7 +1,7 @@
 #include "bits/stdc++.h"
 using namespace std;
-#include <utils/SolutionBase.hpp>
-class MazeDijkstra : public SolutionBase {
+#include <utils/ISolution.hpp>
+class MazeDijkstra : public ISolution {
 	REGISTER( MazeDijkstra )
 
     struct Step : public pair<int, int> {

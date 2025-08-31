@@ -5,7 +5,7 @@ import java.util.*;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class CosmicDistance implements SolutionBase {
+public class CosmicDistance implements ISolution {
 
     List<List<Integer>> CosmicMap; // Map char to id of Galaxy, -1 for empty
 

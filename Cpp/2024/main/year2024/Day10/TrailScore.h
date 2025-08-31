@@ -9,11 +9,11 @@
 #include <vector>
 
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
-class TrailScore : public SolutionBase {
+#include "utils/ISolution.hpp"
+class TrailScore : public ISolution {
     REGISTER( TrailScore )
 
-    typedef std::pair<int, int> pos;
+    using pos = std::pair<int, int> ;
 
     const int dx[4]{ -1, 1, 0, 0 };
     const int dy[4]{ 0, 0, -1, 1 };

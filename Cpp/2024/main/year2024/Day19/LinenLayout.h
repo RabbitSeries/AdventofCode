@@ -1,21 +1,27 @@
-#include <bits/stdc++.h>
-using namespace std;
-#include <utils/SolutionBase.hpp>
-class LinenLayout : public SolutionBase {
-	REGISTER( LinenLayout )
+#include <algorithm>
+#include <cstddef>
+#include <fstream>
+#include <ranges>
+#include <regex>
+#include <string>
+#include <vector>
 
-    typedef unsigned long long ull;
-    void readKeys( vector<string>& keys, ifstream& input ) {
-        regex pattern( R"(\b(.*?)(?:,|$))" );
-        for ( string buf; getline( input, buf ) && !buf.empty(); ) {
-            for ( sregex_iterator it( buf.begin(), buf.end(), pattern ), end_it; it != end_it; it++ ) {
+#include "utils/ISolution.hpp"
+class LinenLayout : public ISolution {
+    REGISTER( LinenLayout )
+
+    using ull = unsigned long long;
+    void readKeys( std::vector<std::string>& keys, ifstream& input ) {
+        std::regex pattern( R"(\b(.*?)(?:,|$))" );
+        for ( std::string buf; getline( input, buf ) && !buf.empty(); ) {
+            for ( std::sregex_iterator it( buf.begin(), buf.end(), pattern ), end_it; it != end_it; it++ ) {
                 if ( !( *it )[1].str().empty() )
                     keys.push_back( ( *it )[1] );
             }
         }
     }
 
-    bool match( vector<string> const& keys, string const& design, size_t curpos = 0 ) {
+    bool match( std::vector<std::string> const& keys, std::string const& design, size_t curpos = 0 ) {
         if ( curpos == design.size() ) {
             return true;
         }
@@ -31,8 +37,8 @@ class LinenLayout : public SolutionBase {
         }
         return false;
     }
-    vector<ull> dp;
-    ull ALLMatch( vector<string> const& keys, string const& design ) {
+    std::vector<ull> dp;
+    ull ALLMatch( std::vector<std::string> const& keys, std::string const& design ) {
         //     resize(size_type __new_size)
         //     {
         //   if (__new_size > size())
@@ -52,20 +58,20 @@ class LinenLayout : public SolutionBase {
         }
         return dp[design.size()];
     }
-    vector<string> keys, designs;
+    std::vector<std::string> keys, designs;
 
    public:
     void Solution1() {
         ifstream input( "Day19/input.txt" );  // RAII
         readKeys( keys, input );
         readKeys( designs, input );
-        printRes( 1, ranges::count_if( designs.begin(), designs.end(), [this]( string const& design ) {
+        printRes( 1, std::ranges::count_if( designs, [this]( string const& design ) {
                       return match( keys, design );
                   } ) );
     }
 
     void Solution2() {
-        printRes( 2, accumulate( designs.begin(), designs.end(), 0ull, [this]( ull init, string const& design ) {
+        printRes( 2, std::ranges::fold_left( designs, 0ull, [this]( ull init, string const& design ) {
                       return init + ALLMatch( keys, design );
                   } ) );
     }
