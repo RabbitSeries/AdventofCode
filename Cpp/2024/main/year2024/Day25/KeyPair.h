@@ -1,81 +1,63 @@
-#include "bits/stdc++.h"
-using namespace std;
-#include <utils/SolutionBase.hpp>
-class KeyPair : public SolutionBase {
+#include <algorithm>
+#include <fstream>
+#include <ranges>
+#include <string>
+#include <tuple>
+#include <unordered_set>
+#include <utility>
+#include <vector>
+
+#include "utils/ISolution.hpp"
+class KeyPair : public ISolution {
     REGISTER( KeyPair )
 
-    typedef vector<int> schematics;
-    // TODO Change this algorithm to schema hash code and mapping.
-    bool isUnique( schematics const& schema, vector<schematics> const& schemaList ) {
-        for ( auto const& s : schemaList ) {
-            bool isEuqal = true;
-            for ( int pin = 0; pin < 5; pin++ ) {
-                if ( schema[pin] != s[pin] ) {
-                    isEuqal = false;
-                }
-            }
-            if ( isEuqal ) {
-                return false;
-            }
+    using schematic = std::vector<int>;
+    struct SchemaHasher {
+        size_t operator()( const schematic& obj ) const {
+            return std::ranges::fold_left( obj, 0, []( int sum, int num ) {
+                return sum * 10 + num;
+            } );
         }
-        return true;
-    }
+    };
+    using SchemaSet = std::unordered_set<schematic, SchemaHasher>;
 
    public:
     void Solution1() {
-        vector<schematics> lockList, keyList;
-        ifstream input( "Day25/input.txt" );
+        SchemaSet lockList, keyList;
+        std::ifstream input( "Day25/input.txt" );
         int rowTimes = 0;
         bool isLock = true;
-        schematics row( 5, 0 );
-        for ( string linebuf; getline( input, linebuf ); ) {
-            if ( linebuf.size() < 5 ) {
+        schematic row( 5, 0 );
+        for ( std::string linebuf; getline( input, linebuf ); ) {
+            if ( linebuf.empty() ) {
+                rowTimes = 0;
                 continue;
+            }
+            if ( rowTimes == 0 ) {
+                isLock = ( linebuf == "#####" );
+                rowTimes++;
             } else {
-                if ( rowTimes == 0 ) {
-                    if ( linebuf.substr( 0, 5 ) == "#####" ) {
-                        isLock = true;
-                        rowTimes++;
-                    } else if ( linebuf.substr( 0, 5 ) == "....." ) {
-                        isLock = false;
-                        rowTimes++;
+                if ( rowTimes <= 5 ) {
+                    for ( auto [r, p] : std::views::zip( row, linebuf ) ) {
+                        r += ( p == '#' );
                     }
+                    rowTimes++;
                 } else {
-                    if ( rowTimes != 6 ) {
-                        for ( int pin = 0; pin < 5; pin++ ) {
-                            if ( linebuf[pin] == '#' ) {
-                                row[pin]++;
-                            }
-                        }
-                        rowTimes++;
+                    if ( isLock ) {
+                        lockList.emplace( std::move( row ) );
                     } else {
-                        if ( isLock ) {
-                            if ( isUnique( row, lockList ) ) {
-                                lockList.push_back( row );
-                            }
-                        } else {
-                            if ( isUnique( row, keyList ) ) {
-                                keyList.push_back( row );
-                            }
-                        }
-                        fill( row.begin(), row.end(), 0 );
-                        rowTimes = 0;
+                        keyList.emplace( std::move( row ) );
                     }
+                    row = schematic( 5, 0 );
                 }
             }
         }
         int res = 0;
-        for ( schematics& lock : lockList ) {
-            for ( schematics& key : keyList ) {
-                bool fit = true;
-                for ( int pin = 0; pin < 5; pin++ ) {
-                    if ( lock[pin] + key[pin] > 5 ) {
-                        fit = false;
-                    }
-                }
-                if ( fit ) {
-                    res++;
-                }
+        for ( auto& lock : lockList ) {
+            for ( auto& key : keyList ) {
+                res += std::ranges::all_of( std::views::zip( lock, key ), []( auto const& pin ) {
+                    return ( std::get<0>( pin ) + std::get<1>( pin ) ) <= 5;
+                } );
             }
         }
         printRes( 1, res );

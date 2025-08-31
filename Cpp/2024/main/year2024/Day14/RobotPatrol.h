@@ -1,20 +1,25 @@
-#include "bits/stdc++.h"
-using namespace std;
+#include <algorithm>
+#include <fstream>
+#include <map>
+#include <ranges>
+#include <regex>
+#include <string>
+#include <vector>
 
-#include <utils/SolutionBase.hpp>
-class RobotPatrol : public SolutionBase {
-	REGISTER( RobotPatrol )
+#include "utils/ISolution.hpp"
+class RobotPatrol : public ISolution {
+    REGISTER( RobotPatrol )
 
-    typedef struct robot {
+    struct robot {
         robot() {};
         robot( int leftDis, int topDis, int horizenVel, int verticalVel ) : curPos( leftDis, topDis ),
                                                                             vel( horizenVel, verticalVel ) {};
-        pair<int, int> curPos{};
-        pair<int, int> vel{};
-    } robot;
+        std::pair<int, int> curPos{};
+        std::pair<int, int> vel{};
+    };
     const int WIDTH = 101, HEIGHT = 103;
     using ull = unsigned long long;
-    ull quadrantCount( vector<robot> const& s ) {
+    ull quadrantCount( std::vector<robot> const& s ) {
         // vector<vector<bool>> stacked( HEIGHT, vector<bool>( WIDTH, false ) );
         int wmiddle = WIDTH / 2, hmiddle = HEIGHT / 2;
         ull q1 = 0, q2 = 0, q3 = 0, q4 = 0;
@@ -34,20 +39,20 @@ class RobotPatrol : public SolutionBase {
         return q1 * q2 * q3 * q4;
     }
 
-    vector<robot> step( vector<robot> s, int cnt ) {
+    std::vector<robot> step( std::vector<robot> s, int cnt ) {
         for ( auto& rbt : s ) {
             rbt.curPos.first = ( rbt.curPos.first + ( WIDTH + rbt.vel.first ) * cnt ) % WIDTH;
             rbt.curPos.second = ( rbt.curPos.second + ( HEIGHT + rbt.vel.second ) * cnt ) % HEIGHT;
         }
         return s;
     }
-    vector<robot> specs;
+    std::vector<robot> specs;
 
     void readFile() {
-        ifstream input( "Day14/input.txt" );
-        regex re( "p=([0-9]+),([0-9]+).*v=(-?[0-9]+),(-?[0-9]+)" );
-        smatch m;
-        for ( string buf; getline( input, buf ); ) {
+        std::ifstream input( "Day14/input.txt" );
+        std::regex re( "p=([0-9]+),([0-9]+).*v=(-?[0-9]+),(-?[0-9]+)" );
+        std::smatch m;
+        for ( std::string buf; getline( input, buf ); ) {
             regex_search( buf, m, re );
             if ( m.size() == 5 ) {
                 specs.push_back( robot( stoi( m[1] ), stoi( m[2] ), stoi( m[3] ), stoi( m[4] ) ) );
@@ -55,10 +60,10 @@ class RobotPatrol : public SolutionBase {
         }
     }
     template <typename T>
-    T getter( pair<T, T> const& p, bool getFirst ) {
+    T getter( std::pair<T, T> const& p, bool getFirst ) {
         return getFirst ? p.first : p.second;
     }
-    int centerVariance( int stepCnt, vector<robot> const& specs, bool isFirst, int SCALE ) {
+    int centerVariance( int stepCnt, std::vector<robot> const& specs, bool isFirst, int SCALE ) {
         int var = 0;
         for ( const auto& rbt : specs ) {
             var += abs( ( getter( rbt.curPos, isFirst ) + ( SCALE + getter( rbt.vel, isFirst ) ) * stepCnt ) % SCALE - ( SCALE - 1 ) / 2 );
@@ -80,7 +85,7 @@ class RobotPatrol : public SolutionBase {
         int x = 0, y;
         int res = extendGCD( a, b, x, y );
         if ( res != 1 ) {
-            cerr << "Error reverserMod operands\n";
+            std::cerr << "Error reverserMod operands\n";
             return -1;
         }
         // assert( extendGCD( a, b, x, y ) == 1 );// release mode will skip assert
@@ -96,12 +101,12 @@ class RobotPatrol : public SolutionBase {
         printRes( 1, quadrantCount( step( specs, 100 ) ) );
     }
     void Solution2() {
-        int minDxX = *ranges::min_element( views::iota( 0, WIDTH ),
-                                           {},
-                                           bind( mem_fn( &RobotPatrol::centerVariance ), *this, std::placeholders::_1, cref( specs ), true, WIDTH ) );
-        int minDyY = *ranges::min_element( views::iota( 0, HEIGHT ),
-                                           {},
-                                           bind( &RobotPatrol::centerVariance, this, std::placeholders::_1, cref( specs ), false, HEIGHT ) );
+        int minDxX = *std::ranges::min_element( std::views::iota( 0, WIDTH ),
+                                                {},
+                                                bind( mem_fn( &RobotPatrol::centerVariance ), *this, std::placeholders::_1, cref( specs ), true, WIDTH ) );
+        int minDyY = *std::ranges::min_element( std::views::iota( 0, HEIGHT ),
+                                                {},
+                                                bind( &RobotPatrol::centerVariance, this, std::placeholders::_1, cref( specs ), false, HEIGHT ) );
         printRes( 2, positiveMod( reverseMod( WIDTH, HEIGHT ) * ( minDyY - minDxX ), HEIGHT ) * WIDTH + minDxX );
     }
 };

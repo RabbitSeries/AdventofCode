@@ -3,8 +3,8 @@
 #include <vector>
 
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
-class CheckLevelInOrder : public SolutionBase {
+#include "utils/ISolution.hpp"
+class CheckLevelInOrder : public ISolution {
     REGISTER( CheckLevelInOrder )
 
     inline bool checkDecrease( std::vector<int> const& Levels ) {

@@ -10,7 +10,7 @@ import JavaDataModel.*;
 import java.util.AbstractMap.*;
 
 @AoCSolution()
-public class CardSort implements SolutionBase {
+public class CardSort implements ISolution {
     List<Entry<String, Integer>> cardBits;
 
     static String Rule1Cards = "AKQJT98765432";

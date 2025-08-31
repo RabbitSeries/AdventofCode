@@ -8,8 +8,8 @@
 #include <tuple>
 #include <vector>
 
-#include "utils/SolutionBase.hpp"
-class CoinOptimize : public SolutionBase {
+#include "utils/ISolution.hpp"
+class CoinOptimize : public ISolution {
     REGISTER( CoinOptimize )
 
     using ll = long long;
@@ -86,7 +86,7 @@ class CoinOptimize : public SolutionBase {
 
     void Solution2() {
         for ( auto& p : problemSet ) {
-            tie( p.prize.first, p.prize.second ) = make_pair( p.prize.first + TOP_UP, p.prize.second + TOP_UP );
+            std::tie( p.prize.first, p.prize.second ) = std::make_pair( p.prize.first + TOP_UP, p.prize.second + TOP_UP );
         }
         printRes( 2, solveAll() );
     }

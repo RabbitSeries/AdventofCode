@@ -15,7 +15,7 @@ import java.util.Set;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class LongestHike implements SolutionBase {
+public class LongestHike implements ISolution {
     final int PATH = -2;
 
     final int FOREST = -1;

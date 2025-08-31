@@ -9,8 +9,8 @@
 #include <unordered_set>
 
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
-class LANParty : public SolutionBase {
+#include "utils/ISolution.hpp"
+class LANParty : public ISolution {
     REGISTER( LANParty )
 
     void readFile() {

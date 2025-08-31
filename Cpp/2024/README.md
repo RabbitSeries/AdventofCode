@@ -1,28 +1,5 @@
 # 2024 Summary
 
-## 📜 Worth future utility
-
-### Day 9 Disk Fragmenter
-
-<div align="center">
-  <img src="images/DiskFragmentOriginal.png" alt="DiskFragmentOriginal" width="488" />
-</div>
-
-<div align="center">
-  <img src="images/DiskFragmentOutput.png" alt="DiskFragmentOutput" width="500" />
-</div>
-
-### Day 11 Plutonian Pebbles
-
-The multithreading approach has crashed my OS many times. The dynamic programming method is fruitful. However, what if the position of spawned stones matters in the result calculation?
-
-### Day 12 Garden Groups
-
-This problem guides a way of image edge detection algorithm.
-<div align="center">
-  <img src="images/EdgeDetection.png" alt="EdgeDetection" width="500" />
-</div>
-
 ### Day 14 Restroom Redoubt
 
 <div align="center">
@@ -50,7 +27,7 @@ Through trial, I have given up the multithreading apporach due to time insuffici
 
 ### Day 24 Crossed Wires
 
-[Cascading Full adder](./Day24/GatesVisualize.md)
+[Cascading Full adder](./main/year2024/Day24/GatesVisualize.md)
 
 ## 📆 TODOs
 
@@ -81,9 +58,9 @@ Through trial, I have given up the multithreading apporach due to time insuffici
 ## Valgrind log
 
 ```bash
-cmake -S . -B ./out/build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
-cmake --build ./out/build --config Release
-cd ./out/build/2024 && ./solution
+cmake --preset=unix-release
+cmake --build --preset=unix-release
+cd build/unix-release/Cpp/2024
 valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./solution > out.log 2> valgrind.log
 ```
 
@@ -91,16 +68,23 @@ valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./soluti
 - [MSVC Compiler Options](https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options-listed-alphabetically?view=msvc-170)
 
 ```log
-==165231== Memcheck, a memory error detector
-==165231== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
-==165231== Using Valgrind-3.25.0 and LibVEX; rerun with -h for copyright info
-==165231== Command: ./solution
-==165231== 
-==165231== 
-==165231== HEAP SUMMARY:
-==165231==     in use at exit: 0 bytes in 0 blocks
-==165231==   total heap usage: 2,221,101 allocs, 2,221,101 frees, 841,828,870 bytes allocated
-==165231== 
-==165231== All heap blocks were freed -- no leaks are possible
-==165231== 
-==165231== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+❯ cat valgrind.log 
+==3151== Memcheck, a memory error detector
+==3151== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==3151== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==3151== Command: ./solution
+==3151==
+---                                             Finished                                                ---
+---                                             Finished                                                ---
+---                                             Finished                                                ---
+...
+...
+==3151==
+==3151== HEAP SUMMARY:
+==3151==     in use at exit: 0 bytes in 0 blocks
+==3151==   total heap usage: 2,793,816 allocs, 2,793,816 frees, 1,699,015,747 bytes allocated
+==3151==
+==3151== All heap blocks were freed -- no leaks are possible
+==3151==
+==3151== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+```

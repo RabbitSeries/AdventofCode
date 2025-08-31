@@ -3,9 +3,9 @@
 #include <string>
 #include <vector>
 
-#include "utils/SolutionBase.hpp"
+#include "utils/ISolution.hpp"
 #include "utils/Stream/RegexStream.hpp"
-class CeresSearch : public SolutionBase {
+class CeresSearch : public ISolution {
     REGISTER( CeresSearch )
 
     std::vector<std::string> m;

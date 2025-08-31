@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class LavaInterior implements SolutionBase {
+public class LavaInterior implements ISolution {
     List<DigPlan> DigPlanList;
 
     HashMap<String, Integer> DirectionTranslate = new HashMap<>(Map.of("U", 3, "D", 1, "L", 2, "R", 0));

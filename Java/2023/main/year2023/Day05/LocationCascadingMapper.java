@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class LocationCascadingMapper implements SolutionBase {
+public class LocationCascadingMapper implements ISolution {
     List<Long> Seeds;
 
     List<List<TenaryTuple<Long, Long, Long>>> MapBlocks;

@@ -1,5 +1,5 @@
 {
-    "version": 8,
+    "version": 10,
     "cmakeMinimumRequired": {
         "major": 3,
         "minor": 28,
@@ -17,7 +17,8 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install/${presetName}"
-            }
+            },
+            "$comment": "VSCode cmake tools extension hasn't solved ANSI escape colored characters in garbled output, consider use \"CMAKE_COLOR_DIAGNOSTICS\": \"OFF\""
         },
         {
             "name": "ninja-release",

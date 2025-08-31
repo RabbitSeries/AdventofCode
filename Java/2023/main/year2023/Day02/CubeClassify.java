@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class CubeClassify implements SolutionBase {
+public class CubeClassify implements ISolution {
 
     List<List<Map<String, Integer>>> GameList;
 

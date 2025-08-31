@@ -1,3 +1,8 @@
+#include <chrono>
+#include <functional>
+#include <queue>
+#include <vector>
+
 #include "Day01/PairAndAdd.h"
 #include "Day02/CheckLevelInOrder.h"
 #include "Day03/PreciseMul.h"
@@ -23,7 +28,7 @@
 #include "Day23/LANParty.h"
 #include "Day24/TinkerWithGates.h"
 #include "Day25/KeyPair.h"
-
+#include "utils/ISolution.hpp"
 int main() {
     using solutionStat = std::tuple<int64_t, int, std::string>;
     int64_t t_cost = 0;

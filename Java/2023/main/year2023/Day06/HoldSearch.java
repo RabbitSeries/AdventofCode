@@ -7,7 +7,7 @@ import java.util.stream.*;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class HoldSearch implements SolutionBase {
+public class HoldSearch implements ISolution {
     List<Pair<Integer, Integer>> recordList;
 
     void readFile(BufferedReader input) throws IOException {

@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class CubeStack implements SolutionBase {
+public class CubeStack implements ISolution {
     final int EMPTY = -1;
 
     class Point3D extends TenaryTuple<Integer, Integer, Integer> {

@@ -8,7 +8,7 @@
 
 #include "KeyPadStructure.h"
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
+#include "utils/ISolution.hpp"
 
 /*
  * This is a legacy version of the command list's hasher this my stll results in some hash conflicts.
@@ -22,19 +22,18 @@ struct std::hash<pair<vector<char>, int>> {
     }
 };
  */
-class CascadingRemote : public SolutionBase {
+class CascadingRemote : public ISolution {
     REGISTER( CascadingRemote )
+    using ull = unsigned long long;
     struct commandHash {
-        inline size_t operator()( std::pair<std::vector<char>, int> const& token ) const {
-            return ( accumulate( token.first.begin(), token.first.end(), 0ull, []( unsigned long long const& init, char const& c ) {
+        size_t operator()( std::pair<std::vector<char>, int> const& token ) const {
+            return ( std::ranges::fold_left( token.first, 0ull, []( ull init, char c ) {
                          return ( init << 8 ) + c;
                      } )
                      << 8 ) +
                    token.second;
         }
     };
-
-    typedef unsigned long long ull;
 
     std::unordered_map<std::pair<std::vector<char>, int>, ull, commandHash> cacheMap;
 
@@ -142,7 +141,7 @@ class CascadingRemote : public SolutionBase {
         return 0;
     }
 
-    std::vector<std::vector<char>> getKeyPadAllPath( char const s, char const t, std::unordered_map<char, std::vector<std::pair<char, char>>> const& keyPad ) {
+    std::vector<std::vector<char>> getKeyPadAllPath( char s, char t, std::unordered_map<char, std::vector<std::pair<char, char>>> const& keyPad ) {
         using namespace std;
         map<char, int> cost;
         for ( auto& [key, nextKeyList] : keyPad ) {
@@ -161,7 +160,7 @@ class CascadingRemote : public SolutionBase {
             }
         };
         priority_queue<pair<int, point>, vector<pair<int, point>>, greater<>> pq;
-        pq.push( { 0, point( s, 0 ) } );
+        pq.emplace( 0, point( s, 0 ) );
         cost[s] = 0;
 
         point endPoint( t, 0 );
@@ -181,11 +180,7 @@ class CascadingRemote : public SolutionBase {
                     for ( auto& path : curPoint.linkRoad )
                         path.push_back( curCommand );
                 else {
-                    curPoint.linkRoad.push_back( {
-                        {
-                            curCommand,
-                        },
-                    } );
+                    curPoint.linkRoad.emplace_back( 1, curCommand );
                 }
             }
             // Output process
@@ -209,11 +204,7 @@ class CascadingRemote : public SolutionBase {
             }
         }
         if ( endPoint.linkRoad.empty() ) {
-            endPoint.linkRoad.push_back( {
-                {
-                    'A',
-                },
-            } );
+            endPoint.linkRoad.emplace_back( 1, 'A' );
         } else {
             for ( auto& road : endPoint.linkRoad ) {
                 road.push_back( 'A' );

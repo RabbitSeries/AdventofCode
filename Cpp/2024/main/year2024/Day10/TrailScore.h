@@ -9,11 +9,11 @@
 #include <vector>
 
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
-class TrailScore : public SolutionBase {
+#include "utils/ISolution.hpp"
+class TrailScore : public ISolution {
     REGISTER( TrailScore )
 
-    typedef std::pair<int, int> pos;
+    using pos = std::pair<int, int> ;
 
     const int dx[4]{ -1, 1, 0, 0 };
     const int dy[4]{ 0, 0, -1, 1 };
@@ -31,8 +31,8 @@ class TrailScore : public SolutionBase {
                 visited[x][y] = false;
             return 1;
         }
-        for ( int i : views::iota( 0, 4 ) ) {
-            auto nextPos = pair{ x + dx[i], y + dy[i] };
+        for ( int i : std::views::iota( 0, 4 ) ) {
+            auto nextPos = std::pair{ x + dx[i], y + dy[i] };
             if ( isValid( nextPos ) && !visited[nextPos.first][nextPos.second] && topomap[nextPos.first][nextPos.second] == topomap[x][y] + 1 ) {
                 score += trail( nextPos, visited, isSolution2 );
             }
@@ -41,8 +41,8 @@ class TrailScore : public SolutionBase {
         return score;
     }
 
-    vector<pos> headList;
-    vector<vector<int>> topomap;
+    std::vector<pos> headList;
+    std::vector<std::vector<int>> topomap;
 
     void readFile() {
         using namespace std;

@@ -10,7 +10,7 @@ import org.hipparchus.util.Pair;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class CharacterMatcher implements SolutionBase {
+public class CharacterMatcher implements ISolution {
 
     List<Pair<String, List<Integer>>> SpringLists;
 

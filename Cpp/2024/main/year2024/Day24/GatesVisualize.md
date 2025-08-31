@@ -2,13 +2,13 @@
 
 ## Multisim Cascading Fulladder diagram
 
-![CascadingFullAdder.png](../Images/CascadingFullAdder.png)
+![CascadingFullAdder.png](../../../images/CascadingFullAdder.png)
 
 ## Solution 1
 
 To begin with, suppose the carrier wire in the cascading adder has been found. As **there are no loops**(this condition is important), so the gates can't be swapped from latter gates to former gates. That makes the situation a lot simplifed. Thus, there can only exist five prossible swap (~~I haven't sort them out in a more practical way~~ See [Multisim diagram](./FullAdder.ms14)):
 
-![Possible swap](../Images/PossibleSwaps.png)
+![Possible swap](../../../images/PossibleSwaps.png)
 
 So to check one specific cascading level in the system, five gates input and output must match the specific rules, see [Source Code](./TinkerWithGates.h)
 

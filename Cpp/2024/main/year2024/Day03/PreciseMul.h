@@ -7,10 +7,10 @@
 #include <string>
 #include <vector>
 
-#include "utils/SolutionBase.hpp"
+#include "utils/ISolution.hpp"
 #include "utils/Stream/RegexStream.hpp"
 
-class PreciseMul : public SolutionBase {
+class PreciseMul : public ISolution {
     REGISTER( PreciseMul )
 
     std::string memory;

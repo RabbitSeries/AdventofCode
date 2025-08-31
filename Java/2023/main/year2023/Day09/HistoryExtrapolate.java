@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class HistoryExtrapolate implements SolutionBase {
+public class HistoryExtrapolate implements ISolution {
     List<List<Integer>> HistoryList;
 
     int predict(List<Integer> histroyList, boolean isForward) {

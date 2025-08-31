@@ -6,11 +6,11 @@
 #include <vector>
 
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
-class MonkeyMarket : public SolutionBase {
+#include "utils/ISolution.hpp"
+class MonkeyMarket : public ISolution {
     REGISTER( MonkeyMarket )
 
-    typedef unsigned long long ull;
+    using ull = unsigned long long;
 
     ull getNextSecret( ull curSecret ) {
         // This algorithm is too random, there is no need to dp.
@@ -34,7 +34,7 @@ class MonkeyMarket : public SolutionBase {
     }
 
     int index( std::vector<int> const& v, ull lend ) {
-        return accumulate( lend - 4 + v.begin(), v.begin() + lend, 0, []( int init, int e ) {
+        return accumulate( v.begin() + ( lend - 4 ), v.begin() + lend, 0, []( int init, int e ) {
             return init * 19 + e;
         } );
     }

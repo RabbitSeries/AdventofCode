@@ -6,11 +6,11 @@
 #include <string>
 
 #include "utils/BufferedReader.hpp"
-#include "utils/SolutionBase.hpp"
-class TwinkleStones : public SolutionBase {
+#include "utils/ISolution.hpp"
+class TwinkleStones : public ISolution {
     REGISTER( TwinkleStones )
 
-    typedef long long ll;
+    using ll = long long;
     std::map<ll, ll> TwinkleList;
     void readFile() {
         for ( const std::string& line : BufferedReader( "Day11/input.txt" ).lines().yield() ) {

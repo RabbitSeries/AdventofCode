@@ -6,12 +6,12 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ### Overall
 
- | Year                                |    Progress | Best TimeCost (seconds) |
- | :---------------------------------- |    -------: | ----------------------: |
- | [2021](./TypeScript/2021/README.md) |  3/25 ⭐⭐ |               Not yet   |
- | [2022](./Python/2022/README.md)     | 25/25 ⭐⭐ |               Not yet   |
- | [2023](./Java/2023/README.md)       | 25/25 ⭐⭐ |               9.820279  |
- | [2024](./Cpp/2024/README.md)        | 25/25 ⭐⭐ |               0.965016  |
+ | Year                                                         |    Progress | Best TimeCost (seconds) |
+ | :----------------------------------------------------        |    -------: | ----------------------: |
+ | [2021](./TypeScript/2021/README.md)                          |  3/25 ⭐⭐ |               Not yet   |
+ | [2022](./Python/aocpy/aoc_solutions/year2022/README.md)      | 25/25 ⭐⭐ |               209.622   |
+ | [2023](./Java/2023/README.md)                                | 25/25 ⭐⭐ |               9.820279  |
+ | [2024](./Cpp/2024/README.md)                                 | 25/25 ⭐⭐ |               0.965016  |
 
 > Runs on github actions.
 
@@ -44,10 +44,10 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 Language           |         files|         blank|       comment|          code
 :-------           |         ----:|         ----:|       ------:|          ---:
-C/C++ Header       |            33|           276|           182|          3154
 Java               |            37|           495|           257|          3076
-Python             |            29|           334|           156|          1472
-C++                |             6|            55|            21|           774
+C/C++ Header       |            33|           266|           207|          2959
+Python             |            30|           372|           165|          1646
+C++                |             5|            50|            21|           717
 TypeScript         |             6|             1|             1|            86
 CMake              |             6|            21|            21|            74
-SUM:               |           117|          1182|           638|          8636
+SUM:               |           117|          1205|           672|          8558

@@ -7,7 +7,7 @@ import java.util.stream.*;
 import JavaDataModel.*;
 
 @AoCSolution()
-public class Reflection implements SolutionBase {
+public class Reflection implements ISolution {
     List<List<String>> IslandMaps;
 
     void readFile(BufferedReader input) throws IOException {
