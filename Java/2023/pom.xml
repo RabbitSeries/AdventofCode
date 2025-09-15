@@ -7,11 +7,11 @@
     <groupId>rabbitseries.aoc.java.year2023</groupId>
     <artifactId>year2023</artifactId>
     <packaging>jar</packaging>
+
     <parent>
         <groupId>rabbitseries.aoc.java</groupId>
-        <artifactId>aocjava</artifactId>
+        <artifactId>aocjava-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <dependencies>
@@ -22,7 +22,6 @@
         <dependency>
             <groupId>rabbitseries.aoc.java.datamodel</groupId>
             <artifactId>datamodel</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
