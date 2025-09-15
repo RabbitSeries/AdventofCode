@@ -11,9 +11,9 @@ class LinenLayout : public ISolution {
     REGISTER( LinenLayout )
 
     using ull = unsigned long long;
-    void readKeys( std::vector<std::string>& keys, ifstream& input ) {
+    void readKeys( std::vector<std::string>& keys, std::ifstream& input ) {
         std::regex pattern( R"(\b(.*?)(?:,|$))" );
-        for ( std::string buf; getline( input, buf ) && !buf.empty(); ) {
+        for ( std::string buf; std::getline( input, buf ) && !buf.empty(); ) {
             for ( std::sregex_iterator it( buf.begin(), buf.end(), pattern ), end_it; it != end_it; it++ ) {
                 if ( !( *it )[1].str().empty() )
                     keys.push_back( ( *it )[1] );
@@ -47,7 +47,7 @@ class LinenLayout : public ISolution {
         //     _M_erase_at_end(this->_M_impl._M_start + __new_size);
         //     }
         dp.resize( design.size() + 1 );
-        fill( dp.begin(), dp.end(), 0 );  // Must refill
+        std::ranges::fill( dp, 0 );  // Must refill
         dp[0] = 1;
         for ( size_t i = 1; i <= design.size(); i++ ) {
             for ( auto& key : keys ) {
@@ -62,16 +62,16 @@ class LinenLayout : public ISolution {
 
    public:
     void Solution1() {
-        ifstream input( "Day19/input.txt" );  // RAII
+        std::ifstream input( "Day19/input.txt" );  // RAII
         readKeys( keys, input );
         readKeys( designs, input );
-        printRes( 1, std::ranges::count_if( designs, [this]( string const& design ) {
+        printRes( 1, std::ranges::count_if( designs, [this]( std::string const& design ) {
                       return match( keys, design );
                   } ) );
     }
 
     void Solution2() {
-        printRes( 2, std::ranges::fold_left( designs, 0ull, [this]( ull init, string const& design ) {
+        printRes( 2, std::ranges::fold_left( designs, 0ull, [this]( ull init, std::string const& design ) {
                       return init + ALLMatch( keys, design );
                   } ) );
     }

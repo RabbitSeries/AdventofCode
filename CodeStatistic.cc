@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cstdio>  // for popen(), pclose()
 #include <fstream>
 #include <generator>
@@ -10,9 +11,7 @@
 // constexpr int lang_w = 19, digit_w = 15;
 constexpr int lang_w = 19, digit_w = 14;
 
-struct Entry {
-    std::string lang;
-    int files, blank, comment, code;
+namespace Entry {
     template <typename T, typename... rest>
     static std::string constructLine( T&& lang, rest&&... args ) {
         std::ostringstream oss;
@@ -20,7 +19,7 @@ struct Entry {
         ( ..., ( oss << "|" << std::right << std::setw( digit_w ) << std::forward<rest>( args ) ) );
         return oss.str();
     }
-};
+};  // namespace Entry
 
 std::generator<std::string> splitlines( std::ifstream& ifs ) {
     for ( std::string buf; getline( ifs, buf ); ) {
@@ -59,17 +58,18 @@ int main() {
     }
     char buffer[4096];
     // Parse table lines
-    std::regex re( R"(^(.+?)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+))" );
+    std::regex re( R"(^\b(.+?)((?:\s+\d+){4}))" );
     std::vector<std::string> res{
         Entry::constructLine( "Language", "files", "blank", "comment", "code" ),
         Entry::constructLine( ":-------", "----:", "----:", "------:", "---:" ) };
-    while ( fgets( buffer, sizeof( buffer ), pipe ) ) {
+    while ( std::fgets( buffer, sizeof( buffer ), pipe ) ) {
         std::string line( buffer );
         std::smatch m;
-        if ( !std::regex_search( line, m, re ) ) {
-            continue;  // skip empty lines and cloc line seperators
+        if ( std::regex_search( line, m, re ) ) {
+            int files, blank, comment, code;
+            std::istringstream( m[2] ) >> files >> blank >> comment >> code;
+            res.emplace_back( Entry::constructLine( m[1], files, blank, comment, code ) );
         }
-        res.emplace_back( Entry::constructLine( m[1], m[2], m[3], m[4], m[5] ) );
     }
     if ( int status = pclose( pipe ); status == 0 ) {
         replaceFile( "README.md", "Language", res );

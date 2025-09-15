@@ -10,9 +10,8 @@
 
     <parent>
         <groupId>rabbitseries.aoc.java</groupId>
-        <artifactId>aocjava</artifactId>
+        <artifactId>aocjava-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <build>
@@ -76,7 +75,16 @@
         <dependency>
             <groupId>rabbitseries.aoc.java.datamodel</groupId>
             <artifactId>datamodel</artifactId>
-            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
         </dependency>
     </dependencies>
 

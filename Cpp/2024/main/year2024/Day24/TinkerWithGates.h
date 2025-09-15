@@ -112,6 +112,7 @@ class TinkerWithGates : public ISolution {
                               return info.first.starts_with( 'z' );
                           } ) |
                           std::ranges::to<std::set<WireInfo>>();
+        // std::ranges::sort( zWires );//const_cast<const decltype(*(declval<_Iter&>)())&&>(*(forward<_Out>)(__o))=(forward<_Tp>)(__t)'. It appears ranges::sort requires moveable
         for ( auto& [_, wire] : zWires ) {
             res = std::to_string( wire.data ) + res;
         }

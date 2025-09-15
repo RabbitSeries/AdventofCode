@@ -1,123 +1,96 @@
+#include <cmath>
+#include <fstream>
+#include <functional>
 #include <queue>
+#include <regex>
+#include <set>
+#include <sstream>
 #include <string>
 #include <vector>
 
-using namespace std;
-// #include <utils/ISolution.hpp>
+#include "utils/ISolution.hpp"
 class TenaryMachine : public ISolution {
     REGISTER( TenaryMachine )
 
     using ull = unsigned long long;
-    size_t pc = 0;
+    std::size_t pc = 0;
     ull ra = 0, rb = 0, rc = 0;
-    string outBuf = "";
-
-    void ( TenaryMachine::* fun[8] )( int operand ) = { &TenaryMachine::adv, &TenaryMachine::bxl, &TenaryMachine::bst, &TenaryMachine::jnz, &TenaryMachine::bxc, &TenaryMachine::out, &TenaryMachine::bdv, &TenaryMachine::cdv };
-
+    std::string outBuf = "";
+    std::vector<ull> instruction;
+    std::size_t init_ra = 0, init_rb = 0, init_rc = 0;
+    std::string program = "";
+    void InitRa( ull a ) {
+        pc = 0;
+        ra = a;
+        rb = 0;
+        rc = 0;
+        outBuf.clear();
+    }
+    void ( TenaryMachine::* fun[8] )( ull operand ) = { &TenaryMachine::adv, &TenaryMachine::bxl, &TenaryMachine::bst, &TenaryMachine::jnz,
+                                                        &TenaryMachine::bxc, &TenaryMachine::out, &TenaryMachine::bdv, &TenaryMachine::cdv };
     // It turns out that only opcode 0 will change the value of ra, and the example of this problem always use literal num to change its value. Within one round ra is only changed once, and was all the way devided to zero.
     // out = out + "," + to_string( ( ( ( ( modulo ) ^ 7 ) ^ ( tmp / ( unsigned long long )( powf128( 2, ( modulo ) ^ 7 ) ) ) ) ^ 7 ) % 8 );
-    void adv( int operand ) {
-#ifdef UNIX
-        ull denominator = (ull)powf128( 2, combo( operand ) );
-#else
-        ull denominator = (ull)powl( 2, combo( operand ) );
-#endif
-        ra = ra / denominator;
-        return;
+    void adv( ull operand ) {
+        ra = ra >> combo( operand );
     }
-
-    void bxl( int operand ) {
-        rb = ( ( rb ) ^ ull( operand ) );
-        return;
+    void bxl( ull operand ) {
+        rb = rb ^ operand;
     }
-
-    void bst( int operand ) {
+    void bst( ull operand ) {
         rb = combo( operand ) % 8;
-        return;
     }
-
-    void jnz( int operand ) {
-        if ( ra == 0 ) {
-            pc += 2;
-            return;
-        } else {
-            pc = operand;
-        }
+    void jnz( ull operand ) {
+        pc = operand;
     }
-
-    void bxc( int operand ) {
-        rb = ( ( rb ) ^ ( rc ) );
+    void bxc( ull operand ) {
+        rb = rb ^ rc;
     }
-
-    void out( int operand ) {
-        outBuf += "," + to_string( combo( operand ) % 8 );
+    void out( ull operand ) {
+        outBuf += "," + std::to_string( combo( operand ) % 8 );
     }
-
-    void bdv( int operand ) {
-        ull numerator = ra;
-        ull denominator = (ull)pow( 2, combo( operand ) );
-        rb = numerator / denominator;
+    void bdv( ull operand ) {
+        rb = ra >> combo( operand );
     }
-
-    void cdv( int operand ) {
-        ull numerator = ra;
-        ull denominator = (ull)pow( 2, combo( operand ) );
-        rc = numerator / denominator;
+    void cdv( ull operand ) {
+        rc = ra >> combo( operand );
     }
-
-    ull combo( int operand ) {
+    ull combo( ull operand ) {
         if ( operand <= 3 ) {
-            return (ull)operand;
+            return operand;
         }
         switch ( operand ) {
             case 4:
                 return ra;
             case 5:
                 return rb;
-            case 6:
-                return rc;
-            default:
-                cerr << "invild" << endl;
-                break;
         }
-        return 0;
+        return rc;  // case 6:
     }
-
-    void InitProgram( ull a, ull b, ull c ) {
-        pc = 0;
-        ra = a;
-        rb = b;
-        rc = c;
-        outBuf.clear();
-    }
-
     void operation( int opcode, int operand ) {
-        ( this->*( fun[opcode] ) )( operand );
-        if ( fun[opcode] != &TenaryMachine::jnz ) {
+        if ( fun[opcode] != &TenaryMachine::jnz || ra != 0 ) {
+            ( this->*( fun[opcode] ) )( operand );
+        }
+        if ( fun[opcode] != &TenaryMachine::jnz || ra == 0 ) {
             pc += 2;
         }
     }
-    vector<int> instruction;
-    size_t tra = 0, trb = 0, trc = 0;
-    string program = "";
-
     void readFile() {
-        regex re( "[0-9]+" );
-        ifstream input( "Day17/input.txt" );
-        for ( string buf; getline( input, buf ); ) {
-            sregex_iterator it( buf.begin(), buf.end(), re ), end_it;
+        std::regex re( "[0-9]+" );
+        std::ifstream input( "Day17/input.txt" );
+        for ( std::string buf; std::getline( input, buf ); ) {
+            std::sregex_iterator it( buf.begin(), buf.end(), re ), end_it;
             if ( distance( it, end_it ) == 1 ) {
-                if ( buf.find( "A" ) != string::npos ) {
-                    tra = stoi( ( *it ).str() );
-                } else if ( buf.find( "B" ) != string::npos ) {
-                    rb = trb = stoi( ( *it ).str() );
+                if ( buf.contains( "A" ) ) {
+                    init_ra = std::stoul( it->str() );
+                } else if ( buf.contains( "B" ) ) {
+                    init_rb = std::stoul( it->str() );
                 } else {
-                    rc = trc = stoi( ( *it ).str() );
+                    init_rc = std::stoul( it->str() );
                 }
             } else {
                 while ( it != end_it ) {
-                    instruction.push_back( stoi( ( *it ).str() ) );
-                    program += "," + ( *it ).str();
+                    instruction.push_back( std::stoul( it->str() ) );
+                    program += "," + it->str();
                     it++;
                 }
             }
@@ -127,61 +100,34 @@ class TenaryMachine : public ISolution {
    public:
     void Solution1() {
         readFile();
-        InitProgram( tra, 0, 0 );
+        InitRa( init_ra );
         while ( pc < instruction.size() ) {
-            int opcode = instruction[pc];
-            int operand = instruction[pc + 1];
-            operation( opcode, operand );
+            operation( instruction[pc], instruction[pc + 1] );
         }
         printRes( 1, outBuf.substr( 1 ) );
     }
 
     void Solution2() {
-        InitProgram( tra, 0, 0 );
-        ull p = 1;
-        // Yeah, I nailed it.
-        priority_queue<ull, vector<ull>, greater<>> processQue;
-        processQue.push( p );
-        // int filterdTimes = 0;
-        while ( !processQue.empty() ) {
-            ull searchBase = processQue.top();
-            processQue.pop();
-            int i = 0;
-            bool flag = false;
-            // This boundary is determined by the constant literal value after opcode 0: 0,3, 1<<3 = 8.
-            for ( ; i < 8; i++ ) {
+        std::priority_queue<ull, std::vector<ull>, std::greater<>> pq;
+        pq.push( 0 );
+        std::set<ull> visited( { 0 } );
+        while ( !pq.empty() ) {
+            ull searchBase = pq.top();
+            pq.pop();
+            // use 000 ~ 111 to fill last 3 bit
+            for ( int i : std::views::iota( searchBase == 0 ? 1 : 0, 8 ) ) {
                 ull curRA = searchBase + i;
-                InitProgram( curRA, 0, 0 );
-                // while( pc < instruction.size() ) {
-                //     int opcode = instruction[pc];
-                //     int operand = instruction[pc + 1];
-                //     operation( opcode, operand );
-                // }
-                ull copy = curRA;
-                do {
-                    outBuf = outBuf + "," + to_string( ( ( ( ( copy % 8 ) ^ 7 ) ^ ( copy / (ull)( pow( 2, ( copy % 8 ) ^ 7 ) ) ) ) ^ 7 ) % 8 );
-                    copy /= 8;
-                } while ( copy != 0 );
-
-                if ( outBuf.size() <= program.size() && outBuf == program.substr( program.size() - outBuf.size(), outBuf.size() ) ) {
-                    processQue.push( curRA << 3 );
-                    flag = true;
-                    // cout << outBuf << endl;
-                    if ( outBuf == program ) {
+                InitRa( curRA );
+                while ( pc < instruction.size() ) {
+                    operation( instruction[pc], instruction[pc + 1] );
+                }
+                if ( outBuf.size() <= program.size() && program.ends_with( outBuf ) ) {
+                    if ( outBuf.size() == program.size() ) {
                         printRes( 2, curRA );
-                        // cout << "Found register A: " << curRA << endl;
-                        // cout << (ull)( 0xFFFFFFFFFFFFFFFFull ) << endl;
-                        // Break here instead.
                         return;
                     }
-                    // Don't break me!
-                    // break;
-                    // Filtered, times 71, value 2140870108847336
-                    // There are multiple choice in 0-7 that can reach the current result, but some of them is invalid.
+                    pq.push( curRA << 3 );
                 }
-            }
-            if ( i == 8 && !flag ) {
-                // cout << "Filtered, times " << ++filterdTimes << ", value " << searchBase << endl;
             }
         }
     }

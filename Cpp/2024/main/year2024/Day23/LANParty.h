@@ -57,17 +57,15 @@ class LANParty : public ISolution {
             for ( auto& connection : connections ) {
                 if ( isConnected( atom, connection ) ) {
                     connection.insert( atom );  // Don't break here.
-                    continue;
                 }
             }
-            connections.emplace_back( set( { atom } ) );
+            connections.emplace_back( set{ atom } );
         }
         set<string>& passWord = *ranges::max_element( connections, {}, []( const set<string>& conn ) {
             return conn.size();
         } );
-        printRes( 2, ranges::fold_left_first( passWord, []( string const& acc, string const& host ) {
-                         return acc + "," + host;
-                     } ).value() );
-        return;
+        printRes( 2, ranges::fold_left( passWord, "", []( string const& acc, string const& host ) {
+                      return acc.empty() ? host : ( acc + "," + host );
+                  } ) );
     }
 };

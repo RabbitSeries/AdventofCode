@@ -2,8 +2,8 @@
 #include <map>
 #include <vector>
 
-// Head file initialization use static const to avoid CMKAE warnig
-static const std::unordered_map<char, std::vector<std::pair<char, char>>> NUMERIC_KEYPAD{
+// Head file initialization use inline to share one copy
+inline const std::unordered_map<char, std::vector<std::pair<char, char>>> NUMERIC_KEYPAD{
 
     {'A',{
                     {'3','^'},
@@ -83,7 +83,7 @@ static const std::unordered_map<char, std::vector<std::pair<char, char>>> NUMERI
 };
 
 
-static const std::unordered_map<char, std::vector<std::pair<char, char>>> DIRECTIONAL_KEYPAD{
+inline const std::unordered_map<char, std::vector<std::pair<char, char>>> DIRECTIONAL_KEYPAD{
         {'A',
             {
                 {'^','<'},

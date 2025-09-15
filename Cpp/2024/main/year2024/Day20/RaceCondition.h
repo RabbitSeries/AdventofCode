@@ -2,6 +2,7 @@
 #include <functional>
 #include <map>
 #include <queue>
+#include <ranges>
 #include <string>
 #include <vector>
 
@@ -48,7 +49,7 @@ class RaceCondition : public ISolution {
     }
     int Dijkstra( pos const& start, pos const& end, RoadMap const& roadMap ) {
         int rows = roadMap.size(), cols = roadMap[0].size();
-        std::vector<std::vector<int>> cost( rows, vector<int>( cols, INT_MAX ) );
+        std::vector cost( rows, std::vector<int>( cols, INT_MAX ) );
         // vector<vector<int>> optimized( rows, vector<int>( cols, false ) );
         using pqElem = std::pair<int, pos>;
         std::priority_queue<pqElem, std::vector<pqElem>, std::greater<>> pq;
@@ -56,7 +57,7 @@ class RaceCondition : public ISolution {
         cost[start.first][start.second] = 0;
         path.emplace( start, 0 );
         while ( !pq.empty() ) {
-            auto [curCost, curPos] = move( const_cast<pqElem&>( pq.top() ) );
+            auto [curCost, curPos] = std::move( const_cast<pqElem&>( pq.top() ) );
             pq.pop();
             // // TODO how to filter curCost == cost[start.first][start.second]
             if ( /* optimized[curPos.first][curPos.second] || */ curCost > cost[curPos.first][curPos.second] ) {
@@ -70,12 +71,12 @@ class RaceCondition : public ISolution {
                 pos nextPos( curPos.first + dx[i], curPos.second + dy[i] );
                 if ( isValid( rows, cols, nextPos, roadMap ) && curCost + 1 < cost[nextPos.first][nextPos.second] ) {
                     cost[nextPos.first][nextPos.second] = curCost + 1;
-                    pq.emplace( curCost + 1, move( nextPos ) );
+                    pq.emplace( curCost + 1, std::move( nextPos ) );
                     path.emplace( nextPos, curCost + 1 );
                 }
             }
         }
-        cout << "Path not found" << endl;
+        // std::cout << "Path not found" << std::endl;
         return 0;
     }
 
@@ -106,7 +107,7 @@ class RaceCondition : public ISolution {
                         break;
                 }
             }
-            roadMap.emplace_back( move( row ) );
+            roadMap.emplace_back( std::move( row ) );
         }
         input.close();
         return;
@@ -154,10 +155,10 @@ class RaceCondition : public ISolution {
     int getCheatZone( pos const& curPos ) {
         int cnt = 0;
         int rows = roadMap.size(), cols = roadMap[0].size();
-        for ( int i = -min( curPos.first, 20 ); i <= min( rows - 1 - curPos.first, 20 ); i++ ) {
-            for ( int j = -min( curPos.second, ( 20 - abs( i ) ) ); j <= min( cols - 1 - curPos.second, ( 20 - abs( i ) ) ); j++ ) {
+        for ( int i : std::views::iota( -std::min( curPos.first, 20 ), std::min( rows - 1 - curPos.first, 20 ) + 1 ) ) {
+            for ( int j : std::views::iota( -std::min( curPos.second, 20 - abs( i ) ), std::min( cols - 1 - curPos.second, 20 - abs( i ) ) + 1 ) ) {
                 pos checkPos{ curPos.first + i, curPos.second + j };
-                int cheatCost = abs( i ) + abs( j );
+                int cheatCost = std::abs( i ) + std::abs( j );
                 if ( isValid( rows, cols, checkPos, roadMap ) ) {
                     int proceedCost = cheatCost + path.size() - path.at( checkPos );
                     int savedTime = path.size() - path.at( curPos ) - proceedCost;

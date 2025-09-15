@@ -16,7 +16,7 @@ I don't know what circuit [this](./main/year2023/Day20/mermaid.md) is, but it se
 
 ## Day21
 
-Hard to exlain the langrange solution. See [Visualiza](./main/year2023/Day21/Visualize.ipynb) for BFS solution and math calculation.
+Hard to exlain the langrange solution. See [Visualize](./main/year2023/Day21/Visualize.ipynb) for BFS solution and math calculation.
 
 ## Day22
 

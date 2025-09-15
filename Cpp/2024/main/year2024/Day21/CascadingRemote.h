@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cassert>
 #include <map>
 #include <queue>
 #include <ranges>
@@ -10,36 +11,14 @@
 #include "utils/BufferedReader.hpp"
 #include "utils/ISolution.hpp"
 
-/*
- * This is a legacy version of the command list's hasher this my stll results in some hash conflicts.
-template <>
-struct std::hash<pair<vector<char>, int>> {
-    inline size_t operator()( pair<vector<char>, int> const& token ) const {
-        string vList = accumulate( token.first.begin(), token.first.end(), string(), []( string const res, char c ) {
-            return res + string( 1, c );
-        } );
-        return std::hash<string>{}( vList ) ^ ( std::hash<int>{}( token.second ) << 1 );
-    }
-};
- */
 class CascadingRemote : public ISolution {
     REGISTER( CascadingRemote )
     using ull = unsigned long long;
-    struct commandHash {
-        size_t operator()( std::pair<std::vector<char>, int> const& token ) const {
-            return ( std::ranges::fold_left( token.first, 0ull, []( ull init, char c ) {
-                         return ( init << 8 ) + c;
-                     } )
-                     << 8 ) +
-                   token.second;
-        }
-    };
-
-    std::unordered_map<std::pair<std::vector<char>, int>, ull, commandHash> cacheMap;
-
-    ull directionalCascadingCommand( std::vector<char> const& curComm, int robotCnt ) {
-        if ( cacheMap.find( { curComm, robotCnt } ) != cacheMap.end() ) {
-            return cacheMap[{ curComm, robotCnt }];
+    std::unordered_map<std::string, ull> cacheMap;
+    ull directionalCascadingCommand( std::string const& curComm, int robotCnt ) {
+        std::string key = curComm + "," + std::to_string( robotCnt );
+        if ( cacheMap.contains( key ) ) {
+            return cacheMap[key];
         }
         if ( robotCnt == 1 ) {
             // cout << "Generated level " << robotCnt << " command list, size: " << depth << " CurCommand size: " << curCommand.size() << endl;
@@ -49,29 +28,29 @@ class CascadingRemote : public ISolution {
                 curLen += getOnePath( i == 0 ? 'A' : curComm[i - 1], curComm[i], DIRECTIONAL_KEYPAD );
                 i++;
             }
-            cacheMap[{ curComm, robotCnt }] = curLen;
+            cacheMap[key] = curLen;
             return curLen;
         }
         ull res = 0;
         for ( size_t i = 0; i < curComm.size(); i++ ) {
-            std::vector<std::vector<char>> nextRobotCommList = getKeyPadAllPath( i == 0 ? 'A' : curComm[i - 1], curComm[i], DIRECTIONAL_KEYPAD );
+            std::vector<std::string> nextRobotCommList = getKeyPadAllPath( i == 0 ? 'A' : curComm[i - 1], curComm[i], DIRECTIONAL_KEYPAD );
             ull curLen = ULONG_LONG_MAX;
             for ( auto const& nextRobotComm : nextRobotCommList ) {
-                curLen = min( directionalCascadingCommand( nextRobotComm, robotCnt - 1 ), curLen );
+                curLen = std::min( directionalCascadingCommand( nextRobotComm, robotCnt - 1 ), curLen );
             }
             res += curLen;
         }
-        cacheMap[{ curComm, robotCnt }] = res;
+        cacheMap[key] = res;
         return res;
     }
 
     ull numericCommand( std::string const& password, int robotCnt ) {
         ull res = 0;
         for ( size_t i = 0; i < password.size(); i++ ) {
-            std::vector<std::vector<char>> nextRobotCommList = getKeyPadAllPath( i == 0 ? 'A' : password[i - 1], password[i], NUMERIC_KEYPAD );
+            std::vector<std::string> nextRobotCommList = getKeyPadAllPath( i == 0 ? 'A' : password[i - 1], password[i], NUMERIC_KEYPAD );
             ull curLen = ULONG_LONG_MAX;
             for ( auto const& nextRobotComm : nextRobotCommList ) {
-                curLen = min( directionalCascadingCommand( nextRobotComm, robotCnt - 1 ), curLen );
+                curLen = std::min( directionalCascadingCommand( nextRobotComm, robotCnt - 1 ), curLen );
             }
             res += curLen;
         }
@@ -93,7 +72,7 @@ class CascadingRemote : public ISolution {
             point( char c, char direction ) : curKey( c ), curDirection( direction ) {};
             char curKey;
             char curDirection;
-            vector<char> linkRoad;
+            std::vector<char> linkRoad;
             // Must use const qualifier
             // bool operator<( point & b ) {
             operator char() const {
@@ -105,7 +84,7 @@ class CascadingRemote : public ISolution {
         };
         point pointInitTest{ 1, 1 };
         assert( pointInitTest.curKey == 1 );
-        priority_queue<pair<int, point>, vector<pair<int, point>>, greater<>> pq;
+        std::priority_queue<std::pair<int, point>, std::vector<std::pair<int, point>>, std::greater<>> pq;
         pq.push( { 0, { s, 0 } } );
         cost[s] = 0;
         while ( !pq.empty() ) {
@@ -113,7 +92,7 @@ class CascadingRemote : public ISolution {
             char curKey = curPoint.curKey;
             char curDirection = curPoint.curDirection;
             pq.pop();
-            // Exlcude same cost path and optimized key.
+            // Exlcude higher cost path and optimized key.
             if ( /**visited.at( curKey )*/ curCost > cost.at( curKey ) ) {
                 continue;
             }
@@ -134,14 +113,14 @@ class CascadingRemote : public ISolution {
                     point nextPoint( nextKey, nextDirection );
                     cost[nextKey] = curCost + 1;
                     nextPoint.linkRoad = curPoint.linkRoad;
-                    pq.push( { curCost + 1, nextPoint } );
+                    pq.emplace( curCost + 1, std::move( nextPoint ) );
                 }
             }
         }
         return 0;
     }
 
-    std::vector<std::vector<char>> getKeyPadAllPath( char s, char t, std::unordered_map<char, std::vector<std::pair<char, char>>> const& keyPad ) {
+    std::vector<std::string> getKeyPadAllPath( char s, char t, std::unordered_map<char, std::vector<std::pair<char, char>>> const& keyPad ) {
         using namespace std;
         map<char, int> cost;
         for ( auto& [key, nextKeyList] : keyPad ) {
@@ -150,16 +129,13 @@ class CascadingRemote : public ISolution {
         struct point {
             point() {};
             point( char c, char comm ) : curKey( c ), curCommand( comm ) {};
-            char curKey;
-            char curCommand;
-            vector<vector<char>> linkRoad;
-            // Must use const qualifier
-            // bool operator<( point & b ) {
-            bool operator<( point b ) const {
+            char curKey, curCommand;
+            std::vector<std::string> linkRoad;
+            bool operator<( const point& b ) const {
                 return this->curKey < b.curKey;
             }
         };
-        priority_queue<pair<int, point>, vector<pair<int, point>>, greater<>> pq;
+        std::priority_queue<std::pair<int, point>, std::vector<std::pair<int, point>>, std::greater<>> pq;
         pq.emplace( 0, point( s, 0 ) );
         cost[s] = 0;
 
@@ -213,13 +189,13 @@ class CascadingRemote : public ISolution {
         return endPoint.linkRoad;
     }
 
-    vector<string> passwordList;
+    std::vector<std::string> passwordList;
 
     auto transform( int robotcnt ) {
-        return ranges::fold_left( passwordList | views::transform( [robotcnt, this]( const string& password ) {
-                                      return stoll( string( password.begin(), password.end() - 1 ) ) * numericCommand( password, robotcnt );
-                                  } ),
-                                  0ull, plus<>{} );
+        return std::ranges::fold_left( passwordList | std::views::transform( [robotcnt, this]( const std::string& password ) {
+                                           return std::stoll( password.substr( 0, password.size() - 1 ) ) * numericCommand( password, robotcnt );
+                                       } ),
+                                       0ull, std::plus<>{} );
     }
 
    public:

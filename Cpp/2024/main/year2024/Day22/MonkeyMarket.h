@@ -12,7 +12,7 @@ class MonkeyMarket : public ISolution {
 
     using ull = unsigned long long;
 
-    ull getNextSecret( ull curSecret ) {
+    static inline ull getNextSecret( ull curSecret ) {
         // This algorithm is too random, there is no need to dp.
         curSecret = ( ( curSecret * 64 ) ^ curSecret ) % 16777216;
         curSecret = ( ( curSecret / 32 ) ^ curSecret ) % 16777216;
@@ -22,19 +22,19 @@ class MonkeyMarket : public ISolution {
 
     void readFile() {
         for ( const std::string& buf : BufferedReader( "Day22/input.txt" ).lines().yield() ) {
-            secrets.push_back( stoi( buf ) );
+            secrets.push_back( std::stoi( buf ) );
         }
     }
 
-    ull getSecret( ull curSecret ) {
+    static inline ull getSecret( ull curSecret ) {
         for ( int i = 0; i < 2000; i++ ) {
             curSecret = getNextSecret( curSecret );
         }
         return curSecret;
     }
 
-    int index( std::vector<int> const& v, ull lend ) {
-        return accumulate( v.begin() + ( lend - 4 ), v.begin() + lend, 0, []( int init, int e ) {
+    int hasher( std::vector<int> const& v, ull lend ) {
+        return std::accumulate( v.begin() + ( lend - 4 ), v.begin() + lend, 0, []( int init, int e ) {
             return init * 19 + e;
         } );
     }
@@ -43,35 +43,33 @@ class MonkeyMarket : public ISolution {
    public:
     void Solution1() {
         readFile();
-        printRes( 1, accumulate( secrets.begin(), secrets.end(), 0ull, [this]( ull init, ull s ) {
-                      return init + getSecret( s );
-                  } ) );
+        printRes( 1, std::ranges::fold_left( secrets | std::views::transform( &MonkeyMarket::getSecret ), 0ull, std::plus<>{} ) );
         return;
     }
 
     void Solution2() {
         using namespace std;
-        vector<ull> OfferAcc( 19 * 19 * 19 * 19 ), optimal( 19 * 19 * 19 * 19 );
+        unordered_map<ull, ull> OfferAcc;
         vector<int> window( 2001 );
         for ( ull curSecret : secrets ) {
-            ranges::fill( optimal, 10 );
-            for ( ull i = 1, nextSecret, curOffer; i <= 2000; i++ ) {
-                nextSecret = getNextSecret( curSecret );
-                curOffer = ( to_string( nextSecret ).back() - '0' );
-                window[i] = to_string( nextSecret ).back() - to_string( curSecret ).back() + 9;
+            unordered_map<ull, ull> optimal;
+            for ( int i : views::iota( 1, 2001 ) ) {
+                ull nextSecret = getNextSecret( curSecret );
+                ull curOffer = ( std::to_string( nextSecret ).back() - '0' );
+                window[i] = std::to_string( nextSecret ).back() - std::to_string( curSecret ).back() + 9;
                 curSecret = nextSecret;
                 if ( i >= 4 ) {
-                    int wId = index( window, i + 1 );
-                    if ( optimal[wId] == 10 ) {  // Don't update if existed an offer. The monkey sells once seen the change sequence
+                    int wId = hasher( window, i + 1 );
+                    if ( !optimal.contains( wId ) ) {  // Don't update if existed an offer. The monkey sells once seen the change sequence
                         optimal[wId] = curOffer;
                     }
                 }
             }
-            for ( ull i = 0; i < optimal.size(); i++ ) {
-                OfferAcc[i] += ( optimal[i] == 10 ? 0 : optimal[i] );
+            for ( auto const& [wId, offer] : optimal ) {
+                OfferAcc[wId] += offer;
             }
         }
-        printRes( 2, *ranges::max_element( OfferAcc.begin(), OfferAcc.end() ) );
+        printRes( 2, ranges::max( OfferAcc | std::views::values ) );
         return;
     }
 };

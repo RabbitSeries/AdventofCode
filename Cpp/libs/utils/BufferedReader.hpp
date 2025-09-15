@@ -43,8 +43,8 @@ class BufferedReader {
     }
 };
 
-BufferedReader::LineStream::LineStream( BufferedReader&& reader ) : ss( std::move( reader.ss ) ) {}
+inline BufferedReader::LineStream::LineStream( BufferedReader&& reader ) : ss( std::move( reader.ss ) ) {}
 
-utils::Generator<std::string> BufferedReader::LineStream::yield() {
+inline utils::Generator<std::string> BufferedReader::LineStream::yield() {
     return yield( std::move( ss ) );
 }

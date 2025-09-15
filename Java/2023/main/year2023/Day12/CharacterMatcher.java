@@ -3,6 +3,7 @@ package year2023.Day12;
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.hipparchus.util.Pair;
@@ -40,8 +41,17 @@ public class CharacterMatcher implements ISolution {
                 .toList();
     }
 
+    /**
+     * @deprecated Low performance
+     * @since 1.0.1
+     */
     Map<String, Long> memo = new HashMap<>();
 
+    /**
+     * @deprecated Low performance
+     * @since 1.0.1
+     */
+    @Deprecated(since = "1.0.1")
     long iterateMatch(String m, int startPos, List<Integer> groups, int startGroup) {
         if (startGroup == groups.size()) {
             if (m.substring(startPos - 1).contains("#")) {
@@ -51,133 +61,132 @@ public class CharacterMatcher implements ISolution {
         } else if (memo.containsKey(startPos + "," + startGroup)) {
             return memo.get(startPos + "," + startGroup);
         }
-        long res = 0;
         int curGroupSize = groups.get(startGroup);
-        for (int i = startPos; i + curGroupSize - 1 < m.length(); i++) {
-            if (i > 0 && m.charAt(i - 1) == '#') {
-                break;
-            }
-            if (match(m, i, curGroupSize)) {
-                res += iterateMatch(m, i + curGroupSize + 1, groups, startGroup + 1);
-            }
-        }
+        long res = IntStream.rangeClosed(startPos, m.length() - curGroupSize)
+                .takeWhile(i -> i == 0 || m.charAt(i - 1) != '#')
+                .filter(i -> match(m, i, curGroupSize))
+                .mapToLong(i -> iterateMatch(m, i + curGroupSize + 1, groups, startGroup + 1))
+                .sum();
         memo.put(startPos + "," + startGroup, res);
         return res;
     }
 
-    class nodeInfo implements Comparable<nodeInfo> {
+    class NodeInfo implements Comparable<NodeInfo> {
         public int pos, group;
 
-        public nodeInfo(int pos, int group) {
+        public NodeInfo(int pos, int group) {
             this.pos = pos;
             this.group = group;
         }
 
         @Override
-        public int compareTo(nodeInfo node1) {
+        public int compareTo(NodeInfo node1) {
             return Integer.compare(pos, node1.pos);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.pos, this.group);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj.getClass() != this.getClass()) {
+                return false;
+            }
+            NodeInfo rhs = (NodeInfo) obj;
+            return this.pos == rhs.pos && this.group == rhs.group;
         }
     }
 
-    // heuristic search
-    // Yeah, reverse topological order should be starting from m.lenth()-1
-    // Then DP order should also be m[i][j] = m[i+curGroupSize][j], ehhhh I don't
-    // know
-    long DP(String m, List<Integer> groups) {// error
-        PriorityQueue<nodeInfo> pq = new PriorityQueue<>(Comparator.reverseOrder());
-        String str = "asdasd";
-        Arrays.stream(str.split("asdad")).map(s -> s.length());
-        HashMap<String, Long> visited = new HashMap<>();
-        pq.add(new nodeInfo(0, 0));
+    long DP(String m, List<Integer> groups) {// 162 ms
+        // dp meaning must be consistant with groups mapped value, in this case is count
+        long[][] dp = new long[m.length() + 1][groups.size() + 1]; // the former i(not include) and j(not include)'s matched times
+        dp[0][0] = 1;
+        for (int i : IntStream.rangeClosed(0, m.length()).toArray()) {
+            IntStream.rangeClosed(0, groups.size()).filter(j -> dp[i][j] != 0).forEach(j -> {
+                // dp[i-1][j-1] != 0, continue to match at i, j_th group
+                if (i < m.length() && m.charAt(i) != '#') {
+                    // opt to match current group at i+1 for '.', '?'
+                    dp[i + 1][j] += dp[i][j];
+                }
+                // Attempt to match current group
+                if (j < groups.size()) {
+                    int group = groups.get(j);
+                    if (match(m, i, group)) {
+                        int nextPos = i + group + 1; // skip a white space
+                        // Continue to match at nextPos on j+1 group
+                        // Or Accumulate to final position
+                        dp[Math.min(nextPos, m.length())][j + 1] += dp[i][j];
+                    }
+                }
+            });
+        }
+        return dp[m.length()][groups.size()];
+    }
+
+    long heuristics(String m, List<Integer> groups) { // 169 ms
+        var begin = new NodeInfo(0, 0);
+        var end = new NodeInfo(m.length(), groups.size());
+        Queue<NodeInfo> pq = new LinkedList<>(List.of(begin));
+        // Queue<NodeInfo> pq = new PriorityQueue<>(List.of(begin)); // Sort also works
+        Map<NodeInfo, Long> matchCount = new HashMap<>(Map.of(begin, 1L));
         while (!pq.isEmpty()) {
-            nodeInfo curNode = pq.poll();
-            int curPos = curNode.pos, curGroup = curNode.group;
-            if (curPos >= m.length()) {
-                continue;
+            NodeInfo node = pq.poll();
+            int i = node.pos, j = node.group;
+            if (i < m.length() && m.charAt(i) != '#') {
+                NodeInfo nextNode = new NodeInfo(i + 1, j);
+                if (!matchCount.containsKey(nextNode)) {
+                    pq.add(nextNode);
+                }
+                matchCount.compute(nextNode, (k, v) -> (v == null ? 0 : v) + matchCount.get(node));
             }
-            if (curGroup == groups.size()) {
-                boolean cleaned = true;
-                for (int i = curPos; i < m.length(); i++) {
-                    if (m.charAt(i) == '#') {
-                        cleaned = false;
+            if (j < groups.size()) {
+                int group = groups.get(j);
+                if (match(m, i, group)) {
+                    NodeInfo nextNode = new NodeInfo(Math.min(i + group + 1, m.length()), j + 1);
+                    if (!matchCount.containsKey(nextNode)) {
+                        pq.add(nextNode);
                     }
-                }
-                if (cleaned) {
-                    long curRes = visited.getOrDefault(m.length() + "," + curGroup, (long) 0);
-                    visited.put(m.length() + "," + curGroup, curRes + 1);
-                }
-                continue;
-            }
-            while (curPos < m.length() && m.charAt(curPos) == '.') {
-                curPos++;
-            }
-            for (int nextPos = curPos; nextPos < m.length(); nextPos++) {
-                if ((nextPos > 0 && m.charAt(nextPos - 1) == '#')) {
-                    break;
-                }
-                if (match(m, nextPos, groups.get(curGroup))) {
-                    if (!visited.containsKey(nextPos + "," + curGroup)) {
-                        visited.put(nextPos + "," + curGroup, (long) 1);
-                        pq.add(new nodeInfo(nextPos + groups.get(curGroup) + 1, curGroup + 1));
-                    } else {
-                        long curRes = visited.get(nextPos + "," + curGroup);
-                        visited.put(nextPos + "," + curGroup, curRes + 1);
-                    }
+                    matchCount.compute(nextNode, (k, v) -> (v == null ? 0 : v) + matchCount.get(node));
                 }
             }
         }
-        return visited.getOrDefault(m.length() + "," + groups.size(), (long) 0);
+        return matchCount.getOrDefault(end, 0L);
     }
 
     void unitTest() {
-        memo = new HashMap<>();
-        assert (iterateMatch("?###????????", 0, List.of(3, 2, 1), 0) == 10);
-        memo = new HashMap<>();
-        assert (iterateMatch("?#??#????.????#", 0, List.of(8, 1, 1), 0) == 6);
+        assert (DP("?###????????", List.of(3, 2, 1)) == 10);
+        assert (heuristics("?###????????", List.of(3, 2, 1)) == 10);
+        assert (DP("?#??#????.????#", List.of(8, 1, 1)) == 6);
+        assert (heuristics("?#??#????.????#", List.of(8, 1, 1)) == 6);
         System.out.println("Unit test assertation successful");
     }
 
     public void Solution1(BufferedReader input) throws IOException {
         readFile(input);
         System.out.println("Solution 1: " + SpringLists.stream().mapToLong(K_V -> {
-            memo.clear();
-            return iterateMatch(K_V.getKey(), 0, K_V.getValue(), 0);
+            return heuristics(K_V.getKey(), K_V.getValue());
         }).sum());
     }
 
     public void Solution2(BufferedReader input) throws IOException {
         System.out.println("Solution 2: " + SpringLists.stream().mapToLong(K_V -> {
-            memo.clear();
             String unfoldMatchString = Collections.nCopies(5, K_V.getKey()).stream()
                     .collect(Collectors.joining("?"));
             List<Integer> unfoldGroupts = Collections.nCopies(5, K_V.getValue()).stream()
                     .flatMap(groupList -> groupList.stream()).collect(Collectors.toList());
-            return iterateMatch(unfoldMatchString, 0, unfoldGroupts, 0);
+            // return iterateMatch(unfoldMatchString, 0, unfoldGroupts, 0);
+            return heuristics(unfoldMatchString, unfoldGroupts);
         }).sum());
     }
 
-    // void Solution2_DP(BufferedReader input) throws IOException {
-    // readFile(input);
-    // long res = 0, problemSetSize = SpringLists.size();
-    // for (int i = 0; i < problemSetSize; i++) {
-
-    // // System.out.println("Processing: " + (i + 1) + "/" + problemSetSize);
-    // String unfoldMatchString = Collections.nCopies(5, SpringLists.get(i)).stream()
-    // .collect(Collectors.joining("?"));
-    // List<Integer> unfoldGroupts = Collections.nCopies(5, DamagedGroups.get(i)).stream()
-    // .flatMap(groupList -> groupList.stream()).collect(Collectors.toList());
-    // res += DP(unfoldMatchString, unfoldGroupts);
-    // }
-    // System.out.println("Solution 2 DP: " + res);
-    // }
-
     public static void main(String[] args) throws IOException {
-
         CharacterMatcher Day12 = new CharacterMatcher();
-        // Solution.unitTest();
+        var now = System.currentTimeMillis();
         Day12.unitTest();
         Day12.Solution1(new BufferedReader(new FileReader("Day12/input.txt")));
         Day12.Solution2(new BufferedReader(new FileReader("Day12/input.txt")));
-        // Day12.Solution2_DP(new BufferedReader(new FileReader("Day12/input.txt")));
+        System.out.println(System.currentTimeMillis() - now);
     }
 }

@@ -6,7 +6,7 @@
         "--global-config=${workspaceFolder}/pyproject.toml",
     ],
     "C_Cpp.clang_format_style": "file:${workspaceFolder}/formatters/.clang-format",
-    "java.format.settings.url": "formatters/java-formatter.xml", //Redhat java is not suppressing abstract path uri error, use relative path here
+    "java.format.settings.url": "formatters/java-formatter.xml", //Redhat java is not suppressing absolute path uri error, use relative path here
     // "cmake.debugConfig": {
     //     "cwd": "${workspaceFolder}/2024}",
     //     "dumpPath": ""

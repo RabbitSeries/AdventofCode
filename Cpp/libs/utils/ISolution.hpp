@@ -37,7 +37,7 @@ struct SolutionRegistry {
 };
 
 template <typename T>
-consteval std::string_view type_name() {
+inline consteval std::string_view type_name() {
 // consteval should not contain std::cout or any runtime-only expressions
 #if defined( __clang__ )
     std::string_view p = __PRETTY_FUNCTION__;

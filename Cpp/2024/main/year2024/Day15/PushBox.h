@@ -1,4 +1,7 @@
+#include <algorithm>
+#include <fstream>
 #include <map>
+#include <ranges>
 #include <vector>
 
 #include "utils/ISolution.hpp"
@@ -70,7 +73,7 @@ class PushBox : public ISolution {
 
     void buildData() {
         std::ifstream input( "Day15/input.txt" );
-        for ( std::string buf; getline( input, buf ) && !buf.empty(); ) {
+        for ( std::string buf; std::getline( input, buf ) && !buf.empty(); ) {
             std::vector<int> row;
             for ( char c : buf ) {
                 if ( c == '#' ) {
@@ -87,14 +90,13 @@ class PushBox : public ISolution {
             }
             BoxMap.emplace_back( std::move( row ) );
         }
-        for ( std::string buf; getline( input, buf ); ) {
+        for ( std::string buf; std::getline( input, buf ); ) {
             control += buf;
         }
         for ( auto& line : BoxMap ) {
             WideBoxMap.push_back( {} );
             for ( int cell : line ) {
-                WideBoxMap.rbegin()->push_back( cell );
-                WideBoxMap.rbegin()->push_back( cell );
+                WideBoxMap.rbegin()->insert( WideBoxMap.rbegin()->end(), { cell, cell } );
             }
         }
         for ( size_t i = 0; i < BoxList.size(); i++ ) {

@@ -53,7 +53,7 @@ class RAMRun : public ISolution {
 
     int dijkstra( Stamp const &stamp ) {
         std::vector<std::vector<int>> step( SPACE, std::vector<int>( SPACE, INT_MAX ) );
-        std::priority_queue<pair<int, pos>, std::vector<std::pair<int, pos>>, std::greater<>> pq;
+        std::priority_queue<std::pair<int, pos>, std::vector<std::pair<int, pos>>, std::greater<>> pq;
         step[0][0] = 0;
         pq.push( { 0, { 0, 0 } } );
         while ( !pq.empty() ) {
@@ -94,14 +94,12 @@ class RAMRun : public ISolution {
     void Solution1() {
         Stamp stamp( SPACE, std::vector<cellStatus>( SPACE, good ) );
         readSpaceStamp( 1024, input );
-        for_each( bytePos.begin(), bytePos.end(), [&]( pos cur ) {
-            stamp[cur.second][cur.first] = bad;
-        } );
+        std::ranges::for_each( bytePos, [&]( const pos &cur ) { stamp[cur.second][cur.first] = bad; } );
         int res = dijkstra( stamp );
         if ( res )
             printRes( 1, res );
         else {
-            cout << "Solution 1 failed." << endl;
+            std::cout << "Solution 1 failed." << std::endl;
             exit( -1 );
         }
     }
