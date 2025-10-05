@@ -88,6 +88,11 @@ public class AoCSolutionLoader {
                 String className = name
                         .replace("/", ".") // regardless platform, paths inside the plarform are always seperated by /
                         .replace(".class", "");
+                // Exception in thread "main" java.lang.NoClassDefFoundError: META-INF/versions/9/module-info is not a class because access_flag ACC_MODULE is set
+                // WTF, This exception is not captured
+                if (className.endsWith("module-info")) {
+                    continue;
+                }
                 Class<?> source = classLoader.loadClass(className);
                 if (source.isAnnotationPresent(AoCSolution.class) && List.of(source.getInterfaces()).contains(ISolution.class)) {
                     classSources.add(new AbstractMap.SimpleEntry<>(entry, source));

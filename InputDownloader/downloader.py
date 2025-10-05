@@ -40,6 +40,11 @@ class JavaProject(ProjectStructure):
         return os.path.join(f"{year}", "resources", "Day{:0>2d}".format(day), "input.txt")
 
 
+class KotlinProject(JavaProject):
+    def __init__(self, root, ext: str = "kt"):
+        super().__init__(root, ext)
+
+
 class CppProject(JavaProject):
     def __init__(self, root):
         super().__init__(root, "h")
@@ -69,7 +74,8 @@ def process_all_inputs(session_cookie: str, root_dir: str | None = None, overwri
         return
     dirs: dict[tuple[int, int], list[str]] = {}
     Projects: list[ProjectStructure] = [PythonProject("Python"), JavaProject("Java"),
-                                        CppProject("Cpp"), TypeScriptProject("TypeScript")]
+                                        CppProject("Cpp"), TypeScriptProject("TypeScript"),
+                                        KotlinProject("Java")]
     for projects in Projects:
         for k, v in projects.places.items():
             dirs.setdefault(k, []).append(v)

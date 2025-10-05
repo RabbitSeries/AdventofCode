@@ -45,6 +45,7 @@ public class CharacterMatcher implements ISolution {
      * @deprecated Low performance
      * @since 1.0.1
      */
+    @Deprecated(since = "1.0.1")
     Map<String, Long> memo = new HashMap<>();
 
     /**

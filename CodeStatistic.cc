@@ -47,10 +47,10 @@ int main() {
     // There is a bug for resolving special extension name of CMakeLists.txt in perl script:
     // https://github.com/AlDanial/cloc/blob/dfaa4618ab7057bebb9e9dbe093f5d56d5fc13ab/Unix/cloc#L2664-L2672
 #ifdef __linux__
-    FILE* pipe = popen( R"(       cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)", "r" );
+    FILE* pipe = popen( R"(       cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python,Kotlin" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)", "r" );
 #else
     // FILE* pipe = popen( R"(wsl -e cloc . --include-ext=h,cc,cpp,hpp,c,java,py,ts,cmake,CMakeLists.txt" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)", "r" );
-    FILE* pipe = popen( R"(wsl -e cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)", "r" );
+    FILE* pipe = popen( R"(wsl -e cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python,Kotlin" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)", "r" );
 #endif
     if ( !pipe ) {
         std::cerr << "Failed to open popen\n";

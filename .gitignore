@@ -11,3 +11,4 @@ target
 exception.log
 __pycache__
 *.egg-info
+.idea

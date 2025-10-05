@@ -1,7 +1,7 @@
 <!-- pom.xml -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>rabbitseries.aoc.java.launcher</groupId>
@@ -13,6 +13,15 @@
         <artifactId>aocjava-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+
+    <properties>
+        <argLine>-Xshare:off</argLine>
+        <!--OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended-->
+        <parent.basedir>${project.basedir}/../../</parent.basedir>
+        <year2023.dayroot>${parent.basedir}/Java/2023/main/year2023</year2023.dayroot>
+        <year2023.directory>${parent.basedir}/Java/2023/target</year2023.directory>
+        <year2023.artifactId>year2023</year2023.artifactId>
+    </properties>
 
     <build>
         <plugins>
@@ -39,7 +48,7 @@
                             <transformers>
                                 <!-- Adds main class to manifest -->
                                 <transformer
-                                    implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>Launcher.Main</mainClass>
                                 </transformer>
                             </transformers>
@@ -68,6 +77,26 @@
                     <outputFile>${year2023.dayroot}/res.log</outputFile>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>@{argLine} -javaagent:${org.mockito:mockito-core:jar}</argLine>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -87,11 +116,4 @@
             <artifactId>mockito-core</artifactId>
         </dependency>
     </dependencies>
-
-    <properties>
-        <parent.basedir>${basedir}/../../</parent.basedir>
-        <year2023.dayroot>${parent.basedir}/Java/2023/main/year2023</year2023.dayroot>
-        <year2023.directory>${parent.basedir}/Java/2023/target</year2023.directory>
-        <year2023.artifactId>year2023</year2023.artifactId>
-    </properties>
 </project>

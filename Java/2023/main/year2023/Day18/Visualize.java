@@ -22,7 +22,7 @@ public class Visualize {
         Visualize Vis = new Visualize();
         try (BufferedReader reader = new BufferedReader(new FileReader("Day18/input.txt"))) {
             Pattern re = Pattern.compile("(\\w)\\s(\\d+)\\s\\(#([\\d\\w]+)\\)");
-            Vis.DigPlanList = reader.lines().map(line -> re.matcher(line)).filter(Matcher::find)
+            Vis.DigPlanList = reader.lines().map(re::matcher).filter(Matcher::find)
                     .map(m -> Input.new DigPlan(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), m.group(3))).toList();
 
         }

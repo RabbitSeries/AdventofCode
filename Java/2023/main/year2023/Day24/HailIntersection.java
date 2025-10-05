@@ -49,7 +49,7 @@ public class HailIntersection implements ISolution {
 
     /**
      * Currently using hipparchus MultivariateJacobianFunction as a solution
-     * @see HailIntersection_LinearAlgebra#Solution2() Legacy.Day24.HailIntersection_LinearAlgbra
+     * @see HailIntersection_LinearAlgebra#Solution2(List)  year2023.Legacy.Day24.HailIntersection_LinearAlgbra
      */
     public void Solution2(BufferedReader input) throws Exception {
         HailIntersection_LinearAlgebra legacy = new HailIntersection_LinearAlgebra();
