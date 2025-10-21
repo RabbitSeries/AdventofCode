@@ -1,8 +1,6 @@
 package year2023.Day02;
 
 import java.io.*;
-import java.util.*;
-import java.util.stream.IntStream;
 
 import JavaDataModel.ISolution;
 import JavaDataModel.AoCSolution

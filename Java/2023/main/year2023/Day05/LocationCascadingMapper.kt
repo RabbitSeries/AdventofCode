@@ -1,7 +1,6 @@
 package year2023.Day05
 
 import java.io.*
-import java.util.*
 
 import JavaDataModel.ISolution
 import JavaDataModel.AoCSolution

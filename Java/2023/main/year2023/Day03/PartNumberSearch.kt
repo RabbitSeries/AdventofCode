@@ -3,8 +3,6 @@ package year2023.Day03
 import JavaDataModel.AoCSolution
 import JavaDataModel.ISolution
 import java.io.*
-import java.util.*
-
 
 typealias Point2D = Pair<Int, Int>
 
@@ -23,17 +21,17 @@ class PartNumberSearch : ISolution {
         rows = schematic.size
         cols = schematic[0].length
         schematic.indices.forEach { i ->
-            var num: Optional<Point2D> = Optional.empty()
+            var num: Point2D? = null
             schematic[i].indices.forEach { j ->
                 val ch = schematic[i][j]
                 if (ch.isDigit()) {
-                    if (num.isEmpty) {
-                        num = Optional.of(Point2D(i, j))
+                    if (num == null) {
+                        num = Point2D(i, j)
                     }
-                    NumPositions.compute(num.get()) { _, v -> v?.let { "${it}${ch}".toInt() } ?: ch.digitToInt() }
+                    NumPositions.compute(num) { _, v -> v?.let { "${it}${ch}".toInt() } ?: ch.digitToInt() }
                 } else {
-                    if (num.isPresent) {
-                        num = Optional.empty()
+                    if (num != null) {
+                        num = null
                     }
                     if (ch == '*') {
                         GearPositions.add(Point2D(i, j))

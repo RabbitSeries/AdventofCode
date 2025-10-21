@@ -1,5 +1,7 @@
+#include <algorithm>
 #include <fstream>
 #include <map>
+#include <ranges>
 #include <string>
 #include <vector>
 
@@ -23,14 +25,12 @@ class DiskCompact : public ISolution {
 
     ll fileCompack( std::vector<int> disk ) {
         ll checkSum = 0;
-        size_t i = 0, j = disk.size() - 1;
-        while ( i < disk.size() && j > i ) {
+        int len = (int)disk.size();
+        int i = 0, j = len - 1;
+        while ( i < len && j > i ) {
             if ( disk[i] == -1 ) {
-                while ( j > i ) {
-                    if ( disk[j] == -1 )
-                        j--;
-                    else
-                        break;
+                while ( j > i && disk[j] == -1 ) {
+                    j--;
                 }
                 if ( j > i ) {
                     disk[i] = disk[j];
@@ -52,116 +52,105 @@ class DiskCompact : public ISolution {
         std::ifstream input( "Day09/input.txt" );
         std::string linebuf;
         int fileId = 0;
-        bool isFile = true;
+        bool isFile = false;
         while ( getline( input, linebuf ) ) {
-            for ( size_t i = 0; i < linebuf.size(); i++ ) {
-                if ( linebuf[i] != '\n' && linebuf[i] != '\0' ) {
-                    if ( isFile ) {
-                        appendFileBlock( fileId++, linebuf[i] - '0', disk );
-                        fileSizeTable.push_back( linebuf[i] - '0' );
-                        isFile = false;
-                    } else {
-                        // atoi convets string to integer, but requires and end sign '\0' in the string;
-                        appendEmptyBlock( linebuf[i] - '0', disk );
-                        if ( linebuf[i] - '0' != 0 ) {
-                            freeSpaceTable.emplace_back( linebuf[i] - '0', disk.size() - ( linebuf[i] - '0' ) );
-                        }
-                        isFile = true;
-                    }
+            for ( char c : linebuf ) {
+                isFile = !isFile;
+                if ( c == '0' ) {
+                    continue;
+                }
+                if ( isFile ) {
+                    appendFileBlock( fileId++, c - '0', disk );
+                    fileSizeTable.push_back( c - '0' );
+                } else {
+                    // atoi convets string to integer, but requires and end sign '\0' in the string;
+                    freeSpaceTable.emplace_back( c - '0', disk.size() );
+                    appendEmptyBlock( c - '0', disk );
                 }
             }
         }
     }
 
-    // void printDisk( const vector<int> disk, const string path ) {
+    // void printDisk( const std::vector<int> disk, const char* path ) {
     //     // int cnt = 0;
-    //     FILE* output = fopen( path.c_str(), "w" );
+    //     std::ofstream of( path );
     //     for ( size_t diskId = 0; diskId < disk.size(); diskId++ ) {
     //         if ( disk[diskId] == -1 ) {
-    //             // cout << ".";
-    //             fprintf( output, "_" );
+    //             of << "_";
     //         } else {
-    //             fprintf( output, "%s", "X" );
+    //             of << "X";
     //         }
     //     }
-    //     fclose( output );
     // }
 
-    // void scanFreeSpace( vector<int> disk, vector<pair<int, int>>& freeSpaceTable ) {
-    // }
+    auto findBlockHandle( int diskPos, bool endWith ) {
+        int l = 0, r = (int)freeSpaceTable.size() - 1;
+        auto best = freeSpaceTable.end();
+        // Binary search
+        while ( l <= r ) {
+            int mid = ( l + r ) / 2;
+            // If search fore end with, apply block length offset
+            int cmp = freeSpaceTable[mid].second + ( endWith ? freeSpaceTable[mid].first - 1 : 0 );
+            if ( cmp >= diskPos ) {
+                best = freeSpaceTable.begin() + mid;
+                r = mid - 1;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return best;
+    }
 
     ll fileCompack( std::vector<int> disk, const std::vector<int>& fileSizeTable, std::vector<std::pair<int, int>>& freeSpaceTable ) {
         // printDisk( disk, "Day09/original.txt" );
-        int denseHead = freeSpaceTable[0].second;
-        ll checkSum = 0;
-        int j = disk.size() - 1;
-        while ( j > denseHead ) {
-            if ( disk[j] == -1 ) {
-                j--;
+        int ptr = (int)disk.size() - 1;
+        while ( !freeSpaceTable.empty() && ptr > freeSpaceTable[0].second ) {
+            if ( disk[ptr] == -1 ) {
+                ptr--;
+                continue;
+            }
+            int fileId = disk[ptr];
+            int fileSize = fileSizeTable[fileId];
+            ptr = ptr - fileSize;
+            auto avaiBlock = std::ranges::find_if( freeSpaceTable, [&]( auto& space ) {
+                return space.first >= fileSize && space.second <= ptr;
+            } );
+            bool canMove = avaiBlock != freeSpaceTable.end();
+            if ( !canMove ) {
+                continue;
+            }
+            for ( int fill = 0; fill < fileSize; fill++ ) {
+                disk[ptr + 1 + fill] = -1;                // Overwrite file to empty
+                disk[avaiBlock->second + fill] = fileId;  // Overwrite allocated to fileId
+            }
+            // Consume free space
+            // printDisk( disk );
+            if ( fileSize == avaiBlock->first ) {
+                freeSpaceTable.erase( avaiBlock );  // Fully consume
             } else {
-                int fileId = disk[j];
-                int fileSize = fileSizeTable[fileId];
-                j = j - fileSize;
-                size_t s = 0;
-                bool flag = false;
-                for ( s = 0; freeSpaceTable[s].second <= j && s < freeSpaceTable.size(); s++ ) {
-                    if ( freeSpaceTable[s].first >= fileSize ) {
-                        flag = true;
-                        break;
-                    }
+                avaiBlock->first -= fileSize;   // Decrease remain size
+                avaiBlock->second += fileSize;  // Offset free block start pos by fileSize
+            }
+            // Release free space to Space Table
+            int beforeFile = ptr, afterFile = ptr + 1 + fileSize;
+            if ( disk[beforeFile] == -1 ) {                                     // Space before released space is free space
+                auto handle = findBlockHandle( beforeFile, true );              // Find the former free space's handle
+                handle->first += fileSize;                                      // Merge released block into former block
+                if ( afterFile < (int)disk.size() && disk[afterFile] == -1 ) {  // After released space is also free space
+                    handle->first += ( handle + 1 )->first;                     // Merge latter block into former block
+                    freeSpaceTable.erase( handle + 1 );                         // Remove latter block
                 }
-                if ( flag ) {
-                    std::pair<int, int> blockInfo = freeSpaceTable[s];
-                    for ( int fill = 0; fill < fileSize; fill++ ) {
-                        disk[j + 1 + fill] = -1;
-                        disk[blockInfo.second + fill] = fileId;
-                    }
-                    // Consume free space
-                    // printDisk( disk );
-                    if ( fileSize == blockInfo.first ) {
-                        freeSpaceTable[s].first = 0;
-                        freeSpaceTable.erase( freeSpaceTable.begin() + s );
-                    } else {
-                        freeSpaceTable[s].first -= fileSize;
-                        freeSpaceTable[s].second += fileSize;
-                    }
-                    // Create free space
-                    size_t former = j, latter = j + 1 + fileSize;
-                    if ( disk[former] == -1 ) {
-                        if ( latter < disk.size() && disk[j + fileSize] == -1 ) {
-                            // Merge former and latter
-                            for ( size_t i = 0; i < freeSpaceTable.size(); i++ ) {
-                                if ( freeSpaceTable[i].second + freeSpaceTable[i].first - 1ull == former ) {
-                                    freeSpaceTable[i].first += ( fileSize + freeSpaceTable[i + 1].first );
-                                    freeSpaceTable.erase( freeSpaceTable.begin() + i + 1 );
-                                }
-                            }
-                        } else {
-                            // Merge former only
-                            for ( size_t i = 0; i < freeSpaceTable.size(); i++ ) {
-                                if ( freeSpaceTable[i].second + freeSpaceTable[i].first - 1ull == former ) {
-                                    freeSpaceTable[i].first += fileSize;
-                                }
-                            }
-                        }
-                    } else {
-                        if ( latter < disk.size() && disk[j + fileSize] == -1 ) {
-                            // Merge latter only
-                            for ( size_t i = 0; i < freeSpaceTable.size(); i++ ) {
-                                if ( freeSpaceTable[i].second + 0ull == latter ) {
-                                    freeSpaceTable[i].first += fileSize;
-                                    freeSpaceTable[i].second = j + 1;
-                                }
-                            }
-                        } else {
-                            // Don't Merge
-                            ;
-                        }
-                    }
-                    denseHead = freeSpaceTable[0].second - 1;
+            } else {  // Space before released space is not free space
+                auto handle = findBlockHandle( afterFile, false );
+                if ( handle == freeSpaceTable.end() ) {  // There is no after block, create a new one
+                    freeSpaceTable.emplace_back( fileSize, beforeFile + 1 );
+                } else {  // Merge released file to latter block
+                    handle->first += fileSize;
+                    handle->second = beforeFile + 1;
                 }
             }
         }
+        ll checkSum = 0;
         for ( size_t diskId = 0; diskId < disk.size(); diskId++ ) {
             if ( disk[diskId] != -1 )
                 checkSum += diskId * disk[diskId];
@@ -171,6 +160,7 @@ class DiskCompact : public ISolution {
     }
     std::vector<int> disk;
     std::vector<int> fileSizeTable;
+    // [FreeSpace : StartPos,...]
     std::vector<std::pair<int, int>> freeSpaceTable;
 
    public:
