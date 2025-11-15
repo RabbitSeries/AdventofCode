@@ -59,15 +59,16 @@ class File:
         self.name, self.parent, self.isDir, self.fileSize = name, parent, isDir, fileSize
         self.subFile: dict[str, File] = {'.': self, **({'..': parent} if parent else {})}
         self.absPath: list[str] = parent.absPath + [name] if parent else []
-
-    def getAbsPath(self) -> str:
-        return '/' + '/'.join(self.absPath)
+        self.absPathStr = '/' + '/'.join(self.absPath)
 
     def __repr__(self) -> str:
         # return f"File(name='{self.name}',parent={self.parent.name if self.parent else 'None'},isDir={self.isDir},fileSize={self.fileSize})"
         return f"File(name='{self.name}',parent={self.parent},isDir={self.isDir},fileSize={self.fileSize})"
 
-    def __hash__(self) -> int: return (self.getAbsPath().__hash__() << 1) & self.isDir
+    def __eq__(self, rhs: File):
+        return self.absPathStr == rhs.absPathStr
+
+    def __hash__(self) -> int: return hash((self.absPathStr, self.isDir))
 
 
 if __name__ == "__main__":
