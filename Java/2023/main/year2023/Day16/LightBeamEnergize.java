@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import JavaDataModel.*;
 
-@AoCSolution()
+@AoCSolution(day = 16)
 public class LightBeamEnergize implements ISolution {
     List<String> ContraptionLayout;
 

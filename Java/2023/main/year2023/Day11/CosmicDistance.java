@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 import JavaDataModel.*;
 
-@AoCSolution()
+@AoCSolution(day = 11)
 public class CosmicDistance implements ISolution {
 
     List<List<Integer>> CosmicMap; // Map char to id of Galaxy, -1 for empty

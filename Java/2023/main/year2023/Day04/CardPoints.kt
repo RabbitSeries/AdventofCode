@@ -1,12 +1,12 @@
-package year2023.Day04;
+package year2023.Day04
 
-import java.io.*;
+import java.io.*
 
-import JavaDataModel.ISolution;
-import JavaDataModel.AoCSolution;
+import JavaDataModel.ISolution
+import JavaDataModel.AoCSolution
 import kotlin.math.pow
 
-@AoCSolution()
+@AoCSolution(day = 4)
 class CardPoints : ISolution {
     fun readFile(input: BufferedReader) {
         CardsList = input.lineSequence().map { line ->
@@ -19,7 +19,7 @@ class CardPoints : ISolution {
     override fun Solution1(input: BufferedReader) {
         readFile(input)
         WinResultList = CardsList.map { (k, v) -> v.asSequence().filter { k.contains(it) }.count() }
-        println("Solution 1: " + WinResultList.asSequence().filter { it > 0 }.sumOf { 2.0.pow(it - 1).toInt() });
+        println("Solution 1: " + WinResultList.asSequence().filter { it > 0 }.sumOf { 2.0.pow(it - 1).toInt() })
     }
 
     override fun Solution2(input: BufferedReader) {
@@ -30,7 +30,7 @@ class CardPoints : ISolution {
                 dp[j] = dp[j] + dp[i]
             }
         }
-        println("Solution 2: " + dp.sum());
+        println("Solution 2: " + dp.sum())
     }
 
     lateinit var CardsList: List<Pair<Set<Int>, List<Int>>>

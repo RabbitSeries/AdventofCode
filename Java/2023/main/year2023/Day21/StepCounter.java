@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 
 import JavaDataModel.*;
 
-@AoCSolution()
+@AoCSolution(day = 21)
 public class StepCounter implements ISolution {
     List<String> Farm = null, ZeroFarm = null;
 
@@ -20,9 +20,9 @@ public class StepCounter implements ISolution {
         rows = Farm.size();
         cols = Farm.get(0).length();
         start = IntStream.range(0, cols)
-                .filter(i -> Farm.get(i).contains("S"))
-                .mapToObj(i -> new Point2D(i, Farm.get(i).indexOf('S')))
-                .findFirst().get();
+            .filter(i -> Farm.get(i).contains("S"))
+            .mapToObj(i -> new Point2D(i, Farm.get(i).indexOf('S')))
+            .findFirst().get();
         ZeroFarm = Farm;
     }
 
@@ -45,11 +45,11 @@ public class StepCounter implements ISolution {
     }
 
     final int[] dx = new int[] {
-            -1, 1, 0, 0
+        -1, 1, 0, 0
     };
 
     final int[] dy = new int[] {
-            0, 0, -1, 1
+        0, 0, -1, 1
     };
 
     boolean isValid(Point2D pos) {
@@ -100,8 +100,8 @@ public class StepCounter implements ISolution {
         Farm = Collections.nCopies(2 * times + 1,
                 ZeroFarm.stream().map(
                         row -> Collections.nCopies(2 * times + 1, row).stream().collect(Collectors.joining()))
-                        .toList())
-                .stream().flatMap(l -> l.stream()).toList();
+                    .toList())
+            .stream().flatMap(l -> l.stream()).toList();
     }
 
     public void Solution1(BufferedReader input) throws Exception {
@@ -139,7 +139,7 @@ public class StepCounter implements ISolution {
     public void LagrangeSolution() throws Exception {
         FoldTo(2);
         final int[] steps = {
-                rows / 2, rows + rows / 2, rows * 2 + rows / 2
+            rows / 2, rows + rows / 2, rows * 2 + rows / 2
         };
         final long[] f = new long[3];
         for (int i = 0; i < 3; i++) {

@@ -5,7 +5,7 @@ import JavaDataModel.*;
 
 import java.io.*;
 
-@AoCSolution()
+@AoCSolution(day = 15)
 public class StringHasher implements ISolution {
     List<String> stepList;
 

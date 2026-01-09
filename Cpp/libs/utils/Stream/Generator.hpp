@@ -21,33 +21,32 @@ namespace utils {
             promise_type() {}
             ~promise_type() {}
 
-            Generator get_return_object() {  // Called on frame construction
+            Generator get_return_object() noexcept {  // Called on frame construction
                 return Generator{ handle::from_promise( *this ) };
             }
-            std::suspend_always initial_suspend() {
+            std::suspend_always initial_suspend() const noexcept {
                 return {};
             }
             std::suspend_always final_suspend() noexcept {
                 return {};
             }
-            std::suspend_always yield_value( auto&& v ) {
+            std::suspend_always yield_value( auto&& v ) noexcept {
                 current = std::move( v );
                 return {};
             }
-            void return_void() {}
-            void unhandled_exception() {
+            void return_void() const noexcept {}
+            void unhandled_exception() const {
                 std::terminate();
             }
             void await_transform() = delete;
         };
-
         explicit Generator( handle h_ ) : h( h_ ) {}
         Generator( const Generator& ) = delete;
         // For viewable_range<Generator<T>&&> -> ... || std::movable<utils::Generator<T>&&> && ...;
         Generator( Generator&& o ) noexcept : h( std::exchange( o.h, {} ) ) {
         }
         Generator& operator=( Generator other ) {
-            swap( other.h, this->h );
+            std::swap( other.h, this->h );
         }
         ~Generator() {
             if ( h ) h.destroy();
@@ -82,6 +81,6 @@ namespace utils {
             if ( h ) h.resume();
             return iterator{ h };
         }
-        std::default_sentinel_t end() { return {}; }
+        std::default_sentinel_t end() const { return {}; }
     };
 }  // namespace utils

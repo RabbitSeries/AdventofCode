@@ -5,9 +5,9 @@ import java.io.*
 import JavaDataModel.ISolution
 import JavaDataModel.AoCSolution
 
-@AoCSolution()
+@AoCSolution(day = 6)
 class HoldSearch : ISolution {
-    lateinit var recordList: List<Pair<Long, Long>>;
+    lateinit var recordList: List<Pair<Long, Long>>
 
     fun readFile(input: BufferedReader) {
         val lines = input.lineSequence().toList()

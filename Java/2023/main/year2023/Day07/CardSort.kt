@@ -4,11 +4,10 @@ import java.io.*
 
 import JavaDataModel.ISolution
 import JavaDataModel.AoCSolution
-import year2023.Day06.HoldSearch
 
 import java.util.Comparator.comparing
 
-@AoCSolution()
+@AoCSolution(day = 7)
 class CardSort : ISolution {
     lateinit var cardBits: MutableList<Pair<String, Int>>
 
@@ -32,7 +31,7 @@ class CardSort : ISolution {
     }
 
     fun cardHoldCompare(hold: String, rule: String): Int {
-        return hold.asSequence().map { c -> rule.indexOf(c) }.fold(0) { a, b -> a * rule.length + b }
+        return hold.asSequence().fold(0) { a, b -> a * rule.length + rule.indexOf(b) }
     }
 
     fun rule1Priority(str: String): Priority {

@@ -9,4 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface AoCSolution {
     int year() default 2023;
+
+    int day();
 }

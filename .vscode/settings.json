@@ -20,6 +20,6 @@
     //      such as: "cmake.buildDirectory": "${workspaceFolder}/builds/${buildKit}/${buildType}"
     "python.analysis.extraPaths": [
         "${workspaceFolder}/Python",
-        "${workspaceFolder}/tests",
+        "${workspaceFolder}/tests"
     ]
 }

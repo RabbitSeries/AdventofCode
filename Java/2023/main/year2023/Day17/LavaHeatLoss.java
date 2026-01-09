@@ -7,16 +7,16 @@ import java.util.*;
 
 import JavaDataModel.*;
 
-@AoCSolution()
+@AoCSolution(day = 17)
 public class LavaHeatLoss implements ISolution {
     List<List<Integer>> LavaMap;
 
     final int[] dx = new int[] {
-            0, 1, 0, -1
+        0, 1, 0, -1
     };
 
     final int[] dy = new int[] {
-            1, 0, -1, 0
+        1, 0, -1, 0
     };
 
     // void printLossMap(List<List<List<Integer>>> LossMap) {
@@ -50,10 +50,10 @@ public class LavaHeatLoss implements ISolution {
     int Dijkstra(Point2D startPos, Point2D endPos, int lowerBound, int upperBound) {
         PriorityQueue<PosInfo> pq = new PriorityQueue<>(Comparator.comparing(PosInfo::getKey));
         List<List<HashMap<String, Integer>>> LossMap = Collections.nCopies(rows, Collections.nCopies(cols, new HashMap<String, Integer>()))
-                .stream().map(row -> row.stream()
-                        .map(loss -> new HashMap<>(loss))
-                        .toList())
-                .toList();
+            .stream().map(row -> row.stream()
+                .map(HashMap::new)
+                .toList())
+            .toList();
         for (int i = 0; i < 4; i++) {
             // LossMap.get(startPos.first).get(startPos.second).set(i, 0);
             Point2D nextPos = new Point2D(startPos.first + dx[i], startPos.second + dy[i]);

@@ -6,7 +6,7 @@ import java.io.*
 
 typealias Point2D = Pair<Int, Int>
 
-@AoCSolution()
+@AoCSolution(day = 3)
 class PartNumberSearch : ISolution {
     lateinit var schematic: List<String>
 

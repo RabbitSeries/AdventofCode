@@ -7,7 +7,7 @@ import JavaDataModel.AoCSolution
 
 typealias Interval = Pair<Long, Long>
 
-@AoCSolution()
+@AoCSolution(day = 5)
 class LocationCascadingMapper : ISolution {
     lateinit var Seeds: List<Long>
 

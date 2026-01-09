@@ -14,7 +14,7 @@ import JavaDataModel.Pair;
 import JavaDataModel.Point2D;
 import JavaDataModel.ISolution;
 
-@AoCSolution()
+@AoCSolution(day = 14)
 public class RocksRoll implements ISolution {
     List<StringBuilder> Platform;
 

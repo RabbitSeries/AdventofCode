@@ -271,6 +271,7 @@ MSE &= \frac{1}{2} Residual^2(R,V,T(U))\\
 \frac{\partial{MSE}}{\partial{w}} &= Residual\frac{\partial{Residual}}{\partial{w}}\\
 \end{aligned}
 $$
+
 $$
 \begin{aligned}
     \begin{rcases}

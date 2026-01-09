@@ -6,11 +6,11 @@ import java.util.stream.*;
 
 import JavaDataModel.*;
 
-@AoCSolution()
+@AoCSolution(day = 13)
 public class Reflection implements ISolution {
     List<List<String>> IslandMaps;
 
-    void readFile(BufferedReader input) throws IOException {
+    void readFile(BufferedReader input) {
         IslandMaps = Stream.of(input.lines()
                 .map(l -> l.concat("\n"))
                 .collect(Collectors.joining()).split("\\n\\n"))

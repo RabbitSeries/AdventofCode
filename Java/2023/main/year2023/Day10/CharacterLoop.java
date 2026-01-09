@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 
 import JavaDataModel.*;
 
-@AoCSolution()
+@AoCSolution(day = 10)
 public class CharacterLoop implements ISolution {
     List<String> PipeMap;
 

@@ -52,8 +52,8 @@ class RaceCondition : public ISolution {
         std::vector cost( rows, std::vector<int>( cols, INT_MAX ) );
         // vector<vector<int>> optimized( rows, vector<int>( cols, false ) );
         using pqElem = std::pair<int, pos>;
-        std::priority_queue<pqElem, std::vector<pqElem>, std::greater<>> pq;
-        pq.push( { 0, start } );
+        std::priority_queue pq( std::greater<>{}, std::vector<pqElem>{} );
+        pq.emplace( 0, start );
         cost[start.first][start.second] = 0;
         path.emplace( start, 0 );
         while ( !pq.empty() ) {
@@ -86,7 +86,7 @@ class RaceCondition : public ISolution {
         std::string strBuf;
         while ( getline( input, strBuf ) ) {
             std::vector<cellStatus> row;
-            for ( auto c : strBuf ) {
+            for ( char c : strBuf ) {
                 switch ( c ) {
                     case '#':
                         row.push_back( WALL );

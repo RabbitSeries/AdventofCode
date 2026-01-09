@@ -12,9 +12,9 @@
 class PatrolRoute : public ISolution {
     REGISTER( PatrolRoute )
 
-    using pos = std::pair<size_t, size_t>;
+    using pos = std::pair<int, int>;
     const char face[4]{ '^', '>', 'v', '<' };
-    const std::unordered_map<char, int> faceId{
+    const std::map<char, unsigned int> faceId{
         { '^', 0 },
         { '>', 1 },
         { 'v', 2 },
@@ -22,55 +22,42 @@ class PatrolRoute : public ISolution {
     const int dx[4]{ -1, 0, 1, 0 };
     const int dy[4]{ 0, 1, 0, -1 };
 
-    // Inclass init, use {}
-    // atomic<int> progress( 0 );
-    // char face[] = { '^','>','v','<' };//an initializer cannot be specified for a flexible array member
-    inline bool isValid( pos const& curPos ) {
+    bool isValid( pos const& curPos ) {
         return curPos.first >= 0 && curPos.first < rows && curPos.second >= 0 && curPos.second < cols;
     }
 
-    size_t rows, cols;
-
     void readFile() {
-        for ( std::string line : BufferedReader( "Day06/input.txt" ).lines().yield() ) {
-            for ( size_t i : std::views::iota( 0ull, line.size() ) ) {
-                if ( line[i] == '<' || line[i] == '>' || line[i] == '^' || line[i] == 'v' ) {
-                    guardPos.first = routeMap.size();
-                    guardPos.second = i;
+        for ( const std::string& line : BufferedReader( "Day06/input.txt" ).lines().yield() ) {
+            if ( guardPos.first == -1 ) {
+                for ( size_t i : std::views::iota( 0ull, line.size() ) ) {
+                    if ( faceId.contains( line[i] ) ) {
+                        guardPos.first = routeMap.size();
+                        guardPos.second = i;
+                        guardDirection = faceId.at( line[i] );
+                    }
                 }
             }
-            routeMap.emplace_back( std::move( line ) );
+            routeMap.emplace_back( std::move( const_cast<std::string&>( line ) ) );
         }
         rows = routeMap.size();
         cols = routeMap[0].size();
     }
 
-    std::vector<std::vector<std::array<bool, 4>>> passed;
-    std::vector<std::vector<bool>> visited;
-
-    std::pair<bool, int> patrol( bool enablePlacementCnt = true ) {
+    bool patrol( std::optional<std::function<void( const pos& )>> visitor = std::nullopt ) {
         using namespace std;
         pos curPos = guardPos;
-        int distinctPosCnt = 0;
-        if ( enablePlacementCnt ) {
-            visited = vector( routeMap.size(), vector( routeMap.at( 0 ).size(), false ) );
-        }
-        passed = vector( routeMap.size(), vector( routeMap[0].size(), array<bool, 4>{ false } ) );
-        int curFace = faceId.at( routeMap[curPos.first][curPos.second] );
+        std::vector passed = vector( routeMap.size(), vector( routeMap[0].size(), 0 ) );
+        unsigned int curFace = faceId.at( routeMap[curPos.first][curPos.second] );
         while ( isValid( curPos ) ) {
-            if ( enablePlacementCnt && !visited[curPos.first][curPos.second] ) {
-                visited[curPos.first][curPos.second] = true;
-                distinctPosCnt++;
+            if ( visitor ) {
+                visitor.value()( curPos );
             }
-            if ( passed[curPos.first][curPos.second][curFace] ) {
-                return { true, distinctPosCnt };
-            } else {
-                passed[curPos.first][curPos.second][curFace] = true;
+            if ( passed[curPos.first][curPos.second] & ( 1 << curFace ) ) {
+                return true;
             }
+            passed[curPos.first][curPos.second] |= ( 1 << curFace );
             pos nextPos{ dx[curFace] + curPos.first, dy[curFace] + curPos.second };
             if ( isValid( nextPos ) ) {
-                //     // There is no need to update before turnning directions, cause this location's direction must not be updated if this location is a loop's end and it will be updated if this location is not loop's end.
-                //     // However, in general mark every status on this block can be another useful approach (implemented)
                 if ( routeMap[nextPos.first][nextPos.second] == '#' ) {
                     curFace = ( curFace + 1 ) % 4;
                 } else {
@@ -80,28 +67,36 @@ class PatrolRoute : public ISolution {
                 break;
             }
         }
-        return { false, distinctPosCnt };
+        return false;
     }
+
     std::vector<std::string> routeMap;
-    pos guardPos{ 0, 0 };
+    int rows, cols;
+    pos guardPos{ -1, 0 };
+    int guardDirection;
 
    public:
     void Solution1() {
         readFile();
-        using namespace std;
-        printRes( 1, patrol().second );
+        std::vector visited = std::vector( rows, std::vector( cols, false ) );
+        int count = 0;
+        patrol( [&]( const pos& p ) {
+            if ( !visited[p.first][p.second] ) {
+                visited[p.first][p.second] = ++count;
+            }
+        } );
+        printRes( 1, count );
     }
-
     void Solution2() {
         int distinctPlacement = 0;
-        for ( size_t i = 0; i < routeMap.size(); i++ ) {
-            for ( size_t j = 0; j < routeMap[0].size(); j++ ) {
-                if ( ( guardPos == std::pair{ i, j } ) || routeMap[i][j] == '#' ) {
+        for ( int i = 0; i < rows; i++ ) {
+            for ( int j = 0; j < cols; j++ ) {
+                if ( ( guardPos.first == i && guardPos.second == j ) || routeMap[i][j] == '#' ) {
                     continue;
                 }
                 char curCell = routeMap[i][j];
                 routeMap[i][j] = '#';
-                if ( patrol( false ).first ) {
+                if ( patrol() ) {
                     distinctPlacement++;
                 }
                 routeMap[i][j] = curCell;

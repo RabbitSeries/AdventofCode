@@ -4,7 +4,7 @@ import JavaDataModel.*
 import java.io.BufferedReader
 import java.io.FileReader
 
-@AoCSolution
+@AoCSolution(day = 1)
 class ValueCalibration : ISolution {
     private lateinit var mapList: List<String>
 

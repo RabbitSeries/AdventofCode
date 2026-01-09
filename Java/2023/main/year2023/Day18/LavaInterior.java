@@ -7,24 +7,24 @@ import java.util.regex.Pattern;
 
 import JavaDataModel.*;
 
-@AoCSolution()
+@AoCSolution(day = 18)
 public class LavaInterior implements ISolution {
     List<DigPlan> DigPlanList;
 
     HashMap<String, Integer> DirectionTranslate = new HashMap<>(Map.of("U", 3, "D", 1, "L", 2, "R", 0));
 
     final static int[] dx = new int[] {
-            0, 1, 0, -1
+        0, 1, 0, -1
     };
 
     final static int[] dy = new int[] {
-            1, 0, -1, 0
+        1, 0, -1, 0
     };
 
     public void readFile(BufferedReader input) throws IOException {
         Pattern re = Pattern.compile("(\\w)\\s(\\d+)\\s\\(#([\\d\\w]+)\\)");
         DigPlanList = input.lines().map(line -> re.matcher(line)).filter(Matcher::find)
-                .map(m -> new DigPlan(DirectionTranslate.get(m.group(1)), Integer.parseInt(m.group(2)), m.group(3))).toList();
+            .map(m -> new DigPlan(DirectionTranslate.get(m.group(1)), Integer.parseInt(m.group(2)), m.group(3))).toList();
     }
 
     HashSet<Point2D> Boundary, visited;

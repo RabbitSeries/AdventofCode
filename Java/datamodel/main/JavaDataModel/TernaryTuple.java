@@ -2,7 +2,7 @@ package JavaDataModel;
 
 import java.util.Objects;
 
-public class TenaryTuple<E1, E2, E3> {
+public class TernaryTuple<E1, E2, E3> {
     E1 e1;
 
     E2 e2;
@@ -33,7 +33,7 @@ public class TenaryTuple<E1, E2, E3> {
         this.e3 = e3;
     }
 
-    public TenaryTuple(E1 e1, E2 e2, E3 e3) {
+    public TernaryTuple(E1 e1, E2 e2, E3 e3) {
         this.e1 = e1;
         this.e2 = e2;
         this.e3 = e3;
@@ -47,7 +47,7 @@ public class TenaryTuple<E1, E2, E3> {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        TenaryTuple<?, ?, ?> tuple = (TenaryTuple<?, ?, ?>) obj;
+        TernaryTuple<?, ?, ?> tuple = (TernaryTuple<?, ?, ?>) obj;
         return Objects.equals(e1, tuple.e1) && Objects.equals(e2, tuple.e2)
                 && Objects.equals(e3, tuple.e3);
     }

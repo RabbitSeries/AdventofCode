@@ -1,11 +1,11 @@
-package year2023.Day02;
+package year2023.Day02
 
-import java.io.*;
+import java.io.*
 
-import JavaDataModel.ISolution;
+import JavaDataModel.ISolution
 import JavaDataModel.AoCSolution
 
-@AoCSolution()
+@AoCSolution(day = 2)
 class CubeClassify : ISolution {
     private lateinit var GameList: List<List<Map<String, Int>>>
     fun readFile(input: BufferedReader) {

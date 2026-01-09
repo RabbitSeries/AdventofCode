@@ -2,13 +2,11 @@ package year2023.Day20
 
 import java.io.*
 import java.util.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 import JavaDataModel.ISolution
 import JavaDataModel.AoCSolution
 
-@AoCSolution()
+@AoCSolution(day = 20)
 class PulsePropagation : ISolution {
     enum class ModuleType {
         Conjunction, BroadCaster, FlipFlop
@@ -24,26 +22,26 @@ class PulsePropagation : ISolution {
     val CjctModuleInputStatus: HashMap<String, HashMap<String, Boolean>> = HashMap()
 
     fun readFile(input: BufferedReader) {
-        val WirePattern = Pattern.compile("(?<InWire>.+)->(?<OutWireList>.+)")
+        val WirePattern = """(?<InWire>.+)->(?<OutWireList>.+)""".toRegex()
         for (buf in input.lineSequence()) {
-            val WireMatch: Matcher = WirePattern.matcher(buf)
-            if (WireMatch.find()) {
-                var InWire = WireMatch.group("InWire").trim()
-                val OutWireList = WireMatch.group("OutWireList").trim().split(",").asSequence()
+            val WireMatch = WirePattern.find(buf)?.groups
+            if (WireMatch != null) {
+                var InWire = WireMatch["InWire"]!!.value.trim()
+                val OutWireList = WireMatch["OutWireList"]!!.value.trim().split(",").asSequence()
                     .map { it.trim() }.toList()
                 if (InWire[0] == '%') {
                     InWire = InWire.substring(1)
                     // Is on
-                    Modules.putIfAbsent(InWire, Pair(ModuleType.FlipFlop, false))
+                    Modules.putIfAbsent(InWire, ModuleType.FlipFlop to false)
                 } else if (InWire[0] == '&') {
                     InWire = InWire.substring(1)
-                    Modules.putIfAbsent(InWire, Pair(ModuleType.Conjunction, null))
+                    Modules.putIfAbsent(InWire, ModuleType.Conjunction to null)
                 } else {
-                    Modules.putIfAbsent(InWire, Pair(ModuleType.BroadCaster, null))
+                    Modules.putIfAbsent(InWire, ModuleType.BroadCaster to null)
                 }
-                OutputLists.computeIfAbsent(InWire) { s -> ArrayList() }.addAll(OutWireList)
+                OutputLists.getOrPut(InWire) { ArrayList() } += OutWireList
                 for (s in OutWireList) {
-                    CjctModuleInputStatus.computeIfAbsent(s) { _ -> HashMap() }.putIfAbsent(InWire, false)
+                    CjctModuleInputStatus.getOrPut(s) { HashMap() }.putIfAbsent(InWire, false)
                 }
             }
         }
@@ -56,7 +54,7 @@ class PulsePropagation : ISolution {
         // pulseList =  ArrayList()
         val q: Queue<Pair<String, Boolean>> = LinkedList()
         q.add(Pair(From, stat))
-        var (lowCnt, highCnt) = Pair(1L, 0L)
+        var (lowCnt, highCnt) = 1L to 0L
         while (!q.isEmpty()) {
             val curPulse = q.poll()
             for (outWire in OutputLists[curPulse.first] ?: listOf()) {
@@ -65,16 +63,15 @@ class PulsePropagation : ISolution {
                 } else {
                     highCnt++
                 }
-                if (Modules.containsKey(outWire)) {
+                if (outWire in Modules) {
                     var nextPulse: Boolean? = null
-                    if (Modules[outWire]!!.first == ModuleType.Conjunction) {
+                    if (Modules.getValue(outWire).first == ModuleType.Conjunction) {
                         if (curPulse.first == To) {
                             // pulseList.add(curPulse.second)
                             continue// Forbit the conjunction module's propagation to next conjunction module
                         }
-                        CjctModuleInputStatus[outWire]!![curPulse.first] = curPulse.second
-                        nextPulse = !CjctModuleInputStatus[outWire]!!.values.asSequence()
-                            .fold(true) { init, e -> init && e }
+                        CjctModuleInputStatus.getValue(outWire)[curPulse.first] = curPulse.second
+                        nextPulse = CjctModuleInputStatus[outWire]!!.values.asSequence().any { !it }
                     } else {// if (Modules.get(outWire).first.equals(ModuleType.FlipFlop)) {
                         if (!curPulse.second) {// low pulse
                             // Flip
@@ -83,13 +80,13 @@ class PulsePropagation : ISolution {
                         }
                     }
                     if (nextPulse != null) {
-                        q.add(Pair(outWire, nextPulse))
+                        q += outWire to nextPulse
                     }
                 }
 
             }
         }
-        return Pair(lowCnt, highCnt)
+        return lowCnt to highCnt
     }
 
     override fun Solution1(input: BufferedReader) {
@@ -108,7 +105,7 @@ class PulsePropagation : ISolution {
         val q: Queue<String> = LinkedList()
         val visitedModule: HashSet<String> = HashSet()
         q.add(InModule)
-        visitedModule.add(InModule)
+        visitedModule += InModule
         while (!q.isEmpty()) {
             val curModuleName: String = q.poll()
             val curModule = Modules[curModuleName]!!
@@ -117,17 +114,15 @@ class PulsePropagation : ISolution {
                     return false
                 }
             } else {
-                for ((_, InputStatus) in CjctModuleInputStatus[curModuleName]!!.entries) {
-                    if (InputStatus) {
-                        return false
-                    }
+                if (CjctModuleInputStatus[curModuleName]!!.values.any { it }) {
+                    return false
                 }
             }
             if (curModuleName != OutModule) {
                 for (outModuleName in OutputLists[curModuleName]!!) {
-                    if (!visitedModule.contains(outModuleName)) {
-                        q.add(outModuleName)
-                        visitedModule.add(outModuleName)
+                    if (outModuleName !in visitedModule) {
+                        q += outModuleName
+                        visitedModule += outModuleName
                     }
                 }
             }
@@ -141,7 +136,7 @@ class PulsePropagation : ISolution {
         for (branchName in BranchNameList) {
             for (output in OutputLists[branchName]!!) {
                 if (Modules[output]!!.first == ModuleType.Conjunction) {
-                    BranchOutputName.put(branchName, output)
+                    BranchOutputName[branchName] = output
                     break
                 }
             }
@@ -178,10 +173,10 @@ class PulsePropagation : ISolution {
             .fold(1L) { init, l -> lcm(init, l) })
     }
 
-    var lowCnt = 0
-    var highCnt = 0
-
-    val LowPulseAt = Pair(0, 0)
+    // var lowCnt = 0
+    // var highCnt = 0
+    //
+    // val LowPulseAt = Pair(0, 0)
 
     fun gcd(a: Long, b: Long): Long {
         return if (b == 0L) {

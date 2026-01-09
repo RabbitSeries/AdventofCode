@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import JavaDataModel.*;
 
-@AoCSolution()
+@AoCSolution(day = 8)
 public class CamelInstruction implements ISolution {
     // Solution 1
     List<Character> Instructions;
@@ -22,13 +22,13 @@ public class CamelInstruction implements ISolution {
         Instructions = input.readLine().chars().mapToObj(l -> (char) l).toList();
         Pattern re = Pattern.compile("(\\w+)\\s+=\\s+\\((\\w+),\\s+(\\w+)\\)");
         Network = input.lines()
-                .map(line -> re.matcher(line)).filter(matcher -> matcher.find())
-                .collect(Collectors.toMap(k -> {
-                    if (k.group(1).endsWith("A")) {
-                        StartList.add(k.group(1));
-                    }
-                    return k.group(1);
-                }, k -> new SimpleEntry<>(k.group(2), k.group(3))));
+            .map(line -> re.matcher(line)).filter(matcher -> matcher.find())
+            .collect(Collectors.toMap(k -> {
+                if (k.group(1).endsWith("A")) {
+                    StartList.add(k.group(1));
+                }
+                return k.group(1);
+            }, k -> new SimpleEntry<>(k.group(2), k.group(3))));
     }
 
     int insId(int len) {

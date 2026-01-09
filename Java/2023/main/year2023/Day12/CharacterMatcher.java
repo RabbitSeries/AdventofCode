@@ -10,7 +10,7 @@ import org.hipparchus.util.Pair;
 
 import JavaDataModel.*;
 
-@AoCSolution()
+@AoCSolution(day = 12)
 public class CharacterMatcher implements ISolution {
 
     List<Pair<String, List<Integer>>> SpringLists;

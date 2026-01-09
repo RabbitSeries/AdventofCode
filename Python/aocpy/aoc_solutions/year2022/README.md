@@ -13,13 +13,13 @@ How to start a language:
 
 - Types: literals, string<->int apis, mutability, variable scope, array, stack( list ), set, map, queue, deque, heap ( priority_queue ), container apis, exceptions
 - IO: file IO, stdio, format
-- OOP: copy controll, polymorphism, generics
+- OOP: copy control, polymorphism, generics
 - Algo Shortcut/Apis: Functions equivalent to C++'s in `algorithm.h`
 - Grammar Suger:
   - C++style list initialize, generator initialize
   - C++ unfold & python unpack & java/typescript vararg
   - Assignment expression in Python, C++ (limited support in if, for, switch statement), C# out var
-  - Default function parameter initailizer
+  - Default function parameter initializer
   - C++ structure binding, Java consumption, Python  
 - Functional programming
   - Process storage
@@ -37,7 +37,7 @@ How to start a language:
   - Java Reflection & Java annotation
   - Python function level decorator
   - C# Dependency injection, Assembly reflection
-  - Typesctipt JSON style reflection 
+  - Typescript JSON style reflection 
 - Time apis
 - Random engine apis
 - For experience: get a formatter, editor and smash the hotkeys

@@ -19,12 +19,12 @@ import java.util.stream.IntStream;
 
 import JavaDataModel.*;
 
-@AoCSolution()
+@AoCSolution(day = 22)
 public class CubeStack implements ISolution {
     final int EMPTY = -1;
 
-    class Point3D extends TenaryTuple<Integer, Integer, Integer> {
-        public Point3D(TenaryTuple<Integer, Integer, Integer> rhs) {
+    class Point3D extends TernaryTuple<Integer, Integer, Integer> {
+        public Point3D(TernaryTuple<Integer, Integer, Integer> rhs) {
             super(rhs.getE1(), rhs.getE2(), rhs.getE3());
         }
 

@@ -4,8 +4,9 @@ import JavaDataModel.AoCSolution
 import JavaDataModel.ISolution
 import java.io.*
 import java.util.*
+import JavaDataModel.inputFileName
 
-@AoCSolution()
+@AoCSolution(day = 25)
 class MinimumCut : ISolution {
     fun readFile(input: BufferedReader) {
         input.use { data ->
@@ -20,34 +21,25 @@ class MinimumCut : ISolution {
         }
     }
 
-    fun Hasher(WireName: String): Int {
-        return WireName.fold(0) { i, c -> i * 26 + c.code - 'a'.code }
-    }
+    fun Hasher(WireName: String) = WireName.fold(0) { i, c -> i * 26 + c.code - 'a'.code }
 
     val WireGraph: MutableMap<Int, MutableSet<Int>> = HashMap()
 
-    fun CutCount(Cliques: Map<Int, Set<Int>>): Int {
-        if (Cliques.size != 2) return -1
-        val (from, to) = Cliques.values.take(2)
-        var cutCnt = 0
-        for (fromV in from) {
-            WireGraph[fromV]?.forEach { conn ->
-                if (to.contains(conn)) {
-                    cutCnt++
-                }
-            }
-        }
-        return cutCnt
-    }
+    // fun CutCount(Cliques: Map<Int, Set<Int>>) = when {
+    //     Cliques.size != 2 -> -1
+    //     else -> {
+    //         val (from, to) = Cliques.values.take(2)
+    //         from.sumOf { WireGraph[it]?.count { conn -> conn in to } ?: 0 }
+    //     }
+    // }
 
-    fun FindCliqueRoot(CliqueRootMap: HashMap<Int, Int>, name: Int): Int {
+    fun FindCliqueRoot(CliqueRootMap: HashMap<Int, Int>, name: Int): Int =
         CliqueRootMap[name]!!.let { f ->
-            if (CliqueRootMap[f] == name) {
-                return f
+            when {
+                CliqueRootMap[f] == name -> f
+                else -> CliqueRootMap.compute(name) { k, v -> FindCliqueRoot(CliqueRootMap, f) }!!
             }
-            return CliqueRootMap.compute(name) { k, v -> FindCliqueRoot(CliqueRootMap, f) }!!
         }
-    }
 
     fun Karger(seed: Long, timeout: Long): Map<Int, Set<Int>> {
         val now = System.currentTimeMillis()
@@ -67,24 +59,24 @@ class MinimumCut : ISolution {
             }
             // Get father
             val NodeList = NodesHavingEdge.toList()
-            val father = NodeList[rand.nextInt(NodeList.size)]
+            val root = NodeList[rand.nextInt(NodeList.size)]
             // Get child
-            val ChildList = WireGraph[father]!!.filter { child ->
-                !visited[father]!!.contains(child) && !visited[child]!!.contains(father)
+            val ChildList = WireGraph[root]!!.filter { child ->
+                !visited[root]!!.contains(child) && !visited[child]!!.contains(root)
             }.toList()
             if (ChildList.isEmpty()) {
-                NodesHavingEdge.remove(father)
+                NodesHavingEdge.remove(root)
                 continue
             }
             val child = ChildList[rand.nextInt(ChildList.size)]
-            visited[father]!!.add(child)
-            visited[child]!!.add(father)
-            val FatherCliqueName = FindCliqueRoot(CliqueRootMap, father)
-            val ChildCliqueName = FindCliqueRoot(CliqueRootMap, child)
-            CliqueRootMap.put(ChildCliqueName, FatherCliqueName)
-            if (FatherCliqueName != ChildCliqueName) {
-                Cliques[FatherCliqueName]!!.addAll(Cliques[ChildCliqueName]!!)
-                Cliques.remove(ChildCliqueName)
+            visited[root]!!.add(child)
+            visited[child]!!.add(root)
+            val CliqueRootId = FindCliqueRoot(CliqueRootMap, root)
+            val CliqueChildId = FindCliqueRoot(CliqueRootMap, child)
+            CliqueRootMap.put(CliqueChildId, CliqueRootId)
+            if (CliqueRootId != CliqueChildId) {
+                Cliques[CliqueRootId]!!.addAll(Cliques[CliqueChildId]!!)
+                Cliques.remove(CliqueChildId)
             }
         }
         return Cliques
@@ -95,9 +87,9 @@ class MinimumCut : ISolution {
         //val timeout = 70L
         //while (true) {
         //    val seed = System.currentTimeMillis()
-        //    val res = Karger(seed, timeout);
+        //    val res = Karger(seed, timeout)
         //    if (CutCount(res) == 3) {
-        //        println("Using seed: ${seed}, time cost ${System.currentTimeMillis() - seed}");
+        //        println("Using seed: ${seed}, time cost ${System.currentTimeMillis() - seed}")
         //        println("Solution 1: " + res.values.map { it.size }.fold(1) { i, v -> i * v })
         //        return
         //    }
@@ -119,8 +111,8 @@ class MinimumCut : ISolution {
         @JvmStatic
         fun main(args: Array<String>) {
             MinimumCut().let { day25 ->
-                BufferedReader(FileReader("Day25/input.txt")).use { day25.Solution1(it) }
-                BufferedReader(FileReader("Day25/input.txt")).use { day25.Solution2(it) }
+                BufferedReader(FileReader(day25.inputFileName!!)).use { day25.Solution1(it) }
+                BufferedReader(FileReader(day25.inputFileName!!)).use { day25.Solution2(it) }
             }
         }
     }

@@ -19,10 +19,10 @@ class PairAndAdd : public ISolution {
    public:
     void Solution1() {
         using namespace std;
-        regex re( "[0-9]+" );
         numList = BufferedReader( "Day01/input.txt" ).lines().yield() | views::transform( [&]( const string& line ) {
-                      sregex_iterator it( line.begin(), line.end(), re ), end;
-                      return pair<int, int>{ stoi( ( *it ).str() ), stoi( ( *( ++it ) ).str() ) };
+                      int a, b;
+                      std::stringstream( std::move( const_cast<string&>( line ) ) ) >> a >> b;
+                      return pair<int, int>{ a, b };
                   } ) |
                   ranges::to<vector<pair<int, int>>>();
         priority_queue<int, vector<int>, greater<>> pq1, pq2;
