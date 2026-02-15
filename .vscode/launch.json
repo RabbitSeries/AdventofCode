@@ -64,12 +64,11 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "cwd": "${fileDirname}",
+            "cwd": "${input:Working_Directory}",
             "outFiles": [
                 "${workspaceFolder}/**/*.(m|c|)js",
                 "!**/node_modules/**"
-            ],
-            "preLaunchTask": "[Arch/Windows] [npm rum build]"
+            ]
         }
     ],
     "inputs": [

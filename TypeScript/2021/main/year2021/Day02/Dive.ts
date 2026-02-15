@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs"
 import { EOL } from "node:os"
-const data = readFileSync("input.txt").toString().trim().split(EOL)
+const data = readFileSync("Day02/input.txt").toString().trim().split(EOL)
 let forward = 0, aim = 0, aimedDepth = 0
 data.forEach(cmd => {
     const delta = +cmd.split(" ")[1]

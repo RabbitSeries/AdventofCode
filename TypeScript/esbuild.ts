@@ -2,12 +2,11 @@ import * as esbuild from "esbuild"
 import fg from "fast-glob"
 import fs from "node:fs"
 const src = fg.globSync(["./**/*.ts", "!node_modules"])
-console.log(`Found files: ${src}`)
 const outDirectory = "dist";
 if (fs.existsSync(outDirectory)) {
     fs.rmSync(outDirectory, { force: true, recursive: true })
 }
-await esbuild.build({
+const ctx = await esbuild.context({
     target: "esnext",
     entryPoints: src,
     platform: "node",
@@ -15,7 +14,10 @@ await esbuild.build({
     bundle: true,
     outbase: ".",
     outdir: outDirectory,
-    sourcemap: "inline"
-    // treeShaking: true // true if bundle or format is iife
+    sourcemap: "inline",
+    logLevel: "info",
 })
-console.log(`bundle finished`)
+await ctx.watch()
+console.log('Watching...')
+await ctx.rebuild()
+console.log('Initial build finished.')
