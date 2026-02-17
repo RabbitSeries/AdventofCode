@@ -15,7 +15,7 @@ const parse_boards = (board_blocks: string[]) =>
             })
         })
         return {
-            indexHash,// Each board has unique numbers in this tests example
+            indexHash, // Each board has unique numbers in this example
             boardCells,
             rowRemain: Array.from({ length: 5 }, () => 5),
             colRemain: Array.from({ length: 5 }, () => 5)
@@ -37,14 +37,9 @@ function run_bingo(first_win: boolean = true) {
                 nextRound.push(board)
                 continue
             }
-            if (first_win) {
+            if (first_win || bingo_boards.length === 1) {
                 const sum = board.indexHash.keys().reduce((a, b) => a + b, 0)
                 return sum * number
-            } else {
-                if (bingo_boards.length === 1) {
-                    const sum = board.indexHash.keys().reduce((a, b) => a + b, 0)
-                    return sum * number
-                }
             }
         }
         bingo_boards = nextRound
