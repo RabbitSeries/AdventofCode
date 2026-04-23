@@ -1,0 +1,8 @@
+Language: Cpp
+BasedOnStyle: Google
+NamespaceIndentation: All
+IndentWidth: 4
+TabWidth: 4
+SpacesInAngles: false
+SpacesInParentheses: true
+ColumnLimit: 0

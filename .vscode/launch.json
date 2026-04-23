@@ -1,0 +1,138 @@
+{
+    "configurations": [
+        {
+            "name": "[Java] [Debug]",
+            "type": "java",
+            "request": "launch",
+            "vmArgs": "-ea",
+            "cwd": "${input:Working_Directory}",
+            "mainClass": "${file}",
+            "classPaths": [
+                "$Runtime"
+            ]
+        },
+        {
+            "name": "[Java] [Debug] [AoC]: Load solutions under directory specified",
+            "type": "java",
+            "request": "launch",
+            "vmArgs": "-ea",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "${workspaceFolder}/Java/${input:Year_Name}/target/year${input:Year_Name}-${input:Solution_Version}.jar"
+            ],
+            "mainClass": "${file}",
+            "classPaths": [
+                "$Runtime"
+            ],
+            "preLaunchTask": "[maven package]",
+            "projectName": "${input:Launcher_Name}"
+        },
+        {
+            "name": "[Python] [Debug]",
+            "type": "debugpy",
+            "request": "launch",
+            "justMyCode": false,
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder}/.env",
+            "cwd": "${input:Working_Directory}"
+        },
+        {
+            "name": "[C/C++] [Launch]",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/exe_${fileBasenameNoExtension}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${input:Working_Directory}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "${input:Prelaunch_Task}"
+        },
+        {
+            "name": "[Node] [Debug]",
+            "type": "node",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "cwd": "${input:Working_Directory}",
+            "outFiles": [
+                "${workspaceFolder}/**/*.(m|c|)js",
+                "!**/node_modules/**"
+            ]
+        }
+    ],
+    "inputs": [
+        {
+            "id": "Project_Name",
+            "type": "pickString",
+            "default": "year2023",
+            "options": [
+                "year2023",
+                "launcher"
+            ],
+            "description": "Project name for resolving the classpaths"
+        },
+        {
+            "id": "Working_Directory",
+            "type": "pickString",
+            "default": "${fileDirname}",
+            "options": [
+                "${fileDirname}",
+                "${fileDirname}/../resources",
+                "${fileDirname}/../../resources",
+                "${fileDirname}/../../../resources",
+                "${fileDirname}/../../../resources/${fileDirnameBasename}",
+                "${workspaceFolder}"
+            ],
+            "description": "Working directory of the launched program"
+        },
+        {
+            "id": "Year_Name",
+            "type": "pickString",
+            "default": "2023",
+            "options": [
+                "2023"
+            ],
+            "description": "AoC solution year"
+        },
+        {
+            "id": "Solution_Version",
+            "type": "pickString",
+            "default": "1.0-SNAPSHOT",
+            "options": [
+                "1.0-SNAPSHOT"
+            ],
+            "description": "AoC solution version"
+        },
+        {
+            "id": "Launcher_Name",
+            "type": "pickString",
+            "default": "launcher",
+            "options": [
+                "launcher"
+            ],
+            "description": "Select AoC Launcher Project Name"
+        },
+        {
+            "id": "Prelaunch_Task",
+            "type": "pickString",
+            "default": "[Arch/Windows] [Release Build] [C/C++]: g++ build active file",
+            "options": [
+                "[Arch/Windows] [Debug Build] [C/C++]: g++ build active file",
+                "[Arch/Windows] [Release Build] [C/C++]: g++ build active file"
+            ],
+            "description": "Build task before build"
+        }
+    ],
+    "version": "2.0.0"
+}

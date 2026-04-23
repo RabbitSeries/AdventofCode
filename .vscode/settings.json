@@ -1,0 +1,29 @@
+{
+    "flake8.args": [
+        "--config=${workspaceFolder}/formatters/.flake8"
+    ],
+    "autopep8.args": [
+        "--global-config=${workspaceFolder}/pyproject.toml",
+    ],
+    "C_Cpp.clang_format_style": "file:${workspaceFolder}/formatters/.clang-format",
+    "java.format.settings.url": "formatters/java-formatter.xml", //Redhat java is not suppressing absolute path uri error, use relative path here
+    // "cmake.debugConfig": {
+    //     "cwd": "${workspaceFolder}/2024}",
+    //     "dumpPath": ""
+    // },
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "cmake.configureOnOpen": false,
+    "cmake.options.statusBarVisibility": "hidden",
+    // "cmake.useCMakePresets":"auto",
+    // Use CMakePresets.json to configure drive CMake configure, build, and test. 
+    // When using CMakePresets.json, kits, variants, and some settings in settings.json will be ignored,
+    //      such as: "cmake.buildDirectory": "${workspaceFolder}/builds/${buildKit}/${buildType}"
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/Python",
+        "${workspaceFolder}/tests"
+    ],
+    "eslint.workingDirectories": [
+        "./TypeScript"
+    ],
+    "js/ts.tsdk.path": "./TypeScript/node_modules/typescript/lib"
+}

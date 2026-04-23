@@ -1,0 +1,2 @@
+add_library(aoc_cpp_utils INTERFACE)
+target_include_directories(aoc_cpp_utils INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

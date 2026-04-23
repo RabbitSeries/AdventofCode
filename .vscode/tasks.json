@@ -1,0 +1,148 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "[Windows] Clean workspace",
+            "command": "${workspaceFolder}/.vscode/clean_noConfirm.bat",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "args": [
+                "${workspaceFolder}"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "[ArchLinux] Clean workspace",
+            "command": "${workspaceFolder}/.vscode/clean_noConfirm.sh",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "args": [
+                "${workspaceFolder}"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "type": "cppbuild",
+            "label": "[Arch/Windows] [Debug Build] [C/C++]: g++ build active file",
+            "command": "g++",
+            "args": [
+                "-Wall",
+                "-Wa,-mbig-obj",
+                "-fdiagnostics-color=always",
+                "-std=c++23",
+                "-g",
+                "${fileBasenameNoExtension}.cc",
+                "-fconcepts-diagnostics-depth=3",
+                "-o",
+                "${fileDirname}/exe_${fileBasenameNoExtension}",
+                "-I",
+                "${workspaceFolder}/Cpp/libs"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build"
+            }
+        },
+        {
+            "type": "cppbuild",
+            "label": "[Arch/Windows] [Release Build] [C/C++]: g++ build active file",
+            "command": "g++",
+            "args": [
+                "-Wall",
+                "-Wa,-mbig-obj",
+                "-fdiagnostics-color=always",
+                "-std=c++23",
+                "-O3",
+                "${fileBasenameNoExtension}.cc",
+                "-o",
+                "${fileDirname}/exe_${fileBasenameNoExtension}",
+                "-I",
+                "${workspaceFolder}/Cpp/libs"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "[Run InputDownloader]",
+            "command": "python InputDownloader/downloader.py",
+            "options": {
+                "env": {
+                    "AOC_SESSION_COOKIE": "${input:AOC_SESSION_COOKIE}",
+                    "OVERWRITE_DOWNLOAD": "${input:OVERWRITE_DOWNLOAD}"
+                },
+                // Windows is case-insensitive to load this cwd, but linux is not
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$python"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "[maven verify]",
+            "command": "mvn verify",
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "[maven package]",
+            "command": "mvn package",
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "[maven goals]",
+            "command": "mvn",
+            "args": [
+                "${input:MAVEN_PRELAUNCH_GOAL}"
+            ],
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "AOC_SESSION_COOKIE",
+            "type": "promptString",
+            "description": "Please user provide AOC_SESSION_COOKIE. Press enter for automatically fectching .env under project root"
+        },
+        {
+            "id": "OVERWRITE_DOWNLOAD",
+            "type": "pickString",
+            "default": "False",
+            "options": [
+                "True",
+                "False"
+            ],
+            "description": "Overwrite existing input files"
+        },
+        {
+            "id": "MAVEN_PRELAUNCH_GOAL",
+            "type": "promptString",
+            "default": "package",
+            "description": "Maven goal to launch before debug, this will be passed to args of command mvn [args] one goal at once"
+        }
+    ],
+    "version": "2.0.0"
+}

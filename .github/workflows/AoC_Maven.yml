@@ -1,0 +1,91 @@
+name: AoC Maven Java Part
+
+on:
+  workflow_dispatch:
+    
+env:
+  PACKAGE_ROOT: ./Java/launcher/target
+  PROJECT_VERSION: 1.0-SNAPSHOT
+
+jobs:
+  downloadInput:
+    uses: ./.github/workflows/AoC_Download.yml
+    secrets: 
+      AOC_SESSION_COOKIE: ${{secrets.AOC_SESSION_COOKIE}}
+
+  build-and-run:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        year-folder: [Java/2023/main/year2023]
+
+    runs-on: ${{ matrix.os }}
+    needs: downloadInput
+    steps:
+      - uses: actions/checkout@v4          
+      - name: setup JDK
+        uses: actions/setup-java@v4
+        with:  
+          distribution: 'microsoft'
+          java-version: '21'
+          cache: 'maven'
+          cache-dependency-path: | # optional
+            ./**/pom.xml
+
+      - name: Download input
+        uses: actions/download-artifact@v4
+        with:
+          name: AoC_Input
+          path: |
+            ./
+
+      - name: Build and run
+      # Use runtime dependency for execute, no need to install
+        run: |
+          mvn --batch-mode --update-snapshots package exec:exec
+
+      - name: Updload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: RESULTS-${{ matrix.os }}
+          path: |
+            ${{matrix.year-folder}}/*.log
+
+  log:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        year-folder: [Java/2023/main/year2023]
+    runs-on: ${{ matrix.os }}
+    needs: build-and-run
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare results
+        uses: actions/download-artifact@v4
+        with:
+          name: RESULTS-${{ matrix.os }}
+          path: |
+            ${{matrix.year-folder}}/ActionResults
+
+      - name: Print results log files
+        working-directory: ${{matrix.year-folder}}/ActionResults
+        run: |
+          cat res.log
+          cat exception.log
+      
+      - name: Diff results
+        shell: bash
+        run: |
+          sh ./.github/workflows/diff_file.sh ${{matrix.year-folder}}/ActionResults/res.log ${{matrix.year-folder}}/ActionResults/../res.log
+
+
+  report-if-diff-fail:
+    runs-on: ubuntu-latest
+    needs: log
+    if: ${{ failure() }}
+    steps:
+      - run: |
+          echo "FAILED"

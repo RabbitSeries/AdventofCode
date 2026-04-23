@@ -1,0 +1,30 @@
+cmake_minimum_required(VERSION 3.28)
+
+project(AoC_Cpp LANGUAGES CXX VERSION 0.1.0)
+
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 23)
+
+if(MSVC)
+    add_compile_options(
+        /W4
+        $<$<CONFIG:Debug>:/Od>
+        $<$<CONFIG:Release>:/O2>
+    )
+elseif(CMAKE_CXX_COMPILER MATCHES "Clang|GNU")
+    add_compile_options(
+        -Wall -Wextra -Wpedantic
+        $<$<CONFIG:Debug>:-g>
+        $<$<CONFIG:Release>:-O3>
+    )
+endif()
+
+# include(${CMAKE_CURRENT_LIST_DIR}/cpp/cmake/glob_projects.cmake)
+# glob_projects(${CMAKE_CURRENT_SOURCE_DIR}/cpp 2 "[0-9]+/main" res FALSE)
+# message(STATUS "Found solutions: ${res}")
+# glob_projects(${CMAKE_CURRENT_SOURCE_DIR}/Java 2 "[0-9]+/main" res FALSE)
+# message(STATUS "Found solutions: ${res}")
+add_subdirectory(Cpp/libs)
+add_subdirectory(Cpp/2024)
+
+include(Cpp/cmake/clean_build.cmake)

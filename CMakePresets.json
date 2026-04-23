@@ -1,0 +1,117 @@
+{
+    "version": 10,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 28,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "default",
+            "displayName": "Default Config",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "environment": {
+                "ProjectName": "AoC_Cpp"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install/${presetName}"
+            },
+            "$comment": "VSCode cmake tools extension hasn't solved ANSI escape colored characters in garbled output, consider use \"CMAKE_COLOR_DIAGNOSTICS\": \"OFF\""
+        },
+        {
+            "name": "ninja-release",
+            "inherits": "default",
+            "displayName": "Ninja Release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "unix-release",
+            "inherits": "default",
+            "displayName": "Unix Release",
+            "generator": "Unix Makefiles",
+            "condition": {
+                "type": "matches",
+                "string": "$penv{PATH}",
+                "regex": "usr/bin"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "windows-gcc-debug",
+            "inherits": "default",
+            "displayName": "Windows GCC",
+            "generator": "MinGW Makefiles",
+            "condition": {
+                "type": "allOf",
+                "conditions": [
+                    {
+                        "type": "equals",
+                        "lhs": "${hostSystemName}",
+                        "rhs": "Windows"
+                    }
+                ]
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "windows-gcc-release",
+            "inherits": "windows-gcc-debug",
+            "displayName": "Windows GCC Release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "windows-msvc",
+            "inherits": "windows-gcc-debug",
+            "displayName": "Windows MSVC",
+            "generator": "Visual Studio 18 2026",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": null
+            },
+            "description": "Multi-config MSVC preset. Choose Debug or Release from the build preset instead of setting CMAKE_BUILD_TYPE at configure time."
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "unix-release",
+            "configurePreset": "unix-release",
+            "jobs": 6
+        },
+        {
+            "name": "windows-gcc-debug",
+            "inherits": "unix-release",
+            "configurePreset": "windows-gcc-debug"
+        },
+        {
+            "name": "windows-gcc-release",
+            "inherits": "unix-release",
+            "configurePreset": "windows-gcc-release"
+        },
+        {
+            "name": "ninja-release",
+            "inherits": "unix-release",
+            "configurePreset": "ninja-release"
+        },
+        {
+            "name": "msvc-debug",
+            "inherits": "windows-gcc-debug",
+            "configurePreset": "windows-msvc",
+            "configuration": "Debug",
+            "description": "Typical entries include Debug, Release, RelWithDebInfo and MinSizeRel, but custom build types can also be defined."
+        },
+        {
+            "name": "msvc-release",
+            "inherits": "msvc-debug",
+            "configuration": "Release"
+        }
+    ]
+}

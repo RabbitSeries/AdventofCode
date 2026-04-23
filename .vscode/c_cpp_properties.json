@@ -1,0 +1,48 @@
+{
+    "configurations": [
+        {
+            "name": "ArchLinux",
+            "includePath": [
+                "${workspaceFolder}/Cpp/**/main",
+                "${workspaceFolder}/Cpp/libs"
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "cStandard": "gnu23",
+            "cppStandard": "gnu++23",
+            "intelliSenseMode": "linux-gcc-x64"
+        },
+        {
+            "name": "MinGW",
+            "includePath": [
+                "D:/Build_Tool_Lib/boost/boost_1_87_0_MinGW",
+                "${workspaceFolder}/Cpp/**/main",
+                "${workspaceFolder}/Cpp/libs"
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "cStandard": "c23",
+            "cppStandard": "c++26",
+            "intelliSenseMode": "windows-gcc-x64",
+            "compilerPath": "D:/Build_Tool_Lib/x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0/mingw64/bin/g++.exe"
+        },
+        {
+            "name": "MSVC",
+            "includePath": [
+                "${default}"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "D:\\Program Files\\Microsoft Visual Studio\\2026\\Professional\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+            "intelliSenseMode": "windows-msvc-x64",
+            "cppStandard": "c++23",
+            "cStandard": "c23"
+        }
+    ],
+    "version": 4
+}

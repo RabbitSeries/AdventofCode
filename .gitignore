@@ -1,0 +1,16 @@
+exe_*
+*.exe
+build
+/.env
+input.txt
+/[oO]ut
+/CMakeUserPresets.json
+node_modules
+dist
+target
+exception.log
+__pycache__
+*.egg-info
+.idea
+*.iml
+package-lock.json
