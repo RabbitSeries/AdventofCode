@@ -5,8 +5,9 @@
 #include <set>
 #include <vector>
 
-#include "utils/BufferedReader.hpp"
 #include "utils/ISolution.hpp"
+#include "utils/Streams.hpp"
+
 class AntinodeHarmonic : public ISolution {
     REGISTER( AntinodeHarmonic )
 
@@ -70,7 +71,7 @@ class AntinodeHarmonic : public ISolution {
     int rows, cols;
 
     void readFile() {
-        data = BufferedReader( "Day08/input.txt" ).lines().toList();
+        data = toList( fileLinesStream( "Day08/input.txt" ) );
         rows = static_cast<int>( data.size() );
         cols = static_cast<int>( data[0].size() );
         for ( int x : std::views::iota( 0, rows ) ) {

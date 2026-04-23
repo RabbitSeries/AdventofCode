@@ -82,7 +82,7 @@ class PushBox : public ISolution {
                     row.push_back( CELLEMPTY );
                 } else if ( c == 'O' ) {
                     row.push_back( static_cast<int>( BoxList.size() ) );
-                    BoxList.emplace_back( BoxMap.size(), row.size() - 1, BoxList.size() );
+                    BoxList.emplace_back( static_cast<int>( BoxMap.size() ), static_cast<int>( row.size() ) - 1, static_cast<int>( BoxList.size() ) );
                 } else if ( c == '@' ) {
                     row.push_back( CELLEMPTY );
                     start = Point2D( static_cast<int>( BoxMap.size() ), static_cast<int>( row.size() ) - 1, -1 );
@@ -101,7 +101,7 @@ class PushBox : public ISolution {
         }
         for ( size_t i = 0; i < BoxList.size(); i++ ) {
             Point2D& box = BoxList[i];
-            WideBoxList.emplace_back( box.x, box.y * 2, box.x, box.y * 2 + 1, i );
+            WideBoxList.emplace_back( box.x, box.y * 2, box.x, box.y * 2 + 1, static_cast<int>( i ) );
         }
     }
 

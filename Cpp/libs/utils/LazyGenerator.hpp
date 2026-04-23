@@ -10,7 +10,7 @@
 
 namespace utils {
     template <class T>
-    struct Generator : public std::ranges::view_interface<Generator<T>> {
+    struct LazyGenerator : public std::ranges::view_interface<LazyGenerator<T>> {
         struct promise_type;
         using handle = std::coroutine_handle<promise_type>;
         handle h{};
@@ -21,8 +21,8 @@ namespace utils {
             promise_type() {}
             ~promise_type() {}
 
-            Generator get_return_object() noexcept {  // Called on frame construction
-                return Generator{ handle::from_promise( *this ) };
+            LazyGenerator get_return_object() noexcept {  // Called on frame construction
+                return LazyGenerator{ handle::from_promise( *this ) };
             }
             std::suspend_always initial_suspend() const noexcept {
                 return {};
@@ -40,15 +40,15 @@ namespace utils {
             }
             void await_transform() = delete;
         };
-        explicit Generator( handle h_ ) : h( h_ ) {}
-        Generator( const Generator& ) = delete;
-        // For viewable_range<Generator<T>&&> -> ... || std::movable<utils::Generator<T>&&> && ...;
-        Generator( Generator&& o ) noexcept : h( std::exchange( o.h, {} ) ) {
+        explicit LazyGenerator( handle h_ ) : h( h_ ) {}
+        LazyGenerator( const LazyGenerator& ) = delete;
+        // For viewable_range<LazyGenerator<T>&&> -> ... || std::movable<utils::LazyGenerator<T>&&> && ...;
+        LazyGenerator( LazyGenerator&& o ) noexcept : h( std::exchange( o.h, {} ) ) {
         }
-        Generator& operator=( Generator other ) {
+        LazyGenerator& operator=( LazyGenerator other ) {
             std::swap( other.h, this->h );
         }
-        ~Generator() {
+        ~LazyGenerator() {
             if ( h ) h.destroy();
         }
         struct iterator {
@@ -68,10 +68,10 @@ namespace utils {
             void operator++( int ) {
                 this->operator++();
             }
-            const T& operator*() const {
-                return h.promise().current;
+            T&& operator*() const {
+                return std::move( h.promise().current );
             }
-            const T* operator->() const {
+            T* operator->() const {
                 return std::addressof( h.promise().current );
             }
             bool operator==( std::default_sentinel_t ) const { return h.done(); }

@@ -64,7 +64,7 @@ class DiskCompact : public ISolution {
                     fileSizeTable.push_back( c - '0' );
                 } else {
                     // atoi convets string to integer, but requires and end sign '\0' in the string;
-                    freeSpaceTable.emplace_back( c - '0', diskData.size() );
+                    freeSpaceTable.emplace_back( c - '0', static_cast<int>( diskData.size() ) );
                     appendEmptyBlock( c - '0', diskData );
                 }
             }

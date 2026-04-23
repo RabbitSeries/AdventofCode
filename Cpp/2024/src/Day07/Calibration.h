@@ -4,17 +4,17 @@
 #include <string>
 #include <vector>
 
-#include "utils/BufferedReader.hpp"
 #include "utils/ISolution.hpp"
-#include "utils/Stream/RegexStream.hpp"
+#include "utils/Streams.hpp"
+
 class Calibration : public ISolution {
     REGISTER( Calibration )
 
     using ull = unsigned long long;
     void readFile() {
         using namespace std;
-        for ( string buf : BufferedReader( "Day07/input.txt" ).lines().yield() ) {
-            auto nums = RegexStream( R"(\d+)", buf ).yield() | views::transform( []( const smatch& m ) {
+        for ( string&& buf : fileLinesStream( "Day07/input.txt" ) ) {
+            auto nums = regexStream( R"(\d+)", buf ) | views::transform( []( const smatch& m ) {
                             return stoull( m.str() );
                         } ) |
                         ranges::to<vector<ull>>();

@@ -8,14 +8,15 @@
 #include <string>
 #include <unordered_set>
 
-#include "utils/BufferedReader.hpp"
 #include "utils/ISolution.hpp"
+#include "utils/Streams.hpp"
+
 class LANParty : public ISolution {
     REGISTER( LANParty )
 
     void readFile() {
         using namespace std;
-        for ( const string& buf : BufferedReader( "Day23/input.txt" ).lines().yield() ) {
+        for ( string&& buf : fileLinesStream( "Day23/input.txt" ) ) {
             LANNetwork[buf.substr( 0, 2 )].emplace( buf.substr( 3 ) );
             LANNetwork[buf.substr( 3 )].emplace( buf.substr( 0, 2 ) );
         }

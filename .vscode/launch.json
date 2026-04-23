@@ -5,7 +5,7 @@
             "type": "java",
             "request": "launch",
             "vmArgs": "-ea",
-            "cwd": "${input:Working_Directory}",
+            "cwd": "${input:workingDirectory}",
             "mainClass": "${file}",
             "classPaths": [
                 "$Runtime"
@@ -18,14 +18,14 @@
             "vmArgs": "-ea",
             "cwd": "${workspaceFolder}",
             "args": [
-                "${workspaceFolder}/Java/${input:Year_Name}/target/year${input:Year_Name}-${input:Solution_Version}.jar"
+                "${workspaceFolder}/Java/${input:yearName}/target/year${input:yearName}-${input:solutionVersion}.jar"
             ],
             "mainClass": "${file}",
             "classPaths": [
                 "$Runtime"
             ],
             "preLaunchTask": "[maven package]",
-            "projectName": "${input:Launcher_Name}"
+            "projectName": "${input:launcherName}"
         },
         {
             "name": "[Python] [Debug]",
@@ -35,7 +35,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
-            "cwd": "${input:Working_Directory}"
+            "cwd": "${input:workingDirectory}"
         },
         {
             "name": "[C/C++] [Launch]",
@@ -44,7 +44,7 @@
             "program": "${fileDirname}/exe_${fileBasenameNoExtension}",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${input:Working_Directory}",
+            "cwd": "${input:workingDirectory}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -55,8 +55,30 @@
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 }
-            ],
-            "preLaunchTask": "${input:Prelaunch_Task}"
+            ]
+        },
+        {
+            "name": "[C/C++] [CMAKE] [GDB] [Launch]",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${command:cmake.launchTargetPath}",
+            "cwd": "${input:workingDirectory}",
+            "MIMode": "gdb",
+            "miDebuggerPath": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "[C/C++] [MSVC] [CMake] [Launch]",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${command:cmake.launchTargetPath}",
+            "cwd": "${input:workingDirectory}"
         },
         {
             "name": "[Node] [Debug]",
@@ -64,7 +86,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "cwd": "${input:Working_Directory}",
+            "cwd": "${input:workingDirectory}",
             "outFiles": [
                 "${workspaceFolder}/**/*.(m|c|)js",
                 "!**/node_modules/**"
@@ -73,7 +95,7 @@
     ],
     "inputs": [
         {
-            "id": "Project_Name",
+            "id": "projectName",
             "type": "pickString",
             "default": "year2023",
             "options": [
@@ -83,7 +105,7 @@
             "description": "Project name for resolving the classpaths"
         },
         {
-            "id": "Working_Directory",
+            "id": "workingDirectory",
             "type": "pickString",
             "default": "${fileDirname}",
             "options": [
@@ -97,7 +119,7 @@
             "description": "Working directory of the launched program"
         },
         {
-            "id": "Year_Name",
+            "id": "yearName",
             "type": "pickString",
             "default": "2023",
             "options": [
@@ -106,7 +128,7 @@
             "description": "AoC solution year"
         },
         {
-            "id": "Solution_Version",
+            "id": "solutionVersion",
             "type": "pickString",
             "default": "1.0-SNAPSHOT",
             "options": [
@@ -115,23 +137,13 @@
             "description": "AoC solution version"
         },
         {
-            "id": "Launcher_Name",
+            "id": "launcherName",
             "type": "pickString",
             "default": "launcher",
             "options": [
                 "launcher"
             ],
             "description": "Select AoC Launcher Project Name"
-        },
-        {
-            "id": "Prelaunch_Task",
-            "type": "pickString",
-            "default": "[Arch/Windows] [Release Build] [C/C++]: g++ build active file",
-            "options": [
-                "[Arch/Windows] [Debug Build] [C/C++]: g++ build active file",
-                "[Arch/Windows] [Release Build] [C/C++]: g++ build active file"
-            ],
-            "description": "Build task before build"
         }
     ],
     "version": "2.0.0"

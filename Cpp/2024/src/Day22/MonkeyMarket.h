@@ -5,8 +5,9 @@
 #include <string>
 #include <vector>
 
-#include "utils/BufferedReader.hpp"
 #include "utils/ISolution.hpp"
+#include "utils/Streams.hpp"
+
 class MonkeyMarket : public ISolution {
     REGISTER( MonkeyMarket )
 
@@ -21,7 +22,7 @@ class MonkeyMarket : public ISolution {
     }
 
     void readFile() {
-        for ( const std::string& buf : BufferedReader( "Day22/input.txt" ).lines().yield() ) {
+        for ( std::string&& buf : fileLinesStream( "Day22/input.txt" ) ) {
             secrets.push_back( std::stoi( buf ) );
         }
     }

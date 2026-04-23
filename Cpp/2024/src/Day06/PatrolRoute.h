@@ -7,8 +7,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "utils/BufferedReader.hpp"
 #include "utils/ISolution.hpp"
+#include "utils/Streams.hpp"
+
 class PatrolRoute : public ISolution {
     REGISTER( PatrolRoute )
 
@@ -27,7 +28,7 @@ class PatrolRoute : public ISolution {
     }
 
     void readFile() {
-        for ( const std::string& line : BufferedReader( "Day06/input.txt" ).lines().yield() ) {
+        for ( auto&& line : fileLinesStream( "Day06/input.txt" ) ) {
             if ( guardPos.first == -1 ) {
                 for ( size_t i : std::views::iota( 0ull, line.size() ) ) {
                     if ( faceId.contains( line[i] ) ) {
@@ -37,10 +38,10 @@ class PatrolRoute : public ISolution {
                     }
                 }
             }
-            routeMap.emplace_back( std::move( const_cast<std::string&>( line ) ) );
+            routeMap.emplace_back( std::move( line ) );
         }
-        rows = (int)routeMap.size();
-        cols = (int)routeMap[0].size();
+        rows = static_cast<int>( routeMap.size() );
+        cols = static_cast<int>( routeMap[0].size() );
     }
 
     bool patrol( std::optional<std::function<void( const pos& )>> visitor = std::nullopt ) {

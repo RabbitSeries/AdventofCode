@@ -1,5 +1,4 @@
 import re
-
 from aocpy.aoc_libs.utils.ISolution import ISolution
 
 

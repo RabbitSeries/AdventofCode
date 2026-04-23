@@ -18,7 +18,7 @@ int main() {
         const auto& entry = registry.top();
         const auto solutionDay = entry.day ? entry.day : ( i + 1 );
         const auto& solutionName = entry.name;
-        const auto& instance = entry.factory;
+        const auto& factory = entry.factory;
         std::cout << "Day " << solutionDay << ": " << solutionName << std::endl;
 
         auto startTime = std::chrono::high_resolution_clock::now();
@@ -26,7 +26,7 @@ int main() {
         std::string info = std::string( solutionName );
         try {
             // create and run solution
-            solution = instance();
+            solution = factory();
             solution->Solution1();
             solution->Solution2();
         } catch ( const std::exception& ex ) {

@@ -3,7 +3,6 @@ name: AoC CMake C++ Part
 on:
   workflow_dispatch:
 
-
 env:
   BUILD_DIR: build
   INSTALL_PREFIX: build/install
@@ -17,8 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        year: [AoC/Cpp/2024]
+        os: [ ubuntu-latest, windows-latest ]
+        year: [ AoC/Cpp/2024 ]
         include:
           - os: ubuntu-latest
             preset: "unix-release"
@@ -47,7 +46,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.BUILD_DIR }}
-          key: cmake-${{ matrix.os }}-${{ matrix.preset }}-${{ hashFiles('**/CMakeLists.txt', 'Cpp/**/*.cc', 'Cpp/**/*.h', 'Cpp/**/*.hpp') }}
+          key: cmake-${{ matrix.os }}-${{ matrix.preset }}-${{
+            hashFiles('**/CMakeLists.txt', 'Cpp/**/*.cc', 'Cpp/**/*.h',
+            'Cpp/**/*.hpp') }}
 
       - name: Run cmake configure
         if: steps.cache-cmake.outputs.cache-hit != 'true'
@@ -59,7 +60,7 @@ jobs:
         if: steps.cache-cmake.outputs.cache-hit != 'true'
         run: |
           cmake --build --preset=${{ matrix.preset }}
-        
+
       - name: Run cmake install
         if: steps.cache-cmake.outputs.cache-hit != 'true'
         working-directory: ${{ env.BUILD_DIR }}/${{ matrix.preset }}
@@ -87,7 +88,7 @@ jobs:
         shell: cmd
         run: |
           .\solution 1>actionRes.log 2>runtime.log 
-          
+
       - name: LogResults
         shell: bash
         working-directory: ${{ env.INSTALL_PREFIX }}/${{ matrix.preset }}/${{ matrix.year }}
@@ -98,7 +99,7 @@ jobs:
       - name: Diff files
         shell: bash
         run: |
-          sh ./.github/workflows/diff_file.sh ${{ env.INSTALL_PREFIX }}/${{ matrix.preset }}/${{ matrix.year }}/actionRes.log Cpp/2024/main/year2024/res.log
+          sh ./.github/diff_file.sh ${{ env.INSTALL_PREFIX }}/${{ matrix.preset }}/${{ matrix.year }}/actionRes.log Cpp/2024/res.log
 
   report-if-diff-fail:
     runs-on: ubuntu-latest

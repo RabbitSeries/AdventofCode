@@ -6,8 +6,9 @@
 #include <string>
 #include <vector>
 
-#include "utils/BufferedReader.hpp"
 #include "utils/ISolution.hpp"
+#include "utils/Streams.hpp"
+
 class AsciiGraph : public ISolution {
     REGISTER( AsciiGraph )
 
@@ -95,7 +96,7 @@ class AsciiGraph : public ISolution {
 
    public:
     void Solution1() {
-        garden = BufferedReader( "Day12/input.txt" ).lines().toList();
+        garden = toList( fileLinesStream( "Day12/input.txt" ) );
         rows = (int)garden.size();
         cols = (int)garden[0].size();
         std::vector visited( garden.size(), std::vector( garden[0].size(), false ) );

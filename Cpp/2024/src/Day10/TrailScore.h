@@ -8,12 +8,13 @@
 #include <utility>
 #include <vector>
 
-#include "utils/BufferedReader.hpp"
 #include "utils/ISolution.hpp"
+#include "utils/Streams.hpp"
+
 class TrailScore : public ISolution {
     REGISTER( TrailScore )
 
-    using pos = std::pair<int, int> ;
+    using pos = std::pair<int, int>;
 
     const int dx[4]{ -1, 1, 0, 0 };
     const int dy[4]{ 0, 0, -1, 1 };
@@ -46,11 +47,11 @@ class TrailScore : public ISolution {
 
     void readFile() {
         using namespace std;
-        for ( const string& line : BufferedReader( "Day10/input.txt" ).lines().yield() ) {
+        for ( string&& line : fileLinesStream( "Day10/input.txt" ) ) {
             auto row = line | views::transform( []( char c ) { return c - '0'; } ) | ranges::to<vector<int>>();
-            for ( int i : views::iota( 0, (int)row.size() ) ) {
+            for ( int i : views::iota( 0, static_cast<int>( row.size() ) ) ) {
                 if ( row[i] == 0 ) {
-                    headList.emplace_back( topomap.size(), i );
+                    headList.emplace_back( static_cast<int>( topomap.size() ), i );
                 }
             };
             topomap.emplace_back( std::move( row ) );

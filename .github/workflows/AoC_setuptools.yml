@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ ubuntu-latest, windows-latest ]
 
     runs-on: ${{ matrix.os }}
     needs: downloadInput
@@ -51,7 +51,7 @@ jobs:
       - name: Diff results
         shell: bash
         run: |
-          sh ./.github/workflows/diff_file.sh aocpy.log Python/aocpy/aocpy.log
+          sh ./.github/diff_file.sh aocpy.log Python/aocpy/aocpy.log
 
   report-if-diff-fail:
     runs-on: ubuntu-latest

@@ -5,15 +5,16 @@
 #include <sstream>
 #include <string>
 
-#include "utils/BufferedReader.hpp"
 #include "utils/ISolution.hpp"
+#include "utils/Streams.hpp"
+
 class TwinkleStones : public ISolution {
     REGISTER( TwinkleStones )
 
     using ll = long long;
     std::map<ll, ll> TwinkleList;
     void readFile() {
-        for ( const std::string& line : BufferedReader( "Day11/input.txt" ).lines().yield() ) {
+        for ( std::string&& line : fileLinesStream( "Day11/input.txt" ) ) {
             std::stringstream ss( line );
             for ( ll stone : std::views::istream<ll>( ss ) ) {
                 TwinkleList[stone]++;

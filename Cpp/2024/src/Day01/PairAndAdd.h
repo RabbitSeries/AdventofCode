@@ -7,9 +7,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "utils/BufferedReader.hpp"
 #include "utils/ISolution.hpp"
-#include "utils/Stream/Generator.hpp"
+#include "utils/Streams.hpp"
 
 class PairAndAdd : public ISolution {
     REGISTER( PairAndAdd )
@@ -19,9 +18,9 @@ class PairAndAdd : public ISolution {
    public:
     void Solution1() {
         using namespace std;
-        numList = BufferedReader( "Day01/input.txt" ).lines().yield() | views::transform( [&]( const string& line ) {
+        numList = fileLinesStream( "Day01/input.txt" ) | views::transform( [&]( string&& line ) {
                       int a, b;
-                      std::stringstream( std::move( const_cast<string&>( line ) ) ) >> a >> b;
+                      std::stringstream( std::move( line ) ) >> a >> b;
                       return pair<int, int>{ a, b };
                   } ) |
                   ranges::to<vector<pair<int, int>>>();
@@ -30,7 +29,7 @@ class PairAndAdd : public ISolution {
             pq1.push( num1 );
             pq2.push( num2 );
         }
-        printRes( 1, ranges::fold_left( [&]() -> utils::Generator<int> {
+        printRes( 1, ranges::fold_left( [&]() -> utils::LazyGenerator<int> {
                       while ( !pq1.empty() && !pq2.empty() ) {
                           co_yield abs( pq1.top() - pq2.top() );
                           pq1.pop();

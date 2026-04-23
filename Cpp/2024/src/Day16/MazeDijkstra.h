@@ -109,10 +109,10 @@ class MazeDijkstra : public ISolution {
                 } else if ( c == '.' ) {
                     row.push_back( CELLEMPTY );
                 } else if ( c == 'S' ) {
-                    s = { maze.size(), row.size() };
+                    s = { static_cast<int>( maze.size() ), static_cast<int>( row.size() ) };
                     row.push_back( CELLEMPTY );
                 } else if ( c == 'E' ) {
-                    e = { maze.size(), row.size() };
+                    e = { static_cast<int>( maze.size() ), static_cast<int>( row.size() ) };
                     row.push_back( CELLEMPTY );
                 }
             }

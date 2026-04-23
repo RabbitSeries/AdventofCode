@@ -1,4 +1,3 @@
-from abc import abstractmethod
 from aocpy.aoc_libs.utils.ISolution import ISolution
 
 

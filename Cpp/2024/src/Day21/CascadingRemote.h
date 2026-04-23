@@ -9,8 +9,8 @@
 #include <vector>
 
 #include "KeyPadStructure.h"
-#include "utils/BufferedReader.hpp"
 #include "utils/ISolution.hpp"
+#include "utils/Streams.hpp"
 
 class CascadingRemote : public ISolution {
     REGISTER( CascadingRemote )
@@ -202,7 +202,7 @@ class CascadingRemote : public ISolution {
    public:
     void Solution1() {
         using namespace std;
-        passwordList = BufferedReader( "Day21/input.txt" ).lines().toList();
+        passwordList = toList( fileLinesStream( "Day21/input.txt" ) );
         printRes( 1, transform( 3 ) );
     }
     void Solution2() {

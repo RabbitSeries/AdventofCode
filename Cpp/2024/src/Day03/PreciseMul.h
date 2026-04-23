@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "utils/ISolution.hpp"
-#include "utils/Stream/RegexStream.hpp"
+#include "utils/Streams.hpp"
 
 class PreciseMul : public ISolution {
     REGISTER( PreciseMul )
@@ -16,20 +16,23 @@ class PreciseMul : public ISolution {
     std::string memory;
 
     int parseMul( const std::string& range ) {
-        return std::ranges::fold_left(
-            RegexStream( R"(mul\((\d+),(\d+)\))", range ).yield() | std::views::transform( []( const std::smatch& p ) { return stoi( p[1] ) * stoi( p[2] ); } ),
-            0, std::plus<>{} );
+        return std::ranges::fold_left( regexStream( R"(mul\((\d+),(\d+)\))", range ) |
+                                           std::views::transform( []( std::smatch&& p ) { return stoi( p[1] ) * stoi( p[2] ); } ),
+                                       0, std::plus<>{} );
     }
 
     void readFile() {
         using namespace std;
-        ifstream input( "Day03/input.txt" );
-        memory = ( stringstream() << input.rdbuf() ).str();
+        ifstream input( "Day03/input.txt", std::ios_base::ate | std::ios_base::binary );
+        memory.resize( input.tellg() );
+        input.seekg( 0 );
+        input.read( memory.data(), memory.size() );
     }
 
-    utils::Generator<int> EnabledSolve() {
+    utils::LazyGenerator<int> EnabledSolve() {
         bool enabled = true;
-        for ( std::smatch const& section : RegexStream( R"(((?:.|\s)*?)(don't\(\)|do\(\)|$))", memory ).yield() ) {
+        // MSVC stack is too small, it will somehow cause stack overflow for (?:.|\s)*?
+        for ( std::smatch&& section : regexStream( R"([\s\S]*?(don't\(\)|do\(\)|$))", memory ) ) {
             if ( enabled ) {
                 co_yield parseMul( section.str() );
             }

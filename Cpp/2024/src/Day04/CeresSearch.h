@@ -3,9 +3,9 @@
 #include <string>
 #include <vector>
 
-#include "utils/BufferedReader.hpp"
 #include "utils/ISolution.hpp"
-#include "utils/Stream/RegexStream.hpp"
+#include "utils/Streams.hpp"
+
 class CeresSearch : public ISolution {
     REGISTER( CeresSearch )
 
@@ -50,7 +50,7 @@ class CeresSearch : public ISolution {
     }
 
     void readFile() {
-        m = BufferedReader( "Day04/input.txt" ).lines().toList();
+        m = toList( fileLinesStream( "Day04/input.txt" ) );
         rows = m.size();
         cols = m[0].length();
     }

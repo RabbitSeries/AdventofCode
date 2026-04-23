@@ -2,8 +2,9 @@
 #include <string>
 #include <vector>
 
-#include "utils/BufferedReader.hpp"
 #include "utils/ISolution.hpp"
+#include "utils/Streams.hpp"
+
 class CheckLevelInOrder : public ISolution {
     REGISTER( CheckLevelInOrder )
 
@@ -36,7 +37,7 @@ class CheckLevelInOrder : public ISolution {
     std::vector<std::vector<int>> LevelLists;
 
     void readFile() {
-        LevelLists = BufferedReader( "Day02/input.txt" ).lines().yield() | std::views::transform( []( const std::string& line ) {
+        LevelLists = fileLinesStream( "Day02/input.txt" ) | std::views::transform( []( const std::string& line ) {
                          std::istringstream ss( std::move( const_cast<std::string&>( line ) ) );
                          return std::views::istream<int>( ss ) | std::ranges::to<std::vector<int>>();
                      } ) |

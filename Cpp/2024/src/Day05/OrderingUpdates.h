@@ -11,9 +11,9 @@
 #include <utility>
 #include <vector>
 
-#include "utils/BufferedReader.hpp"
 #include "utils/ISolution.hpp"
-#include "utils/Stream/RegexStream.hpp"
+#include "utils/Streams.hpp"
+
 class OrderingUpdates : public ISolution {
     REGISTER( OrderingUpdates )
 
@@ -35,14 +35,14 @@ class OrderingUpdates : public ISolution {
 
     std::vector<int> consume( const std::string& range ) {
         using namespace std;
-        return RegexStream( R"(\d+)", range ).yield() |
+        return regexStream( R"(\d+)", range ) |
                views::transform( []( const std::smatch& m ) { return stoi( m.str() ); } ) |
                ranges::to<vector<int>>();
     }
 
     void readFile() {
         using namespace std;
-        auto input = BufferedReader( "Day05/input.txt" ).lines().yield();
+        auto input = fileLinesStream( "Day05/input.txt" );
         auto itr = input.begin();
         while ( itr != input.end() ) {
             if ( itr->empty() ) {
