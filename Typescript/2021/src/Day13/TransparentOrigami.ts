@@ -6,7 +6,7 @@ enum FoldDirection {
     Horizontal
 }
 
-export class TransparentOrigami {
+class TransparentOrigami {
     private paper: boolean[][] = []
     private positions: [number, number][] = []
     private instructions: { direction: FoldDirection, position: number }[] = []
@@ -43,7 +43,7 @@ export class TransparentOrigami {
     private fold(option: { direction: FoldDirection, position: number }) {
         if (option.direction === FoldDirection.Horizontal) {
             for (let y = 0; y < this.paper.length; y++) {
-                for (let dis = 0; option.position - dis >= 0 && option.position + dis < this.paper[y].length; dis++) {
+                for (let dis = 1; option.position - dis >= 0 && option.position + dis < this.paper[y].length; dis++) {
                     const [x, mirrorX] = [option.position - dis, option.position + dis]
                     this.paper[y][x] = this.paper[y][x] || this.paper[y][mirrorX]
                 }

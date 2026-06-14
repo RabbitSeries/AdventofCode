@@ -113,5 +113,25 @@
             "inherits": "msvc-debug",
             "configuration": "Release"
         }
+    ],
+    "packagePresets": [
+        {
+            "name": "msvc-pack",
+            "packageDirectory": "packages",
+            "configurePreset": "windows-msvc",
+            "output": {
+                "verbose": true
+            },
+            "vendorName": "RabbitX",
+            "configurations": [
+                "Release",
+                "Debug"
+            ],
+            "generators": [
+                "7Z",
+                "ZIP",
+                "TAR"
+            ]
+        }
     ]
 }

@@ -31,13 +31,18 @@ endforeach()
 
 target_link_libraries(solution PRIVATE aoc_cpp_utils)
 
-install(TARGETS solution DESTINATION "AoC/Cpp/2024")
+# These should remain relative for both cmake install (use CMAKE_INSTALL_PREFIX) and CPack (use CMAKE_PACKAGE_DIR/somecache.dir)
+if(MSVC)
+    set(INSTALL_DIR "AoC/Cpp/$<CONFIG>/2024")
+else()
+    set(INSTALL_DIR "AoC/Cpp/${CMAKE_BUILD_TYPE}/2024")
+endif()
 
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/resources/" DESTINATION "AoC/Cpp/2024" FILES_MATCHING PATTERN input.txt)
+install(TARGETS solution DESTINATION ${INSTALL_DIR})
+
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/resources/" DESTINATION ${INSTALL_DIR} FILES_MATCHING PATTERN input.txt)
 
 set(CPACK_PACKAGE_NAME "solution")
-set(CPACK_PACKAGE_VENDOR "RabbitX")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_NAME}")
 include(CPack)
-

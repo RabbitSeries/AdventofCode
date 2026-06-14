@@ -49,13 +49,20 @@ int main() {
 #ifdef __linux__
     FILE* pipe = popen( R"(       cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python,Kotlin" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)", "r" );
 #else
+#ifdef _MSC_VER
     // FILE* pipe = popen( R"(wsl -e cloc . --include-ext=h,cc,cpp,hpp,c,java,py,ts,cmake,CMakeLists.txt" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)", "r" );
-    FILE* pipe = popen( R"(wsl -e cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python,Kotlin")"
-                        R"( --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)",
-                        "r" );
+    auto pipeOpener = _popen;
+    auto pipeCloser = _pclose;
+#else
+    auto pipeOpener = popen;
+    auto pipeCloser = pclose;
+#endif
+    FILE* pipe = pipeOpener( R"(wsl -e cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python,Kotlin")"
+                             R"( --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)",
+                             "r" );
 #endif
     if ( !pipe ) {
-        std::cerr << "Failed to open popen\n";
+        std::cerr << "Failed to open pipe\n";
         return 1;
     }
     char buffer[4096];
@@ -73,7 +80,7 @@ int main() {
             res.emplace_back( Entry::constructLine( m[1], files, blank, comment, code ) );
         }
     }
-    if ( int status = pclose( pipe ); status == 0 ) {
+    if ( int status = pipeCloser( pipe ); !status ) {
         replaceFile( "README.md", "Language", res );
     } else {
         std::cout << "Runing cloc exit " << status << ", " << std::endl
