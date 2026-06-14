@@ -1,4 +1,10 @@
 [flake8]
 ignore=
-    E501, # Lines are too long
-    E712  # comparison to True should be if cond is True, but == might be overloaded: np.where(arr == True)
+    ; Comparison to True should be if cond is True, but == might be overloaded: np.where(arr == True)
+    E712,
+    ; Break before binary operators
+    W503
+    ; Lines are too long
+    ; E501,
+
+max-line-length=79

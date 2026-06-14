@@ -1,8 +1,1430 @@
-Language: Cpp
+---
+# version: clang-format 22.x
+# clang-format supports two ways to provide custom style options: directly specify style configuration in the
+# -style= command line option or use -style=file and put style configuration in the .clang-format or _clang-format file in the project directory.
+
+# When using -style=file, clang-format for each input file will try to find
+# the .clang-format file located in the closest parent directory of the input file.
+# When the standard input is used, the search is started from the current directory.
+
+# When using -style=file:<format_file_path>, clang-format for each input file will
+# use the format file located at <format_file_path>.
+# The path may be absolute or relative to the working directory.
+
+# The .clang-format file uses YAML format.
+
+# The configuration file can consist of several sections each having different Language:
+# parameter denoting the programming language this section of the configuration is targeted at.
+# See the description of the Language option below for the list of supported languages.
+# The first section may have no language set, it will set the default style options for all languages.
+# Configuration sections for specific language will override options set in the default section.
+
+# When clang-format formats a file, it auto-detects the language using the file name.
+# When formatting standard input or a file that doesn't have the extension corresponding to its language,
+# -assume-filename= option can be used to override the file name clang-format uses to detect the language.
+
+# An easy way to get a valid .clang-format file containing all configuration options of a certain predefined style is:
+# clang-format -style=llvm -dump-config > .clang-format
+
+# When specifying configuration in the -style= option, the same configuration is applied for all input files. The format of the configuration is:
+# -style='{key1: value1, key2: value2, ...}'
+
+# Disabling Formatting on a Piece of Code
+# The code between a comment // clang-format off or /* clang-format off */
+# up to a comment // clang-format on or /* clang-format on */ will not be formatted.
+# The comments themselves will be formatted (aligned) normally.
+# Also, a colon (:) and additional text may follow // clang-format off or // clang-format on
+# to explain why clang-format is turned off or back on.
+
+# In addition, the OneLineFormatOffRegex option gives you a concise way to disable formatting
+# for all of the lines that match the regular expression.
+
+# Configuring Style in Code
+# When using clang::format::reformat(...) functions, the format is specified by supplying the clang::format::FormatStyle structure.
+
+# Configurable Format Style Options
+# This section lists the supported style options. Value type is specified for each option.
+# For enumeration types possible values are specified both as a C++ enumeration member (with a prefix, e.g. LS_Auto),
+# and as a value usable in the configuration (without a prefix: Auto).
+
+# Language (LanguageKind) clang-format 3.5
+# The language that this format style targets.
+# You can specify the language (C, Cpp, or ObjC) for .h files by adding a // clang-format Language:
+# line before the first non-comment (and non-empty) line, e.g. // clang-format Language: Cpp.
+# Language: None # Do not use.
+# Language: C # Should be used for C.
+# Language: Cpp # Should be used for C++.
+# Language: CSharp # Should be used for C#.
+# Language: Java # Should be used for Java.
+# Language: JavaScript # Should be used for JavaScript.
+# Language: Json # Should be used for JSON.
+# Language: ObjC # Should be used for Objective-C, Objective-C++.
+# Language: Proto # Should be used for Protocol Buffers (https://developers.google.com/protocol-buffers/).
+# Language: TableGen # Should be used for TableGen code.
+# Language: TextProto # Should be used for Protocol Buffer messages in text format (https://developers.google.com/protocol-buffers/).
+# Language: Verilog # Should be used for Verilog and SystemVerilog. https://standards.ieee.org/ieee/1800/6700/ https://sci-hub.st/10.1109/IEEESTD.2018.8299595
+
+# DisableFormat (Boolean) clang-format 3.7
+# Disables formatting completely.
+DisableFormat: false
+
+# BasedOnStyle (String) clang-format 0.0
+# The style used for all options not specifically set in the configuration.
+# This option is supported only in the clang-format configuration (both within -style='{...}' and the .clang-format file).
+# BasedOnStyle: LLVM
 BasedOnStyle: Google
-NamespaceIndentation: All
+# BasedOnStyle: Chromium
+# BasedOnStyle: Mozilla
+# BasedOnStyle: WebKit
+# BasedOnStyle: Microsoft
+# BasedOnStyle: GNU
+# BasedOnStyle: InheritParentConfig # Not a real style, but allows to use the .clang-format file from the parent directory (or its parent if there is none). If there is no parent file found it falls back to the fallback style, and applies the changes to that. With this option you can overwrite some parts of your main style for your subdirectories. This is also possible through the command line, e.g.: --style={BasedOnStyle: InheritParentConfig, ColumnLimit: 20}
+# BasedOnStyle: InheritParentConfig=<directory-path> # Same as the above except that the inheritance is redirected to <directory-path>. This is only supported in configuration files.
+
+# ColumnLimit (Unsigned) clang-format 3.7
+# The column limit.
+# A column limit of 0 means that there is no column limit. In this case,
+# clang-format will respect the input's line breaking decisions within statements unless they contradict other rules.
+ColumnLimit: 79
+
+# IndentWidth (Unsigned) clang-format 3.7
+# The number of columns to use for indentation.
 IndentWidth: 4
+
+# MaxEmptyLinesToKeep (Unsigned) clang-format 3.7
+# The maximum number of consecutive empty lines to keep.
+MaxEmptyLinesToKeep: 1
+
+# AccessModifierOffset (Integer) clang-format 3.3
+AccessModifierOffset: 0 # The extra indent or outdent of access modifiers, e.g. public:.
+
+# AlignAfterOpenBracket (Boolean) clang-format 3.8
+AlignAfterOpenBracket: true # If true, horizontally aligns arguments after an open bracket across multiple lines.
+# This applies to round brackets (parentheses), angle brackets and square brackets.
+# As of clang-format 22 this option replaced the previous options of Align and DontAlign with AlignAfterOpenBracket set to true or false respectively
+# and the options of AlwaysBreak and BlockIndent with true together with a setting of new style options
+# using BreakAfterOpenBracketBracedList, BreakAfterOpenBracketFunction,
+# BreakAfterOpenBracketIf, BreakBeforeCloseBracketBracedList, BreakBeforeCloseBracketFunction, and BreakBeforeCloseBracketIf.
+# BreakAfterOpenBracketBracedList: true
+# BreakAfterOpenBracketFunction: true
+# BreakAfterOpenBracketIf: false
+# BreakBeforeCloseBracketBracedList: true
+# BreakBeforeCloseBracketFunction: false
+# BreakBeforeCloseBracketIf: false
+
+# AlignArrayOfStructures (ArrayInitializerAlignmentStyle) clang-format 13
+# If not None, when using initialization for an array of structs aligns the fields into columns.
+# As of clang-format 15 this option only applied to arrays with equal number of columns per row.
+AlignArrayOfStructures: Left # Align array column and left justify the columns e.g.:
+# AlignArrayOfStructures: Right
+# AlignArrayOfStructures: None # Don't align array initializer columns.
+
+# AlignConsecutiveAssignments (AlignConsecutiveStyle) clang-format 3.8
+# Style of aligning consecutive assignments.
+# AlignConsecutiveAssignments: None
+# AlignConsecutiveAssignments: Consecutive
+# AlignConsecutiveAssignments: AcrossEmptyLines
+# AlignConsecutiveAssignments: AcrossComments
+# AlignConsecutiveAssignments: AcrossEmptyLinesAndComments
+AlignConsecutiveAssignments:
+  Enabled: false # bool Enabled Whether aligning is enabled.
+  # AcrossEmptyLines: true # bool AcrossEmptyLines Whether to align across empty lines.
+  # AcrossComments: false # bool AcrossComments Whether to align across comments.
+  # AlignCompound: false # bool AlignCompound Only for `AlignConsecutiveAssignments`. Whether compound assignments like += are aligned along with =.
+  # PadOperators: false # bool PadOperators Only for `AlignConsecutiveAssignments`. Whether short assignment operators are left-padded to the same length as long ones in order to put all assignment operators to the right of the left hand side.
+
+# AlignConsecutiveBitFields (AlignConsecutiveStyle) clang-format 11
+# Style of aligning consecutive bit fields.
+AlignConsecutiveBitFields: None
+# AlignConsecutiveBitFields: Consecutive
+# AlignConsecutiveBitFields: AcrossEmptyLines
+# AlignConsecutiveBitFields: AcrossComments
+# AlignConsecutiveBitFields: AcrossEmptyLinesAndComments
+# AlignConsecutiveBitFields:
+#   Enabled: true # bool Enabled Whether aligning is enabled.
+#   AcrossEmptyLines: true # bool AcrossEmptyLines Whether to align across empty lines.
+#   AcrossComments: false # bool AcrossComments Whether to align across comments.
+
+# AlignConsecutiveDeclarations (AlignConsecutiveStyle) clang-format 3.8
+# Style of aligning consecutive declarations.
+# AlignConsecutiveDeclarations: None
+# AlignConsecutiveDeclarations: Consecutive
+# AlignConsecutiveDeclarations: AcrossEmptyLines
+# AlignConsecutiveDeclarations: AcrossComments
+# AlignConsecutiveDeclarations: AcrossEmptyLinesAndComments
+AlignConsecutiveDeclarations:
+  Enabled: false # bool Enabled Whether aligning is enabled.
+  AlignFunctionDeclarations:
+    false # bool AlignFunctionDeclarations Only for `AlignConsecutiveDeclarations`.
+    # Whether function declarations are aligned.
+  AlignFunctionPointers:
+    false # bool AlignFunctionPointers Only for `AlignConsecutiveDeclarations`.
+    # Whether function pointers are aligned.
+  AcrossEmptyLines: false # bool AcrossEmptyLines Whether to align across empty lines.
+  AcrossComments: false # bool AcrossComments Whether to align across comments.
+
+# AlignConsecutiveMacros (AlignConsecutiveStyle) clang-format 9
+# Style of aligning consecutive macro definitions.
+# AlignConsecutiveMacros: None
+# AlignConsecutiveMacros: Consecutive
+# AlignConsecutiveMacros: AcrossEmptyLines
+# AlignConsecutiveMacros: AcrossComments
+# AlignConsecutiveMacros: AcrossEmptyLinesAndComments
+AlignConsecutiveMacros:
+  Enabled: true # bool Enabled Whether aligning is enabled.
+  AcrossEmptyLines: true # bool AcrossEmptyLines Whether to align across empty lines.
+  AcrossComments: false # bool AcrossComments Whether to align across comments.
+
+# AlignConsecutiveShortCaseStatements (ShortCaseStatementsAlignmentStyle) clang-format 17
+# Style of aligning consecutive short switch-case labels. Only applies if AllowShortCaseExpressionOnASingleLine or AllowShortCaseLabelsOnASingleLine is true.
+# AllowShortCaseLabelsOnASingleLine: true
+AlignConsecutiveShortCaseStatements:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: true
+  AlignCaseColons: false # bool AlignCaseColons Whether aligned case labels are aligned on the colon, or on the tokens after the colon.
+  AlignCaseArrows: false # bool AlignCaseArrows Whether to align the case arrows when aligning short case expressions. Java
+
+# AlignEscapedNewlines (EscapedNewlineAlignmentStyle) clang-format 5
+# Options for aligning backslashes in escaped newlines.
+# AlignEscapedNewlines: DontAlign
+# AlignEscapedNewlines: Left # Align escaped newlines as far left as possible.
+AlignEscapedNewlines:
+  LeftWithLastLine # Align escaped newlines as far left as possible, using the last line of the preprocessor directive
+  # as the reference if it's the longest.
+# AlignEscapedNewlines: Right # Align escaped newlines in the right-most column.
+
+# AlignOperands (OperandAlignmentStyle) clang-format 3.5
+# If true, horizontally align operands of binary and ternary expressions.
+# This option is usually used with `BreakBeforeBinaryOperators` to controll breaks before binary operators
+# and `ContinuationIndentWidth` to controll sapces from the start of the wrapped lines
+# AlignOperands: DontAlign
+# AlignOperands: Align # When BreadBeforeBinaryOperators, alignment will include operators
+AlignOperands: AlignAfterOperator # When `BreakBeforeBinaryOperaotrs` is also set, alignment will ignore operators.
+
+# AlignTrailingComments (TrailingCommentsAlignmentStyle) clang-format 3.7
+# Control of trailing comments.
+# The alignment stops at closing braces after a line break, and only followed by other closing braces, a (do-) while, a lambda call, or a semicolon.
+# As of clang-format 16 this option is not a bool but can be set to the options. Conventional bool options still can be parsed as before.
+# AlignTrailingComments: ture
+AlignTrailingComments:
+  Kind: Never # Don't align trailing comments, but other formating will apply, such as space inserting before and after slashes.
+  # Kind: Leave # Leave trailing comments as they are, no formating will apply
+  # Kind: Always
+  AlignPPAndNotPP: false # Controlls alignment across trailing comments after preprocess directives and comments that don't.
+  OverEmptyLines: 2 # Used with MaxEmptyLinesToKeep
+
+# AllowAllArgumentsOnNextLine (Boolean) clang-format 9
+# If a function call or braced initializer list doesn't fit on a line, allow putting all arguments onto the next line,
+# even if `BinPackArguments` is false.
+AllowAllArgumentsOnNextLine: true
+
+# AllowAllConstructorInitializersOnNextLine (Boolean) clang-format 9
+# This option is deprecated. See `NextLine` of `PackConstructorInitializers`.
+
+# AllowAllParametersOfDeclarationOnNextLine (Boolean) clang-format 3.3
+# If the function declaration doesn't fit on a line, allow putting all parameters of a function declaration onto the next line
+# even if `BinPackParameters` is OnePerLine.
+AllowAllParametersOfDeclarationOnNextLine: true
+
+# AllowBreakBeforeNoexceptSpecifier (BreakBeforeNoexceptSpecifierStyle) clang-format 18
+# Controls if there could be a line break before a noexcept specifier.
+# AllowBreakBeforeNoexceptSpecifier: Never # No line break allowed. Only applies to the first noexcept in conditional noexcept expressions.
+# AllowBreakBeforeNoexceptSpecifier: OnlyWithPare # For a simple noexcept there is no line break allowed,
+# but when we have a condition the first noexcept is allowed to break onto the newline.
+AllowBreakBeforeNoexceptSpecifier:
+  Always # Line breaks are allowed. But note that because of the associated penalties
+  # clang-format often prefers not to break before the noexcept.
+
+# AllowShortBlocksOnASingleLine (ShortBlockStyle) clang-format 3.5
+# Dependent on the value, while (true) { continue; } can be put on a single line.
+# AllowShortBlocksOnASingleLine: Never # Never merge blocks into a single line.
+AllowShortBlocksOnASingleLine: Empty # Only merge empty blocks.
+# AllowShortBlocksOnASingleLine: Always # Always merge short blocks into a single line.
+
+# AllowShortCaseExpressionOnASingleLine (Boolean) clang-format 19
+# Whether to merge a short switch labeled rule into a single line. Applies for Java case arrow expressions
+# AllowShortCaseExpressionOnASingleLine: true
+
+# AllowShortCaseLabelsOnASingleLine (Boolean) clang-format 3.6
+# If true, short case labels will be contracted to a single line.
+AllowShortCaseLabelsOnASingleLine: true
+
+# AllowShortCompoundRequirementOnASingleLine (Boolean) clang-format 18
+# Allow short compound requirement on a single line.
+AllowShortCompoundRequirementOnASingleLine: true
+
+# AllowShortEnumsOnASingleLine (Boolean) clang-format 11
+# Allow short enums on a single line.
+AllowShortEnumsOnASingleLine: true
+
+# AllowShortFunctionsOnASingleLine (ShortFunctionStyle) clang-format 3.5
+# Dependent on the value, int f() { return 0; } can be put on a single line.
+# Different styles for merging short functions containing at most one statement.
+# AllowShortFunctionsOnASingleLine: None # Never merge functions into a single line.
+# AllowShortFunctionsOnASingleLine: InlineOnly  # Only merge functions defined inside a class.
+# Same as inline, except it does not implies empty: i.e.
+# top level empty functions are not merged either. See `Inline` of `ShortFunctionStyle`.
+# AllowShortFunctionsOnASingleLine: Empty # Only merge empty functions. See `Empty` of `ShortFunctionStyle`.
+AllowShortFunctionsOnASingleLine: Inline # Only merge functions defined inside a class.
+# Implies empty. See `Inline` and `Empty` of `ShortFunctionStyle`.
+# AllowShortFunctionsOnASingleLine: All # Merge all functions fitting on a single line.
+
+# AllowShortIfStatementsOnASingleLine (ShortIfStyle) clang-format 3.3
+# Dependent on the value, if (a) return; can be put on a single line.
+# AllowShortIfStatementsOnASingleLine: Never
+# AllowShortIfStatementsOnASingleLine: WithoutElse # Put short ifs on the same line only if there is no else statement.
+# AllowShortIfStatementsOnASingleLine: OnlyFirstIf
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+
+# AllowShortLambdasOnASingleLine (ShortLambdaStyle) clang-format 9
+# Dependent on the value, auto lambda []() { return 0; } can be put on a single line.
+# AllowShortLambdasOnASingleLine: None
+# AllowShortLambdasOnASingleLine: Empty
+# AllowShortLambdasOnASingleLine: Inline # Merge lambda into a single line if the lambda is argument of a function.
+AllowShortLambdasOnASingleLine: All
+
+# AllowShortLoopsOnASingleLine (Boolean) clang-format 3.7
+# If true, while (true) continue; can be put on a single line.
+AllowShortLoopsOnASingleLine: false
+
+# AllowShortNamespacesOnASingleLine (Boolean) clang-format 20
+# If true, namespace a { class b; } can be put on a single line.
+AllowShortCaseExpressionOnASingleLine: false
+
+# AlwaysBreakAfterDefinitionReturnType (DefinitionReturnTypeBreakingStyle) clang-format 3.7
+# The function definition return type breaking style to use. This option is deprecated and is retained for backwards compatibility.
+
+# AlwaysBreakAfterReturnType (deprecated) clang-format 3.8
+# This option is renamed to `BreakAfterReturnType`.
+
+# AlwaysBreakBeforeMultilineStrings (Boolean) clang-format 3.4
+# If true, always break before multiline string literals.
+AlwaysBreakBeforeMultilineStrings: false
+# This flag is meant to make cases where there are multiple multiline strings in a file look more consistent.
+# Thus, it will only take effect if wrapping the string at that point
+# leads to it being indented `ContinuationIndentWidth` spaces from the start of the line.
+
+# AlwaysBreakTemplateDeclarations (deprecated) clang-format 3.4
+# This option is renamed to `BreakTemplateDeclarations`.
+
+# AttributeMacros (List of Strings) clang-format 12
+# A vector of strings that should be interpreted as attributes __attribute__((__unused__))/qualifiers
+# instead of identifiers. This can be useful for language extensions or static analyzer annotations.
+AttributeMacros: [__capability, __output, __unused]
+
+# BinPackArguments (Boolean) clang-format 3.7
+BinPackArguments: true
+
+# BinPackLongBracedList (Boolean) clang-format 21
+# If BinPackLongBracedList is true it overrides BinPackArguments if there are 20 or more items in a braced initializer list.
+BinPackLongBracedList: true
+
+# BinPackParameters (BinPackParametersStyle) clang-format 3.7
+BinPackParameters: OnePerLine
+
+# BitFieldColonSpacing (BitFieldColonSpacingStyle) clang-format 12
+# The BitFieldColonSpacingStyle to use for bitfields.
+# BitFieldColonSpacing: Both # Add one space on each side of the `:`.
+# BitFieldColonSpacing: None # Add no space around the `:` (except when needed for `AlignConsecutiveBitFields`).
+# BitFieldColonSpacing: Before # Add space before the `:` only
+# BitFieldColonSpacing: After # Add space after the : only (space may be added before if needed for AlignConsecutiveBitFields).
+
+# BraceWrapping (BraceWrappingFlags) clang-format 3.8
+# Control of individual brace wrapping cases.
+# If `BreakBeforeBraces` is set to Custom, use this to specify how each individual brace case should be handled.
+# Otherwise, this is ignored.
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterEnum: true # Wrap enum definitions.
+  AfterStruct: false
+  AfterCaseLabel: false # Wrap bracket after case labels.
+  # AfterControlStatement: Always # Value type is BraceWrappingAfterControlStatementStyle. Wrap control statements (if/for/while/switch/..).
+  # AfterControlStatement: MultiLine # expression inside the parentheses is wrapped into multiline
+  # AfterControlStatement: Never
+  # AfterObjCDeclaration: false # Wrap ObjC definitions (interfaces, implementations…).
+  # @autoreleasepool and @synchronized blocks are wrapped according to AfterControlStatement flag.
+  AfterUnion: false # Wrap union definitions.
+  AfterExternBlock: true # Wrap extern blocks.
+  BeforeCatch: false # Wrap before catch.
+  BeforeElse: false # Wrap before else.
+  BeforeLambdaBody: false # Wrap lambda block.
+  BeforeWhile: false # Wrap before while.
+  IndentBraces: false # Indent the wrapped braces themselves.
+  AfterFunction: true # Wrap function definitions.
+  SplitEmptyFunction: false # If false, empty function body can be put on a single line.
+  # This option is used only if the opening brace of the function has already been wrapped,
+  # i.e. the `AfterFunction` brace wrapping mode is set, and the function could/should not be put on a single line
+  # (as per `AllowShortFunctionsOnASingleLine` and constructor formatting options).
+  AfterClass: false
+  SplitEmptyRecord: false # If false, empty record (e.g. class, struct or union) body can be put on a single line.
+  # Only of use if `AfterClass` is set.
+  AfterNamespace: false # Wrap namespace definitions.
+  # SplitEmptyNamespace: false # If false, empty namespace body can be put on a single line. Only of use if `AfterNamespace` is set.
+
+# BracedInitializerIndentWidth (Integer) clang-format 17
+# The number of columns to use to indent the contents of braced init lists. If unset or negative, `ContinuationIndentWidth` is used.
+BracedInitializerIndentWidth: 4
+
+# BreakAdjacentStringLiterals (Boolean) clang-format 18
+# Break between adjacent string literals.
+BreakAdjacentStringLiterals: true
+
+# BreakAfterAttributes (AttributeBreakingStyle) clang-format 16
+# Break after a group of C++11 attributes before variable
+# or function (including constructor/destructor) declaration/definition names
+# or before control statements, i.e. if, switch (including case and default labels), for, and while statements.
+# BreakAfterAttributes: Always # Always break after the last attribute of the group.
+BreakAfterAttributes: Leave
+# BreakAfterAttributes: Never
+
+# BreakAfterJavaFieldAnnotations (Boolean) clang-format 3.8
+# Break after each annotation on a field in Java files.
+
+# BreakAfterOpenBracketBracedList (Boolean) clang-format 22
+# Force break after the left bracket of a braced initializer list (when Cpp11BracedListStyle is true) when the list exceeds the column limit.
+BreakAfterOpenBracketBracedList: true
+
+# BreakAfterOpenBracketFunction (Boolean) clang-format 22
+# Force break after the left parenthesis of a function (declaration, definition, call) when the parameters exceed the column limit.
+BreakAfterOpenBracketFunction: true
+
+# BreakAfterOpenBracketIf (Boolean) clang-format 22
+# Force break after the left parenthesis of an if control statement when the expression exceeds the column limit.
+BreakAfterOpenBracketIf: false
+
+# BreakAfterOpenBracketLoop (Boolean) clang-format 22
+# Force break after the left parenthesis of a loop control statement when the expression exceeds the column limit.
+BreakAfterOpenBracketLoop: false
+
+# BreakAfterOpenBracketSwitch (Boolean) clang-format 22
+# Force break after the left parenthesis of a switch control statement when the expression exceeds the column limit.
+BreakAfterOpenBracketSwitch: false
+
+# BreakAfterReturnType (ReturnTypeBreakingStyle) clang-format 19
+# The function declaration return type breaking style to use.
+BreakAfterReturnType: None # This is deprecated. See `Automatic` below.
+# BreakAfterReturnType: Automatic # Break after return type based on `PenaltyReturnTypeOnItsOwnLine`.
+# BreakAfterReturnType: ExceptShortType # Same as Automatic above, except that there is no break after short return types.
+# BreakAfterReturnType: All # Always break after the return type.
+# BreakAfterReturnType: TopLevel  # Always break after the return types of top-level functions,
+# i.e excluding member function declaration and inline definition).
+# BreakAfterReturnType: AllDefinitions # AllDefinitions) Always break after the return type of function definitions.
+# BreakAfterReturnType: TopLevelDefinitions # Always break after the return type of top-level definitions.
+
+# BreakArrays (Boolean) clang-format 16
+# If true, clang-format will always break after a Json array [ otherwise it will scan until the closing ] to determine if it should add newlines between elements (prettier compatible).
+# This is currently only for formatting JSON.
+
+# BreakBeforeBinaryOperators (BinaryOperatorStyle) clang-format 3.6
+# The way to wrap binary operators.
+BreakBeforeBinaryOperators: None # Don't break after operators.
+# BreakBeforeBinaryOperators: NonAssignment # Break before operators that aren't assignments.
+# BreakBeforeBinaryOperators: All # Break before operators.
+
+# BreakBeforeBraces (BraceBreakingStyle) clang-format 3.7
+# The brace breaking style to use.
+# BreakBeforeBraces: Attach # Always attach braces to surrounding context.
+# BreakBeforeBraces: Linux # Like Attach, but break before braces on function, namespace and class definitions.
+# BreakBeforeBraces: Mozilla # Like Attach, but break before braces on enum, function, and record definitions.
+# BreakBeforeBraces: Stroustrup # Like Attach, but break before function definitions, catch, and else.
+# BreakBeforeBraces: Allman # Always break before braces.
+# BreakBeforeBraces: Whitesmiths # Like Allman but always indent braces and line up code with braces.
+# BreakBeforeBraces: GNU # Always break before braces and add an extra level of indentation to braces of control statements,
+# not to those of class, function or other definitions.
+# BreakBeforeBraces: WebKit # Like Attach, but break before functions.
+# BreakBeforeBraces: Custom # Configure each individual brace in `BraceWrapping`.
+
+# BreakBeforeCloseBracketBracedList (Boolean) clang-format 22
+# Force break before the right bracket of a braced initializer list (when Cpp11BracedListStyle is true) when the list exceeds the column limit.
+# The break before the right bracket is only made if there is a break after the opening bracket.
+BreakBeforeCloseBracketBracedList: true
+
+# BreakBeforeCloseBracketFunction (Boolean) clang-format 22
+# Force break before the right parenthesis of a function (declaration, definition, call) when the parameters exceed the column limit.
+BreakBeforeCloseBracketFunction: true
+
+# BreakBeforeCloseBracketIf (Boolean) clang-format 22
+# Force break before the right parenthesis of an if control statement when the expression exceeds the column limit.
+# The break before the closing parenthesis is only made if there is a break after the opening parenthesis.
+BreakBeforeCloseBracketIf: true
+
+# BreakBeforeCloseBracketLoop (Boolean) clang-format 22
+# Force break before the right parenthesis of a loop control statement when the expression exceeds the column limit.
+# The break before the closing parenthesis is only made if there is a break after the opening parenthesis.
+BreakBeforeCloseBracketLoop: true
+
+# BreakBeforeCloseBracketSwitch (Boolean) clang-format 22
+# Force break before the right parenthesis of a switch control statement when the expression exceeds the column limit.
+# The break before the closing parenthesis is only made if there is a break after the opening parenthesis.
+BreakBeforeCloseBracketSwitch: true
+
+# BreakBeforeConceptDeclarations (BreakBeforeConceptDeclarationsStyle) clang-format 12
+# The concept declaration style to use.
+# BreakBeforeConceptDeclarations: Never # Keep the template declaration line together with concept.
+# BreakBeforeConceptDeclrations: Allowed  # Breaking between template declaration and concept is allowed.
+# The actual behavior depends on the content and line breaking rules and penalties.
+BreakBeforeConceptDeclarations: Always # Always break before concept, putting it in the line after the template declaration.
+
+# BreakBeforeInlineASMColon (BreakBeforeInlineASMColonStyle) clang-format 16
+# The inline ASM colon style to use.
+# BreakBeforeInlineASMColon: Never # No break before inline ASM colon.
+# BreakBeforeInlineASMColon: Always # Always break before inline ASM colon.
+
+# BreakBeforeTemplateCloser (Boolean) clang-format 21
+# If true, break before a template closing bracket (>) when there is a line break after the matching opening bracket (<).
+BreakBeforeTemplateCloser: false
+
+# BreakBeforeTernaryOperators (Boolean) clang-format 3.7
+# If true, ternary operators will be placed after line breaks.
+BreakBeforeTernaryOperators: true
+
+# BreakBinaryOperations (BreakBinaryOperationsOptions) clang-format 20
+# The break binary operations style to use.
+# If specified as a simple string (e.g. OnePerLine), it behaves like the original enum and applies to all binary operators.
+# If specified as a struct, allows per-operator configuration:
+# BreakBinaryOperations: Never # Don't break binary operations
+# BreakBinaryOperations: OnePerLine # Binary operations will either be all on the same line, or each operation will have one line each.
+BreakBinaryOperations: RespectPrecedence # Binary operations of a particular precedence that exceed the column limit will have one line each.
+
+# BreakConstructorInitializers (BreakConstructorInitializersStyle) clang-format 5
+# The break constructor initializers style to use.
+# BreakConstructorInitializers: BeforeColon # Break constructor initializers before the colon and after the commas.
+# BreakConstructorInitializers: BeforeComma # Break constructor initializers before the colon and commas, and align the commas with the colon.
+BreakConstructorInitializers: AfterColon # Break constructor initializers after the colon and commas.
+
+# BreakFunctionDefinitionParameters (Boolean) clang-format 19
+# If true, clang-format will always break before function definition parameters.
+BreakFunctionDefinitionParameters: false
+
+# BreakInheritanceList (BreakInheritanceListStyle) clang-format 7
+# The inheritance list style to use.
+BreakInheritanceList: BeforeColon # Break inheritance list before the colon and after the commas.
+# BreakInheritanceList: BeforeComma # Break inheritance list before the colon and commas, and align the commas with the colon.
+# BreakInheritanceList: AfterColon # Break inheritance list after the colon and commas.
+# BreakInheritanceList: AfterComma # Break inheritance list only after the commas.
+
+# BreakStringLiterals (Boolean) clang-format 3.9
+# Allow breaking string literals when formatting in C, C++, and Objective-C; C# and Java; Verilog
+# C# interpolated strings are not broken. #"Hello, {world}"
+BreakStringLiterals: true
+
+# BreakTemplateDeclarations (BreakTemplateDeclarationsStyle) clang-format 19
+# The template declaration breaking style to use.
+# BreakTemplateDeclarations: Leave # Do not change the line breaking before the declaration.
+# BreakTemplateDeclarations: "No" # No in Ymal is boolean. Do not force break before declaration.
+# `PenaltyBreakTemplateDeclaration` is taken into account.
+# BreakTemplateDeclarations: MultiLine # Force break after template declaration only when the following declaration spans multiple lines.
+BreakTemplateDeclarations: "Yes" # Always break after template declaration.
+
+# CommentPragmas (String) clang-format 3.7
+# A regular expression that describes comments with special meaning, which should not be split into lines or otherwise changed.
+CommentPragmas: '^\s+pragma'
+
+# CompactNamespaces (Boolean) clang-format 5
+# If true, consecutive namespace declarations will be on the same line. If false, each namespace is declared on a new line.
+# If it does not fit on a single line, the overflowing namespaces get wrapped:
+CompactNamespaces: true
+
+# ConstructorInitializerAllOnOneLineOrOnePerLine (Boolean) clang-format 3.7
+# This option is deprecated. See `CurrentLine` of `PackConstructorInitializers`.
+
+# ConstructorInitializerIndentWidth (Unsigned) clang-format 3.7
+# The number of characters to use for indentation of constructor initializer lists as well as inheritance lists.
+ConstructorInitializerIndentWidth: 4
+
+# ContinuationIndentWidth (Unsigned) clang-format 3.7
+# Indent width for line continuations.
+ContinuationIndentWidth: 4
+
+# Cpp11BracedListStyle (BracedListStyle) clang-format 3.4
+# The style to handle braced lists.
+# Cpp11BracedListStyle: Block # Best suited for pre C++11 braced lists.
+# Spaces inside the braced list.
+# Line break before the closing brace.
+# Indentation with the block indent.
+Cpp11BracedListStyle:
+  FunctionCall # Best suited for C++11 braced lists.
+  # No spaces inside the braced list.
+  # No line break before the closing brace.
+  # Indentation with the continuation indent.
+  # Fundamentally, C++11 braced lists are formatted exactly like function calls would be formatted in their place.
+  # If the braced list follows a name (e.g. a type or variable name),
+  # clang-format formats as if the {} were the parentheses of a function call with that name.
+  # If there is no name, a zero-length name is assumed.
+# Cpp11BracedListStyle: AlignFirstComment # Same as FunctionCall, except for the handling of a comment at the begin,
+# it then aligns everything following with the comment.
+# No spaces inside the braced list. (Even for a comment at the first position.)\
+# No line break before the closing brace.
+# Indentation with the continuation indent, except when followed by a line comment, then it uses the block indent.
+
+# DeriveLineEnding (Boolean) clang-format 10
+# This option is deprecated. See `DeriveLF` and `DeriveCRLF` of `LineEnding`.
+
+# DerivePointerAlignment (Boolean) clang-format 3.7
+# If true, analyze the formatted file for the most common alignment of & and *.
+# Pointer and reference alignment styles are going to be updated according to the preferences found in the file.
+# `PointerAlignment` is then used only as fallback.
+DerivePointerAlignment: false # Don't learn from the pointer/referece alignments found in the file.
+
+# EmptyLineAfterAccessModifier (EmptyLineAfterAccessModifierStyle) clang-format 13
+# Defines when to put an empty line after access modifiers, i.e. public, private and protected.
+# `EmptyLineBeforeAccessModifier` configuration handles the number of empty lines between two access modifiers.
+EmptyLineAfterAccessModifier: Never # Remove all empty lines after access modifiers.
+# EmptyLineAfterAccessModifier: Leave # Keep existing empty lines after access modifiers. `MaxEmptyLinesToKeep` is applied instead.
+# EmptyLineAfterAccessModifier: Always # Always add empty line after access modifiers if there are none. `MaxEmptyLinesToKeep` is applied also.
+
+# EmptyLineBeforeAccessModifier (EmptyLineBeforeAccessModifierStyle) clang-format 12
+# Defines in which cases to put empty line before access modifiers.
+# EmptyLineBeforeAccessModifier: Never
+# EmptyLineBeforeAccessModifier: Leave
+EmptyLineBeforeAccessModifier:
+  LogicalBlock # Add empty line only when access modifier starts a new logical block.
+  # Logical block is a group of one or more member fields or functions.
+# EmptyLineBeforeAccessModifier: Always # Always add empty line before access modifiers
+# unless access modifier is at the start of struct or class definition.
+
+# EnumTrailingComma (EnumTrailingCommaStyle) clang-format 21
+# Insert a comma (if missing) or remove the comma at the end of an enum enumerator list.
+# Setting this option to any value other than `Leave` could lead to incorrect code formatting
+# due to clang-format's lack of complete semantic information.
+# As such, extra care should be taken to review code changes made by this option.
+EnumTrailingComma: Leave # Don't insert or remove trailing commas.
+# EnumTrailingComma: Remove
+# EnumTrailingComma: Insert
+
+# ExperimentalAutoDetectBinPacking (Boolean) clang-format 3.7
+# If true, clang-format detects whether function calls and definitions are formatted with one parameter per line.
+# Each call can be bin-packed, one-per-line or inconclusive.
+# If it is inconclusive, e.g. completely on one line, but a decision needs to be made,
+# clang-format analyzes whether there are other bin-packed cases in the input file and act accordingly.
+
+# FixNamespaceComments (Boolean) clang-format 5
+# If true, clang-format adds missing namespace end comments for namespaces and fixes invalid existing ones.
+# This doesn't affect short namespaces, which are controlled by ShortNamespaceLines.
+FixNamespaceComments: true
+
+# ForEachMacros (List of Strings) clang-format 3.7
+# A vector of macros that should be interpreted as foreach loops instead of as function calls.
+# In the .clang-format configuration file, this can be configured like:
+# ForEachMacros: [foreach]
+
+# IfMacros (List of Strings) clang-format 13
+# A vector of macros that should be interpreted as conditionals instead of as function calls.
+# IfMacros: [IF]
+
+# IncludeBlocks (IncludeBlocksStyle) clang-format 6
+# Dependent on the value, multiple #include blocks can be sorted as one and divided based on category.
+# IncludeBlocks: Preserve # Sort each #include block separately.
+# IncludeBlocks: Merge # Merge multiple #include blocks together and sort as one.
+IncludeBlocks:
+  Regroup # Merge multiple #include blocks together and sort as one.
+  # Then split into groups based on category priority. See IncludeCategories.
+
+# IncludeCategories (List of IncludeCategories) clang-format 3.8
+# Regular expressions denoting the different #include categories used for ordering #includes.
+# POSIX extended regular expressions are supported.
+# These regular expressions are matched against the filename of an include (including the <> or "") in order.
+# The value belonging to the first matching regular expression is assigned and #includes are sorted first
+# according to increasing category number and then alphabetically within each category.
+# If none of the regular expressions match, INT_MAX is assigned as category. The main header for a source file automatically gets category 0.
+# so that it is generally kept at the beginning of the #includes (https://llvm.org/docs/CodingStandards.html#include-style).
+# However, you can also assign negative priorities if you have certain headers that always need to be first.
+# There is a third and optional field `SortPriority` which can used while IncludeBlocks = IBS_Regroup
+# to define the priority in which #includes should be ordered.
+# The value of `Priority` defines the order of #include blocks and also allows the grouping of #includes of different priority.
+# `SortPriority` is set to the value of `Priority` as default if it is not assigned.
+# Each regular expression can be marked as case sensitive with the field `CaseSensitive`, per default it is not.
+# To configure this in the .clang-format file, use:
+# IncludeCategories:
+#   - Regex:           '^"(llvm|llvm-c|clang|clang-c)/'
+#     Priority:        2
+#     SortPriority:    2
+#     CaseSensitive:   true
+#   - Regex:           '^((<|")(gtest|gmock|isl|json)/)'
+#     Priority:        3
+#   - Regex:           '<[[:alnum:].]+>'
+#     Priority:        4
+#   - Regex:           '.*'
+#     Priority:        1
+#     SortPriority:    0
+
+# IncludeIsMainRegex (String) clang-format 3.9
+# Specify a regular expression of suffixes that are allowed in the file-to-main-include mapping.
+# When guessing whether a #include is the "main" include (to assign category 0, see above),
+# use this regex of allowed suffixes to the header stem.
+# A partial match is done, so that: * "" means "arbitrary suffix" * "$" means "no suffix"
+# For example, if configured to "(_test)?$", then a header a.h would be seen as the "main" include in both a.cc and a_test.cc.
+
+# IncludeIsMainSourceRegex (String) clang-format 10
+# Specify a regular expression for files being formatted that are allowed to be considered "main" in the file-to-main-include mapping.
+# By default, clang-format considers files as "main" only when they end with: .c, .cc, .cpp, .c++, .cxx, .m or .mm extensions.
+# For these files a guessing of "main" include takes place (to assign category 0, see above).
+# This config option allows for additional suffixes and extensions for files to be considered as "main".
+# For example, if this option is configured to (Impl\.hpp)$, then a file ClassImpl.hpp is considered "main"
+# (in addition to Class.c, Class.cc, Class.cpp and so on) and "main include file" logic will be executed
+# (with IncludeIsMainRegex setting also being respected in later phase).
+# Without this option set, ClassImpl.hpp would not have the main include file put on top before any other include.
+
+# IndentAccessModifiers (Boolean) clang-format 13
+# Specify whether access modifiers should have their own indentation level.
+IndentAccessModifiers: false
+# When false, access modifiers are indented (or outdented) relative to the record members, respecting the `AccessModifierOffset`.
+# Record members are indented one level below the record. When true, access modifiers get their own indentation level.
+# As a consequence, record members are always indented 2 levels below the record, regardless of the access modifier presence.
+# Value of the `AccessModifierOffset` is ignored when true.
+
+# IndentCaseBlocks (Boolean) clang-format 11
+# Indent case label blocks one level from the case label.
+# When false, the block following the case label uses the same indentation level as for the case label,
+# treating the case label the same as an if-statement. When true, the block gets indented as a scope block.
+IndentCaseBlocks: false
+
+# IndentCaseLabels (Boolean) clang-format 3.3
+# Indent case labels one level from the switch statement.
+# When false, use the same indentation level as for the switch statement.
+# Switch statement body is always indented one level more than case labels
+# (except the first block following the case label, which itself indents the code - unless IndentCaseBlocks is enabled).
+IndentCaseLabels: true
+
+# IndentExportBlock (Boolean) clang-format 20
+# If true, clang-format will indent the body of an export { ... } block.
+# This doesn't affect the formatting of anything else related to exported declarations.
+IndentExportBlock: true
+
+# IndentExternBlock (IndentExternBlockStyle) clang-format 11
+# IndentExternBlockStyle is the type of indenting of extern blocks.
+# Used with BraceWrapping.AfterExternBlock
+# IndentExternBlock: AfterExternBlock # Backwards compatible with AfterExternBlock's indenting.
+# Twice indent if BraceWrapping.AfterExternBlock is true, no indent if false
+# IndentExternBlock: NoIndent # Does not indent extern blocks.
+IndentExternBlock: Indent # Indent Indents extern blocks.
+
+# IndentGotoLabels (Boolean) clang-format 10
+# The goto label indenting style to use.
+IndentGotoLabels: false
+
+# IndentPPDirectives (PPDirectiveIndentStyle) clang-format 6
+# The preprocessor directive indenting style to use.
+# IndentPPDirectives: None
+# IndentPPDirectives: AfterHash # Indents directives after the hash.
+IndentPPDirectives: BeforeHash # BeforeHash Indents directives before the hash.
+# IndentPPDirectives: Leave # Leaves indentation of directives as-is. Ignores `PPIndentWidth`.
+
+# IndentRequiresClause (Boolean) clang-format 15
+# Indent the requires clause in a template. This only applies when RequiresClausePosition is OwnLine, OwnLineWithBrace, or WithFollowing.
+# In clang-format 12, 13 and 14 it was named `IndentRequires`.
+IndentRequiresClause: true
+
+# IndentWrappedFunctionNames (Boolean) clang-format 3.7
+# Indent if a function definition or declaration is wrapped after the type.
+IndentWrappedFunctionNames: false
+
+# InsertBraces (Boolean) clang-format 15
+# Insert braces after control statements (if, else, for, do, and while) in C++
+# unless the control statements are inside macro definitions or the braces would enclose preprocessor directives.
+InsertBraces: true
+# ! Setting this option to true could lead to incorrect code formatting due to clang-format's lack of complete semantic information.
+# ! As such, extra care should be taken to review code changes made by this option.
+
+# InsertNewlineAtEOF (Boolean) clang-format 16
+# Insert a newline at end of file if missing.
+InsertNewlineAtEOF: true
+
+# InsertTrailingCommas (TrailingCommaStyle) clang-format 11
+# If set to TCS_Wrapped will insert trailing commas in container literals (arrays and objects) that wrap across multiple lines.
+# It is currently only available for `JavaScript` and disabled by default TCS_None.
+# `InsertTrailingCommas` cannot be used together with `BinPackArguments` as inserting the comma disables bin-packing.
+InsertTrailingCommas: None
+# InsertTrailingCommas: Wrapped # Insert trailing commas in container literals that were wrapped over multiple lines.
+# Note that this is conceptually incompatible with bin-packing,
+# because the trailing comma is used as an indicator that a container should be formatted
+# one-per-line (i.e. not bin-packed). So inserting a trailing comma counteracts bin-packing.
+
+# IntegerLiteralSeparator (IntegerLiteralSeparatorStyle) clang-format 16
+# Format integer literal separators (' for C/C++ and _ for C#, Java, and JavaScript).
+# Separator format of integer literals of different bases.
+# If `negative`, remove separators. If `0`, leave the literal as is.
+# If `positive`, insert separators between digits starting from the rightmost digit.
+# For example, the config below will leave separators in binary literals alone,
+# insert separators in decimal literals to separate the digits into groups of 3, and remove separators in hexadecimal literals.
+IntegerLiteralSeparator:
+  Binary: 4
+  BinaryMinDigitsInsert: 9
+  BinaryMaxDigitsRemove: 4
+  Decimal: 3
+  DecimalMinDigitsInsert: 9
+  DecimalMaxDigitsRemove: 4
+  Hex: 2
+  HexMinDigitsInsert: 5
+  HexMaxDigitsRemove: 2
+# You can also specify a minimum number of digits (`BinaryMinDigitsInsert`, `DecimalMinDigitsInsert`, and `HexMinDigitsInsert`)
+# the integer literal must have in order for the separators to be inserted,
+# and a maximum number of digits (`BinaryMaxDigitsRemove`, `DecimalMaxDigitsRemove`, and `HexMaxDigitsRemove`)
+# until the separators are removed.
+# This divides `the literals` in 3 regions (not split a specific literal into 3 regions) ,
+# always without separator (up until including `xxxMaxDigitsRemove`),
+# maybe with, or without separators (up until excluding `xxxMinDigitsInsert`),
+# and finally always with separators.
+# `BinaryMinDigits`, `DecimalMinDigits`, and `HexMinDigits` are deprecated and renamed to `BinaryMinDigitsInsert`, `DecimalMinDigitsInsert`,
+# and `HexMinDigitsInsert`, respectively.
+# According to the digit count in a literal, it might be formatted differently:
+# digit count <= xxxMaxDigitsRemove: remove all separators
+# xxxMaxDigitsRemove < digit count <= xxxMinDigitsInsert: leave it as is
+# digit count >= xxxMaxDigitsInsert: insert separators into the literal accroding to xxx.
+
+# KeepEmptyLines (KeepEmptyLinesStyle) clang-format 19
+# Which empty lines are kept. See `MaxEmptyLinesToKeep` for how many consecutive empty lines are kept.
+# Options regarding which empty lines are kept.
+KeepEmptyLines:
+  AtEndOfFile: false # Keep empty lines at end of file.
+  AtStartOfBlock: false
+  AtStartOfFile: false
+
+# KeepEmptyLinesAtEOF (Boolean) clang-format 17
+# This option is deprecated. See `AtEndOfFile` of `KeepEmptyLines`.
+
+# KeepEmptyLinesAtTheStartOfBlocks (Boolean) clang-format 3.7
+# This option is deprecated. See `AtStartOfBlock` of `KeepEmptyLines`.
+
+# KeepFormFeed (Boolean) clang-format 20
+# Keep the form feed character if it's immediately preceded and followed by a newline.
+# Multiple form feeds and newlines within a whitespace range are replaced with a single newline and form feed followed by the remaining newlines.
+# (See www.gnu.org/prep/standards/html_node/Formatting.html#:~:text=formfeed.)
+KeepFormFeed: false
+
+# LambdaBodyIndentation (LambdaBodyIndentationKind) clang-format 13
+# The indentation style of lambda bodies.
+# Signature (the default) causes the lambda body to be indented one additional level relative to the indentation level of the signature.
+# OuterScope forces the lambda body to be indented one additional level relative to the parent scope containing the lambda signature.
+LambdaBodyIndentation: Signature # Align lambda body relative to the lambda signature. This is the default.
+# LambdaBodyIndentation: OuterScope # For statements within block scope,
+# align lambda body relative to the indentation level of the outer scope the lambda signature resides in.
+
+# LineEnding (LineEndingStyle) clang-format 16
+# Line ending style (\n or \r\n) to use.
+# LineEnding: LF
+# LineEnding: CRLF
+# LineEnding: DeriveLF # Learn from file, more LF wins
+# LineEnding: DeriveCRLF
+
+# MacroBlockBegin (String) clang-format 3.7
+# A regular expression matching macros that start a block.
+MacroBlockBegin: "^NS_MAP_BEGIN|\
+  NS_TABLE_HEAD$"
+
+# MacroBlockEnd (String) clang-format 3.7
+# A regular expression matching macros that end a block.
+MacroBlockEnd: "^\
+  NS_MAP_END|\
+  NS_TABLE_.*_END$"
+
+# Macros (List of Strings) clang-format 17
+# A list of macros of the form <definition>=<expansion> .
+# Code will be parsed with macros expanded, in order to determine how to interpret and format the macro arguments.
+# For example, the code:
+# A(a*b);
+# will usually be interpreted as a call to a function A, and the multiplication expression will be formatted as a * b.
+# If we specify the macro definition:
+# Macros:
+#   - A(x)=x
+# ! the code will now be parsed as a declaration of the variable b of type a*, and formatted as a* b (depending on pointer-binding rules).
+# Features and restrictions:
+# Both function-like macros and object-like macros are supported.
+# Macro arguments must be used exactly once in the expansion.
+# No recursive expansion; macros referencing other macros will be ignored.
+# Overloading by arity is supported: for example, given the macro definitions A=x, A()=y, A(a)=a
+# A; -> x;
+# A(); -> y;
+# A(z); -> z;
+# A(a, b); // will not be expanded.
+Macros: []
+
+# MacrosSkippedByRemoveParentheses (List of Strings) clang-format 21
+# A vector of function-like macros whose invocations should be skipped by `RemoveParentheses`.
+MacrosSkippedByRemoveParentheses: []
+
+# MainIncludeChar (MainIncludeCharDiscriminator) clang-format 19
+# When guessing whether a #include is the "main" include, only the include directives that use the specified character are considered.
+MainIncludeChar: Quote # Main include uses quotes: #include "foo.hpp" (the default).
+# MainIncludeChar: AngleBracket
+# MainIncludeChar: Any # Quote or AngleBracket
+
+# NamespaceIndentation (NamespaceIndentationKind) clang-format 3.7
+# The indentation used for namespaces.
+# NamespaceIndentation: None
+# NamespaceIndentation: Inner
+NamespaceIndentation: All
+
+# NamespaceMacros (List of Strings) clang-format 9
+# A vector of macros which are used to open namespace blocks.
+NamespaceMacros: [TESTSUITE]
+
+# NumericLiteralCase (NumericLiteralCaseStyle) clang-format 22
+# Capitalization style for numeric literals.
+# Separate control for each numeric literal component.
+# For example, the config below will leave exponent letters alone,
+# reformat hexadecimal digits in lowercase, reformat numeric literal prefixes in uppercase, and reformat suffixes in lowercase.
+NumericLiteralCase:
+  ExponentLetter: Leave
+  HexDigit: Lower
+  Prefix: Upper
+  Suffix:
+    Lower # NumericLiteralComponentStyle This option excludes case-sensitive reserved suffixes,
+    # such as min(namespace std::chrono::literals) in C++.
+
+# OneLineFormatOffRegex (String) clang-format 21
+# A regular expression that describes markers for turning formatting off for one line.
+# If it matches a comment (including the comment signatures) that is the only token of a line, clang-format skips the comment and the next line.
+# Otherwise, clang-format skips lines containing a matched token(all tokens will be matched against this regex untill one matched).
+# ! This option does not apply to `IntegerLiteralSeparator` and `NumericLiteralCase`.
+OneLineFormatOffRegex: ^(// NOLINT|logger$)
+
+# PPIndentWidth (Integer) clang-format 13
+# The number of columns to use for indentation of preprocessor statements.
+# When set to -1 (default) `IndentWidth` is used also for preprocessor statements.
+PPIndentWidth: 1
+
+# PackConstructorInitializers (PackConstructorInitializersStyle) clang-format 14
+# The pack constructor initializers style to use.
+# PackConstructorInitializers: Never      # Always put each constructor initializer/delegator on its own line.
+# PackConstructorInitializers: Bin-pack   # Bin-pack constructor initializers, every two initializers will be placed on the same line.
+PackConstructorInitializers:
+  CurrentLine # Put all constructor initializers on the current contructor line if they fit. Otherwise,
+  # if the column limit exceeds, put each one on its own line.
+  # N initializers will be put on one line or N lines.
+# PackConstructorInitializers: NextLine   # Same as `CurrentLine` except that if all constructor initializers do not fit on the current contructor line,
+# try to fit them on the next line. Each line will lie as many initializers as possible.
+# PackConstructorInitializers: NextLineOnly # Put all constructor initializers on the next line if they fit. Otherwise, put each one on its own line.
+
+# PenaltyBreakAssignment (Unsigned) clang-format 5
+# The penalty for breaking around an assignment operator.
+
+# PenaltyBreakBeforeFirstCallParameter (Unsigned) clang-format 3.7
+# The penalty for breaking a function call after call(.
+
+# PenaltyBreakBeforeMemberAccess (Unsigned) clang-format 20
+# The penalty for breaking before a member access operator (., ->).
+
+# PenaltyBreakComment (Unsigned) clang-format 3.7
+# The penalty for each line break introduced inside a comment.
+
+# PenaltyBreakFirstLessLess (Unsigned) clang-format 3.7
+# The penalty for breaking before the first <<.
+
+# PenaltyBreakOpenParenthesis (Unsigned) clang-format 14
+# The penalty for breaking after (.
+
+# PenaltyBreakScopeResolution (Unsigned) clang-format 18
+# The penalty for breaking after ::.
+
+# PenaltyBreakString (Unsigned) clang-format 3.7
+# The penalty for each line break introduced inside a string literal.
+
+# PenaltyBreakTemplateDeclaration (Unsigned) clang-format 7
+# The penalty for breaking after template declaration.
+
+# PenaltyExcessCharacter (Unsigned) clang-format 3.7
+# The penalty for each character outside of the column limit.
+
+# PenaltyIndentedWhitespace (Unsigned) clang-format 12
+# Penalty for each character of whitespace indentation (counted relative to leading non-whitespace column).
+
+# PenaltyReturnTypeOnItsOwnLine (Unsigned) clang-format 3.7
+# Penalty for putting the return type of a function onto its own line.
+
+# PointerAlignment (PointerAlignmentStyle) clang-format 3.7
+# Pointer and reference alignment style.
+PointerAlignment: Left
+# PointerAlignment: Right
+# PointerAlignment: Middle
+
+# QualifierAlignment (QualifierAlignmentStyle) clang-format 14
+# Different ways to arrange specifiers and qualifiers (e.g. const/volatile).
+# Setting QualifierAlignment to something other than Leave,
+# COULD lead to incorrect code formatting due to incorrect decisions made due to clang-formats
+# lack of complete semantic information.
+QualifierAlignment: Leave # Don't change specifiers/qualifiers to either Left or Right alignment (default).
+# QualifierAlignment: Left
+# QualifierAlignment: Right
+# QualifierAlignment: Custom # Change specifiers/qualifiers to be aligned based on QualifierOrder. With:
+
+# QualifierOrder (List of Strings) clang-format 14
+# The order in which the qualifiers appear. The order is an array that can contain any of the following:
+# QualifierOrder: [static, inline, type, const, volatile]
+# const,inline,static,friend,constexpr,volatile,restrict,type
+# ! It must contain type.
+# Items to the left of type will be placed to the left of the type and aligned in the order supplied.
+# Items to the right of type will be placed to the right of the type and aligned in the order supplied.
+
+# RawStringFormats (List of RawStringFormats) clang-format 6
+# Defines hints for detecting supported languages code blocks in raw strings.
+# A raw string with a matching delimiter or a matching enclosing function name
+# will be reformatted assuming the specified language based on the style for that language
+# defined in the .clang-format file. If no style has been defined in the .clang-format file
+# for the specific language, a predefined style given by BasedOnStyle is used.
+# If BasedOnStyle is not found, the formatting is based on LLVM style.
+# A matching delimiter takes precedence over a matching enclosing function name for determining the language of the raw string contents.
+# If a canonical delimiter is specified, occurrences of other delimiters for the same language
+# will be updated to the canonical if possible.
+# There should be at most one specification per language and each delimiter and enclosing function should not occur in multiple specifications.
+# To configure this in the .clang-format file, use:
+# See https://en.cppreference.com/cpp/language/string_literal#Raw_string_literals for raw string literals and delimeters reference.
+# RawStringFormats:
+# - Language: TextProto
+#   Delimiters:
+#     - pb
+#     - proto
+#   EnclosingFunctions:
+#     - PARSE_TEXT_PROTO
+#   BasedOnStyle: google
+# - Language: Cpp
+#   Delimiters:
+#     - cc
+#     - cpp
+#   BasedOnStyle: LLVM
+#   CanonicalDelimiter: cc
+
+# ReferenceAlignment (ReferenceAlignmentStyle) clang-format 13
+# Reference alignment style (overrides PointerAlignment for references).
+# ReferenceAlignment: Pointer
+ReferenceAlignment: Left
+# ReferenceAlignment: Right
+# ReferenceAlignment: Middle
+
+# ReflowComments (ReflowCommentsStyle) clang-format 3.8
+# Comment reformatting style.
+# ReflowComments: Never
+ReflowComments: IndentOnly # Only apply indentation rules, moving comments left or right, without changing formatting inside the comments.
+# ReflowComments: Always # Apply indentation rules and reflow long comments into new lines, trying to obey the `ColumnLimit`.
+
+# RemoveBracesLLVM (Boolean) clang-format 14
+# Remove optional braces of control statements (if, else, for, and while) in C++ according to the LLVM coding style.
+# ! This option will be renamed and expanded to support other styles.
+# ! Setting this option to true could lead to incorrect code formatting due to clang-format's lack of complete semantic information.
+
+# RemoveEmptyLinesInUnwrappedLines (Boolean) clang-format 20
+# Remove empty lines within unwrapped lines.
+RemoveEmptyLinesInUnwrappedLines: true
+
+# RemoveParentheses (RemoveParenthesesStyle) clang-format 17
+# Remove redundant parentheses.
+# ! Setting this option to any value other than Leave could lead to incorrect code formatting
+# ! due to clang-format's lack of complete semantic information.
+RemoveParentheses: Leave
+# RemoveParentheses: MultipleParentheses
+# RemoveParentheses: ReturnStatement
+# RemoveParentheses: ReturnStatement
+
+# RemoveSemicolon (Boolean) clang-format 16
+# Remove semicolons after the closing braces of functions and constructors/destructors.
+# ! Setting this option to true could lead to incorrect code formatting due to clang-format's lack of complete semantic information.
+RemoveSemicolon: false
+
+# RequiresClausePosition (RequiresClausePositionStyle) clang-format 15
+# The position of the requires clause.
+RequiresClausePosition: OwnLine # Always put the requires clause on its own line (possibly followed by a semicolon).
+# RequiresClausePosition: OwnLineWithBrace  # As with OwnLine, except, unless otherwise prohibited,
+# place a following open brace (of a function definition) to follow on the same line.
+# RequiresClausePosition: WithPreceding # Try to put the clause together with the preceding part of a declaration.
+# For class templates: stick to the template declaration.
+# For function templates: stick to the template declaration.
+# For function declaration followed by a requires clause: stick to the parameter list.
+# RequiresClausePosition: WithFollowing # Try to put the requires clause together with the class or function declaration.
+# RequiresClausePosition: SingleLine # Try to put everything in the same line if possible. Otherwise normal line breaking rules take over.
+
+# RequiresExpressionIndentation (RequiresExpressionIndentationKind) clang-format 16
+# The indentation used for requires expression bodies.
+RequiresExpressionIndentation:
+  OuterScope # Align requires expression body relative to the indentation level
+  # of the outer scope the requires expression resides in. This is the default.
+# RequiresExpressionIndentation: Keyword # Align requires expression body relative to the requires keyword.
+
+# SeparateDefinitionBlocks (SeparateDefinitionStyle) clang-format 14
+# Specifies the use of empty lines to separate definition blocks, including classes, structs, enums, and functions.
+SeparateDefinitionBlocks: Always
+# SeparateDefinitionBlocks: Leave
+# SeparateDefinitionBlocks: Never
+
+# ShortNamespaceLines (Unsigned) clang-format 13
+# The maximal number of unwrapped lines that a short namespace spans. Defaults to 1.
+# This determines the maximum length of short namespaces by counting unwrapped lines
+# (i.e. containing neither opening nor closing namespace brace)
+# and makes `FixNamespaceComments` omit adding end comments for those (i.e. no end comments for short namespace).
+ShortNamespaceLines: 1
+
+# SkipMacroDefinitionBody (Boolean) clang-format 18
+# Do not format macro definition body.
+SkipMacroDefinitionBody: false
+
+# SortIncludes (SortIncludesOptions) clang-format 3.8
+# Controls if and how clang-format will sort #includes.
+SortIncludes:
+  Enabled: true # bool
+  IgnoreCase: false # Whether or not includes are sorted in a case-insensitive fashion.
+  IgnoreExtension: false # When sorting includes in each block, only take file extensions into account if two includes compare equal otherwise.
+
+# SortUsingDeclarations (SortUsingDeclarationsOptions) clang-format 5
+# Controls if and how clang-format will sort using declarations.
+# SortUsingDeclarations: Never
+# SortUsingDeclarations: Lexicographic  # Using declarations are sorted in the order defined as follows:
+# Split the strings by :: and discard any initial empty strings.
+# Sort the lists of names lexicographically, and within those groups,
+# names are in case-insensitive lexicographic order.
+SortUsingDeclarations:
+  LexicographicNumeric # Using declarations are sorted in the order defined as follows:
+  # Split the strings by :: and discard any initial empty strings.
+  # The last element of each list is a non-namespace name;
+  # all others are namespace names.
+  # Sort the lists of names lexicographically,
+  # where the sort order of individual names is that all non-namespace names
+  # come before all namespace names, and within those groups,
+  # names are in case-insensitive lexicographic order.
+
+# SpaceAfterCStyleCast (Boolean) clang-format 3.5
+# If true, a space is inserted after C style casts.
+SpaceAfterCStyleCast: false
+
+# SpaceAfterLogicalNot (Boolean) clang-format 9
+# If true, a space is inserted after the logical not operator (!).
+SpaceAfterLogicalNot: false
+
+# SpaceAfterOperatorKeyword (Boolean) clang-format 21
+# If true, a space will be inserted after the operator keyword.
+SpaceAfterOperatorKeyword: false
+
+# SpaceAfterTemplateKeyword (Boolean) clang-format 4
+# If true, a space will be inserted after the template keyword.
+SpaceAfterTemplateKeyword: true
+
+# SpaceAroundPointerQualifiers (SpaceAroundPointerQualifiersStyle) clang-format 12
+# Defines in which cases to put a space before or after pointer qualifiers
+SpaceAroundPointerQualifiers: Default # Don't ensure spaces around pointer qualifiers and use PointerAlignment instead.
+# SpaceAroundPointerQualifiers: Before
+# SpaceAroundPointerQualifiers: After
+# SpaceAroundPointerQualifiers: Both
+
+# SpaceBeforeAssignmentOperators (Boolean) clang-format 3.7
+# If false, spaces will be removed before assignment operators.
+SpaceBeforeAssignmentOperators: true
+
+# SpaceBeforeCaseColon (Boolean) clang-format 12
+# If false, spaces will be removed before case colon.
+SpaceBeforeCaseColon: false
+
+# SpaceBeforeCpp11BracedList (Boolean) clang-format 7
+# If true, a space will be inserted before a C++11 braced list used to initialize an object (after the preceding identifier or type).
+SpaceBeforeCpp11BracedList: false
+
+# SpaceBeforeCtorInitializerColon (Boolean) clang-format 7
+# If false, spaces will be removed before constructor initializer colon.
+SpaceBeforeCtorInitializerColon: false
+
+# SpaceBeforeInheritanceColon (Boolean) clang-format 7
+# If false, spaces will be removed before inheritance colon.
+SpaceBeforeInheritanceColon: false
+
+# SpaceBeforeParens (SpaceBeforeParensStyle) clang-format 3.5
+# Defines in which cases to put a space before opening parentheses.
+# SpaceBeforeParens: Never  # This is deprecated and replaced by `Custom` below,
+# with all `SpaceBeforeParensOptions` but `AfterPlacementOperator` set to false.
+# SpaceBeforeParens: ControlStatements # Put a space before opening parentheses only after control statement keywords (for/if/while...).
+# SpaceBeforeParens: ControlStatementsExceptControlMacros # Same as `ControlStatements` except this option
+# doesn't apply to ForEach and If macros.
+# This is useful in projects where ForEach/If macros are treated as
+# function calls instead of control statements.
+# `ControlStatementsExceptForEachMacros` remains an alias for backward compatibility.
+# SpaceBeforeParens: NonEmptyParentheses # Put a space before opening parentheses only if the parentheses are not empty.
+# SpaceBeforeParens: Always # Always put a space before opening parentheses,
+# except when it's prohibited by the syntax rules (in function-like macro definitions)
+# or when determined by other style rules (after unary operators, opening parentheses, etc.)
+SpaceBeforeParens: Custom # Configure each individual space before parentheses in `SpaceBeforeParensOptions`.
+
+# SpaceBeforeParensOptions (SpaceBeforeParensCustom) clang-format 14
+# Control of individual space before parentheses.
+# If SpaceBeforeParens is set to Custom, use this to specify how each individual space before parentheses case should be handled.
+# Otherwise, this is ignored.
+SpaceBeforeParensOptions:
+  AfterControlStatements: true # If true, put space between control statement keywords (for/if/while…) and opening parentheses.
+  AfterForeachMacros: false # If true, put space between foreach macros and opening parentheses.
+  AfterFunctionDeclarationName: false # If true, put a space between function declaration name and opening parentheses.
+  AfterFunctionDefinitionName: false # If true, put a space between function definition name and opening parentheses.
+  AfterIfMacros: false # If true, put space between if macros and opening parentheses.
+  # AfterNot: true # If true, put a space between alternative operator/keyword not and the opening parenthesis.
+  AfterOverloadedOperator: false # If true, put a space between operator overloading and opening parentheses.
+  AfterPlacementOperator: true # If true, put a space between placement operator new/delete and opening parenthesis.
+  AfterRequiresInClause: true # If true, put space between requires keyword in a requires clause and opening parentheses, if there is one.
+  AfterRequiresInExpression: false # If true, put space between requires keyword in a requires expression and opening parentheses.
+  BeforeNonEmptyParentheses: false # If true, put a space before opening parentheses only if the parentheses are not empty.
+
+# SpaceBeforeRangeBasedForLoopColon (Boolean) clang-format 7
+# If false, spaces will be removed before range-based for loop colon.
+SpaceBeforeRangeBasedForLoopColon: true
+
+# SpaceBeforeSquareBrackets (Boolean) clang-format 10
+# If true, spaces will be before [. Lambdas will not be affected. Only the first [ will get a space added.
+SpaceBeforeSquareBrackets: false
+
+# SpaceInEmptyBlock (Boolean) clang-format 10
+# This option is deprecated. See Block of SpaceInEmptyBraces.
+
+# SpaceInEmptyBraces (SpaceInEmptyBracesStyle) clang-format 22
+# Specifies when to insert a space in empty braces.
+# SpaceInEmptyBraces: Always
+# SpaceInEmptyBraces: Block # Only insert a space in empty blocks.
+# SpaceInEmptyBraces: Never
+# This option doesn't apply to initializer braces if `Cpp11BracedListStyle` is not Block.
+
+# SpaceInEmptyParentheses (Boolean) clang-format 3.7
+# If true, spaces may be inserted into (). This option is deprecated. See `InEmptyParentheses` of `SpacesInParensOptions`.
+
+# SpacesBeforeTrailingComments (Unsigned) clang-format 3.7
+# The number of spaces before trailing line comments (// - comments).
+# This does not affect trailing block comments (/* - comments) as those commonly have different usage patterns
+# and a number of special cases.
+#? In the case of Verilog, it doesn't affect a comment right after the opening parenthesis
+#? in the port or parameter list in a module header, because it is probably
+#? for the port on the following line instead of the parenthesis it follows.
+SpacesBeforeTrailingComments: 3
+
+# SpacesInAngles (SpacesInAnglesStyle) clang-format 3.4
+# The SpacesInAnglesStyle to use for template argument lists.
+SpacesInAngles: Never # Remove spaces after < and before >.
+# SpacesInAngles: Always # Add spaces after < and before >.
+# SpacesInAngles: Leave # Keep a single space after < and before > if any spaces were present.
+# Option Standard: Cpp03 takes precedence.
+
+# SpacesInCStyleCastParentheses (Boolean) clang-format 3.7
+# If true, spaces may be inserted into C style casts. This option is deprecated. See `InCStyleCasts` of `SpacesInParensOptions`.
+
+# SpacesInConditionalStatement (Boolean) clang-format 10
+# If true, spaces will be inserted around if/for/switch/while conditions. This option is deprecated.
+# See `InConditionalStatements` of `SpacesInParensOptions`.
+
+# SpacesInLineCommentPrefix (SpacesInLineComment) clang-format 13
+# How many spaces are allowed at the start of a line comment.
+# To disable the maximum set it to -1, apart from that the maximum takes precedence over the minimum (i.e.
+# if Maximum < Minimum, and Maximum is not -1, Maximum takes effect).
+SpacesInLineCommentPrefix:
+  # One space is forced, more spaces are possible
+  Minimum: 1
+  Maximum: 1
+# Note that in line comment sections the relative indent of the subsequent lines is kept.
+# This option has only effect if `ReflowComments` is set to true.
+
+# SpacesInParens (SpacesInParensStyle) clang-format 17
+# Defines in which cases spaces will be inserted after ( and before ).
+# SpacesInParens: Never # Never put a space in parentheses.
+SpacesInParens: Custom # Configure each individual space in parentheses in `SpacesInParensOptions`.
+
+# SpacesInParensOptions (SpacesInParensCustom) clang-format 17
+# Control of individual spaces in parentheses.
+# If SpacesInParens is set to Custom, use this to specify how each individual space in parentheses case should be handled.
+# Otherwise, this is ignored.
+SpacesInParensOptions:
+  ExceptDoubleParentheses:
+    false # Override any of the following options to prevent addition of space
+    # when both opening and closing parentheses use multiple parentheses.
+  InConditionalStatements: true # Put a space in parentheses only inside conditional statements (for/if/while/switch...).
+  InCStyleCasts: false # Put a space in C style casts.
+  InEmptyParentheses: false # Insert a space in empty parentheses, i.e. ().
+  Other: true #  Put a space in parentheses not covered by preceding options.
+
+# SpacesInParentheses (Boolean) clang-format 3.7
+# If true, spaces will be inserted after ( and before ). This option is deprecated.
+# The previous behavior is preserved by using `SpacesInParens` with `Custom`
+# and by setting all `SpacesInParensOptions` to true except for `InCStyleCasts` and `InEmptyParentheses`.
+
+# SpacesInSquareBrackets (Boolean) clang-format 3.7
+# If true, spaces will be inserted after [ and before ].
+# ! Lambdas without arguments or unspecified size array declarations will not be affected.
+SpacesInSquareBrackets: false
+
+# Standard (LanguageStandard) clang-format 3.7
+# Parse and format C++ constructs compatible with this standard.
+Standard: Latest
+# Standard: c++03 # Parse and format as C++03. Cpp03 is a deprecated alias for c++03
+# Standard: c++11 # Parse and format as C++11.
+# Standard: c++14 # Parse and format as C++14.
+# Standard: c++17 # Parse and format as C++17.
+# Standard: c++20 # Parse and format as C++20.
+# Standard: c++23 # Parse and format as C++23.
+# Standard: c++26 # Parse and format as C++26.
+# Standard: Latest # Parse and format using the latest supported language version. Cpp11 is a deprecated alias for Latest
+# Standard: Auto # Automatic detection based on the input.
+
+# StatementAttributeLikeMacros (List of Strings) clang-format 12
+# Macros which are ignored in front of a statement, as if they were an attribute.
+# So that they are not parsed as identifier, for example for Qts emit.
+StatementAttributeLikeMacros: [emit]
+# ---
+# AlignConsecutiveDeclarations: true
+# StatementAttributeLikeMacros: []
+# unsigned char data = 'x';
+# emit          signal(data); // This is parsed as variable declaration.
+# ---
+# AlignConsecutiveDeclarations: true
+# StatementAttributeLikeMacros: [emit]
+# unsigned char data = 'x';
+# emit signal(data); // Now it's fine again.
+
+# StatementMacros (List of Strings) clang-format 8
+# A vector of macros that should be interpreted as complete statements.
+# Typical macros are expressions and require a semicolon to be added.
+# Sometimes this is not the case, and this allows to make clang-format aware of such cases.
+# Treat these macros as statements instead of function calls.
+StatementMacros: [Q_UNUSED]
+
+# TabWidth (Unsigned) clang-format 3.7
+# The number of columns used for tab stops.
 TabWidth: 4
-SpacesInAngles: false
-SpacesInParentheses: true
-ColumnLimit: 0
+
+# TypeNames (List of Strings) clang-format 17
+# A vector of non-keyword identifiers that should be interpreted as type names.
+# A *, &, or && between a type name and another non-keyword identifier is annotated
+# as a pointer or reference token instead of a binary operator.
+# That provides some interaction for customized TypeNames
+TypeNames: []
+
+# TypenameMacros (List of Strings) clang-format 9
+# A vector of macros that should be interpreted as type declarations instead of as function calls.
+# These are expected to be macros of the form:
+# STACK_OF(...)
+# In the .clang-format configuration file, this can be configured like:
+# For example: OpenSSL STACK_OF, BSD LIST_ENTRY.
+TypenameMacros: [STACK_OF, LIST]
+
+# UseCRLF (Boolean) clang-format 10
+# This option is deprecated. See `LF` and `CRLF` of `LineEnding`.
+
+# UseTab (UseTabStyle) clang-format 3.7
+# The way to use tab characters in the resulting file.
+UseTab: Never
+# UseTab: ForIndentation
+# UseTab: ForContinuationAndIndentation # Fill all leading whitespace with tabs,
+# and use spaces for alignment that appears within a line
+# (e.g. consecutive assignments and declarations).
+# UseTab: AlignWithSpaces # Use tabs for line continuation and indentation, and spaces for alignment.
+# UseTab: Always # Use tabs whenever we need to fill whitespace that spans at least from one tab stop to the next one.
+
+# VariableTemplates (List of Strings) clang-format 20
+# A vector of non-keyword identifiers that should be interpreted as variable template names.
+# A ) after a variable template instantiation is not annotated as the closing parenthesis of C-style cast operator.
+VariableTemplates: []
+
+# WhitespaceSensitiveMacros (List of Strings) clang-format 11
+# A vector of macros which are whitespace-sensitive and should not be touched.
+# These are expected to be macros of the form:
+# STRINGIZE(...)
+# In the .clang-format configuration file, this can be configured like:
+WhitespaceSensitiveMacros: []
+# For example: BOOST_PP_STRINGIZE
+
+# WrapNamespaceBodyWithEmptyLines (WrapNamespaceBodyWithEmptyLinesStyle) clang-format 20
+# Wrap namespace body with empty lines.
+WrapNamespaceBodyWithEmptyLines: Never # Remove all empty lines at the beginning and the end of namespace body.
+# WrapNamespaceBodyWithEmptyLines: Always # Always have at least one empty line at the beginning and the end of namespace body
+# except that the number of empty lines between consecutive nested namespace definitions
+# is not increased.
+# WrapNamespaceBodyWithEmptyLines: Leave # `MaxEmptyLinesToKeep` still applies.
+
+--- # Qt options
+
+Language: Cpp
+
+# AllowBreakBeforeQtProperty (Boolean) clang-format 22
+# Allow breaking before Q_Property keywords READ, WRITE, etc.
+# as if they were preceded by a comma (,). This allows them to be formatted according to BinPackParameters.
+AllowBreakBeforeQtProperty: true
+
+--- # Java options
+
+Language: Java
+
+# JavaImportGroups (List of Strings) clang-format 8
+# A vector of prefixes ordered by the desired groups for Java imports.
+# One group's prefix can be a subset of another - the longest prefix is always matched.
+# Within a group, the imports are ordered lexicographically. Static imports are grouped separately and follow the same group rules.
+# By default, static imports are placed before non-static imports, but this behavior is changed by another option, `SortJavaStaticImport`.
+JavaImportGroups: [com, org]
+
+# SortJavaStaticImport (SortJavaStaticImportOptions) clang-format 12
+# When sorting Java imports, by default static imports are placed before non-static imports.
+# If JavaStaticImportAfterImport is After, static imports are placed after non-static imports.
+# SortJavaStaticImport: Before
+SortJavaStaticImport: After
+
+--- # JavaSript options
+
+Language: JavaScript
+
+# JavaScriptQuotes (JavaScriptQuoteStyle) clang-format 3.9
+# The JavaScriptQuoteStyle to use for JavaScript strings.
+# JavaScriptQuotes: Leave
+# JavaScriptQuotes: Single # Always use single
+JavaScriptQuotes: Double
+
+# JavaScriptWrapImports (Boolean) clang-format 3.9
+# Whether to wrap JavaScript import/export statements.
+JavaScriptWrapImports: true
+
+# SpacesInContainerLiterals (Boolean) clang-format 3.7
+# If true, spaces are inserted inside container literals (e.g. ObjC and Javascript array and dict literals).
+# For JSON, use `SpaceBeforeJsonColon` instead.
+SpacesInContainerLiterals: false
+
+--- # TableGen options
+
+Language: TableGen
+
+
+# AlignConsecutiveTableGenBreakingDAGArgColons (AlignConsecutiveStyle) clang-format 19
+
+# AlignConsecutiveTableGenCondOperatorColons (AlignConsecutiveStyle) clang-format 19
+
+# AlignConsecutiveTableGenDefinitionColons (AlignConsecutiveStyle) clang-format 19
+
+# TableGenBreakInsideDAGArg (DAGArgStyle) clang-format 19
+
+# TableGenBreakingDAGArgOperators (List of Strings) clang-format 19
+
+--- # ObjC options
+
+Language: ObjC
+
+
+# ObjCBinPackProtocolList (BinPackStyle) clang-format 7
+# Controls bin-packing Objective-C protocol conformance list items into as few lines as possible when they go over ColumnLimit.
+
+# ObjCBlockIndentWidth (Unsigned) clang-format 3.7
+# The number of characters to use for indentation of ObjC blocks.
+
+# ObjCBreakBeforeNestedBlockParam (Boolean) clang-format 11
+# Break parameters list into lines when there is nested block parameters in a function call.
+
+# ObjCPropertyAttributeOrder (List of Strings) clang-format 18
+# The order in which ObjC property attributes should appear.
+
+# ObjCSpaceAfterMethodDeclarationPrefix (Boolean) clang-format 23
+# Add or remove a space between the '-'/'+' and the return type in Objective-C method declarations. i.e
+
+# ObjCSpaceAfterProperty (Boolean) clang-format 3.7
+# Add a space after @property in Objective-C, i.e. use @property (readonly) instead of @property(readonly).
+
+# ObjCSpaceBeforeProtocolList (Boolean) clang-format 3.7
+# Add a space in front of an Objective-C protocol list, i.e. use Foo <Protocol> instead of Foo<Protocol>.
+
+--- # JSON options
+
+Language: Json
+
+# SpaceBeforeJsonColon (Boolean) clang-format 17
+# If true, a space will be added before a JSON colon. For other languages, e.g. JavaScript, use SpacesInContainerLiterals instead.
+SpaceBeforeJsonColon: false
+
+--- # Verilog options
+
+Language: Verilog
+
+# VerilogBreakBetweenInstancePorts (Boolean) clang-format 17
+# For Verilog, put each port on its own line in module instantiations.
