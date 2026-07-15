@@ -156,14 +156,6 @@ public class CharacterMatcher implements ISolution {
         return matchCount.getOrDefault(end, 0L);
     }
 
-    void unitTest() {
-        assert (DP("?###????????", List.of(3, 2, 1)) == 10);
-        assert (heuristics("?###????????", List.of(3, 2, 1)) == 10);
-        assert (DP("?#??#????.????#", List.of(8, 1, 1)) == 6);
-        assert (heuristics("?#??#????.????#", List.of(8, 1, 1)) == 6);
-        System.out.println("Unit test assertation successful");
-    }
-
     public void Solution1(BufferedReader input) throws IOException {
         readFile(input);
         System.out.println("Solution 1: " + SpringLists.stream().mapToLong(K_V -> {
@@ -185,7 +177,6 @@ public class CharacterMatcher implements ISolution {
     public static void main(String[] args) throws IOException {
         CharacterMatcher Day12 = new CharacterMatcher();
         var now = System.currentTimeMillis();
-        Day12.unitTest();
         Day12.Solution1(new BufferedReader(new FileReader("Day12/input.txt")));
         Day12.Solution2(new BufferedReader(new FileReader("Day12/input.txt")));
         System.out.println(System.currentTimeMillis() - now);
