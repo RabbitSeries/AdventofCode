@@ -8,6 +8,7 @@ from aocpy.aoc_libs.utils.ISolution import ISolution
 def test_random():
     day = random.randrange(1, 26)
     clazz = import_solution(2022, day)
+    assert clazz is not None
     assert issubclass(clazz, ISolution)
     ins = clazz()
     with ir.files("aocpy.aoc_solutions.year2022.resources.Day{:0>2d}".format(day)).joinpath("input.txt").open("r") as f:

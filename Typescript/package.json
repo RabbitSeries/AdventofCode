@@ -5,13 +5,12 @@
         "watch:config": "esbuild ./esbuild.ts --outdir=./dist --format=esm --platform=node",
         "watch:run": "tsc -b && node ./dist/esbuild.js",
         "watch": "run-s watch:config watch:run",
-        "lint": "eslint .",
-        "update": "npm update --save"
+        "lint": "eslint ."
     },
     "packageManager": "npm@12.0.1+sha512.2f94fd8bf600416416a934bfc59c4991e8bff7372ef7d842784e2a8b8d48c81555ee645069ddea73625fb8e92dc261feab0188fd5dab6c22fefd46316f5f9140",
     "devDependencies": {
         "@eslint/js": "^9.28.0",
-        "@types/node": "^25.8.0",
+        "@types/node": "^25.9.5",
         "esbuild": "^0.25.12",
         "eslint": "^9.39.4",
         "fast-glob": "^3.3.3",

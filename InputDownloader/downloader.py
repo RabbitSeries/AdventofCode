@@ -9,7 +9,7 @@ import re
 
 
 class ProjectStructure:
-    def __init__(self,  srcPattern: str, yearDayRe: str = r"year(\d+).*Day(\d+)"):
+    def __init__(self, srcPattern: str, yearDayRe: str = r"year(\d+).*Day(\d+)"):
         self.solutions = glob(srcPattern, recursive=True)
         self.places: dict[tuple[int, int], str] = {}
         self.re = re.compile(yearDayRe)
@@ -27,13 +27,13 @@ class ProjectStructure:
         return None
 
     @abstractmethod
-    def placer(self, year: int, day: int) -> str | None:
+    def placer(self, year: int, day: int) -> str:
         pass
 
 
 class PythonProject(ProjectStructure):
     def __init__(self):
-        super().__init__("Python/aoc_solutions/**/*.py")
+        super().__init__("Python/aocpy/aoc_solutions/**/*.py")
 
     @override
     def placer(self, year, day):
@@ -58,21 +58,22 @@ class CppProject(ProjectStructure):
         super().__init__("Cpp/**/src/**/*.cc", r"(\d+).*Day(\d+)")
 
     def placer(self, year, day):
-        return os.path.join("Cpp", f"{year}",  "resources", "Day{:0>2d}".format(day), "input.txt")
+        return os.path.join("Cpp", f"{year}", "resources", "Day{:0>2d}".format(day), "input.txt")
 
 
 class TypescriptProject(ProjectStructure):
     def __init__(self):
-        super().__init__("Typescript/**/src/**/*.ts")
+        super().__init__("Typescript/**/src/**/*.ts", r"(\d+).*Day(\d+)")
 
     def placer(self, year, day):
-        return super().placer(year, day).replace("Cpp", "Typescript")
+        return os.path.join("Typescript", f"{year}", "resources", "Day{:0>2d}".format(day), "input.txt")
 
 
 def download_input(url: str, session_cookie: str, retry: int = 0) -> str | None:
     if retry >= 5:
         return None
-    response = requests.get(url, headers={"Cookie": f"session={session_cookie}"})
+    response = requests.get(
+        url, headers={"Cookie": f"session={session_cookie}"})
     try:
         response.raise_for_status()
         if response.status_code != requests.codes.ok and len(response.text) == 0:
@@ -84,16 +85,14 @@ def download_input(url: str, session_cookie: str, retry: int = 0) -> str | None:
         print("Retrying")
         time.sleep(random.randrange(2 ** (retry+1)))
         return download_input(url, session_cookie, retry+1)
-    except:
-        print("Unknown error.")
-        return None
 
 
 def process_all_inputs(session_cookie: str, root_dir: str | None = None, overwrite: bool = False):
     if root_dir is None:
         return
     dirs: dict[tuple[int, int], list[str]] = {}
-    Projects: list[ProjectStructure] = [PythonProject(), JavaProject(), CppProject(), TypescriptProject(), KotlinProject()]
+    Projects: list[ProjectStructure] = [PythonProject(), JavaProject(
+    ), CppProject(), TypescriptProject(), KotlinProject()]
     for projects in Projects:
         for k, v in projects.places.items():
             dirs.setdefault(k, []).append(v)
@@ -119,7 +118,8 @@ project_root = os.getcwd()
 session_cookie = os.environ.get("AOC_SESSION_COOKIE")
 if not session_cookie:
     envFilePath = os.path.join(project_root, ".env")
-    print(f'Session cookie not found in environment, looking for {envFilePath}')
+    print(
+        f'Session cookie not found in environment, looking for {envFilePath}')
     try:
         with open(envFilePath) as file:
             session_cookie = file.read().strip().split("=")[1]
