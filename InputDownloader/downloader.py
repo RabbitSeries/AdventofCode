@@ -9,7 +9,8 @@ import re
 
 
 class ProjectStructure:
-    def __init__(self, srcPattern: str, yearDayRe: str = r"year(\d+).*Day(\d+)"):
+    def __init__(self, srcPattern: str,
+                 yearDayRe: str = r"year(\d+).*Day(\d+)"):
         self.solutions = glob(srcPattern, recursive=True)
         self.places: dict[tuple[int, int], str] = {}
         self.re = re.compile(yearDayRe)
@@ -37,7 +38,8 @@ class PythonProject(ProjectStructure):
 
     @override
     def placer(self, year, day):
-        return os.path.join("Python", "aocpy", "aoc_solutions", f"year{year}", "resources", "Day{:0>2d}".format(day), "input.txt")
+        return os.path.join("Python", "aocpy", "aoc_solutions", f"year{year}",
+                            "resources", "Day{:0>2d}".format(day), "input.txt")
 
 
 class JavaProject(ProjectStructure):
@@ -45,7 +47,8 @@ class JavaProject(ProjectStructure):
         super().__init__(srcPattern)
 
     def placer(self, year: int, day: int):
-        return os.path.join("Java", f"{year}", "resources", "Day{:0>2d}".format(day), "input.txt")
+        return os.path.join("Java", f"{year}", "resources",
+                            "Day{:0>2d}".format(day), "input.txt")
 
 
 class KotlinProject(JavaProject):
@@ -58,7 +61,8 @@ class CppProject(ProjectStructure):
         super().__init__("Cpp/**/src/**/*.cc", r"(\d+).*Day(\d+)")
 
     def placer(self, year, day):
-        return os.path.join("Cpp", f"{year}", "resources", "Day{:0>2d}".format(day), "input.txt")
+        return os.path.join("Cpp", f"{year}", "resources",
+                            "Day{:0>2d}".format(day), "input.txt")
 
 
 class TypescriptProject(ProjectStructure):
@@ -66,28 +70,32 @@ class TypescriptProject(ProjectStructure):
         super().__init__("Typescript/**/src/**/*.ts", r"(\d+).*Day(\d+)")
 
     def placer(self, year, day):
-        return os.path.join("Typescript", f"{year}", "resources", "Day{:0>2d}".format(day), "input.txt")
+        return os.path.join("Typescript", f"{year}", "resources",
+                            "Day{:0>2d}".format(day), "input.txt")
 
 
-def download_input(url: str, session_cookie: str, retry: int = 0) -> str | None:
+def download_input(url: str,
+                   session_cookie: str, retry: int = 0) -> str | None:
     if retry >= 5:
         return None
     response = requests.get(
         url, headers={"Cookie": f"session={session_cookie}"})
     try:
         response.raise_for_status()
-        if response.status_code != requests.codes.ok and len(response.text) == 0:
+        if response.status_code != requests.codes and len(response.text) == 0:
             raise requests.HTTPError(
-                "This request may have been blocked by region/anti-crawler protection. Try using VPN.", response=response)
+                "This request may have been blocked by region/anti-crawler"
+                "protection. Try using VPN.", response=response)
         return response.text
     except requests.HTTPError as identifier:
         print(identifier)
         print("Retrying")
-        time.sleep(random.randrange(2 ** (retry+1)))
-        return download_input(url, session_cookie, retry+1)
+        time.sleep(random.randrange(2 ** (retry + 1)))
+        return download_input(url, session_cookie, retry + 1)
 
 
-def process_all_inputs(session_cookie: str, root_dir: str | None = None, overwrite: bool = False):
+def process_all_inputs(session_cookie: str,
+                       root_dir: str | None = None, overwrite: bool = False):
     if root_dir is None:
         return
     dirs: dict[tuple[int, int], list[str]] = {}
@@ -127,4 +135,5 @@ if not session_cookie:
         raise ValueError("Missing AOC_SESSION_COOKIE environment variable", e)
 overwrite = os.environ.get("OVERWRITE_DOWNLOAD")
 process_all_inputs(session_cookie, project_root, eval(overwrite)
-                   if overwrite and isinstance(eval(overwrite), bool) else False)
+                   if overwrite and isinstance(eval(overwrite), bool)
+                   else False)

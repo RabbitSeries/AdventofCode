@@ -20,10 +20,10 @@
     //      such as: "cmake.buildDirectory": "${workspaceFolder}/builds/${buildKit}/${buildType}"
     "python.analysis.extraPaths": [
         "${workspaceFolder}/Python",
-        "${workspaceFolder}/tests"
+        "${workspaceFolder}/Python/tests"
     ],
     "eslint.workingDirectories": [
-        "./TypeScript"
+        "./Typescript"
     ],
-    "js/ts.tsdk.path": "./TypeScript/node_modules/typescript/lib"
+    "js/ts.tsdk.path": "./Typescript/node_modules/typescript/lib"
 }
