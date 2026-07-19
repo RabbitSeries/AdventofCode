@@ -1,14 +1,15 @@
-import { readFileSync } from "node:fs"
-import { EOL } from "node:os"
-const data = readFileSync("Day02/input.txt").toString().trim().split(EOL)
+import { readFileSync } from 'node:fs'
+import { EOL } from 'node:os'
+const data = readFileSync('Day02/input.txt').toString().trim().split(EOL)
 let forward = 0, aim = 0, aimedDepth = 0
-data.forEach(cmd => {
-    const delta = +cmd.split(" ")[1]
-    if (cmd.startsWith("forward")) {
+data.forEach((cmd) => {
+    const delta = +cmd.split(' ')[1]
+    if (cmd.startsWith('forward')) {
         forward += delta
         aimedDepth += aim * delta
-    } else {
-        aim += cmd.startsWith("down") ? delta : -delta;
+    }
+    else {
+        aim += cmd.startsWith('down') ? delta : -delta
     }
 })
 console.log(`Part 1: ${forward * aim}`)

@@ -1,7 +1,7 @@
 import js from '@eslint/js'
 import { node } from 'globals'
 import { defineConfig } from 'eslint/config'
-import { configs } from 'typescript-eslint'
+import ts from 'typescript-eslint'
 import stylistic from '@stylistic/eslint-plugin'
 
 /**
@@ -10,12 +10,14 @@ import stylistic from '@stylistic/eslint-plugin'
  */
 export default defineConfig([
     {
+        ignores: ['dist/**/*', 'node_modules/**/*'],
+    },
+    {
         files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
-        ignores: ['dist'],
         extends: [
             js.configs.recommended,
             stylistic.configs.recommended,
-            ...configs.recommended,
+            ...ts.configs.recommended,
         ],
         languageOptions: {
             ecmaVersion: 'latest',

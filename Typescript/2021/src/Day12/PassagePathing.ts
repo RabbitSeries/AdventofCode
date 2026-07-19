@@ -1,26 +1,31 @@
-import { readFile } from "fs/promises"
-import { EOL } from "os"
+import { readFile } from 'fs/promises'
+import { EOL } from 'os'
 
 enum CaveType {
     BigCave,
-    SmallCave
+    SmallCave,
 }
 
 class Cave {
     public constructor(caveName: string) {
         this.caveName = caveName
-        this.caveType = [...caveName].reduce((p, c) => p && c.toUpperCase() === c, true) ? CaveType.BigCave : CaveType.SmallCave
+        this.caveType = [...caveName]
+            .reduce((p, c) => p && c.toUpperCase() === c, true)
+            ? CaveType.BigCave
+            : CaveType.SmallCave
     }
+
     public caveName: string
     public caveType: CaveType
 }
 
-const links = await readFile("Day12/input.txt")
+const links = await readFile('Day12/input.txt')
     .then(data => data.toString().trimEnd().split(`${EOL}`))
     .then(lines =>
         lines.map(
-            line => line.split("-").map(caveName => new Cave(caveName)) as [Cave, Cave]
-        )
+            line => line.split('-')
+                .map(caveName => new Cave(caveName)) as [Cave, Cave],
+        ),
     )
 
 const caveMap = new Map<string, Cave[]>()
@@ -30,20 +35,24 @@ for (const [from, to] of links) {
 }
 
 // Yet another expensive dfs.
-function countWays(reachTimes = 1, currentCave: string = "start", visited = new Map<string, number>([["start", 1]]), hasTwiceInPath = false) {
-    let wayCount = 0;
-    if (currentCave === "end") {
-        return 1;
+function countWays(reachTimes = 1,
+    currentCave: string = 'start',
+    visited = new Map<string, number>([['start', 1]]),
+    hasTwiceInPath = false) {
+    let wayCount = 0
+    if (currentCave === 'end') {
+        return 1
     }
     for (const cave of caveMap.get(currentCave)!) {
         if (cave.caveType === CaveType.SmallCave) {
             const t = visited.get(cave.caveName) ?? 0
-            if (t < reachTimes && cave.caveName !== "start") {
+            if (t < reachTimes && cave.caveName !== 'start') {
                 let h = hasTwiceInPath
                 if (t === 1) {
                     if (hasTwiceInPath) {
                         continue
-                    } else {
+                    }
+                    else {
                         h = true
                     }
                 }
@@ -51,8 +60,10 @@ function countWays(reachTimes = 1, currentCave: string = "start", visited = new 
                 wayCount += countWays(reachTimes, cave.caveName, visited, h)
                 visited.set(cave.caveName, t)
             }
-        } else {
-            wayCount += countWays(reachTimes, cave.caveName, visited, hasTwiceInPath)
+        }
+        else {
+            wayCount += countWays(reachTimes,
+                cave.caveName, visited, hasTwiceInPath)
         }
     }
     return wayCount

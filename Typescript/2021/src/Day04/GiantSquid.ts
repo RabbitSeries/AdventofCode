@@ -1,12 +1,14 @@
-import { readFile } from "fs/promises";
-import { EOL } from "os";
+import { readFile } from 'fs/promises'
+import { EOL } from 'os'
 
-const input_blocks = await readFile("Day04/input.txt").then(buf => buf.toString().trim().split(`${EOL}${EOL}`))
-const bingo_nums = input_blocks[0].split(",").map(s => parseInt(s))
+const input_blocks = await readFile('Day04/input.txt').then(buf =>
+    buf.toString().trim().split(`${EOL}${EOL}`))
+const bingo_nums = input_blocks[0].split(',').map(s => parseInt(s))
 const parse_boards = (board_blocks: string[]) =>
-    board_blocks.map(board => {
+    board_blocks.map((board) => {
         const indexHash: Map<number, { i: number, j: number }> = new Map()
-        const boardCells: number[][] = Array.from({ length: 5 }, () => Array(5))
+        const boardCells: number[][] = Array.from({ length: 5 },
+            () => Array(5))
         board.split(EOL).map((line, i) => {
             line.trim().split(/\s+/).map((cell, j) => {
                 const num = parseInt(cell)
@@ -18,7 +20,7 @@ const parse_boards = (board_blocks: string[]) =>
             indexHash, // Each board has unique numbers in this example
             boardCells,
             rowRemain: Array.from({ length: 5 }, () => 5),
-            colRemain: Array.from({ length: 5 }, () => 5)
+            colRemain: Array.from({ length: 5 }, () => 5),
         }
     })
 

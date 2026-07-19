@@ -1,7 +1,7 @@
-import { readFile } from "fs/promises";
-import { EOL } from "os";
+import { readFile } from 'fs/promises'
+import { EOL } from 'os'
 
-const octopusMap = await readFile("Day11/input.txt")
+const octopusMap = await readFile('Day11/input.txt')
     .then(data => data.toString().trimEnd().split(`${EOL}`))
     .then(lines => lines.map(line => [...line].map(level => parseInt(level))))
 const [h, w] = [octopusMap.length, octopusMap[0].length]
@@ -33,7 +33,8 @@ function blink(octopusMap: number[][]) {
             const key = oKey(nx, ny)
             // Blinked octopus will not receive recharge on this step.
             // So perform blink check before recharge energy level.
-            if (isValid(nx, ny) && !visited.has(key) && (++octopusMap[nx][ny] > 9)) {
+            if (isValid(nx, ny)
+              && !visited.has(key) && (++octopusMap[nx][ny] > 9)) {
                 q.push([nx, ny])
                 visited.add(key)
             }

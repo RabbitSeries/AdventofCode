@@ -1,7 +1,8 @@
-import { readFile } from "fs/promises";
-import { EOL } from "os";
+import { readFile } from 'fs/promises'
+import { EOL } from 'os'
 
-const map = await readFile("Day09/input.txt").then(data => data.toString().trimEnd().split(`${EOL}`))
+const map = await readFile('Day09/input.txt')
+    .then(data => data.toString().trimEnd().split(`${EOL}`))
 // helpers
 const [w, h] = [map[0].length, map.length]
 const isValid = (x: number, y: number) => x >= 0 && x < h && y >= 0 && y < w
@@ -32,7 +33,8 @@ function mapLowPoints(map: string[]) {
 
 const lowPoints = mapLowPoints(map)
 
-console.log(lowPoints.reduce((prev, p) => prev + parseInt(map[p[0]][p[1]]) + 1, 0))
+console.log(lowPoints.reduce((prev, p) =>
+    prev + parseInt(map[p[0]][p[1]]) + 1, 0))
 
 function basin(i: number, j: number, visited: Set<string>) {
     const q = [[i, j]]
@@ -44,7 +46,10 @@ function basin(i: number, j: number, visited: Set<string>) {
         for (let k = 0; k < 4; k++) {
             const [nx, ny] = [x + dx[k], y + dy[k]]
             const key = pointKey(nx, ny)
-            if (isValid(nx, ny) && !visited.has(key) && map[nx][ny] !== "9" && p < map[nx].charCodeAt(ny)) {
+            if (isValid(nx, ny)
+              && !visited.has(key)
+              && map[nx][ny] !== '9'
+              && p < map[nx].charCodeAt(ny)) {
                 visited.add(key)
                 q.push([nx, ny])
             }

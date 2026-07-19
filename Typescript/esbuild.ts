@@ -1,9 +1,9 @@
-import * as esbuild from "esbuild"
-import fg from "fast-glob"
-import fs from "node:fs"
+import * as esbuild from 'esbuild'
+import fg from 'fast-glob'
+import fs from 'node:fs'
 // import path from "node:path";
-const src = fg.globSync(["./**/*.ts", "!node_modules"])
-const outDirectory = "dist";
+const src = fg.globSync(['./**/*.ts', '!node_modules'])
+const outDirectory = 'dist'
 if (fs.existsSync(outDirectory)) {
     fs.rmSync(outDirectory, { force: true, recursive: true })
 }
@@ -25,16 +25,16 @@ if (fs.existsSync(outDirectory)) {
 
 for (const year of [2021]) {
     const ctx = await esbuild.context({
-        target: "esnext",
+        target: 'esnext',
         entryPoints: src,
-        platform: "node",
-        format: "esm",
+        platform: 'node',
+        format: 'esm',
         tsconfig: `./${year}/tsconfig.json`,
         bundle: true,
-        outbase: ".",
+        outbase: '.',
         outdir: outDirectory,
-        sourcemap: "inline",
-        logLevel: "info",
+        sourcemap: 'inline',
+        logLevel: 'info',
         // plugins: [utilsAliasResolve]
     })
     await ctx.watch()
