@@ -1,6 +1,7 @@
-import { readFile } from "node:fs/promises";
+import { readFile } from 'node:fs/promises'
 
-const ages = await readFile("Day06/input.txt").then(line => line.toString().trim().split(",").map(age => parseInt(age)))
+const ages = await readFile('Day06/input.txt')
+    .then(line => line.toString().trim().split(',').map(age => parseInt(age)))
 
 const lanternFishes: Map<number, number> = new Map()
 
@@ -15,7 +16,8 @@ function propagation(lanternFishes: Map<number, number>, days: number) {
         for (const [k, v] of fishes.entries()) {
             if (k) {
                 lanternFishes.set(k - 1, (lanternFishes.get(k - 1) ?? 0) + v)
-            } else {
+            }
+            else {
                 lanternFishes.set(6, (lanternFishes.get(6) ?? 0) + v)
                 lanternFishes.set(8, (lanternFishes.get(8) ?? 0) + v)
             }
