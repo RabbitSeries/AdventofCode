@@ -22,7 +22,7 @@ public class CamelInstruction implements ISolution {
         Instructions = input.readLine().chars().mapToObj(l -> (char) l).toList();
         Pattern re = Pattern.compile("(\\w+)\\s+=\\s+\\((\\w+),\\s+(\\w+)\\)");
         Network = input.lines()
-            .map(line -> re.matcher(line)).filter(matcher -> matcher.find())
+            .map(re::matcher).filter(Matcher::find)
             .collect(Collectors.toMap(k -> {
                 if (k.group(1).endsWith("A")) {
                     StartList.add(k.group(1));

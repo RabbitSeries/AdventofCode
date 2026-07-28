@@ -50,27 +50,6 @@
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-toolchains-plugin</artifactId>
-                    <version>${project.maven-toolchains-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>toolchain</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <toolchains>
-                            <jdk>
-                                <version>1.8</version>
-                                <vendor>openjdk</vendor>
-                            </jdk>
-                        </toolchains>
-                    </configuration>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
                     <version>${project.maven-shade-plugin.version}</version>
                 </plugin>
@@ -94,6 +73,26 @@
 
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-toolchains-plugin</artifactId>
+                <version>${project.maven-toolchains-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>toolchain</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <toolchains>
+                        <jdk>
+                            <version>21</version>
+                        </jdk>
+                    </toolchains>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -151,9 +150,12 @@
                 <version>${project.maven-compiler-plugin.version}</version>
                 <configuration>
                     <release>21</release>
-                    <!-- [WARNING] location of system modules is not set in conjunction with -source 21-->
-                    <!-- not setting the location of system modules may lead to class files that cannot run on JDK 21-->
-                    <!-- release 21 is recommended instead of -source 21 -target 21 because it sets the location of system modules automatically-->
+                    <!-- [WARNING] location of system modules is not set in conjunction with -source
+                    21-->
+                    <!-- not setting the location of system modules may lead to class files that
+                    cannot run on JDK 21-->
+                    <!-- release 21 is recommended instead of -source 21 -target 21 because it sets
+                    the location of system modules automatically-->
                 </configuration>
                 <executions>
                     <!-- Replacing default-compile as it is treated specially by Maven -->
