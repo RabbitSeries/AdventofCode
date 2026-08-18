@@ -8,16 +8,16 @@
 #include "utils/ISolution.hpp"
 #include "utils/Streams.hpp"
 
-class MonkeyMarket : public ISolution {
+class MonkeyMarket: public ISolution {
     REGISTER( MonkeyMarket )
 
     using ull = unsigned long long;
 
     static inline ull getNextSecret( ull curSecret ) {
         // This algorithm is too random, there is no need to dp.
-        curSecret = ( ( curSecret * 64 ) ^ curSecret ) % 16777216;
-        curSecret = ( ( curSecret / 32 ) ^ curSecret ) % 16777216;
-        curSecret = ( ( curSecret * 2048 ) ^ curSecret ) % 16777216;
+        curSecret = ( ( curSecret << 6 ) ^ curSecret ) & 0Xff'ff'ff;
+        curSecret = ( ( curSecret >> 5 ) ^ curSecret ) & 0Xff'ff'ff;
+        curSecret = ( ( curSecret << 11 ) ^ curSecret ) & 0Xff'ff'ff;
         return curSecret;
     }
 
@@ -35,16 +35,18 @@ class MonkeyMarket : public ISolution {
     }
 
     int hasher( std::vector<int> const& v, ull lend ) {
-        return std::accumulate( v.begin() + ( lend - 4 ), v.begin() + lend, 0, []( int init, int e ) {
-            return init * 19 + e;
-        } );
+        return std::accumulate( v.begin() + ( lend - 4 ), v.begin() + lend, 0,
+                                []( int init, int e ) { return init * 19 + e; } );
     }
+
     std::vector<ull> secrets;
 
-   public:
+    public:
     void Solution1() {
         readFile();
-        printRes( 1, std::ranges::fold_left( secrets | std::views::transform( &MonkeyMarket::getSecret ), 0ull, std::plus<>{} ) );
+        printRes( 1, std::ranges::fold_left(
+                         secrets | std::views::transform( &MonkeyMarket::getSecret ),
+                         0ull, std::plus<>{} ) );
         return;
     }
 
@@ -56,12 +58,14 @@ class MonkeyMarket : public ISolution {
             unordered_map<ull, ull> optimal;
             for ( int i : views::iota( 1, 2001 ) ) {
                 ull nextSecret = getNextSecret( curSecret );
-                ull curOffer = ( std::to_string( nextSecret ).back() - '0' );
-                window[i] = std::to_string( nextSecret ).back() - std::to_string( curSecret ).back() + 9;
+                ull curOffer = nextSecret % 10;
+                window[i] = curOffer - ( curSecret % 10 ) + 9;
                 curSecret = nextSecret;
                 if ( i >= 4 ) {
                     int wId = hasher( window, i + 1 );
-                    if ( !optimal.contains( wId ) ) {  // Don't update if existed an offer. The monkey sells once seen the change sequence
+                    if ( !optimal.contains( wId ) ) {
+                        // Don't update if an offer exists.
+                        // The monkey sells once seen the change sequence.
                         optimal[wId] = curOffer;
                     }
                 }

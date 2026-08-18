@@ -85,7 +85,7 @@ BasedOnStyle: Google
 # The column limit.
 # A column limit of 0 means that there is no column limit. In this case,
 # clang-format will respect the input's line breaking decisions within statements unless they contradict other rules.
-ColumnLimit: 79
+ColumnLimit: 90
 
 # IndentWidth (Unsigned) clang-format 3.7
 # The number of columns to use for indentation.
@@ -351,7 +351,7 @@ BraceWrapping:
   BeforeLambdaBody: false # Wrap lambda block.
   BeforeWhile: false # Wrap before while.
   IndentBraces: false # Indent the wrapped braces themselves.
-  AfterFunction: true # Wrap function definitions.
+  AfterFunction: false # Wrap function definitions.
   SplitEmptyFunction: false # If false, empty function body can be put on a single line.
   # This option is used only if the opening brace of the function has already been wrapped,
   # i.e. the `AfterFunction` brace wrapping mode is set, and the function could/should not be put on a single line

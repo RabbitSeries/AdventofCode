@@ -11,20 +11,24 @@
 // constexpr int lang_w = 19, digit_w = 15;
 constexpr int lang_w = 19, digit_w = 14;
 
-namespace Entry {
-    template <typename T, typename... rest>
-    static std::string constructLine( T&& lang, rest&&... args )
-    {
-        std::ostringstream oss;
+template <typename T, typename... rest>
+struct Entry {
+    Entry( T&& lang, rest&&... args ) {
         oss << std::left << std::setw( lang_w ) << lang;
-        ( ..., ( oss << "|" << std::right << std::setw( digit_w )
-                     << std::forward<rest>( args ) ) );
-        return oss.str();
+        ( ( oss << "|" << std::right << std::setw( digit_w )
+                << std::forward<rest>( args ) ),
+          ... );
     }
-}   // namespace Entry
 
-std::generator<std::string> splitlines( std::ifstream& ifs )
-{
+    std::ostringstream oss;
+
+    operator std::string() { return std::move( oss ).str(); }
+};
+
+template <typename T, typename... rest>
+Entry( T&& lang, rest&&... args ) -> Entry<T, rest...>;
+
+std::generator<std::string> splitlines( std::ifstream& ifs ) {
     for ( std::string buf; getline( ifs, buf ); ) {
         co_yield buf;
     }
@@ -33,8 +37,7 @@ std::generator<std::string> splitlines( std::ifstream& ifs )
 
 void replaceFile( const char* filename,
                   const char* prefix,
-                  std::vector<std::string> const& replaceWith )
-{
+                  std::vector<std::string> const& replaceWith ) {
     std::ifstream ifs( filename, std::ios::in );
     std::stringstream output_buffer;
     for ( auto&& line : splitlines( ifs ) ) {
@@ -50,8 +53,7 @@ void replaceFile( const char* filename,
     }
 }
 
-int main()
-{
+int main() {
     // There is a bug for resolving special extension name of CMakeLists.txt in perl script:
     // https://github.com/AlDanial/cloc/blob/dfaa4618ab7057bebb9e9dbe093f5d56d5fc13ab/Unix/cloc#L2664-L2672
 #ifdef __linux__
@@ -79,20 +81,17 @@ int main()
     char buffer[4096];
     // Parse table lines
     std::regex re( R"(^\b(.+?)((?:\s+\d+){4}))" );
-    // clang-format off
-    std::vector<std::string> res{
-        Entry::constructLine( "Language", "files", "blank", "comment", "code" ),
-        Entry::constructLine( ":-------", "----:", "----:", "------:", "---:" )
+    std::vector<std::string> res = {
+        Entry{"Language", "files", "blank", "comment", "code"},
+        Entry{":-------", "----:", "----:", "------:", "---:"}
     };
-    // clang-format on
     while ( std::fgets( buffer, sizeof( buffer ), pipe ) ) {
         std::string line( buffer );
         std::smatch m;
         if ( std::regex_search( line, m, re ) ) {
             int files, blank, comment, code;
             std::istringstream( m[2] ) >> files >> blank >> comment >> code;
-            res.emplace_back(
-                Entry::constructLine( m[1], files, blank, comment, code ) );
+            res.emplace_back( Entry( m[1].str(), files, blank, comment, code ) );
         }
     }
     if ( int status = pipeCloser( pipe ); !status ) {
@@ -100,8 +99,7 @@ int main()
     } else {
         std::cout << "Runing cloc exit " << status << ", " << std::endl
                   << "cloc may have not been installed." << std::endl
-                  << "Please run this programm without VS debugger"
-                  << std::endl
+                  << "Please run this programm without VS debugger" << std::endl
                   << "See ./exception.log for details." << std::endl;
     }
     return 0;
