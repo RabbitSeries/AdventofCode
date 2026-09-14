@@ -8,25 +8,30 @@
 #include <sstream>
 #include <string>
 #include <vector>
-// constexpr int lang_w = 19, digit_w = 15;
-constexpr int lang_w = 19, digit_w = 14;
 
-template <typename T, typename... rest>
+// There are differences in CTAD and Template function deduction.
+template <size_t ArgN>
 struct Entry {
+    // constexpr int lang_w = 19, digit_w = 15;
+    static constexpr int lang_w = 19, digit_w = 14;
+
+    template <typename T, typename... rest>
     Entry( T&& lang, rest&&... args ) {
+        std::ostringstream oss;
         oss << std::left << std::setw( lang_w ) << lang;
         ( ( oss << "|" << std::right << std::setw( digit_w )
                 << std::forward<rest>( args ) ),
           ... );
+        str = std::move( oss ).str();
     }
 
-    std::ostringstream oss;
+    std::string str;
 
-    operator std::string() { return std::move( oss ).str(); }
+    operator std::string_view() const& { return str; }
 };
 
 template <typename T, typename... rest>
-Entry( T&& lang, rest&&... args ) -> Entry<T, rest...>;
+Entry( T&& lang, rest&&... args ) -> Entry<sizeof...( rest )>;
 
 std::generator<std::string> splitlines( std::ifstream& ifs ) {
     for ( std::string buf; getline( ifs, buf ); ) {
@@ -35,15 +40,17 @@ std::generator<std::string> splitlines( std::ifstream& ifs ) {
     co_return;
 }
 
-void replaceFile( const char* filename,
-                  const char* prefix,
-                  std::vector<std::string> const& replaceWith ) {
+template <size_t Col>
+void replaceFile(
+    const char* filename, const char* prefix, std::vector<Entry<Col>> const& replaceWith
+) {
     std::ifstream ifs( filename, std::ios::in );
     std::stringstream output_buffer;
     for ( auto&& line : splitlines( ifs ) ) {
         if ( line.starts_with( prefix ) ) {
-            for ( auto& line : replaceWith ) {
-                output_buffer << line << std::endl;
+            for ( auto const& line : replaceWith ) {
+                // This calls: constexpr explicit basic_string_view(_Range&& __r)
+                output_buffer << std::string_view( line ) << std::endl;
             }
             std::ofstream( filename, std::ios::out | std::ios::trunc )
                 << output_buffer.str();
@@ -59,7 +66,8 @@ int main() {
 #ifdef __linux__
     FILE* pipe = popen(
         R"(       cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python,Kotlin" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)",
-        "r" );
+        "r"
+    );
 #else
  #ifdef _MSC_VER
     // FILE* pipe = popen( R"(wsl -e cloc . --include-ext=h,cc,cpp,hpp,c,java,py,ts,cmake,CMakeLists.txt" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)", "r" );
@@ -72,7 +80,8 @@ int main() {
     FILE* pipe = pipeOpener(
         R"(wsl -e cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python,Kotlin")"
         R"( --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)",
-        "r" );
+        "r"
+    );
 #endif
     if ( !pipe ) {
         std::cerr << "Failed to open pipe\n";
@@ -81,7 +90,7 @@ int main() {
     char buffer[4096];
     // Parse table lines
     std::regex re( R"(^\b(.+?)((?:\s+\d+){4}))" );
-    std::vector<std::string> res = {
+    std::vector res = {
         Entry{"Language", "files", "blank", "comment", "code"},
         Entry{":-------", "----:", "----:", "------:", "---:"}
     };
@@ -91,7 +100,7 @@ int main() {
         if ( std::regex_search( line, m, re ) ) {
             int files, blank, comment, code;
             std::istringstream( m[2] ) >> files >> blank >> comment >> code;
-            res.emplace_back( Entry( m[1].str(), files, blank, comment, code ) );
+            res.emplace_back( m[1].str(), files, blank, comment, code );
         }
     }
     if ( int status = pipeCloser( pipe ); !status ) {
