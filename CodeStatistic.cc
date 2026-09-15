@@ -31,7 +31,7 @@ struct Entry {
 };
 
 template <typename T, typename... rest>
-Entry( T&& lang, rest&&... args ) -> Entry<sizeof...( rest )>;
+Entry( T&& lang, rest&&... args ) -> Entry<sizeof...( rest ) + 1>;
 
 std::generator<std::string> splitlines( std::ifstream& ifs ) {
     for ( std::string buf; getline( ifs, buf ); ) {

@@ -10,14 +10,16 @@
 #include "utils/ISolution.hpp"
 #include "utils/Streams.hpp"
 
-class PreciseMul : public ISolution {
+class PreciseMul: public ISolution {
     REGISTER( PreciseMul )
 
     std::string memory;
 
     int parseMul( const std::string& range ) {
         return std::ranges::fold_left( regexStream( R"(mul\((\d+),(\d+)\))", range ) |
-                                           std::views::transform( []( std::smatch&& p ) { return stoi( p[1] ) * stoi( p[2] ); } ),
+                                           std::views::transform( []( std::smatch&& p ) {
+                                               return stoi( p[1] ) * stoi( p[2] );
+                                           } ),
                                        0, std::plus<>{} );
     }
 
@@ -32,7 +34,8 @@ class PreciseMul : public ISolution {
     utils::LazyGenerator<int> EnabledSolve() {
         bool enabled = true;
         // MSVC stack is too small, it will somehow cause stack overflow for (?:.|\s)*?
-        for ( std::smatch&& section : regexStream( R"([\s\S]*?(don't\(\)|do\(\)|$))", memory ) ) {
+        for ( std::smatch&& section :
+              regexStream( R"([\s\S]*?(don't\(\)|do\(\)|$))", memory ) ) {
             if ( enabled ) {
                 co_yield parseMul( section.str() );
             }
@@ -40,7 +43,7 @@ class PreciseMul : public ISolution {
         }
     }
 
-   public:
+    public:
     void Solution1() {
         readFile();
         printRes( 1, parseMul( memory ) );

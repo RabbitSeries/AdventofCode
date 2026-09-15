@@ -12,10 +12,11 @@
 #include "utils/ISolution.hpp"
 #include "utils/Streams.hpp"
 
-class CascadingRemote : public ISolution {
+class CascadingRemote: public ISolution {
     REGISTER( CascadingRemote )
     using ull = unsigned long long;
     std::unordered_map<std::string, ull> cacheMap;
+
     ull directionalCascadingCommand( std::string const& curComm, int robotCnt ) {
         std::string key = curComm + "," + std::to_string( robotCnt );
         if ( cacheMap.contains( key ) ) {
@@ -26,7 +27,8 @@ class CascadingRemote : public ISolution {
             // The final human's command to the last robot.
             ull curLen = 0, i = 0;
             while ( i < curComm.size() ) {
-                curLen += getOnePath( i == 0 ? 'A' : curComm[i - 1], curComm[i], DIRECTIONAL_KEYPAD );
+                curLen += getOnePath( i == 0 ? 'A' : curComm[i - 1], curComm[i],
+                                      DIRECTIONAL_KEYPAD );
                 i++;
             }
             cacheMap[key] = curLen;
@@ -34,10 +36,12 @@ class CascadingRemote : public ISolution {
         }
         ull res = 0;
         for ( size_t i = 0; i < curComm.size(); i++ ) {
-            std::vector<std::string> nextRobotCommList = getKeyPadAllPath( i == 0 ? 'A' : curComm[i - 1], curComm[i], DIRECTIONAL_KEYPAD );
+            std::vector<std::string> nextRobotCommList = getKeyPadAllPath(
+                i == 0 ? 'A' : curComm[i - 1], curComm[i], DIRECTIONAL_KEYPAD );
             ull curLen = ULLONG_MAX;
             for ( auto const& nextRobotComm : nextRobotCommList ) {
-                curLen = std::min( directionalCascadingCommand( nextRobotComm, robotCnt - 1 ), curLen );
+                curLen = std::min(
+                    directionalCascadingCommand( nextRobotComm, robotCnt - 1 ), curLen );
             }
             res += curLen;
         }
@@ -48,10 +52,12 @@ class CascadingRemote : public ISolution {
     ull numericCommand( std::string const& password, int robotCnt ) {
         ull res = 0;
         for ( size_t i = 0; i < password.size(); i++ ) {
-            std::vector<std::string> nextRobotCommList = getKeyPadAllPath( i == 0 ? 'A' : password[i - 1], password[i], NUMERIC_KEYPAD );
+            std::vector<std::string> nextRobotCommList = getKeyPadAllPath(
+                i == 0 ? 'A' : password[i - 1], password[i], NUMERIC_KEYPAD );
             ull curLen = ULLONG_MAX;
             for ( auto const& nextRobotComm : nextRobotCommList ) {
-                curLen = std::min( directionalCascadingCommand( nextRobotComm, robotCnt - 1 ), curLen );
+                curLen = std::min(
+                    directionalCascadingCommand( nextRobotComm, robotCnt - 1 ), curLen );
             }
             res += curLen;
         }
@@ -59,7 +65,10 @@ class CascadingRemote : public ISolution {
         return res;
     }
 
-    int getOnePath( char const s, char const t, std::unordered_map<char, std::vector<std::pair<char, char>>> const& keyPad ) {
+    int getOnePath(
+        char const s,
+        char const t,
+        std::unordered_map<char, std::vector<std::pair<char, char>>> const& keyPad ) {
         using namespace std;
         map<char, int> cost;
         // map<char, bool> visited;
@@ -67,26 +76,30 @@ class CascadingRemote : public ISolution {
             cost[key] = INT_MAX;
             // visited[key] = false;
         }
+
         struct point {
             point() {};
-            point( char c ) : curKey( c ) {};
-            point( char c, char direction ) : curKey( c ), curDirection( direction ) {};
+            point( char c ): curKey( c ) {};
+            point( char c, char direction ): curKey( c ), curDirection( direction ) {};
             char curKey;
             char curDirection;
             std::vector<char> linkRoad;
+
             // Must use const qualifier
             // bool operator<( point & b ) {
-            operator char() const {
-                return curKey;
-            }
-            bool operator<( point b ) const {
-                return this->curKey < b.curKey;
-            }
+            operator char() const { return curKey; }
+
+            bool operator<( point b ) const { return this->curKey < b.curKey; }
         };
+
         point pointInitTest{ 1, 1 };
         assert( pointInitTest.curKey == 1 );
-        std::priority_queue<std::pair<int, point>, std::vector<std::pair<int, point>>, std::greater<>> pq;
-        pq.push( { 0, { s, 0 } } );
+        std::priority_queue<std::pair<int, point>, std::vector<std::pair<int, point>>,
+                            std::greater<>>
+            pq;
+        pq.push( {
+            0, { s, 0 }
+        } );
         cost[s] = 0;
         while ( !pq.empty() ) {
             auto [curCost, curPoint] = pq.top();
@@ -121,22 +134,28 @@ class CascadingRemote : public ISolution {
         return 0;
     }
 
-    std::vector<std::string> getKeyPadAllPath( char s, char t, std::unordered_map<char, std::vector<std::pair<char, char>>> const& keyPad ) {
+    std::vector<std::string> getKeyPadAllPath(
+        char s,
+        char t,
+        std::unordered_map<char, std::vector<std::pair<char, char>>> const& keyPad ) {
         using namespace std;
         map<char, int> cost;
         for ( auto& [key, nextKeyList] : keyPad ) {
             cost[key] = INT_MAX;
         }
+
         struct point {
             point() {};
-            point( char c, char comm ) : curKey( c ), curCommand( comm ) {};
+            point( char c, char comm ): curKey( c ), curCommand( comm ) {};
             char curKey, curCommand;
             std::vector<std::string> linkRoad;
-            bool operator<( const point& b ) const {
-                return this->curKey < b.curKey;
-            }
+
+            bool operator<( const point& b ) const { return this->curKey < b.curKey; }
         };
-        std::priority_queue<std::pair<int, point>, std::vector<std::pair<int, point>>, std::greater<>> pq;
+
+        std::priority_queue<std::pair<int, point>, std::vector<std::pair<int, point>>,
+                            std::greater<>>
+            pq;
         pq.emplace( 0, point( s, 0 ) );
         cost[s] = 0;
 
@@ -153,10 +172,11 @@ class CascadingRemote : public ISolution {
             }
             // Path process
             if ( curKey != s ) {
-                if ( !curPoint.linkRoad.empty() )
-                    for ( auto& path : curPoint.linkRoad )
+                if ( !curPoint.linkRoad.empty() ) {
+                    for ( auto& path : curPoint.linkRoad ) {
                         path.push_back( curCommand );
-                else {
+                    }
+                } else {
                     curPoint.linkRoad.emplace_back( 1, curCommand );
                 }
             }
@@ -174,8 +194,9 @@ class CascadingRemote : public ISolution {
                     cost[curKey] = curCost + 1;
                     pq.push( { curCost + 1, nextPoint } );
                 } else if ( curCost + 1 == cost.at( nextKey ) ) {
-                    for ( auto& path : curPoint.linkRoad )
+                    for ( auto& path : curPoint.linkRoad ) {
                         nextPoint.linkRoad.push_back( path );
+                    }
                     pq.push( { curCost + 1, nextPoint } );
                 }
             }
@@ -193,18 +214,22 @@ class CascadingRemote : public ISolution {
     std::vector<std::string> passwordList;
 
     auto transform( int robotcnt ) {
-        return std::ranges::fold_left( passwordList | std::views::transform( [robotcnt, this]( const std::string& password ) {
-                                           return std::stoll( password.substr( 0, password.size() - 1 ) ) * numericCommand( password, robotcnt );
-                                       } ),
-                                       0ull, std::plus<>{} );
+        return std::ranges::fold_left(
+            passwordList |
+                std::views::transform( [robotcnt, this]( const std::string& password ) {
+                    return std::stoll( password.substr( 0, password.size() - 1 ) ) *
+                           numericCommand( password, robotcnt );
+                } ),
+            0ull, std::plus<>{} );
     }
 
-   public:
+    public:
     void Solution1() {
         using namespace std;
         passwordList = toList( fileLinesStream( "Day21/input.txt" ) );
         printRes( 1, transform( 3 ) );
     }
+
     void Solution2() {
         printRes( 2, transform( 26 ) );
         // cout << "Cache size: " << cacheMap.size() << endl;

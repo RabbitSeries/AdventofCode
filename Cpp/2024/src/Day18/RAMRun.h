@@ -10,13 +10,15 @@
 #include <vector>
 
 #include "utils/ISolution.hpp"
-class RAMRun : public ISolution {
+
+class RAMRun: public ISolution {
     REGISTER( RAMRun )
 
 #define BUF_SIZE 100
-#define SPACE 71
+#define SPACE    71
 
-    enum cellStatus {
+    enum cellStatus
+    {
         good,
         bad
     };
@@ -55,9 +57,13 @@ class RAMRun : public ISolution {
 
     int dijkstra( Stamp const& stamp ) {
         std::vector<std::vector<int>> step( SPACE, std::vector<int>( SPACE, INT_MAX ) );
-        std::priority_queue<std::pair<int, pos>, std::vector<std::pair<int, pos>>, std::greater<>> pq;
+        std::priority_queue<std::pair<int, pos>, std::vector<std::pair<int, pos>>,
+                            std::greater<>>
+            pq;
         step[0][0] = 0;
-        pq.push( { 0, { 0, 0 } } );
+        pq.push( {
+            0, { 0, 0 }
+        } );
         while ( !pq.empty() ) {
             auto [curCost, curPos] = pq.top();
             pq.pop();
@@ -69,7 +75,8 @@ class RAMRun : public ISolution {
             }
             for ( int i = 0; i < 4; i++ ) {
                 pos nextPos = { curPos.first + dx[i], curPos.second + dy[i] };
-                if ( isValid( nextPos, stamp ) && curCost + 1 < step[nextPos.second][nextPos.first] ) {
+                if ( isValid( nextPos, stamp ) &&
+                     curCost + 1 < step[nextPos.second][nextPos.first] ) {
                     step[nextPos.second][nextPos.first] = curCost + 1;
                     pq.push( { curCost + 1, nextPos } );
                 }
@@ -89,18 +96,20 @@ class RAMRun : public ISolution {
         }
         return cnt;
     }
+
     std::vector<pos> bytePos;
     std::ifstream input{ "Day18/input.txt" };
 
-   public:
+    public:
     void Solution1() {
         Stamp stamp( SPACE, std::vector<cellStatus>( SPACE, good ) );
         readSpaceStamp( 1024 );
-        std::ranges::for_each( bytePos, [&]( const pos& cur ) { stamp[cur.second][cur.first] = bad; } );
+        std::ranges::for_each(
+            bytePos, [&]( const pos& cur ) { stamp[cur.second][cur.first] = bad; } );
         int res = dijkstra( stamp );
-        if ( res )
+        if ( res ) {
             printRes( 1, res );
-        else {
+        } else {
             std::cout << "Solution 1 failed." << std::endl;
             exit( -1 );
         }
@@ -113,9 +122,8 @@ class RAMRun : public ISolution {
         while ( left < right ) {
             Stamp curStamp = stamp;
             int mid = ( left + right ) / 2;
-            for_each( bytePos.begin(), bytePos.begin() + mid + 1, [&]( pos cur ) {
-                curStamp[cur.second][cur.first] = bad;
-            } );
+            for_each( bytePos.begin(), bytePos.begin() + mid + 1,
+                      [&]( pos cur ) { curStamp[cur.second][cur.first] = bad; } );
             if ( dijkstra( curStamp ) ) {
                 left = mid + 1;
             } else {

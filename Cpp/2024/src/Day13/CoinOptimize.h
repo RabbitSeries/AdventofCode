@@ -9,12 +9,14 @@
 #include <vector>
 
 #include "utils/ISolution.hpp"
-class CoinOptimize : public ISolution {
+
+class CoinOptimize: public ISolution {
     REGISTER( CoinOptimize )
 
     using ll = long long;
-    const ll TOP_UP = 10000000000000;
+    const ll TOP_UP = 10'000'000'000'000;
     using point2D = std::pair<ll, ll>;
+
     struct problem {
         point2D a, b, prize;
     };
@@ -27,14 +29,20 @@ class CoinOptimize : public ISolution {
         point2D a = p.a, b = p.b, prize = p.prize;
         ll ta = 0, tb = 0;
         bool ba = false;
-        if ( ( prize.first * b.second - prize.second * b.first ) % ( a.first * b.second - a.second * b.first ) == 0 ) {
-            ta = ( prize.first * b.second - prize.second * b.first ) / ( a.first * b.second - a.second * b.first );
+        if ( ( prize.first * b.second - prize.second * b.first ) %
+                 ( a.first * b.second - a.second * b.first ) ==
+             0 ) {
+            ta = ( prize.first * b.second - prize.second * b.first ) /
+                 ( a.first * b.second - a.second * b.first );
             // if( ta <= MAX_ATTEMPT ) {
             ba = true;
             // }
         }
-        if ( ba && ( prize.first * a.second - prize.second * a.first ) % ( a.second * b.first - a.first * b.second ) == 0 ) {
-            tb = ( prize.first * a.second - prize.second * a.first ) / ( a.second * b.first - a.first * b.second );
+        if ( ba && ( prize.first * a.second - prize.second * a.first ) %
+                           ( a.second * b.first - a.first * b.second ) ==
+                       0 ) {
+            tb = ( prize.first * a.second - prize.second * a.first ) /
+                 ( a.second * b.first - a.first * b.second );
             // if( tb <= MAX_ATTEMPT ) {
             return 3 * ta + tb;
             // }
@@ -59,7 +67,8 @@ class CoinOptimize : public ISolution {
                         problemSet.back().b = pair<ll, ll>( stoi( m[1] ), stoi( m[2] ) );
                         inProblem++;
                     } else {
-                        problemSet.back().prize = pair<ll, ll>( stoi( m[1] ), stoi( m[2] ) );
+                        problemSet.back().prize =
+                            pair<ll, ll>( stoi( m[1] ), stoi( m[2] ) );
                         inProblem = 0;
                     }
                 }
@@ -70,15 +79,15 @@ class CoinOptimize : public ISolution {
     std::vector<problem> problemSet;
 
     ll solveAll() {
-        return std::ranges::fold_left( problemSet |
-                                           std::views::transform( [this]( problem& p ) {
-                                               ll res = solve( p );
-                                               return res >= 0 ? res : 0ll;
-                                           } ),
-                                       0ll, std::plus<>{} );
+        return std::ranges::fold_left(
+            problemSet | std::views::transform( [this]( problem& p ) {
+                ll res = solve( p );
+                return res >= 0 ? res : 0ll;
+            } ),
+            0ll, std::plus<>{} );
     }
 
-   public:
+    public:
     void Solution1() {
         createProblem();
         printRes( 1, solveAll() );
@@ -86,7 +95,8 @@ class CoinOptimize : public ISolution {
 
     void Solution2() {
         for ( auto& p : problemSet ) {
-            std::tie( p.prize.first, p.prize.second ) = std::make_pair( p.prize.first + TOP_UP, p.prize.second + TOP_UP );
+            std::tie( p.prize.first, p.prize.second ) =
+                std::make_pair( p.prize.first + TOP_UP, p.prize.second + TOP_UP );
         }
         printRes( 2, solveAll() );
     }

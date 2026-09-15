@@ -14,15 +14,16 @@
 #include "utils/ISolution.hpp"
 #include "utils/Streams.hpp"
 
-class OrderingUpdates : public ISolution {
+class OrderingUpdates: public ISolution {
     REGISTER( OrderingUpdates )
 
     bool isCorrectOrder( const std::vector<int>& update ) {
         for ( size_t i = 0; i < update.size(); i++ ) {
             for ( size_t j = 0; j < i; j++ ) {
                 if ( rules.count( update[i] ) != 0 ) {
-                    if ( rules.at( update[i] ).count( update[j] ) != 0 )
+                    if ( rules.at( update[i] ).count( update[j] ) != 0 ) {
                         return false;
+                    }
                 } else {
                     break;
                 }
@@ -36,7 +37,8 @@ class OrderingUpdates : public ISolution {
     std::vector<int> consume( const std::string& range ) {
         using namespace std;
         return regexStream( R"(\d+)", range ) |
-               views::transform( []( const std::smatch& m ) { return stoi( m.str() ); } ) |
+               views::transform(
+                   []( const std::smatch& m ) { return stoi( m.str() ); } ) |
                ranges::to<vector<int>>();
     }
 
@@ -69,7 +71,8 @@ class OrderingUpdates : public ISolution {
                     if ( k == j ) {
                         continue;
                     }
-                    if ( rules.count( update[k] ) != 0 && rules.at( update[k] ).count( update[j] ) != 0 ) {
+                    if ( rules.count( update[k] ) != 0 &&
+                         rules.at( update[k] ).count( update[j] ) != 0 ) {
                         ahead = false;
                         break;
                     }
@@ -83,32 +86,34 @@ class OrderingUpdates : public ISolution {
         return update;
     }
 
-   public:
+    public:
     void Solution1() {
         readFile();
         using namespace std;
-        printRes( 1, ranges::fold_left( updates |
-                                            views::filter( [this]( const vector<int>& update ) {
-                                                return isCorrectOrder( update );
-                                            } ) |
-                                            views::transform( []( const vector<int>& update ) {
-                                                return update[update.size() / 2];
-                                            } ),
-                                        0, plus<>{} ) );
+        printRes(
+            1, ranges::fold_left( updates |
+                                      views::filter( [this]( const vector<int>& update ) {
+                                          return isCorrectOrder( update );
+                                      } ) |
+                                      views::transform( []( const vector<int>& update ) {
+                                          return update[update.size() / 2];
+                                      } ),
+                                  0, plus<>{} ) );
     }
 
     void Solution2() {
         using namespace std;
-        printRes( 2, ranges::fold_left( updates |
-                                            views::filter( [this]( const vector<int>& update ) {
-                                                return !isCorrectOrder( update );
-                                            } ) |
-                                            views::transform( [this]( const vector<int>& update ) {
-                                                return reOrdered( update );
-                                            } ) |
-                                            views::transform( []( const vector<int>& update ) {
-                                                return update[update.size() / 2];
-                                            } ),
-                                        0, plus<>{} ) );
+        printRes( 2, ranges::fold_left(
+                         updates |
+                             views::filter( [this]( const vector<int>& update ) {
+                                 return !isCorrectOrder( update );
+                             } ) |
+                             views::transform( [this]( const vector<int>& update ) {
+                                 return reOrdered( update );
+                             } ) |
+                             views::transform( []( const vector<int>& update ) {
+                                 return update[update.size() / 2];
+                             } ),
+                         0, plus<>{} ) );
     }
 };

@@ -14,10 +14,12 @@
 #include <vector>
 
 #include "utils/ISolution.hpp"
-class TinkerWithGates : public ISolution {
+
+class TinkerWithGates: public ISolution {
     REGISTER( TinkerWithGates )
 
     using Str = std::string;
+
     bool gateResult( Str const& op, bool operand1, bool operand2 ) {
         if ( op == "AND" ) {
             return operand1 & operand2;
@@ -29,12 +31,16 @@ class TinkerWithGates : public ISolution {
             return false;
         }
     }
+
     struct Wire {
-        Wire( bool _data = false ) : data( _data ) {};
+        Wire( bool _data = false ): data( _data ) {};
         bool data;
+
         bool operator<( Wire const& ) const { return false; }
+
         std::vector<std::tuple<Str, Str, Str>> outwires;
     };
+
     std::unordered_map<Str, Wire> WireList;
     std::unordered_map<Str, std::tuple<Str, Str, Str>> WireInputs;
 
@@ -94,7 +100,8 @@ class TinkerWithGates : public ISolution {
         for ( auto& wireInfo : WireInputs ) {
             auto& [gate, wire1, wire2] = wireInfo.second;
             if ( gate == gateType ) {
-                if ( ( wire1 == input1 && wire2 == input2 ) || ( wire1 == input2 && wire2 == input1 ) ) {
+                if ( ( wire1 == input1 && wire2 == input2 ) ||
+                     ( wire1 == input2 && wire2 == input1 ) ) {
                     return wireInfo.first;
                 }
             }
@@ -102,13 +109,14 @@ class TinkerWithGates : public ISolution {
         return "";
     };
 
-   public:
+    public:
     void Solution1() {
         readFile();
         runGates();
         Str res = "";
         using WireInfo = std::unordered_map<Str, Wire>::value_type;
-        std::set zWires = WireList | std::views::filter( []( const WireInfo& info ) {
+        std::set zWires = WireList |
+                          std::views::filter( []( const WireInfo& info ) {
                               return info.first.starts_with( 'z' );
                           } ) |
                           std::ranges::to<std::set<WireInfo>>();
@@ -122,8 +130,9 @@ class TinkerWithGates : public ISolution {
     void Solution2() {
         int CascadingDepth = 0;
         for ( auto const& wireInfo : WireList ) {
-            if ( wireInfo.first[0] == 'x' )
+            if ( wireInfo.first[0] == 'x' ) {
                 CascadingDepth++;
+            }
         }
         std::vector<Str> swapList;
         Str input1 = "x00", input2 = "y00", nextCarrier = "";
@@ -180,7 +189,8 @@ class TinkerWithGates : public ISolution {
             input2 = "y" + nextIndex.str();
         }
         std::ranges::sort( swapList, std::less<>{} );
-        printRes( 2, std::ranges::fold_left_first( swapList, [&]( Str const& cat, Str const& res ) {
+        printRes( 2, std::ranges::fold_left_first( swapList, [&]( Str const& cat,
+                                                                  Str const& res ) {
                          return cat + "," + res;
                      } ).value_or( "" ) );
     }

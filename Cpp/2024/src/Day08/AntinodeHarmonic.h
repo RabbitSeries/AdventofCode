@@ -8,22 +8,28 @@
 #include "utils/ISolution.hpp"
 #include "utils/Streams.hpp"
 
-class AntinodeHarmonic : public ISolution {
+class AntinodeHarmonic: public ISolution {
     REGISTER( AntinodeHarmonic )
 
     using pos = struct Antenna {
         int x, y;
+
         Antenna() { x = y = 0; }
-        Antenna( int _x, int _y ) : x( _x ), y( _y ) {}
+
+        Antenna( int _x, int _y ): x( _x ), y( _y ) {}
     };
 
     bool isValid( const pos& p ) {
         return p.x >= 0 && p.x < rows && p.y >= 0 && p.y < cols;
     }
 
-    void HarmonicAntenna( const pos& s, const pos& t, std::vector<std::string>& antinodeMap, bool isHarmony ) {
+    void HarmonicAntenna( const pos& s,
+                          const pos& t,
+                          std::vector<std::string>& antinodeMap,
+                          bool isHarmony ) {
         pos st, ts;
-        for ( int harmonicTimes = isHarmony ? 1 : 2; isHarmony ? true : harmonicTimes < 3; harmonicTimes++ ) {
+        for ( int harmonicTimes = isHarmony ? 1 : 2; isHarmony ? true : harmonicTimes < 3;
+              harmonicTimes++ ) {
             bool withinLocale = false;
             st.x = s.x + ( t.x - s.x ) * harmonicTimes;
             st.y = s.y + ( t.y - s.y ) * harmonicTimes;
@@ -44,13 +50,17 @@ class AntinodeHarmonic : public ISolution {
 
         return;
     }
-    void antennaEffectZone( const std::vector<pos>& antennaList, std::vector<std::string>& antinodeMap, bool isHarmony ) {
+
+    void antennaEffectZone( const std::vector<pos>& antennaList,
+                            std::vector<std::string>& antinodeMap,
+                            bool isHarmony ) {
         for ( int i : std::views::iota( 0, (int)( antennaList.size() - 1 ) ) ) {
             for ( int j : std::views::iota( i + 1, (int)antennaList.size() ) ) {
                 HarmonicAntenna( antennaList[i], antennaList[j], antinodeMap, isHarmony );
             }
         }
     }
+
     void find( bool isHarmony ) {
         using namespace std;
         vector<string> antinodeMap = data;
@@ -85,13 +95,11 @@ class AntinodeHarmonic : public ISolution {
         }
     }
 
-   public:
+    public:
     void Solution1() {
         readFile();
         find( false );
     }
 
-    void Solution2() {
-        find( true );
-    }
+    void Solution2() { find( true ); }
 };

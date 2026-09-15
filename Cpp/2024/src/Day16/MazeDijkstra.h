@@ -9,22 +9,30 @@
 #include <vector>
 
 #include "utils/ISolution.hpp"
-class MazeDijkstra : public ISolution {
+
+class MazeDijkstra: public ISolution {
     REGISTER( MazeDijkstra )
-    struct Step : public std::pair<int, int> {
+
+    struct Step: public std::pair<int, int> {
         int direction, cost;
         std::vector<std::pair<int, int>> path;
-        Step( int x, int y, int _direction, int _cost ) : std::pair<int, int>( x, y ), direction( _direction ), cost{ _cost } {}
-        bool operator>( const Step& p ) const {
-            return cost > p.cost;
-        }
+
+        Step( int x, int y, int _direction, int _cost ):
+            std::pair<int, int>( x, y ),
+            direction( _direction ),
+            cost{ _cost } {}
+
+        bool operator>( const Step& p ) const { return cost > p.cost; }
+
         bool isSameLocation( const std::pair<int, int>& p ) const {
             return this->first == p.first && this->second == p.second;
         }
     };
 
-    enum constants {
-        PENALTY = 1000,  // If the Penalty is 0, then this is a simple undirected graph problem.
+    enum constants
+    {
+        PENALTY =
+            1000,   // If the Penalty is 0, then this is a simple undirected graph problem.
         CELLWALL = -2,
         CELLEMPTY = -1
     };
@@ -38,7 +46,11 @@ class MazeDijkstra : public ISolution {
     std::pair<int, int> s, e;
 
     bool isValid( Step const& p ) {
-        return p.first >= 0 && p.first < rows && p.second >= 0 && p.second < cols && maze[p.first][p.second] == CELLEMPTY;
+        return p.first >= 0 &&
+               p.first < rows &&
+               p.second >= 0 &&
+               p.second < cols &&
+               maze[p.first][p.second] == CELLEMPTY;
     };
 
     /**
@@ -47,7 +59,8 @@ class MazeDijkstra : public ISolution {
      */
     int countSeats() {
         std::set<std::pair<int, int>> pathSeats;
-        std::vector Cost = std::vector( rows, std::vector( cols, std::array{ INT_MAX, INT_MAX, INT_MAX, INT_MAX } ) );
+        std::vector Cost = std::vector(
+            rows, std::vector( cols, std::array{ INT_MAX, INT_MAX, INT_MAX, INT_MAX } ) );
         // std::priority_queue<Step, std::vector<Step>, std::greater<>> pq( std::from_range_t{}, std::vector{ Step( s.first, s.second, 0, 0 ) } );
         // Don't use this, or else, compiler may warn this:
         // array subscript 1 is outside array bounds of 'MazeDijkstra::Step [1]' [-Warray-bounds=]GCC
@@ -63,7 +76,7 @@ class MazeDijkstra : public ISolution {
             curStep.path.emplace_back( curStep.first, curStep.second );
             if ( curStep.isSameLocation( e ) ) {
                 if ( curCost <= endCost ) {
-                    if ( curCost < endCost ) {  // Here enters only once.
+                    if ( curCost < endCost ) {   // Here enters only once.
                         printRes( 1, curCost );
                     }
                     endCost = curCost;
@@ -85,10 +98,12 @@ class MazeDijkstra : public ISolution {
                         nextCost += PENALTY;
                     }
                 }
-                Step nextStep( curStep.first + dx[nDir], curStep.second + dy[nDir], nDir, nextCost );
+                Step nextStep( curStep.first + dx[nDir], curStep.second + dy[nDir], nDir,
+                               nextCost );
                 if ( isValid( nextStep ) ) {
                     if ( nextCost <= Cost[nextStep.first][nextStep.second][nDir] ) {
-                        Cost[nextStep.first][nextStep.second][nextStep.direction] = nextCost;
+                        Cost[nextStep.first][nextStep.second][nextStep.direction] =
+                            nextCost;
                         nextStep.path = curStep.path;
                         pq.emplace( std::move( nextStep ) );
                     }
@@ -101,7 +116,7 @@ class MazeDijkstra : public ISolution {
     void readFile() {
         std::ifstream input( "Day16/input.txt" );
         std::istringstream ss( "Hello" );
-        for ( std::string buf; getline( input, buf ); ) {  // operator bool()
+        for ( std::string buf; getline( input, buf ); ) {   // operator bool()
             std::vector<int> row;
             for ( char c : buf ) {
                 if ( c == '#' ) {
@@ -109,25 +124,25 @@ class MazeDijkstra : public ISolution {
                 } else if ( c == '.' ) {
                     row.push_back( CELLEMPTY );
                 } else if ( c == 'S' ) {
-                    s = { static_cast<int>( maze.size() ), static_cast<int>( row.size() ) };
+                    s = { static_cast<int>( maze.size() ),
+                          static_cast<int>( row.size() ) };
                     row.push_back( CELLEMPTY );
                 } else if ( c == 'E' ) {
-                    e = { static_cast<int>( maze.size() ), static_cast<int>( row.size() ) };
+                    e = { static_cast<int>( maze.size() ),
+                          static_cast<int>( row.size() ) };
                     row.push_back( CELLEMPTY );
                 }
             }
-            if ( !row.empty() )
+            if ( !row.empty() ) {
                 maze.emplace_back( std::move( row ) );
+            }
         }
         rows = static_cast<int>( maze.size() );
         cols = static_cast<int>( maze[0].size() );
     }
 
-   public:
-    void Solution1() {
-        readFile();
-    }
-    void Solution2() {
-        printRes( 2, countSeats() );
-    }
+    public:
+    void Solution1() { readFile(); }
+
+    void Solution2() { printRes( 2, countSeats() ); }
 };

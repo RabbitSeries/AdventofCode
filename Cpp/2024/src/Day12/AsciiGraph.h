@@ -9,7 +9,7 @@
 #include "utils/ISolution.hpp"
 #include "utils/Streams.hpp"
 
-class AsciiGraph : public ISolution {
+class AsciiGraph: public ISolution {
     REGISTER( AsciiGraph )
 
     const int dx[4]{ -1, 1, 0, 0 };
@@ -22,14 +22,18 @@ class AsciiGraph : public ISolution {
     }
 
     using pos = std::pair<int, int>;
+
     struct posInfo {
         int side;
         pos p;
-        posInfo( int s, int i, int j ) : side{ s }, p{ i, j } {};
+        posInfo( int s, int i, int j ): side{ s }, p{ i, j } {};
     };
+
     using ll = long long;
 
-    int flood( const pos& s, std::vector<std::vector<bool>>& visited, std::vector<posInfo>& boundary ) {
+    int flood( const pos& s,
+               std::vector<std::vector<bool>>& visited,
+               std::vector<posInfo>& boundary ) {
         int area = 0;
         visited[s.first][s.second] = true;
         std::queue<pos> q( { s } );
@@ -80,11 +84,11 @@ class AsciiGraph : public ISolution {
     size_t getBoundaryEdges( std::vector<posInfo>& bounds ) {
         size_t cnt = 0;
         for ( int side = 0; side < 4; side++ ) {
-            std::vector<posInfo> heading = bounds |
-                                           std::views::filter( [side]( const posInfo& b ) {
-                                               return b.side == side;
-                                           } ) |
-                                           std::ranges::to<std::vector<posInfo>>();
+            std::vector<posInfo> heading =
+                bounds |
+                std::views::filter(
+                    [side]( const posInfo& b ) { return b.side == side; } ) |
+                std::ranges::to<std::vector<posInfo>>();
             cnt += collectBy( heading, side );
         }
         return cnt;
@@ -94,7 +98,7 @@ class AsciiGraph : public ISolution {
     int rows, cols;
     ll res1 = 0, res2 = 0;
 
-   public:
+    public:
     void Solution1() {
         garden = toList( fileLinesStream( "Day12/input.txt" ) );
         rows = (int)garden.size();
@@ -112,7 +116,6 @@ class AsciiGraph : public ISolution {
         }
         printRes( 1, res1 );
     }
-    void Solution2() {
-        printRes( 2, res2 );
-    }
+
+    void Solution2() { printRes( 2, res2 ); }
 };

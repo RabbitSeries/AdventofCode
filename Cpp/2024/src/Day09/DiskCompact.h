@@ -6,7 +6,8 @@
 #include <vector>
 
 #include "utils/ISolution.hpp"
-class DiskCompact : public ISolution {
+
+class DiskCompact: public ISolution {
     REGISTER( DiskCompact )
 
     using ll = long long;
@@ -64,7 +65,8 @@ class DiskCompact : public ISolution {
                     fileSizeTable.push_back( c - '0' );
                 } else {
                     // atoi convets string to integer, but requires and end sign '\0' in the string;
-                    freeSpaceTable.emplace_back( c - '0', static_cast<int>( diskData.size() ) );
+                    freeSpaceTable.emplace_back( c - '0',
+                                                 static_cast<int>( diskData.size() ) );
                     appendEmptyBlock( c - '0', diskData );
                 }
             }
@@ -72,15 +74,15 @@ class DiskCompact : public ISolution {
     }
 
     // void printDisk( const std::vector<int> disk, const char* path ) {
-    //     // int cnt = 0;
-    //     std::ofstream of( path );
-    //     for ( size_t diskId = 0; diskId < disk.size(); diskId++ ) {
-    //         if ( disk[diskId] == -1 ) {
-    //             of << "_";
-    //         } else {
-    //             of << "X";
-    //         }
-    //     }
+    // // int cnt = 0;
+    // std::ofstream of( path );
+    // for ( size_t diskId = 0; diskId < disk.size(); diskId++ ) {
+    // if ( disk[diskId] == -1 ) {
+    // of << "_";
+    // } else {
+    // of << "X";
+    // }
+    // }
     // }
 
     auto findBlockHandle( int diskPos, bool endWith ) {
@@ -90,7 +92,8 @@ class DiskCompact : public ISolution {
         while ( l <= r ) {
             int mid = ( l + r ) / 2;
             // If search fore end with, apply block length offset
-            int cmp = freeSpaceTable[mid].second + ( endWith ? freeSpaceTable[mid].first - 1 : 0 );
+            int cmp = freeSpaceTable[mid].second +
+                      ( endWith ? freeSpaceTable[mid].first - 1 : 0 );
             if ( cmp >= diskPos ) {
                 best = freeSpaceTable.begin() + mid;
                 r = mid - 1;
@@ -120,31 +123,40 @@ class DiskCompact : public ISolution {
                 continue;
             }
             for ( int fill = 0; fill < fileSize; fill++ ) {
-                diskData[ptr + 1 + fill] = -1;                // Overwrite file to empty
-                diskData[avaiBlock->second + fill] = fileId;  // Overwrite allocated to fileId
+                diskData[ptr + 1 + fill] = -1;   // Overwrite file to empty
+                diskData[avaiBlock->second + fill] =
+                    fileId;   // Overwrite allocated to fileId
             }
             // Consume free space
             // printDisk( disk );
             if ( fileSize == avaiBlock->first ) {
-                freeSpaceTable.erase( avaiBlock );  // Fully consume
+                freeSpaceTable.erase( avaiBlock );   // Fully consume
             } else {
                 avaiBlock->first -= fileSize;   // Decrease remain size
-                avaiBlock->second += fileSize;  // Offset free block start pos by fileSize
+                avaiBlock->second +=
+                    fileSize;   // Offset free block start pos by fileSize
             }
             // Release free space to Space Table
             int beforeFile = ptr, afterFile = ptr + 1 + fileSize;
-            if ( diskData[beforeFile] == -1 ) {                                         // Space before released space is free space
-                auto handle = findBlockHandle( beforeFile, true );                      // Find the former free space's handle
-                handle->first += fileSize;                                              // Merge released block into former block
-                if ( afterFile < (int)diskData.size() && diskData[afterFile] == -1 ) {  // After released space is also free space
-                    handle->first += ( handle + 1 )->first;                             // Merge latter block into former block
-                    freeSpaceTable.erase( handle + 1 );                                 // Remove latter block
+            if ( diskData[beforeFile] ==
+                 -1 ) {   // Space before released space is free space
+                auto handle = findBlockHandle(
+                    beforeFile, true );   // Find the former free space's handle
+                handle->first += fileSize;   // Merge released block into former block
+                if ( afterFile < (int)diskData.size() &&
+                     diskData[afterFile] ==
+                         -1 ) {   // After released space is also free space
+                    handle->first +=
+                        ( handle + 1 )->first;   // Merge latter block into former block
+                    freeSpaceTable.erase( handle + 1 );   // Remove latter block
                 }
-            } else {  // Space before released space is not free space
+            } else {   // Space before released space is not free space
                 auto handle = findBlockHandle( afterFile, false );
-                if ( handle == freeSpaceTable.end() ) {  // There is no after block, create a new one
+                if ( handle ==
+                     freeSpaceTable
+                         .end() ) {   // There is no after block, create a new one
                     freeSpaceTable.emplace_back( fileSize, beforeFile + 1 );
-                } else {  // Merge released file to latter block
+                } else {   // Merge released file to latter block
                     handle->first += fileSize;
                     handle->second = beforeFile + 1;
                 }
@@ -152,24 +164,24 @@ class DiskCompact : public ISolution {
         }
         ll checkSum = 0;
         for ( size_t diskId = 0; diskId < diskData.size(); diskId++ ) {
-            if ( diskData[diskId] != -1 )
+            if ( diskData[diskId] != -1 ) {
                 checkSum += diskId * diskData[diskId];
+            }
         }
         // printDisk( disk, "Day09/output.txt" );
         return checkSum;
     }
+
     std::vector<int> diskData;
     // [FreeSpace : StartPos,...]
     std::vector<int> fileSizeTable;
     std::vector<std::pair<int, int>> freeSpaceTable;
 
-   public:
+    public:
     void Solution1() {
         readFile();
         printRes( 1, fileCompack( diskData ) );
     }
 
-    void Solution2() {
-        printRes( 2, fileCompack() );
-    }
+    void Solution2() { printRes( 2, fileCompack() ); }
 };

@@ -10,21 +10,25 @@
 #include "utils/ISolution.hpp"
 #include "utils/Streams.hpp"
 
-class PatrolRoute : public ISolution {
+class PatrolRoute: public ISolution {
     REGISTER( PatrolRoute )
 
     using pos = std::pair<int, int>;
     const char face[4]{ '^', '>', 'v', '<' };
     const std::map<char, unsigned int> faceId{
-        { '^', 0 },
-        { '>', 1 },
-        { 'v', 2 },
-        { '<', 3 } };
+        {'^', 0},
+        {'>', 1},
+        {'v', 2},
+        {'<', 3}
+    };
     const int dx[4]{ -1, 0, 1, 0 };
     const int dy[4]{ 0, 1, 0, -1 };
 
     bool isValid( pos const& curPos ) {
-        return curPos.first >= 0 && curPos.first < rows && curPos.second >= 0 && curPos.second < cols;
+        return curPos.first >= 0 &&
+               curPos.first < rows &&
+               curPos.second >= 0 &&
+               curPos.second < cols;
     }
 
     void readFile() {
@@ -44,7 +48,8 @@ class PatrolRoute : public ISolution {
         cols = static_cast<int>( routeMap[0].size() );
     }
 
-    bool patrol( std::optional<std::function<void( const pos& )>> visitor = std::nullopt ) {
+    bool patrol(
+        std::optional<std::function<void( const pos& )>> visitor = std::nullopt ) {
         using namespace std;
         pos curPos = guardPos;
         std::vector passed = vector( routeMap.size(), vector( routeMap[0].size(), 0 ) );
@@ -76,7 +81,7 @@ class PatrolRoute : public ISolution {
     pos guardPos{ -1, 0 };
     int guardDirection;
 
-   public:
+    public:
     void Solution1() {
         readFile();
         std::vector visited = std::vector( rows, std::vector( cols, false ) );
@@ -88,11 +93,13 @@ class PatrolRoute : public ISolution {
         } );
         printRes( 1, count );
     }
+
     void Solution2() {
         int distinctPlacement = 0;
         for ( int i = 0; i < rows; i++ ) {
             for ( int j = 0; j < cols; j++ ) {
-                if ( ( guardPos.first == i && guardPos.second == j ) || routeMap[i][j] == '#' ) {
+                if ( ( guardPos.first == i && guardPos.second == j ) ||
+                     routeMap[i][j] == '#' ) {
                     continue;
                 }
                 char curCell = routeMap[i][j];

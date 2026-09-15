@@ -5,7 +5,8 @@
 #include <vector>
 
 #include "utils/ISolution.hpp"
-class PushBox : public ISolution {
+
+class PushBox: public ISolution {
     REGISTER( PushBox )
 
     // Simple data member is able to initialize
@@ -14,16 +15,20 @@ class PushBox : public ISolution {
 
     struct Point2D {
         Point2D() {}
-        Point2D( int a, int b, int _id ) : x( a ), y( b ), id{ _id } {}
+
+        Point2D( int a, int b, int _id ): x( a ), y( b ), id{ _id } {}
+
         int x{}, y{}, id{ -1 };
     };
 
     int dx[4]{ -1, 0, 1, 0 };
     int dy[4]{ 0, 1, 0, -1 };
-    std::map<char, int> dirs{ { '^', 0 },
-                              { '>', 1 },
-                              { 'v', 2 },
-                              { '<', 3 } };
+    std::map<char, int> dirs{
+        {'^', 0},
+        {'>', 1},
+        {'v', 2},
+        {'<', 3}
+    };
 
     using Grid = std::vector<std::vector<int>>;
 
@@ -33,15 +38,11 @@ class PushBox : public ISolution {
         return { nx, ny, grid[nx][ny] };
     }
 
-    bool isWALL( Point2D const& point ) {
-        return point.id == CELLWALL;
-    }
-    bool isEmpty( Point2D const& point ) {
-        return point.id == CELLEMPTY;
-    }
-    bool isBox( Point2D const& point ) {
-        return point.id >= 0;
-    }
+    bool isWALL( Point2D const& point ) { return point.id == CELLWALL; }
+
+    bool isEmpty( Point2D const& point ) { return point.id == CELLEMPTY; }
+
+    bool isBox( Point2D const& point ) { return point.id >= 0; }
 
     bool pushBox( Point2D curPos, char c ) {
         Point2D nextPos = next( c, curPos, BoxMap );
@@ -55,17 +56,19 @@ class PushBox : public ISolution {
     }
 
     int sumCoordinates() {
-        return std::ranges::fold_left( BoxList | std::views::transform( []( Point2D const& b ) {
-                                           return 100 * b.x + b.y;
-                                       } ),
-                                       0, std::plus<>{} );
+        return std::ranges::fold_left(
+            BoxList | std::views::transform(
+                          []( Point2D const& b ) { return 100 * b.x + b.y; } ),
+            0, std::plus<>{} );
     }
+
     int sumWideBoxes() {
-        return std::ranges::fold_left( WideBoxList | std::views::transform( []( WideBox const& b ) {
-                                           return 100 * b.l.x + b.l.y;
-                                       } ),
-                                       0, std::plus<>{} );
+        return std::ranges::fold_left(
+            WideBoxList | std::views::transform(
+                              []( WideBox const& b ) { return 100 * b.l.x + b.l.y; } ),
+            0, std::plus<>{} );
     }
+
     std::string control;
     std::vector<Point2D> BoxList;
     Grid BoxMap;
@@ -82,10 +85,13 @@ class PushBox : public ISolution {
                     row.push_back( CELLEMPTY );
                 } else if ( c == 'O' ) {
                     row.push_back( static_cast<int>( BoxList.size() ) );
-                    BoxList.emplace_back( static_cast<int>( BoxMap.size() ), static_cast<int>( row.size() ) - 1, static_cast<int>( BoxList.size() ) );
+                    BoxList.emplace_back( static_cast<int>( BoxMap.size() ),
+                                          static_cast<int>( row.size() ) - 1,
+                                          static_cast<int>( BoxList.size() ) );
                 } else if ( c == '@' ) {
                     row.push_back( CELLEMPTY );
-                    start = Point2D( static_cast<int>( BoxMap.size() ), static_cast<int>( row.size() ) - 1, -1 );
+                    start = Point2D( static_cast<int>( BoxMap.size() ),
+                                     static_cast<int>( row.size() ) - 1, -1 );
                 }
             }
             BoxMap.emplace_back( std::move( row ) );
@@ -101,13 +107,22 @@ class PushBox : public ISolution {
         }
         for ( size_t i = 0; i < BoxList.size(); i++ ) {
             Point2D& box = BoxList[i];
-            WideBoxList.emplace_back( box.x, box.y * 2, box.x, box.y * 2 + 1, static_cast<int>( i ) );
+            WideBoxList.emplace_back( box.x, box.y * 2, box.x, box.y * 2 + 1,
+                                      static_cast<int>( i ) );
         }
     }
 
     struct WideBox {
-        WideBox( int lx, int ly, int rx, int ry, int _id ) : l{ lx, ly, _id }, r{ rx, ry, _id }, id{ _id } {}
-        WideBox( Point2D a, Point2D b, int _id ) : l( std::move( a ) ), r( std::move( b ) ), id{ _id } {}
+        WideBox( int lx, int ly, int rx, int ry, int _id ):
+            l{ lx, ly, _id },
+            r{ rx, ry, _id },
+            id{ _id } {}
+
+        WideBox( Point2D a, Point2D b, int _id ):
+            l( std::move( a ) ),
+            r( std::move( b ) ),
+            id{ _id } {}
+
         Point2D l, r;
         int id;
     };
@@ -122,7 +137,8 @@ class PushBox : public ISolution {
     bool pushWideBox( std::vector<WideBox> collisions, char c ) {
         std::vector<WideBox> nextLevel;
         for ( WideBox const& b : collisions ) {
-            Point2D lNext = next( c, b.l, WideBoxMap ), rNext = next( c, b.r, WideBoxMap );
+            Point2D lNext = next( c, b.l, WideBoxMap ),
+                    rNext = next( c, b.r, WideBoxMap );
             if ( isWALL( lNext ) || isWALL( rNext ) ) {
                 return false;
             }
@@ -135,7 +151,8 @@ class PushBox : public ISolution {
         }
         if ( nextLevel.empty() || pushWideBox( std::move( nextLevel ), c ) ) {
             for ( auto& b : collisions ) {
-                Point2D lNext = next( c, b.l, WideBoxMap ), rNext = next( c, b.r, WideBoxMap );
+                Point2D lNext = next( c, b.l, WideBoxMap ),
+                        rNext = next( c, b.r, WideBoxMap );
                 if ( c == '<' || c != '>' ) {
                     WideBoxMap[lNext.x][lNext.y] = b.id;
                     WideBoxMap[b.r.x][b.r.y] = CELLEMPTY;
@@ -151,7 +168,7 @@ class PushBox : public ISolution {
         return false;
     }
 
-   public:
+    public:
     void Solution1() {
         buildData();
         auto curPos = start;
@@ -165,6 +182,7 @@ class PushBox : public ISolution {
         }
         printRes( 1, sumCoordinates() );
     }
+
     void Solution2() {
         Point2D curPos( start.x, start.y * 2, -1 );
         // PrintGrid( WideBoxMap, curPos );
@@ -184,38 +202,38 @@ class PushBox : public ISolution {
         printRes( 2, sumWideBoxes() );
     }
 
-   private:
+    private:
     // void PrintGrid( Grid const& grid, Point2D const& bot ) {
-    //     std::ofstream output( "Day15/output.txt" );
-    //     for ( size_t i = 0; i < grid.size(); i++ ) {
-    //         for ( size_t j = 0; j < grid[i].size(); j++ ) {
-    //             if ( i == bot.x && j == bot.y ) {
-    //                 output << "@";
-    //             } else {
-    //                 output << ( grid[i][j] >= 0 ? 'O' : grid[i][j] == CELLEMPTY ? ' '
-    //                                                                             : '#' );
-    //             }
-    //         }
-    //         output << std::endl;
-    //     }
-    //     return;
+    // std::ofstream output( "Day15/output.txt" );
+    // for ( size_t i = 0; i < grid.size(); i++ ) {
+    // for ( size_t j = 0; j < grid[i].size(); j++ ) {
+    // if ( i == bot.x && j == bot.y ) {
+    // output << "@";
+    // } else {
+    // output << ( grid[i][j] >= 0 ? 'O' : grid[i][j] == CELLEMPTY ? ' '
+    // : '#' );
+    // }
+    // }
+    // output << std::endl;
+    // }
+    // return;
     // }
     // std::generator<char> readControlls() {
-    //     std::cout << "Commands:\n";
-    //     for ( std::string buf; getline( std::cin, buf ); ) {
-    //         if ( buf.empty() ) {
-    //             continue;
-    //         }
-    //         co_yield buf[0];
-    //     }
+    // std::cout << "Commands:\n";
+    // for ( std::string buf; getline( std::cin, buf ); ) {
+    // if ( buf.empty() ) {
+    // continue;
+    // }
+    // co_yield buf[0];
+    // }
     // }
     // std::generator<char> readControlls() {
-    //     std::cout << "Commands:\n";
-    //     int i = 0;
-    //     for ( char c : control ) {
-    //         std::cout << "Cmd: " << ( ++i ) << "/" << control.size();
-    //         std::cout << c << std::endl;
-    //         co_yield c;
-    //     }
+    // std::cout << "Commands:\n";
+    // int i = 0;
+    // for ( char c : control ) {
+    // std::cout << "Cmd: " << ( ++i ) << "/" << control.size();
+    // std::cout << c << std::endl;
+    // co_yield c;
+    // }
     // }
 };

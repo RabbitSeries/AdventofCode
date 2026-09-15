@@ -8,20 +8,22 @@
 #include <vector>
 
 #include "utils/ISolution.hpp"
-class KeyPair : public ISolution {
+
+class KeyPair: public ISolution {
     REGISTER( KeyPair )
 
     using schematic = std::vector<int>;
+
     struct SchemaHasher {
         size_t operator()( const schematic& obj ) const {
-            return std::ranges::fold_left( obj, 0, []( int sum, int num ) {
-                return sum * 10 + num;
-            } );
+            return std::ranges::fold_left(
+                obj, 0, []( int sum, int num ) { return sum * 10 + num; } );
         }
     };
+
     using SchemaSet = std::unordered_set<schematic, SchemaHasher>;
 
-   public:
+    public:
     void Solution1() {
         SchemaSet lockList, keyList;
         std::ifstream input( "Day25/input.txt" );
@@ -55,15 +57,14 @@ class KeyPair : public ISolution {
         int res = 0;
         for ( auto& lock : lockList ) {
             for ( auto& key : keyList ) {
-                res += std::ranges::all_of( std::views::zip( lock, key ), []( auto const& pin ) {
-                    return ( std::get<0>( pin ) + std::get<1>( pin ) ) <= 5;
-                } );
+                res += std::ranges::all_of(
+                    std::views::zip( lock, key ), []( auto const& pin ) {
+                        return ( std::get<0>( pin ) + std::get<1>( pin ) ) <= 5;
+                    } );
             }
         }
         printRes( 1, res );
     }
 
-    void Solution2() {
-        printRes( 2, "\t\t\t------All 50 stars AoC Finished!!!!------" );
-    }
+    void Solution2() { printRes( 2, "\t\t\t------All 50 stars AoC Finished!!!!------" ); }
 };

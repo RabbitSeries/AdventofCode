@@ -8,11 +8,12 @@
 #include "utils/ISolution.hpp"
 #include "utils/Streams.hpp"
 
-class TwinkleStones : public ISolution {
+class TwinkleStones: public ISolution {
     REGISTER( TwinkleStones )
 
     using ll = long long;
     std::map<ll, ll> TwinkleList;
+
     void readFile() {
         for ( std::string&& line : fileLinesStream( "Day11/input.txt" ) ) {
             std::stringstream ss( line );
@@ -21,6 +22,7 @@ class TwinkleStones : public ISolution {
             }
         }
     }
+
     auto blink( int times ) {
         for ( int twinkle = 0; twinkle < times; twinkle++ ) {
             // cout << "Twinkle times: " << twinkle << "." << endl;
@@ -32,7 +34,8 @@ class TwinkleStones : public ISolution {
                 } else if ( str.size() % 2 == 0 ) {
                     // Rule 2
                     size_t middle = str.size() / 2;
-                    std::string left = str.substr( 0, middle ), right = str.substr( middle );
+                    std::string left = str.substr( 0, middle ),
+                                right = str.substr( middle );
                     nextList[std::stoll( left )] += cnt;
                     nextList[std::stoll( right )] += cnt;
                 } else {
@@ -43,16 +46,21 @@ class TwinkleStones : public ISolution {
             TwinkleList = std::move( nextList );
         }
     }
+
     ll countRes() {
-        return std::ranges::fold_left( TwinkleList | std::views::transform( []( auto const& res ) { return res.second; } ), 0, std::plus<>{} );
+        return std::ranges::fold_left(
+            TwinkleList |
+                std::views::transform( []( auto const& res ) { return res.second; } ),
+            0, std::plus<>{} );
     }
 
-   public:
+    public:
     void Solution1() {
         readFile();
         blink( 25 );
         printRes( 1, countRes() );
     }
+
     void Solution2() {
         blink( 75 - 25 );
         printRes( 2, countRes() );
