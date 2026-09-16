@@ -114,6 +114,7 @@
                 "${fileDirname}/../../resources",
                 "${fileDirname}/../../../resources",
                 "${fileDirname}/../../../resources/${fileDirnameBasename}",
+                "${fileDirname}/../../dist/${input:yearName}",
                 "${workspaceFolder}"
             ],
             "description": "Working directory of the launched program"
@@ -121,9 +122,12 @@
         {
             "id": "yearName",
             "type": "pickString",
-            "default": "2023",
+            "default": "2024",
             "options": [
-                "2023"
+                "2024",
+                "2023",
+                "2022",
+                "2021"
             ],
             "description": "AoC solution year"
         },
