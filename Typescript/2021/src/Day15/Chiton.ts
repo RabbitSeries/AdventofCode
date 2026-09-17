@@ -39,12 +39,10 @@ class Heap<T> {
                 this.element[0] = this.element.pop()!
                 this.sift_down()
                 return top
-            }
-            else {
+            } else {
                 return this.element.shift()
             }
-        }
-        else {
+        } else {
             return undefined
         }
     }
@@ -61,8 +59,7 @@ class Heap<T> {
             const p = Math.floor((i + 1) / 2 - 1)
             if (this.cmp(this.element[i], this.element[p]) > 0) {
                 break
-            }
-            else {
+            } else {
                 this.swap(i, p)
                 i = p
             }
@@ -84,8 +81,7 @@ class Heap<T> {
             if (i !== min_id) {
                 this.swap(i, min_id)
                 i = min_id
-            }
-            else {
+            } else {
                 break
             }
         }
@@ -139,8 +135,7 @@ function main() {
     const h = new Heap<Status>((i, j) => {
         if (j.risk_level !== i.risk_level) {
             return i.risk_level - j.risk_level
-        }
-        else {
+        } else {
             return i.manhattan - j.manhattan
         }
     })

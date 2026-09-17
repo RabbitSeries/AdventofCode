@@ -74,6 +74,7 @@ export default defineConfig([
                 multiline: 'consistent',
                 singleline: 'consistent',
             }],
+            '@stylistic/brace-style': [2, '1tbs'],
             '@stylistic/max-len': ['error', {
                 code: 79,
             }],
