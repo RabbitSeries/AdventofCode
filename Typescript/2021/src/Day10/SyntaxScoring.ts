@@ -26,12 +26,10 @@ function corruputedChar(line: string,
     for (let i = 0; i < line.length; i++) {
         if (bracketMapping.has(line[i])) {
             stack.push(line[i])
-        }
-        else if (!stack.length
+        } else if (!stack.length
           || line[i] !== bracketMapping.get(stack[stack.length - 1])) {
             return line[i]
-        }
-        else {
+        } else {
             stack.pop()
         }
     }

@@ -3,8 +3,9 @@
     "type": "module",
     "scripts": {
         "watch:config": "esbuild ./esbuild.ts --outdir=./dist --format=esm --platform=node",
-        "watch:run": "tsc -b && node ./dist/esbuild.js",
-        "watch": "run-s watch:config watch:run",
+        "watch:watch": "node ./dist/esbuild.js",
+        "watch:run": "tsc -b",
+        "watch": "run-s watch:config watch:run watch:watch",
         "lint": "eslint",
         "lint:fix": "eslint --fix"
     },

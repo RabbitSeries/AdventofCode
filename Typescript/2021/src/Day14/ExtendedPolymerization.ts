@@ -45,8 +45,7 @@ export async function main() {
                     newPolymers.getOrInsert(pair1, 0) + pairN)
                 newPolymers.set(pair2,
                     newPolymers.getOrInsert(pair2, 0) + pairN)
-            }
-            else {
+            } else {
                 newPolymers.set(pair, pairN)
             }
         }
