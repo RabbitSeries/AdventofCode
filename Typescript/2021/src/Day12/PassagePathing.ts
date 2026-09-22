@@ -51,8 +51,7 @@ function countWays(reachTimes = 1,
                 if (t === 1) {
                     if (hasTwiceInPath) {
                         continue
-                    }
-                    else {
+                    } else {
                         h = true
                     }
                 }
@@ -60,8 +59,7 @@ function countWays(reachTimes = 1,
                 wayCount += countWays(reachTimes, cave.caveName, visited, h)
                 visited.set(cave.caveName, t)
             }
-        }
-        else {
+        } else {
             wayCount += countWays(reachTimes,
                 cave.caveName, visited, hasTwiceInPath)
         }

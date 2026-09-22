@@ -16,8 +16,7 @@ function propagation(lanternFishes: Map<number, number>, days: number) {
         for (const [k, v] of fishes.entries()) {
             if (k) {
                 lanternFishes.set(k - 1, (lanternFishes.get(k - 1) ?? 0) + v)
-            }
-            else {
+            } else {
                 lanternFishes.set(6, (lanternFishes.get(6) ?? 0) + v)
                 lanternFishes.set(8, (lanternFishes.get(8) ?? 0) + v)
             }

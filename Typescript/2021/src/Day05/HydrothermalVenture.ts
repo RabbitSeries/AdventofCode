@@ -28,8 +28,7 @@ function count_overlap(cross_only: boolean) {
                 y <= Math.max(line.y1, line.y2); y++) {
                 overlap_zone[y][line.x1]++
             }
-        }
-        else {
+        } else {
             const tan = (line.y2 - line.y1) / (line.x2 - line.x1)
             for (let dx = 0; dx <= Math.abs(line.x2 - line.x1); dx++) {
                 const v_dx = dx * Math.sign(line.x2 - line.x1)

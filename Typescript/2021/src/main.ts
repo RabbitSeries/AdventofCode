@@ -8,8 +8,7 @@ for await (const d of glob('./**/*.js', { exclude: ['**/main.js'] })) {
     try {
         data.push(await import(url) as { main: () => void })
         console.log(data[0].main)
-    }
-    catch {
+    } catch {
         //
     }
 }

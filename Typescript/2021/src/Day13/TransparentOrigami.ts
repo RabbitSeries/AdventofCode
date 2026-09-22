@@ -63,8 +63,7 @@ class TransparentOrigami {
                 }
                 this.paper[y] = this.paper[y].slice(0, option.position)
             }
-        }
-        else {
+        } else {
             for (let x = 0; x < this.paper[0].length; x++) {
                 for (let dis = 1; option.position - dis >= 0
                   && option.position + dis < this.paper.length; dis++) {

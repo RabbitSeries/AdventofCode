@@ -7,8 +7,7 @@ data.forEach((cmd) => {
     if (cmd.startsWith('forward')) {
         forward += delta
         aimedDepth += aim * delta
-    }
-    else {
+    } else {
         aim += cmd.startsWith('down') ? delta : -delta
     }
 })

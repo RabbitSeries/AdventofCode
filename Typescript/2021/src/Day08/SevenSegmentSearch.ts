@@ -30,14 +30,11 @@ function solveInput(signals: Set<string>[], outputs: Set<string>[]) {
     for (const signal of signals) {
         if (signal.size === 2) {
             digits[1] = signal
-        }
-        else if (signal.size === 3) {
+        } else if (signal.size === 3) {
             digits[7] = signal
-        }
-        else if (signal.size === 4) {
+        } else if (signal.size === 4) {
             digits[4] = signal
-        }
-        else if (signal.size === 7) {
+        } else if (signal.size === 7) {
             digits[8] = signal
         }
     }
@@ -67,8 +64,7 @@ function solveInput(signals: Set<string>[], outputs: Set<string>[]) {
             segments[segmentIdx('g')] = sixWiresSignal
                 .difference(new Set([segments[segmentIdx('a')], ...digits[4]]))
                 .keys().take(1).toArray()[0]
-        }
-        else {
+        } else {
             digit06.push(sixWiresSignal)
         }
     }
@@ -81,8 +77,7 @@ function solveInput(signals: Set<string>[], outputs: Set<string>[]) {
     for (const digit of digit06) {
         if (digit.intersection(digits[1]).size == 1) {
             digits[6] = digit
-        }
-        else {
+        } else {
             digits[0] = digit
         }
     }
@@ -120,11 +115,9 @@ function solveInput(signals: Set<string>[], outputs: Set<string>[]) {
     for (const digit of signals.filter(signal => signal.size === 5)) {
         if (!digit.has(segments[segmentIdx('f')])) {
             digits[2] = digit
-        }
-        else if (digit.has(segments[segmentIdx('c')])) {
+        } else if (digit.has(segments[segmentIdx('c')])) {
             digits[3] = digit
-        }
-        else {
+        } else {
             digits[5] = digit
         }
     }
