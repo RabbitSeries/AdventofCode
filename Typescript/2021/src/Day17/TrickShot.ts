@@ -8,18 +8,22 @@ function predict({ vx, vy }: { vx: number, vy: number }, t: number) {
 }
 
 function predictx(vx: number, t: number) {
-    if (t < vx) {
+    if (t <= vx) {
         return predicty(vx, t)
     }
     return predicty(vx, vx)
 }
 
-function predicty(vy: number, t: number) {
-    return (vy + vy - t + 1) * t / 2
+function solve_t(vx: number, x: number) {
+    if (x > predictx(vx, vx)) {
+        return undefined
+    }
+    const b = 2 * vx + 1
+    return Math.ceil((b - Math.sqrt(Math.pow(b, 2) - 8 * x)) / 2)
 }
 
-function solve_vy(y: number, t: number) {
-    return Math.max(0, Math.sqrt(2 * y / t + t - 1))
+function predicty(vy: number, t: number) {
+    return (vy + vy - t + 1) * t / 2
 }
 
 class Vector {
@@ -55,6 +59,22 @@ class Vector {
 //     }
 // }
 
+function min_vx(x: number) {
+    let l = 1, r = x
+    let best = r
+    while (l < r) {
+        const mid = Math.floor((l + r) / 2)
+        const cmp = predictx(mid, mid) - x
+        if (cmp < 0) {
+            l = mid + 1
+        } else {
+            r = mid
+            best = r
+        }
+    }
+    return best
+}
+
 export async function main() {
     const data = new AocInput(17).toString().trimEnd()
     const re = /target area: x=(\d+)..(\d+), y=([-]*\d+)..([-]*\d+)/
@@ -64,25 +84,25 @@ export async function main() {
     }
     let max_h = -Infinity
     const [x1, x2, y1, y2] = result.slice(1).map(it => parseInt(it))
-    for (let vx = 1; vx <= x2; vx++) {
-        let min_time = Infinity
-        const max_time = Infinity
-        const maxx = predictx(vx, vx)
-        if (x1 > maxx) {
-            min_time = Infinity
-        }else{
-            min_time = 
-        }
-        
-        for (let t = min_time; t <= max_time; t++) {
-            //  y1 <= vy * t - t^2 / 2 <= y2
-            const [min_vy, max_vy] = [Math.ceil(solve_vy(y1, t)),
-                Math.floor(solve_vy(y2, t))]
+    for (let vx = min_vx(x1); vx <= x2; vx++) {
+        const min_t = solve_t(vx, x1)
+        const max_t = solve_t(vx, x2)
+        for (let t = min_t!; max_t === undefined ? true : t <= max_t; t++) {
+            const px = predictx(vx, t)
+            if (px > x2) {
+                break
+            }
+            const min_vy = Math.ceil(t / 2 + y1 / t - 1 / 2)
+            const max_vy = Math.floor(t / 2 + y2 / t - 1 / 2)
+            if (predicty(min_vy, t) > y2) {
+                break
+            }
             for (let vy = min_vy; vy <= max_vy; vy++) {
-                max_h = Math.max(max_h, predicty(vy, t))
-                if (max_h === -5) {
-                    console.log(max_h)
+                const py = predicty(vy, t)
+                if (py > y2) {
+                    break
                 }
+                max_h = Math.max(max_h, predicty(vy, vy))
             }
         }
     }
