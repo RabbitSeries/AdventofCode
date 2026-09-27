@@ -194,7 +194,7 @@ function add(a: SnailFish, b: SnailFish) {
     return combination
 }
 
-async function main() {
+export async function main() {
     const pairs = aocInput(18).splitlines().map(it => Parser.parse(it))
     const addition = pairs.slice(1).reduce((a, b) => add(a, b), pairs[0])
     console.log(magnitude(addition))

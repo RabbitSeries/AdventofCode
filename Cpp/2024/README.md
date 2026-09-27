@@ -27,7 +27,7 @@ Through trial, I have given up the multithreading apporach due to time insuffici
 
 ### Day 24 Crossed Wires
 
-[Cascading Full adder](./main/year2024/Day24/GatesVisualize.md)
+[Cascading Full adder](./src/Day24/GatesVisualize.md)
 
 ## 📆 TODOs
 

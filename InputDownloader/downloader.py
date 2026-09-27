@@ -37,13 +37,13 @@ class PythonProject(ProjectStructure):
         super().__init__("Python/aocpy/aoc_solutions/**/*.py")
 
     @override
-    def placer(self, year, day):
+    def placer(self, year: int, day: int) -> str:
         return os.path.join("Python", "aocpy", "aoc_solutions", f"year{year}",
                             "resources", "Day{:0>2d}".format(day), "input.txt")
 
 
 class JavaProject(ProjectStructure):
-    def __init__(self, srcPattern="Java/**/main/**/*.java"):
+    def __init__(self, srcPattern: str = "Java/**/main/**/*.java"):
         super().__init__(srcPattern)
 
     def placer(self, year: int, day: int):
@@ -58,9 +58,9 @@ class KotlinProject(JavaProject):
 
 class CppProject(ProjectStructure):
     def __init__(self):
-        super().__init__("Cpp/**/src/**/*.cc", r"(\d+).*Day(\d+)")
+        super().__init__("Cpp/**/src/**/*.h", r"(\d+).*Day(\d+)")
 
-    def placer(self, year, day):
+    def placer(self, year: int, day: int) -> str:
         return os.path.join("Cpp", f"{year}", "resources",
                             "Day{:0>2d}".format(day), "input.txt")
 
@@ -69,25 +69,25 @@ class TypescriptProject(ProjectStructure):
     def __init__(self):
         super().__init__("Typescript/**/src/**/*.ts", r"(\d+).*Day(\d+)")
 
-    def placer(self, year, day):
+    def placer(self, year: int, day: int) -> str:
         return os.path.join("Typescript", f"{year}", "resources",
                             "Day{:0>2d}".format(day), "input.txt")
 
 
 def download_input(url: str,
-                   session_cookie: str, retry: int = 0) -> str | None:
+                   session_cookie: str, retry: int = 0) -> str:
     if retry >= 5:
-        return None
-    response = requests.get(
-        url, headers={"Cookie": f"session={session_cookie}"})
+        raise ConnectionError("Check network and session cookie")
     try:
-        response.raise_for_status()
-        if response.status_code != requests.codes and len(response.text) == 0:
-            raise requests.HTTPError(
-                "This request may have been blocked by region/anti-crawler"
-                "protection. Try using VPN.", response=response)
-        return response.text
-    except requests.HTTPError as identifier:
+        with requests.get(
+                url, headers={"Cookie": f"session={session_cookie}"}) as response:
+            response.raise_for_status()
+            if len(response.text) == 0:
+                raise requests.HTTPError(
+                    "This request may have been blocked by region/anti-crawler "
+                    "protection. Try using VPN.", response=response)
+            return response.text
+    except Exception as identifier:
         print(identifier)
         print("Retrying")
         time.sleep(random.randrange(2 ** (retry + 1)))
@@ -99,21 +99,23 @@ def process_all_inputs(session_cookie: str,
     if root_dir is None:
         return
     dirs: dict[tuple[int, int], list[str]] = {}
-    Projects: list[ProjectStructure] = [PythonProject(), JavaProject(
-    ), CppProject(), TypescriptProject(), KotlinProject()]
+    Projects: list[ProjectStructure] = [PythonProject(), JavaProject(),
+                                        CppProject(), TypescriptProject(),
+                                        KotlinProject()]
     for projects in Projects:
         for k, v in projects.places.items():
             dirs.setdefault(k, []).append(v)
-    for (year, day), distros in dirs.items():
+    resolved = sorted(dirs.items(), key=lambda it: it[0])
+    for (year, day), distros in resolved:
+        input_text: str | None = None
+        url = f"https://adventofcode.com/{year}/day/{day}/input"
         for distro in distros:
             if os.path.exists(distro) and not overwrite:
                 print(f"Skipping existing: {distro}")
                 continue
-            url = f"https://adventofcode.com/{year}/day/{day}/input"
-            print(f"Downloading {url}...")
-            input_text = download_input(url, session_cookie)
             if input_text is None:
-                raise ConnectionError("Check network and session cookie")
+                print(f"Downloading {url}...")
+                input_text = download_input(url, session_cookie)
             os.makedirs(os.path.dirname(distro), exist_ok=True)
             with open(distro, "w") as f:
                 f.write(input_text)

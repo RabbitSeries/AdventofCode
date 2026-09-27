@@ -5,6 +5,7 @@
 #include <ranges>
 #include <string>
 #include <vector>
+#include <climits>
 
 #include "utils/ISolution.hpp"
 
