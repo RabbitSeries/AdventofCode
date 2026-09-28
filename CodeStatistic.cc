@@ -72,8 +72,8 @@ int main() {
     auto pipeCloser = _pclose;
 #endif
 #ifdef __linux__
-    FILE* pipe = popen(
-        R"(       cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python,Kotlin" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)",
+    FILE* pipe = pipeOpener(
+        R"(cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python,Kotlin" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)",
         "r"
     );
 #else
@@ -96,6 +96,7 @@ int main() {
     };
     while ( std::fgets( buffer, sizeof( buffer ), pipe ) ) {
         std::string line( buffer );
+        std::cout << line;
         std::smatch m;
         if ( std::regex_search( line, m, re ) ) {
             int files, blank, comment, code;

@@ -38,11 +38,11 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 Language           |         files|         blank|       comment|          code
 :-------           |         ----:|         ----:|       ------:|          ---:
-C/C++ Header       |            30|           364|           185|          2900
+C/C++ Header       |            30|           364|           185|          2902
 Java               |            21|           286|           160|          1790
-Python             |            30|           376|           170|          1673
-TypeScript         |            23|           106|            88|          1346
+Python             |            30|           376|           170|          1675
+TypeScript         |            24|           107|            89|          1363
 Kotlin             |            18|           187|            90|          1197
-C++                |             2|            15|             8|           162
+C++                |             2|            15|             8|           163
 CMake              |             5|            24|            20|           121
-SUM:               |           129|          1358|           721|          9189
+SUM:               |           130|          1359|           722|          9211

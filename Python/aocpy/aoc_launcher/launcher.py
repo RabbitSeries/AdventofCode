@@ -17,10 +17,10 @@ def main():
             try:
                 now = time.time()
                 clazz = import_solution(year, day)
-                running = "year{}.Day{:0>2d}.{}:".format(year, day, clazz.__name__)
-                print(running)
                 if clazz is None:
                     raise ModuleNotFoundError(f"year{year}.Day{day} is not found")
+                running = "year{}.Day{:0>2d}.{}:".format(year, day, clazz.__name__)
+                print(running)
                 ins = clazz()
                 for method in ["Part1", "Part2"]:
                     with ir.files("aocpy.aoc_solutions.year{0}.resources.Day{1:0>2d}".format(year, day)).joinpath("input.txt").open("r") as f:
