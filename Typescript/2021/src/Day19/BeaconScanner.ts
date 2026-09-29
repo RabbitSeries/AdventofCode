@@ -39,38 +39,48 @@ function overlap(scanner_a: Point3D[], scanner_b: Point3D[], a_b: Point3D) {
             count++
         }
     }
-    return count >= 12 ? relative_a : undefined
+    return count >= 12
+}
+
+function cross_product(a: Point3D, b: Point3D) {
+    const v = Array.from({ length: 3 }, () => 0)
+    for (let i = 0; i < 3; i++) {
+        const [j, k] = [(i + 1) % 3, (i + 2) % 3]
+        v[i] = Math.pow(-1, i) * (a[j] * b[k] - a[k] * b[j])
+    }
+    return v as Point3D
+}
+
+function direction(axis: number, dir: number) {
+    const v = Array.from({ length: 3 }, () => 0)
+    v[axis] = dir / Math.abs(dir)
+    return v as Point3D
 }
 
 const TRANSFORMS = (() => {
     const result: Transform[] = []
     for (let axis = 0; axis < 3; axis++) {
-        for (const facing of [1, -1]) {
-            for (let direction = 0; direction < 4; direction++) {
-                const transform = Array.from({ length: 3 },
-                    () => Array.from({ length: 3 }, () => 0)) as Transform
-                transform[0][axis] = facing
-                let conversion = true
-                for (let i = 0; i < 3; i++) {
-                    if (i === axis) {
-                        continue
-                    }
-                    if (direction === 0) {
-                        transform[1][i] = conversion ? 1 : 0
-                        transform[2][i] = conversion ? 0 : 1
-                    } else if (direction === 1) {
-                        transform[1][i] = conversion ? 1 : 0
-                        transform[2][i] = conversion ? 0 : -1
-                    } else if (direction === 2) {
-                        transform[1][i] = conversion ? -1 : 0
-                        transform[2][i] = conversion ? 0 : 1
-                    } else {
-                        transform[1][i] = conversion ? -1 : 0
-                        transform[2][i] = conversion ? 0 : -1
-                    }
-                    conversion = false
+        for (const facing_v of [direction(axis, 1), direction(axis, -1)]) {
+            // facing freedom 3 axes * 2 = 6
+            for (let up_axis = 0; up_axis < 3; up_axis++) {
+                if (up_axis === axis) { // up_axis freedom 2 * 2
+                    continue
                 }
-                result.push(transform)
+                for (const left_hand of [
+                    direction(up_axis, 1), direction(up_axis, -1),
+                ]) {
+                    const up_v = cross_product(facing_v, left_hand)
+                    const transform = Array.from(
+                        { length: 3 },
+                        () => Array.from({ length: 3 }, () => 0) as Point3D,
+                    ) as Transform
+                    for (let i = 0; i < 3; i++) {
+                        transform[i][0] = facing_v[i]
+                        transform[i][1] = left_hand[i]
+                        transform[i][2] = up_v[i]
+                    }
+                    result.push(transform)
+                }
             }
         }
     }
@@ -84,13 +94,12 @@ function consturct(scanner_a: Point3D[], scanner_b: Point3D[]) {
         for (let a = 0; a < scanner_a.length; a++) {
             const beacon_a = scanner_a[a]
             for (let b = 0; b < scanner_b.length; b++) {
+                // Assume beacon_a is beacon_b
                 const beacon_b = scanner_b[b]
-                // beacon_a = a->P
-                // transformed = b->p
                 const a_b = minus(beacon_a, beacon_b)
-                const result = overlap(scanner_a, scanner_b, a_b)
-                if (result !== undefined) {
-                    return result
+                if (overlap(scanner_a, scanner_b, a_b)) {
+                    console.log(a_b)
+                    return [transform, a_b] as [Transform, Point3D]
                 }
             }
         }
@@ -106,48 +115,55 @@ export async function main() {
             return m.map(n => parseInt(n[0])) as Point3D
         })
     })
-    const matched = new Set<number>()
-    const q: number[] = []
-    for (let i = 0; i < scanners.length - 1; i++) {
-        for (let j = i + 1; j < scanners.length; j++) {
-            console.log('Matching ', i, ' with ', j, ' ...')
-            const match_result = consturct(scanners[i], scanners[j])
-            if (match_result != undefined) {
-                console.log('Matched', i, j)
-                scanners[j] = match_result
-                q.push(i, j)
-                matched.add(i)
-                matched.add(j)
-                break
-            }
-        }
-        if (q.length) {
-            break
-        }
-    }
-    while (q.length) {
-        const i = q.shift()!
+    const match_group = new Map<number, [number, Transform, Point3D][]>()
+    const pair_q = [0]
+    const pair_visited = new Set<number>([0])
+    while (pair_q.length) {
+        const i = pair_q.shift()!
         for (let j = 0; j < scanners.length; j++) {
-            if (matched.has(j)) {
+            if (pair_visited.has(j)) {
                 continue
             }
-            console.log('Matching ', i, ' with ', j, ' ...')
+            console.log('Matching ', i, j)
             const match_result = consturct(scanners[i], scanners[j])
             if (match_result !== undefined) {
-                console.log('Matched', i, j)
-                scanners[j] = match_result
-                q.push(j)
-                matched.add(j)
+                console.log('Matched ', i, j)
+                const [t, i_j] = match_result
+                match_group.getOrInsert(i, []).push([j, t, i_j])
+                pair_visited.add(j)
+                pair_q.push(j)
             }
         }
     }
-    const beacons = new Set<string>()
-    for (const i of matched) {
-        for (const beacon of scanners[i]) {
-            beacons.add(beacon.join(','))
+    const q: [number, [Transform, Point3D][]][] = [[0, []]]
+    const paths = new Map<number, [Transform, Point3D][]>()
+    const visited = new Set<number>([0])
+    while (q.length) {
+        const [i, path] = q.shift()!
+        paths.set(i, path)
+        for (const [child, t, i_j] of match_group.get(i) ?? []) {
+            if (visited.has(child)) {
+                continue
+            }
+            q.push([child, [[t, i_j], ...path]])
+            visited.add(child)
         }
     }
-    console.log(beacons.size, ' in total')
+    for (const [j, transforms] of paths) {
+        let p: Point3D = [0, 0, 0]
+        for (const [t, i_j] of transforms) {
+            scanners[j] = scanners[j].map(v => plus(transformed(v, t), i_j))
+            p = plus(p, i_j)
+        }
+        console.log(p)
+    }
+    const beacons = new Set<string>()
+    for (const scanner of scanners) {
+        for (const pos of scanner) {
+            beacons.add(toString(pos))
+        }
+    }
+    console.log('Found ', beacons.size, ' beacons')
 }
 
 await main()
