@@ -62,21 +62,21 @@ const TRANSFORMS = (() => {
     for (let axis = 0; axis < 3; axis++) {
         for (const facing_v of [direction(axis, 1), direction(axis, -1)]) {
             // facing freedom 3 axes * 2 = 6
-            for (let up_axis = 0; up_axis < 3; up_axis++) {
-                if (up_axis === axis) { // up_axis freedom 2 * 2
+            for (let left_axis = 0; left_axis < 3; left_axis++) {
+                if (left_axis === axis) { // left_axis freedom 2 * 2
                     continue
                 }
-                for (const left_hand of [
-                    direction(up_axis, 1), direction(up_axis, -1),
+                for (const left_v of [
+                    direction(left_axis, 1), direction(left_axis, -1),
                 ]) {
-                    const up_v = cross_product(facing_v, left_hand)
+                    const up_v = cross_product(facing_v, left_v)
                     const transform = Array.from(
                         { length: 3 },
                         () => Array.from({ length: 3 }, () => 0) as Point3D,
                     ) as Transform
                     for (let i = 0; i < 3; i++) {
                         transform[i][0] = facing_v[i]
-                        transform[i][1] = left_hand[i]
+                        transform[i][1] = left_v[i]
                         transform[i][2] = up_v[i]
                     }
                     result.push(transform)
@@ -107,6 +107,21 @@ function consturct(scanner_a: Point3D[], scanner_b: Point3D[]) {
     return undefined
 }
 
+function invert(m: Transform): Transform {
+    const [[a, b, c], [d, e, f], [g, h, i]] = m
+
+    const A = (e * i - f * h)
+    const B = -(d * i - f * g)
+    const C = (d * h - e * g)
+    const det = a * A + b * B + c * C
+
+    return [
+        [A / det, -(b * i - c * h) / det, (b * f - c * e) / det],
+        [B / det, (a * i - c * g) / det, -(a * f - c * d) / det],
+        [C / det, -(a * h - b * g) / det, (a * e - b * d) / det],
+    ]
+}
+
 export async function main() {
     const scanners = aocInput(19).splitblocks().map((block) => {
         const coordinates = block.split(EOL).slice(1)
@@ -115,23 +130,29 @@ export async function main() {
             return m.map(n => parseInt(n[0])) as Point3D
         })
     })
-    const match_group = new Map<number, [number, Transform, Point3D][]>()
-    const pair_q = [0]
-    const pair_visited = new Set<number>([0])
-    while (pair_q.length) {
-        const i = pair_q.shift()!
-        for (let j = 0; j < scanners.length; j++) {
-            if (pair_visited.has(j)) {
-                continue
-            }
+    const match_group = new Map<number, Map<number, [Transform, Point3D]>>()
+    for (let i = 0; i < scanners.length - 1; i++) {
+        for (let j = i + 1; j < scanners.length; j++) {
             console.log('Matching ', i, j)
-            const match_result = consturct(scanners[i], scanners[j])
+            let match_result = consturct(scanners[i], scanners[j])
             if (match_result !== undefined) {
                 console.log('Matched ', i, j)
                 const [t, i_j] = match_result
-                match_group.getOrInsert(i, []).push([j, t, i_j])
-                pair_visited.add(j)
-                pair_q.push(j)
+                match_group.getOrInsert(i, new Map()).set(j, [t, i_j])
+                const inverted = invert(t)
+                match_group.getOrInsert(j, new Map()).set(i, [inverted,
+                    minus([0, 0, 0], transformed(i_j, inverted))])
+                continue
+            }
+            console.log('Matching ', j, i)
+            match_result = consturct(scanners[j], scanners[i])
+            if (match_result !== undefined) {
+                console.log('Matched ', j, i)
+                const [t, j_i] = match_result
+                match_group.getOrInsert(j, new Map()).set(i, [t, j_i])
+                const inverted = invert(t)
+                match_group.getOrInsert(i, new Map()).set(j, [inverted,
+                    minus([0, 0, 0], transformed(j_i, inverted))])
             }
         }
     }
@@ -141,7 +162,7 @@ export async function main() {
     while (q.length) {
         const [i, path] = q.shift()!
         paths.set(i, path)
-        for (const [child, t, i_j] of match_group.get(i) ?? []) {
+        for (const [child, [t, i_j]] of match_group.get(i)!) {
             if (visited.has(child)) {
                 continue
             }
@@ -153,7 +174,7 @@ export async function main() {
         let p: Point3D = [0, 0, 0]
         for (const [t, i_j] of transforms) {
             scanners[j] = scanners[j].map(v => plus(transformed(v, t), i_j))
-            p = plus(p, i_j)
+            p = plus(transformed(p, t), i_j)
         }
         console.log(p)
     }
