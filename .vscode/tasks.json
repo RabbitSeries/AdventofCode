@@ -30,7 +30,7 @@
             "command": "g++",
             "args": [
                 "-Wall",
-                "-Wa,-mbig-obj",
+                // "-Wa,-mbig-obj", // PE,COFF only
                 "-fdiagnostics-color=always",
                 "-std=c++23",
                 "-g",
@@ -60,7 +60,7 @@
             "command": "g++",
             "args": [
                 "-Wall",
-                "-Wa,-mbig-obj",
+                // "-Wa,-mbig-obj",
                 "-fdiagnostics-color=always",
                 "-std=c++23",
                 "-O3",

@@ -7,22 +7,26 @@
         "watch:run": "tsc -b",
         "watch": "run-s watch:config watch:run watch:watch",
         "lint": "eslint",
-        "lint:fix": "eslint --fix"
+        "lint:fix": "eslint --fix",
+        "npm-check-updates": "npx npm-check-updates",
+        "ncu-update": "npx npm-check-updates -u"
     },
-    "packageManager": "npm@12.0.1+sha512.2f94fd8bf600416416a934bfc59c4991e8bff7372ef7d842784e2a8b8d48c81555ee645069ddea73625fb8e92dc261feab0188fd5dab6c22fefd46316f5f9140",
+    "packageManager": "npm@12.1.0",
     "devDependencies": {
+        "@eslint/js": "^10.0.1",
         "@stylistic/eslint-plugin": "^5.10.0",
-        "@types/node": "^25.9.5",
-        "esbuild": "^0.25.12",
-        "eslint": "^9.39.4",
+        "@types/node": "^26.6.3",
+        "esbuild": "^0.28.2",
+        "eslint": "^10.11.0",
         "fast-glob": "^3.3.3",
-        "globals": "^17.6.0",
+        "globals": "^17.12.0",
         "jiti": "^2.7.0",
+        "npm-check-updates": "^23.1.0",
         "npm-run-all": "^4.1.5",
         "typescript": "^6.0.3",
-        "typescript-eslint": "^8.59.3"
+        "typescript-eslint": "^8.70.1"
     },
     "allowScripts": {
-        "esbuild@0.25.12": true
+        "esbuild@0.28.2": true
     }
 }

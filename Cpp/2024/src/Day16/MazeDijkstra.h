@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <climits>
 
 #include "utils/ISolution.hpp"
 

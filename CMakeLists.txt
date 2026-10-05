@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD 23)
 include(CheckCXXCompilerFlag)
 
 if(MSVC)
-  add_compile_options(/W4 /arch:AVX2 $<$<CONFIG:Debug>:/Od>
+  add_compile_options(/W4 /arch:AVX2 /MP $<$<CONFIG:Debug>:/Od>
                       $<$<CONFIG:Release>:/O2>)
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
   check_cxx_compiler_flag("-mavx2" COMPILER_HAS_AVX2_FLAG)

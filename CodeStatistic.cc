@@ -61,22 +61,22 @@ void replaceFile(
 }
 
 int main() {
-    // There is a bug for resolving special extension name of CMakeLists.txt in perl script:
-    // https://github.com/AlDanial/cloc/blob/dfaa4618ab7057bebb9e9dbe093f5d56d5fc13ab/Unix/cloc#L2664-L2672
+// There is a bug for resolving special extension name of CMakeLists.txt in perl script:
+// https://github.com/AlDanial/cloc/blob/dfaa4618ab7057bebb9e9dbe093f5d56d5fc13ab/Unix/cloc#L2664-L2672
 #ifdef __linux__
-    FILE* pipe = popen(
-        R"(       cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python,Kotlin" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)",
+    // FILE* pipe = popen( R"(wsl -e cloc . --include-ext=h,cc,cpp,hpp,c,java,py,ts,cmake,CMakeLists.txt" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)", "r" );
+    auto pipeOpener = popen;
+    auto pipeCloser = pclose;
+#else
+    auto pipeOpener = _popen;
+    auto pipeCloser = _pclose;
+#endif
+#ifdef __linux__
+    FILE* pipe = pipeOpener(
+        R"(cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python,Kotlin" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)",
         "r"
     );
 #else
- #ifdef _MSC_VER
-    // FILE* pipe = popen( R"(wsl -e cloc . --include-ext=h,cc,cpp,hpp,c,java,py,ts,cmake,CMakeLists.txt" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)", "r" );
-    auto pipeOpener = _popen;
-    auto pipeCloser = _pclose;
- #else
-    auto pipeOpener = popen;
-    auto pipeCloser = pclose;
- #endif
     FILE* pipe = pipeOpener(
         R"(wsl -e cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python,Kotlin")"
         R"( --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)",
@@ -96,6 +96,7 @@ int main() {
     };
     while ( std::fgets( buffer, sizeof( buffer ), pipe ) ) {
         std::string line( buffer );
+        std::cout << line;
         std::smatch m;
         if ( std::regex_search( line, m, re ) ) {
             int files, blank, comment, code;

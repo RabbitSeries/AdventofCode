@@ -40,3 +40,9 @@
 
 [Mozilla JS](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [TypeScript](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+
+## Day19
+
+This problem requires some linear algebra.
+
+The details (AI generated) can be found [here](./src/Day19/README.md).
