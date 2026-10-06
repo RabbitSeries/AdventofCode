@@ -46,7 +46,7 @@ function cross_product(a: Point3D, b: Point3D) {
     return v as Point3D
 }
 
-function direction(axis: number, dir: number) {
+function unit_vec(axis: number, dir: number) {
     const v = Array.from({ length: 3 }, () => 0)
     v[axis] = dir / Math.abs(dir)
     return v as Point3D
@@ -55,15 +55,18 @@ function direction(axis: number, dir: number) {
 // **Group** A^{-1} \in {A}, thus no need to perform an inverted match.
 const TRANSFORMS = (() => {
     const result: Transform[] = []
-    for (let axis = 0; axis < 3; axis++) {
-        for (const facing_v of [direction(axis, 1), direction(axis, -1)]) {
+    for (let facing_axis = 0; facing_axis < 3; facing_axis++) {
+        for (const facing_v of [
+            unit_vec(facing_axis, 1),
+            unit_vec(facing_axis, -1),
+        ]) {
             // facing freedom 3 axes * 2 = 6
             for (let left_axis = 0; left_axis < 3; left_axis++) {
-                if (left_axis === axis) { // left_axis freedom 2 * 2
+                if (left_axis === facing_axis) { // left_axis freedom 2 * 2
                     continue
                 }
                 for (const left_v of [
-                    direction(left_axis, 1), direction(left_axis, -1),
+                    unit_vec(left_axis, 1), unit_vec(left_axis, -1),
                 ]) {
                     const up_v = cross_product(facing_v, left_v)
                     const transform = Array.from(
