@@ -1,3 +1,4 @@
+import { HashMap } from '@utils/HashMap'
 import { aocInput } from '@utils/iohelper'
 
 type Player = {
@@ -23,18 +24,6 @@ function copy_player(p: Player): Player {
         position: p.position,
         score: p.score,
     }
-}
-
-type HashMap = Map<string, { s: State, count: number }>
-
-function hash(s: State) {
-    return [
-        s.p1.position,
-        s.p1.score,
-        s.p2.position,
-        s.p2.score,
-        s.turn,
-    ].join(',')
 }
 
 function part1(p1: Player, p2: Player) {
@@ -75,33 +64,26 @@ export async function main() {
     const [p1, p2] = aocInput(21).splitlines()
         .map((it) => {
             const m = it.match(/position: (\d+)/)!
-            return parseInt(m[1])
+            return {
+                position: parseInt(m[1]),
+                score: 0,
+            } as Player
         })
-    part1(
-        { position: p1, score: 0 },
-        { position: p2, score: 0 },
-    )
-    const states: HashMap = new Map()
-    const initState: State = {
-        p1: {
-            position: p1,
-            score: 0,
-        },
-        p2: {
-            position: p2,
-            score: 0,
-        },
-        turn: true,
-    }
-    const init_key = hash(initState)
-    states.set(init_key, { s: initState, count: 1 })
+    part1(copy_player(p1), copy_player(p2))
+    let states_set = new HashMap<State, number>(
+        s => [
+            s.p1.position,
+            s.p1.score,
+            s.p2.position,
+            s.p2.score,
+            s.turn,
+        ].join(','))
+    states_set.set({ p1: copy_player(p1), p2: copy_player(p2), turn: true }, 1)
     const wins: [number, number] = [0, 0]
     const spawns = [...spawn()]
-    while (states.size) {
-        const keys = states.keys().toArray()
-        for (const key of keys) {
-            const { s, count } = states.get(key)!
-            states.delete(key)
+    while (states_set.size) {
+        const transferred = new HashMap<State, number>(states_set.hasher)
+        for (const [s, count] of states_set) {
             for (let roll = 0; roll < 27; roll++) {
                 const ns = copy_state(s)
                 const p = ns.turn ? ns.p1 : ns.p2
@@ -112,10 +94,10 @@ export async function main() {
                     continue
                 }
                 ns.turn = !ns.turn
-                const ns_key = hash(ns)
-                states.getOrInsert(ns_key, { s: ns, count: 0 }).count += count
+                transferred.upsert(ns, (_, c) => (c ?? 0) + count)
             }
         }
+        states_set = transferred
     }
     console.log(Math.max(...wins))
 }
