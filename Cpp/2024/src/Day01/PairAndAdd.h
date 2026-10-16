@@ -78,7 +78,8 @@ class PairAndAdd: public ISolution {
             numList | views::transform( [&]( const pair<int, int>& elem ) {
                 return elem.first * elemCount[elem.first];
             } ),
-            0, std::plus<>{} );
+            0, std::plus<>{}
+        );
         printRes( 2, addUp );
     }
 };

@@ -58,6 +58,22 @@
             ]
         },
         {
+            "name": "[C/C++] [Attach]",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "${fileDirname}/exe_${fileBasenameNoExtension}",
+            "MIMode": "gdb",
+            "miDebuggerPath": "gdb",
+            "processId": "${command:pickProcess}",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
             "name": "[C/C++] [CMAKE] [GDB] [Launch]",
             "type": "cppdbg",
             "request": "launch",
