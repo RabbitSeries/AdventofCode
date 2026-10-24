@@ -1,5 +1,6 @@
 import HashMap from '@utils/HashMap'
 import HashSet from '@utils/HashSet'
+import Heap from '@utils/Heap'
 import { aocInput } from '@utils/iohelper'
 
 type Point2D = number[]
@@ -125,6 +126,7 @@ function* movements(p: Point2D, s: Situation) {
         const tc = targetCol(p, s)
         const dy = tc > p[1] ? 1 : -1
         const np = [1, p[1] + dy] as Point2D
+        // Walk in hallway
         while (s.isEmpty(np)) {
             if (np[1] === tc) {
                 // In target column, below must be amphipods of the same type
@@ -168,20 +170,27 @@ function organize(start: Situation) {
         (s: Situation) => {
             return s.map.map(it => it.join('')).join('')
         })
-
-    const q: [Situation, number][] = [[start, 0]]
+    const q = new Heap<[Situation, number]>((s1, s2) => s1[1] - s2[1])
+    q.push([start, 0])
     visited.set(start, 0)
     let min_cost = Infinity
     while (q.length) {
-        const [s, cost] = q.shift()!
+        const [s, cost] = q.pop()!
         // console.log(s.map.map(it => it.join('')).join('\n'))
         // console.log()
         if (s.finished()) {
-            min_cost = Math.min(min_cost, cost)
+            if (cost < min_cost) {
+                min_cost = cost
+            } else {
+                break
+            }
             // for (const r of s.records) {
             //     console.log(r)
             //     console.log()
             // }
+            continue
+        }
+        if (visited.has(s) && cost > visited.get(s)!) {
             continue
         }
         for (const p of s.amphipods) {
