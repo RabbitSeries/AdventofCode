@@ -4,8 +4,8 @@
     "scripts": {
         "watch:config": "esbuild ./esbuild.ts --outdir=./dist --format=esm --platform=node",
         "watch:watch": "node ./dist/esbuild.js",
-        "watch:run": "tsc -b",
-        "watch": "run-s watch:config watch:run watch:watch",
+        "watch:tsc-check": "tsc -b",
+        "watch": "run-s watch:config watch:watch",
         "lint": "eslint",
         "lint:fix": "eslint --fix",
         "npm-check-updates": "npx npm-check-updates",
