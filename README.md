@@ -6,12 +6,12 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ### Overall
 
- | Year                                                         |    Progress | Best TimeCost (seconds) |
- | :----------------------------------------------------        |    -------: | ----------------------: |
- | [2021](./TypeScript/2021/README.md)                          | 22/25 ⭐⭐ |               Not yet   |
- | [2022](./Python/aocpy/aoc_solutions/year2022/README.md)      | 25/25 ⭐⭐ |               209.622   |
- | [2023](./Java/2023/README.md)                                | 25/25 ⭐⭐ |               9.820279  |
- | [2024](./Cpp/2024/README.md)                                 | 25/25 ⭐⭐ |               0.965016  |
+ | Year                                                    | Progress | Best TimeCost (seconds) |
+ | :------------------------------------------------------ | -------: | ----------------------: |
+ | [2021](./TypeScript/2021/README.md)                     | 25/25 ⭐⭐ |                 Not yet |
+ | [2022](./Python/aocpy/aoc_solutions/year2022/README.md) | 25/25 ⭐⭐ |                 209.622 |
+ | [2023](./Java/2023/README.md)                           | 25/25 ⭐⭐ |                9.820279 |
+ | [2024](./Cpp/2024/README.md)                            | 25/25 ⭐⭐ |                0.965016 |
 
 > Runs on github actions.
 
@@ -36,13 +36,13 @@ Solutions to [Advent of Code](https://adventofcode.com/) challenges. Advent of C
 
 ## Statistics
 
-Language           |         files|         blank|       comment|          code
-:-------           |         ----:|         ----:|       ------:|          ---:
-C/C++ Header       |            30|           364|           185|          2903
-TypeScript         |            28|           151|           108|          1814
-Java               |            21|           286|           160|          1790
-Python             |            30|           376|           170|          1675
-Kotlin             |            18|           187|            90|          1197
-C++                |             2|            15|             8|           163
-CMake              |             5|            24|            20|           121
-SUM:               |           134|          1403|           741|          9663
+| Language     | files | blank | comment |  code |
+| :----------- | ----: | ----: | ------: | ----: |
+| C/C++ Header |    30 |   364 |     185 |  2903 |
+| TypeScript   |    33 |   196 |     135 |  2263 |
+| Java         |    21 |   286 |     160 |  1790 |
+| Python       |    30 |   376 |     170 |  1675 |
+| Kotlin       |    18 |   187 |      90 |  1197 |
+| C++          |     2 |    15 |       8 |   163 |
+| CMake        |     5 |    24 |      20 |   121 |
+| SUM:         |   139 |  1448 |     768 | 10112 |
