@@ -13,15 +13,16 @@
 template <size_t ArgN>
 struct Entry {
     // constexpr int lang_w = 19, digit_w = 15;
-    static constexpr int lang_w = 19, digit_w = 14;
+    static constexpr int lang_w = 13, digit_w = 14;
 
     template <typename T, typename... rest>
     Entry( T&& lang, rest&&... args ) {
         std::ostringstream oss;
-        oss << std::left << std::setw( lang_w ) << lang;
-        ( ( oss << "|" << std::right << std::setw( digit_w )
-                << std::forward<rest>( args ) ),
+        oss << "| " << std::left << std::setw( lang_w ) << lang << "|";
+        ( ( oss << std::right << std::setw( digit_w ) << std::forward<rest>( args )
+                << "|" ),
           ... );
+
         str = std::move( oss ).str();
     }
 
@@ -67,22 +68,19 @@ int main() {
     // FILE* pipe = popen( R"(wsl -e cloc . --include-ext=h,cc,cpp,hpp,c,java,py,ts,cmake,CMakeLists.txt" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)", "r" );
     auto pipeOpener = popen;
     auto pipeCloser = pclose;
+    constexpr auto cloc_exp_tpl =
+        R"(cloc . --include-lang={} --not-match-d={} 2>exception.log)";
 #else
     auto pipeOpener = _popen;
     auto pipeCloser = _pclose;
+    constexpr auto cloc_exp_tpl =
+        R"(wsl -e cloc . --include-lang={} --not-match-d={} 2>exception.log)";
 #endif
-#ifdef __linux__
-    FILE* pipe = pipeOpener(
-        R"(cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python,Kotlin" --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)",
-        "r"
-    );
-#else
-    FILE* pipe = pipeOpener(
-        R"(wsl -e cloc . --include-lang="C/C++ Header,C++,CMake,TypeScript,Java,Python,Kotlin")"
-        R"( --exclude-dir=build --not-match-d="node_modules|dist|target" 2>exception.log)",
-        "r"
-    );
-#endif
+    constexpr auto include_lang =
+        R"("C/C++ Header,C++,CMake,TypeScript,Java,Python,Kotlin,Rust")";
+    constexpr auto not_match_d = R"("build|node_modules|dist|target")";
+    FILE* pipe =
+        pipeOpener( std::format( cloc_exp_tpl, include_lang, not_match_d ).c_str(), "r" );
     if ( !pipe ) {
         std::cerr << "Failed to open pipe\n";
         return 1;
@@ -105,7 +103,7 @@ int main() {
         }
     }
     if ( int status = pipeCloser( pipe ); !status ) {
-        replaceFile( "README.md", "Language", res );
+        replaceFile( "README.md", "| Language", res );
     } else {
         std::cout << "Runing cloc exit " << status << ", " << std::endl
                   << "cloc may have not been installed." << std::endl

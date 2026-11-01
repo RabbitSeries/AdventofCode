@@ -57,8 +57,8 @@ class KotlinProject(JavaProject):
 
 
 class CppProject(ProjectStructure):
-    def __init__(self):
-        super().__init__("Cpp/**/src/**/*.h", r"(\d+).*Day(\d+)")
+    def __init__(self, pattern: str = "Cpp/**/src/**/*.h"):
+        super().__init__(pattern, r"(\d+).*Day(\d+)")
 
     def placer(self, year: int, day: int) -> str:
         return os.path.join("Cpp", f"{year}", "resources",
@@ -72,6 +72,11 @@ class TypescriptProject(ProjectStructure):
     def placer(self, year: int, day: int) -> str:
         return os.path.join("Typescript", f"{year}", "resources",
                             "Day{:0>2d}".format(day), "input.txt")
+
+
+class RustProject(CppProject):
+    def __init__(self):
+        super().__init__("Rust/**/src/**/*.h")
 
 
 def download_input(url: str,
@@ -99,9 +104,14 @@ def process_all_inputs(session_cookie: str,
     if root_dir is None:
         return
     dirs: dict[tuple[int, int], list[str]] = {}
-    Projects: list[ProjectStructure] = [PythonProject(), JavaProject(),
-                                        CppProject(), TypescriptProject(),
-                                        KotlinProject()]
+    Projects: list[ProjectStructure] = [
+        PythonProject(),
+        JavaProject(),
+        CppProject(),
+        TypescriptProject(),
+        KotlinProject(),
+        RustProject()
+    ]
     for projects in Projects:
         for k, v in projects.places.items():
             dirs.setdefault(k, []).append(v)

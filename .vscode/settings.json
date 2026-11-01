@@ -26,5 +26,8 @@
         "./Typescript"
     ],
     "js/ts.tsdk.path": "./Typescript/node_modules/typescript/lib",
-    "maven.view": "hierarchical"
+    "maven.view": "hierarchical",
+    "evenBetterToml.schema.associations": {
+        "Cargo.*": "https://www.schemastore.org/cargo.json"
+    }
 }
